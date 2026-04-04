@@ -1,0 +1,30 @@
+# --- Python venv ---
+.venv/
+venv/
+env/
+
+# --- Secrets (never commit) ---
+.env
+.env.*
+!.env.example
+
+# Local env overrides
+.env.local
+.env.*.local
+
+# Key / credential filenames (common accidents)
+*.pem
+id_rsa
+*_rsa
+
+# --- Python / tooling artifacts ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- OS ---
+.DS_Store
+Thumbs.db

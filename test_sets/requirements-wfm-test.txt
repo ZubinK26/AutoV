@@ -1,0 +1,3 @@
+# Install: pip install -r test_sets/requirements-wfm-test.txt
+anthropic>=0.40.0
+python-dotenv>=1.0.0
