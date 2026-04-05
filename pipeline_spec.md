@@ -6,6 +6,8 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 
 **WFM LLM prompts:** `WFM/prompts/` (per-agent instruction files; see `WFM/prompts/README.md`).
 
+**ASCII diagram (flow + what is built in repo):** [`pipeline_diagram.md`](pipeline_diagram.md)
+
 ---
 
 ## Scope: Decidable Many-Sorted FOL
@@ -91,20 +93,21 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 3. **Formalizer**
 4. **Identifier critic**
 
-**LLM:** Claude API for all LLM-driven stages (including all WFM sub-agents).
+**LLM backends:** WFM and later pipeline stages are **model-agnostic**: you can use **Anthropic (Claude)**, **Google (Gemini)**, or **other** chat-completion APIs that your orchestration layer supports. **Gemini** is in active use for WFM smoke runs (e.g. `test_sets/scripts/run_wfm_folio_gemini.py`); Claude remains supported (e.g. `run_wfm_folio_claude.py`). The same prompt files under `WFM/prompts/` apply regardless of provider unless you introduce provider-specific variants.
 
 ### Steps:
 
 1. **User input** — natural language rule, unrestricted phrasing. **Safety:** before WFM, enforce **`max_input_code_points`** from `WFM/config/wfm.json` (default **4096** Unicode code points). If over limit, return to input with counts vs. limit; no auto-chunking. See `WFM/Agent_WFM.md`.
 
-2. **Well-formedness module (WFM)** — Runs **Agent 1 → Agent 2 → Agent 3 → Agent 4** as specified in `WFM/Agent_WFM.md` (prompts in `WFM/prompts/`):
+2. **Well-formedness module (WFM)** — Runs **Agent 1 → Agent 2 → Agent 3**, then a **confirmation step** and **conditionally Agent 4 (LLM)**, as specified in `WFM/Agent_WFM.md` (prompts in `WFM/prompts/`):
 
    - **Agent 1:** Single LLM call: **flag** completeness and ambiguity (coreference under ambiguity), then **joint resolve** (most likely interpretation and guesses). **Plain NL output only** through Agent 2 — **no required metadata** for those steps.
    - **Agent 2:** Decomposition with a **compound-operator limit** (default **8**, `compound_operator_limit` in `WFM/config/wfm.json`); exceeding the limit **returns to user input** with an **Agent 2 error report** (structured trace per `WFM/prompts/agent_2_decomposition.md`) and message.
-   - **Agent 3:** Scope check; **scope report** if no rewrite can be suggested (flow continues to Agent 4); **diff report** if a rewrite is proposed; if an **attempted rewrite fails** validation/policy, **return to user input** per WFM.
-   - **Agent 4:** **Always** presents the confirmation package (decomposed text plus scope/diff material). User **yes** → continue to registry agent. User **no** → Agent 4 clarification/tentative-rewrite loop with fixed budgets; **inner** or **outer** exhaustion **returns to user input** with a **failure reason**. Re-runs of full WFM from agreed text follow `WFM/Agent_WFM.md`.
+   - **Agent 3:** Scope check; **scope report** if no rewrite can be suggested (flow continues); **diff report** if a rewrite is proposed; if an **attempted rewrite fails** validation/policy, **return to user input** per WFM.
+   - **Confirmation (product UI / templates):** The application **always** shows the **confirmation package** after Agent 3: decomposed sub-statements plus scope/diff material. User **acceptance** proceeds to the registry stage; reaching agreement may be handled by **orchestration alone** without an LLM (**yes** path). Per-line disagreement, **OUT_OF_SCOPE** handling, **`WFM_PATCH`** merge, and re-entry to WFM are specified in **`WFM/Agent_WFM.md`** (confirmation package, Agent 4, patch merge sections).
+   - **Agent 4 (LLM):** **Not** used to render the initial static package. It is invoked **from the user’s response onward**, **typically when the user rejects** the package and supplies feedback—clarification, **`WFM_PATCH`** proposals (`replacements` only from the model; omissions from UI), and merge under `WFM/Agent_WFM.md`. **Inner** or **outer** exhaustion **returns to user input** with a **failure reason**. User-confirmed **merged natural language** (Style A join) **re-runs full WFM from Agent 1** per `WFM/Agent_WFM.md`. *(Repo test harness: Agent 4 drivers and **Style A** loop-back to Agents 1–3 live under **`test_sets/scripts/`** — see **`test_sets/README.md`**.)*
 
-   WFM **always** presents cleaned output for **user confirmation** before passing to the registry agent. Scope and rewrite information is **always** included in Agent 4’s presentation when applicable.
+   WFM **always** offers **user confirmation** of cleaned output before passing to the registry agent. Scope and rewrite information is **always** included in that confirmation package when applicable.
 
    **WFM failure** (limits, exhaustion, or defined hard failures): pipeline **resets to the user input step** with an **explicit error message**; no registry/formalizer work proceeds until the user provides new input *(exact failure API/event shape is an open integration detail — see WFM “Open issues”).*
 
@@ -123,6 +126,10 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 7. **Repair loop** — if errors at step 5 or 6, concatenate all errors into a single message: Z3 errors as raw exception strings + critic flags formatted as "Registry has 'X' but Z3 code used 'Y'". Send back to formalizer with the original Z3 code for repair. Budget: 1–5 iterations.
 
 8. **Rule accepted** — Z3 assertion added to rule set. Cleaned English + Z3 code + rule ID + registry references saved to rules store.
+
+### Pipeline diagram (ASCII)
+
+The text diagram and build-status legend are in **`pipeline_diagram.md`** (repo root, next to this file).
 
 ---
 
@@ -154,11 +161,20 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 
 The formalizer LLM will sometimes say "animal habitat" when the registry has "habitat_biome." Embedding the NL description means the retrieval step finds it anyway. But the *output* Z3 code must use the exact canonical name and correct arity — that's what the identifier verification step checks.
 
+### Graph-friendly shape (future contradiction / rule interactions)
+
+**Consistency checking is deferred**, but the registry should remain **easy to traverse** once those features exist:
+
+- **Stable IDs:** Treat registry entry `ID` and rule `ID` as **immutable edge endpoints**; never recycle an ID after deletion (or maintain a tombstone) so historical edges remain interpretable.
+- **Explicit edges, not only blobs:** Store **rule → registry entry** references as a **first-class list or adjacency** (which `sort` / `constant` / `function` IDs each rule used after populate), not only embedded inside prose or a single opaque `context` string. Optional later: **entry ↔ entry** links (same parent sort, same signature family) derived at populate time for constrained search.
+- **Separate index from graph:** FAISS (or any embedding index) answers *semantic neighborhood*; **contradiction-style search** will also need **structural** hops (shared predicate, overlapping constants). Keeping **structured fields** (`kind`, `signature`, `parent sort`, `members`) addressable without re-parsing JSON strings avoids painting us into a corner.
+- **Provenance:** `Source rule` (already planned) should support **multiple** rule IDs when an entry is reused, so blame and graph traversal stay accurate.
+
 ---
 
 ## Consistency Checking — Deferred
 
-Post-pipeline component. Will be designed after the core pipeline is built and tested.
+Post-pipeline component (may use **graph-style** traversal over rules + registry references as well as embedding search). Will be designed after the core pipeline is built and tested; see **Graph-friendly shape** above so early persistence choices do not block that.
 
 ---
 

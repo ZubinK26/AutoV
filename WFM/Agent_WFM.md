@@ -38,7 +38,7 @@ Ensures **complete**, **unambiguous** (including coreference), and **within-scop
 
 
 
-Linear pipeline: **Agent 1 → Agent 2 → Agent 3 → Agent 4**. Full WFM may be **re-run** from Agent 1 after user agreement on a revised statement (see **Reruns and exhaustion**).
+Core LLM path: **Agent 1 → Agent 2 → Agent 3**, then the **confirmation (UI)** step. **Agent 4 (LLM)** runs only when the user **rejects** part or all of the package and supplies feedback. After an **approved merge** of revisions, WFM may be **re-run from Agent 1** on the **merged natural-language rule** (see **Confirmation package**, **Patch merge**, and **Reruns and exhaustion**).
 
 
 
@@ -60,7 +60,7 @@ Linear pipeline: **Agent 1 → Agent 2 → Agent 3 → Agent 4**. Full WFM may b
 
 
 
-**Loop-back:** When WFM is re-entered after user agreement on a rewrite, Agent 1 receives **only** the agreed statement — no retry labels, no prior agent metadata.
+**Loop-back:** When WFM is re-entered after the user confirms a **merged rule** (see **Patch merge**), Agent 1 receives **only** that single NL document — no retry labels, no prior agent metadata, no line-level freeze hints unless product adds them later.
 
 
 
@@ -124,39 +124,133 @@ Decompose statements toward **atomic** form, subject to a **compound-operator ch
 
 
 
-### Agent 4 — User-facing presentation and feedback
+### Confirmation package (UI) — after Agent 3
 
 
 
-After Agent 3, the user **always** receives the **confirmation package**: the **speculatively** completed, disambiguated, **decomposed** output plus **scope outcome** — either the **diff report** (when Agent 3 proposed a rewrite) or the **scope report** (when no rewrite was proposed), each with a **short, clear summary** of the issue(s) where applicable.
+After Agent 3, the user **always** receives a **confirmation package** built with **UI and templates** (no LLM required for the static view). It includes:
 
 
 
-**Presentation (UI):** The application shows this package with **UI and templates** — an LLM call is **not** required for static display.
+- The **decomposed sub-statements** (numbered lines), each tied to Agent 3’s outcome: **PASS**, **REWRITE** (with diff text where applicable), or **OUT_OF_SCOPE** (with scope explanation where applicable).
+
+- Enough context for an informed decision: **diff** and **scope** material as specified in **`prompts/agent_3_scope_rewrite.md`** and orchestration.
 
 
 
-**Agent 4 (LLM):** The **LLM-mediated** Agent 4 step is invoked **after the user responds** — in the chosen product flow, **typically when the user rejects** the package and **provides comments**. It has access to **other agents’ goals** and **conversation history**; it may ask **clarifying questions** and propose **tentative rewrites** that aim to pass WFM and reflect user intent. **Retry budget (exact rule):** **First exchange is free** — questions **and** first rewrite proposal. **Then 3 retries** total. Each retry = **one** rewrite proposal, **optionally** preceded by **one** question; each retry **must end in a proposal**.
+**Accept-in-full (happy path):** If the user **accepts the entire package** without disagreeing on any line, **orchestration** proceeds to the **next pipeline stage** (e.g. registry). No Agent 4 LLM call is required for that path.
 
 
 
-**User confirms (yes):** Proceed to the **next pipeline stage** (e.g. registry agent). **Acceptance** may be handled entirely by **orchestration** without an Agent 4 LLM turn. The cleaned output is always confirmed before leaving WFM.
+**Per-line disagreement:** The user may **disagree with one or more specific lines** (by index). **Each disagreed line must have its own comment** (non-empty), regardless of Agent 3 label on that line — including cases where the user disagrees because of **Agent 1 / Agent 2** behavior rather than Agent 3’s verdict. The UI may offer a shortcut (e.g. duplicate draft text into every selected row), but the system **still stores one comment per disagreed line**.
 
 
 
-There are **no** inline markers in the text for speculative resolution; the user is **informed upfront** (via UI copy) that completion/disambiguation may use guesses. The package reads as a **definitive proposal** for confirmation.
+**Blanket rejection:** **Blanket** means **select all lines** as disagreed. **Same rule:** **one comment per line** (**N** comments for **N** lines). No single global comment substitutes for per-line comments in this mode.
 
 
 
-**Clarification:** For the **LLM**, **Agent 4 becomes active** when the user **rejects** and engages in feedback — not for the initial templated presentation. The **confirmation step** itself still happens for every run after Agent 3.
+**Implicit agreement on untouched lines:** Any numbered line **not** marked as disagreed is **accepted as shown** (including **REWRITE** text as presented). **Silence** on those lines means consent. **Do not** send accepted lines through Agent 4 for alteration; they are carried **verbatim** into **patch merge** (below).
 
 
 
-On **agreement** on a tentative statement: **re-run WFM from Agent 1** with that text. The system **records**: original user statement, transformed LLM outputs along the path, user comments, and **agreed** rewrite.
+**OUT_OF_SCOPE lines — no silent drop:** For every line marked **OUT_OF_SCOPE**, the user must leave a **recorded** outcome before merge and re-entry to WFM. Allowed outcomes:
 
 
 
-**Inner exhaustion:** If the Agent 4 tentative-rewrite budget is exhausted without agreement → **WFM failure**: **reset to user input** with an **error message** explaining reason.
+1. **Pursue revision** — the line is **disagreed** with a **comment**; Agent 4 and/or user-driven text may supply a **replacement** intended to be in-scope, captured in the structured patch.
+
+2. **Confirmed omit** — the user **explicitly confirms** that the line is **excluded** from the rule bundle that proceeds downstream (orchestration stores this; it is **not** inferred from ignoring the line).
+
+
+
+There is **no** valid path where an **OUT_OF_SCOPE** line is dropped or skipped **without** either a **replacement** path or **confirmed omit**.
+
+
+
+**Optional second confirmation:** After orchestration computes the **merged** rule text, the product **may** show a **final merged rule** preview. Once the user **confirms** that preview, the **merged NL** is what **re-enters** WFM at Agent 1. *(What happens if the user **rejects** that final preview is **not** yet specified — see **Open issues**; current placeholder: **abort** / reset to user input without an extended Agent 4 loop.)*
+
+
+
+There are **no** inline markers in running text for speculative resolution; the user is **informed upfront** (via UI copy) that earlier steps may have used guesses. The package still reads as a **definitive proposal** pending user action.
+
+
+
+---
+
+
+
+### Agent 4 (LLM) — structured disagreement and patch
+
+
+
+**When invoked:** After the user marks **disagreed lines** and supplies **per-line comments**, **or** after partial engagement that still requires Agent 4 assistance under product rules. **Not** used to render the initial confirmation package.
+
+
+
+**Inputs (orchestration → model):** A **structured disagreement payload** should include at minimum: full **numbered list** as shown, **Agent 3 labels** per index, **disagreed indices**, **comments per disagreed index**, and any **confirmed omit** decisions already taken for **OUT_OF_SCOPE** lines (so the model does not invent omissions).
+
+
+
+**Role:** Clarify objections in natural language (per **`prompts/agent_4_user_interaction.md`**), then produce **replacement wording only for disagreed indices** that are not **confirmed omit**. **Accepted lines must not be rewritten** by Agent 4 except as required to output a valid machine-readable patch (orchestration still **merges** using **verbatim** accepted text for non-patch indices).
+
+
+
+**Machine-readable patch (`WFM_PATCH`):** The **model** supplies **`replacements`** only (see **`prompts/agent_4_user_interaction.md`**). **`omit_indices`** are **never** invented by the model: orchestration fills them from the user’s **confirmed omit** choices in the UI when building the **effective patch** for merge.
+
+
+
+Effective patch object (conceptual — may exist only inside orchestration after validation):
+
+
+
+```json
+
+{
+
+  "replacements": [ { "index": <1-based line number matching the confirmation UI>, "text": "<replacement sub-statement>" } ],
+
+  "omit_indices": [ <1-based line numbers the user explicitly confirmed to omit> ]
+
+}
+
+```
+
+
+
+**Rules:** **Indices are 1-based** and must match the **same numbering** shown to the user in the confirmation package. **Replacements** may **only** touch line indices the user **disagreed** with (and that are not user-confirmed omits). Orchestration **rejects** patches that alter non-disagreed lines or invent omits. The Agent 4 transcript must include a parseable **`WFM_PATCH`** block as defined in the Agent 4 prompt.
+
+
+
+**Retry budget (unchanged):** **First exchange is free** — clarifying questions **and** first proposal that includes a valid patch (or patch-equivalent). **Then 3 retries** total. Each retry = **one** proposal, **optionally** preceded by **one** clarifying question; each retry **must end in a proposal** (see decision table).
+
+
+
+**Inner exhaustion:** If the Agent 4 tentative-rewrite budget is exhausted without an **orchestration-valid** patch and user confirmation to proceed → **WFM failure**: **reset to user input** with reason.
+
+
+
+---
+
+
+
+### Patch merge and re-entry to WFM
+
+
+
+**Programmatic merge (orchestration):** Apply `replacements` and `omit_indices` to the **authoritative numbered list** from the confirmation snapshot — i.e. the **per-line text as shown** in the package (**PASS** = verbatim Agent 2 line unless the UI displayed otherwise; **REWRITE** = rewritten text as displayed; plus user-approved **WFM_PATCH** replacements and **confirmed omits**). Lines neither replaced nor omitted remain **byte-identical** to that accepted display text.
+
+
+
+**NL document for re-run (Style A — canonical):** After applying replacements and omitting confirmed lines, **renumber consecutively** from **1** through the remaining count. Build **one** string for **Agent 1** by joining each sub-statement as a line **`N. `** + text + **newline** (`\n`), for **N = 1 … count** (trim final trailing newline optional but **must** be applied **consistently** everywhere merge runs for reproducibility). **No** other join style is used for loop-back unless this document is formally revised.
+
+
+
+**Re-run:** **Agent 1 → Agent 2 → Agent 3** on that merged string, subject to the **outer** full-WFM rerun budget (**1 initial + 3 reruns** unless changed).
+
+
+
+**Records:** The system should retain originals, Agent 1–3 traces, user comments per line, patch JSON, merged NL, and confirmation timestamps for audit.
 
 
 
@@ -190,11 +284,11 @@ On **agreement** on a tentative statement: **re-run WFM from Agent 1** with that
 
 
 
-**Agreed** tentative statement goes **back to Agent 1** as **fresh** input. Agents **1–3 do not** know it is a retry.
+**Agreed merged** natural language (after confirmation, optional patch flow, and **programmatic merge**) goes **back to Agent 1** as **fresh** input. Agents **1–3 do not** know it is a retry. **Accepted** sub-statements are already **embedded verbatim** in that string from merge; expectations of immutability are enforced in **orchestration**, not by metadata passed into Agent 1.
 
 
 
-The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-back — **accepted limitation**: deep LLM engagement occurs when the user **rejects** the Agent 3-era result and supplies comments.
+The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-back — **accepted limitation**: deep LLM engagement occurs in the **reject / patch** phase only.
 
 
 
@@ -224,9 +318,21 @@ The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-
 
 | Agent 3 failed rewrite | **Reset to user input** with error reason. |
 
-| Loop-back / Agent 4 | Agents 1–3: text only. **Confirmation package** after Agent 3 (UI). **Agent 4 LLM** after user response (typically **no**). No injection into early agents on loop-back. |
+| Loop-back / Agent 4 | Agents 1–3: text only. **Confirmation package** after Agent 3 (UI). **Agent 4 LLM** after user **rejects** lines and supplies comments; **accept-all** skips Agent 4. No injection into early agents on loop-back. |
 
 | Long / multi-paragraph input (safety) | **`max_input_code_points`** (default **4096**, `WFM/config/wfm.json`); measure **Unicode code points**; **reject** over limit before Agent 1; **no** auto-chunk/truncate. |
+
+| Per-line disagreement | User may disagree with **specific indices**; **each disagreed line requires its own non-empty comment**. |
+
+| Blanket rejection | **Select all lines** as disagreed; still **N comments for N lines** (UI may duplicate draft into N fields). |
+
+| Implicit agreement | Any line **not** disagreed is **accepted as shown**; **REWRITE** text as displayed counts as accepted if untouched. |
+
+| **OUT_OF_SCOPE** handling | **No silent drop.** For each OOS line: either **replacement** path (disagree + comment → patch) or **user-confirmed omit** recorded by orchestration (`omit_indices`). |
+
+| Patch merge before re-run | **Model (`WFM_PATCH`):** JSON with **`replacements` only** (see Agent 4 prompt). **Orchestration:** merges user **confirmed omit** indices into the **effective** patch, **validates** (no edits to non-disagreed lines), applies merge, builds **Style A** NL; optional **final merged** preview; then **Agent 1** on that string. |
+
+| Final merged preview rejected | **Open** — not fully specified; placeholder: **abort** / reset to user input; **no** additional Agent 4 retry loop defined yet. |
 
 
 
@@ -242,11 +348,17 @@ The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-
 
 |-------|--------|
 
-| **Prompt maintenance** | Baseline instruction packs live in **`prompts/`**. Add edge-case types and extra examples as real traffic reveals gaps. |
+| **Prompt maintenance** | Baseline instruction packs live in **`prompts/`**. Agent 3 output format is **machine-pinned** (`PASS|REWRITE|OUT_OF_SCOPE: N. "…"`) for merge and tooling; add edge-case types and examples as traffic reveals gaps. |
+
+| **WFM test harness (repo)** | **`test_sets/scripts/`**: Gemini Agents 1–3 (`run_wfm_folio_gemini.py`), Agent 4 from JSONL + merge preview with **Agent 3–aware** base (`run_wfm_agent4_from_run.py`, `wfm_agent4_common.py`), interactive Agent 4 (`run_wfm_agent4_interactive.py`), loopback **merge preview → Agents 1–3** (`run_wfm_loopback_agent4_merge.py`). Not the product orchestrator; documents in **`test_sets/README.md`**. |
 
 | **Decomposition meaning drift** | **Accepted risk** for now; user may catch downstream; optional future checkpoint. |
 
 | **Full-pipeline failure contract** | Registry / formalizer must accept a single **WFM failure / return-to-input** signal and messaging; detailed API TBD. |
+
+| **Reject final merged rule preview** | If the user **rejects** the post-merge **final NL** confirmation, define **retry policy** (whether Agent 4 re-engages, budget, and prompt updates). **Current:** treat as **abort** / return to user input until specified. |
+
+| **`WFM_PATCH` prompt details** | **Done** in **`prompts/agent_4_user_interaction.md`**; keep in sync with **Patch merge** here. |
 
 
 
@@ -258,7 +370,7 @@ The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-
 
 
 
-- **WFM architecture:** Four internal agents: (1) completeness + ambiguity resolution, (2) decomposition, (3) scope check + rewrite/reports, (4) user-facing presentation (**UI** for confirmation package) and **conditional LLM feedback** when the user rejects and engages.
+- **WFM architecture:** Four internal roles: (1) completeness + ambiguity resolution, (2) decomposition, (3) scope check + rewrite/reports, (4) **UI confirmation package** after Agent 3 plus **conditional Agent 4 LLM** for structured disagreement, **`WFM_PATCH`**, and merge before optional full WFM re-run.
 
 - **Speculative resolution marking:** None in text; user informed upfront (e.g. UI copy); output shown as definitive proposal for confirmation.
 

@@ -15,4 +15,4 @@
 
 ## Cross-reference (optional follow-up)
 
-- **`pipeline_spec.md`**: If it still describes Agent 4 only as an LLM-presenter, consider a one-line sync with UI-first wording.
+- **`pipeline_spec.md`**: Synced with UI-first confirmation + conditional Agent 4 LLM (see current WFM step list there).

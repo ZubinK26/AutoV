@@ -1,7 +1,9 @@
 # Agent 4 prompt — refinement decision table
 
-**Scope:** [`agent_4_user_presentation.md`](agent_4_user_presentation.md)  
+**Scope:** [`agent_4_user_interaction.md`](agent_4_user_interaction.md)  
 **Architecture (chosen):** The confirmation package is shown with **UI + templates** (Agent 3 output, scope material, yes/no). The **Agent 4 LLM** is **not** called for that static screen — only **from the user’s response onward** (typically **no** + comments). This keeps policy aligned with `Agent_WFM.md` while avoiding pointless API calls for read-only presentation.
+
+**Structured handoff and re-run:** After rejection and comments, Agent 4’s **user-facing** reply must be paired with a parseable **`WFM_PATCH`** block (JSON **`replacements` only**; UI supplies **confirmed omits** to orchestration). Orchestration **merges** programmatically, then builds the **Style A** natural-language document (`1. …\n2. …\n`, consecutive numbering) that is the **sole input** to the next Agent 1 pass — see **`../Agent_WFM.md`** (Confirmation package, Agent 4, Patch merge) and the walkthrough **`../../test_sets/wfm_agent4_confirmation_manual_scenario.md`** (repo-relative from this file: `test_sets/…` at project root).
 
 | ID | Topic | Status | Resolution |
 |----|--------|--------|------------|
