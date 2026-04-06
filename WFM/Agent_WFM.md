@@ -354,7 +354,7 @@ The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-
 
 | **Decomposition meaning drift** | **Accepted risk** for now; user may catch downstream; optional future checkpoint. |
 
-| **Full-pipeline failure contract** | Registry / formalizer must accept a single **WFM failure / return-to-input** signal and messaging; detailed API TBD. |
+| **Full-pipeline failure contract** | **WFM exit** (limits, exhaustion, return-to-input) and **WFM↔orchestrator** event shape remain **TBD** at API level. **Post-WFM** persistence (commits to `registry.json` / `rules.json` / `bundles/`, full vs partial bundle, draft vs committed) is specified in **`pipeline_spec.md`** — *Failure / commit contract (resolved)*. |
 
 | **Reject final merged rule preview** | If the user **rejects** the post-merge **final NL** confirmation, define **retry policy** (whether Agent 4 re-engages, budget, and prompt updates). **Current:** treat as **abort** / return to user input until specified. |
 
@@ -376,7 +376,7 @@ The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-
 
 - **Decomposition (Agent 2):** Goal is the **smallest sub-statements that still preserve meaning**, with each piece within the **compound-operator limit** and the **plain-language counting rules** in **`prompts/agent_2_decomposition.md`**. If a part is **splittable into independent claims without losing meaning**, it is **not** fully decomposed yet (subject to Agent 2 counterexamples about conditionals). Operational definition and examples: **Agent 2 prompt**.
 
-- **After WFM:** Cleaned output is confirmed with the user, then passed to the **registry agent** (per pipeline spec in the repo root).
+- **After WFM:** Cleaned output is confirmed with the user, then passed to the **registry agent** (per pipeline spec in the repo root). **Structured handoff** (bundle id, per-line `statement_nl`, Agent 3 verdicts, scope/diff reports, `agent2_line_text`, timestamps, optional package-level Style A NL) is defined in **`pipeline_spec.md`** — **WFM → registry handoff (orchestration payload)**.
 
 
 
