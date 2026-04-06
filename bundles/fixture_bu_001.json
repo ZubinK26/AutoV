@@ -1,0 +1,38 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "fixture_bu_001",
+  "user_original_input": "Northwind policy: reporting chain and Avery approvals (stress-style fragment for registry fixtures).",
+  "confirmation_package_style_a": "1. Northwind Logistics assigns every field agent to exactly one regional lead.\n2. Avery is a field agent.\n3. Internal policy defines reachability as a finite chain of direct reports; Avery can escalate to the COO.\n",
+  "orchestration_run_id": "orr_m0_fixture",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-06T12:00:00Z"
+  },
+  "provider_model": "m0-fixture",
+  "wfm_compound_operator_limit": 8,
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Northwind Logistics assigns every field agent to exactly one regional lead.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Northwind Logistics assigns every field agent to exactly one regional lead.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Avery is a field agent.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Avery is a field agent.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Internal policy defines reachability in the reporting graph: an employee can escalate to another employee if there is a finite chain of direct reports (zero or more hops) from the first employee to the second employee.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "Transitive closure / arbitrary-length chains are out of scope for the formalizer.",
+      "diff_report": null,
+      "agent2_line_text": "5. \"Internal policy defines reachability...\""
+    }
+  ]
+}

@@ -25,6 +25,13 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
+# --- Registry M3 eval artifacts (Lane A JSONL; keep local) ---
+registry_stage/eval_runs/
+
+# --- VSC / IDE ---
+.vscode/
+.idea/
+
 # --- OS ---
 .DS_Store
 Thumbs.db

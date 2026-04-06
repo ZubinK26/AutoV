@@ -49,11 +49,13 @@ Steps **4–8** belong to **Phase 2**, which this file only **outlines**; they a
 
 | Task | Notes |
 |------|--------|
-| Choose **package / directory** (e.g. `registry_stage/`, `src/autov_registry/` — see **`registry_persistence_v1.md`** §10 *To do when needed*; **decide in M0**). | Record choice in this file or `README` snippet. |
-| Add **Python env** deps as needed: `json` (stdlib), later `numpy`, `faiss-cpu` or `faiss`, `sentence-transformers` (for `BAAI/bge-base-en-v1.5` per spec), optional LLM SDK matching WFM harness. | Pin versions when CI exists. |
-| **Fixture** `bundles/*.json`: minimal valid handoff (bundle fields + 1–3 per-line objects, mix PASS and optional OUT_OF_SCOPE). | Generated from **`pipeline_spec.md`** *WFM → registry handoff*. |
+| Choose **package / directory** (e.g. `registry_stage/`, `src/autov_registry/` — see **`registry_persistence_v1.md`** §10 *To do when needed*; **decide in M0**). | **Done:** package **`registry_stage/`** (import `registry_stage`); handoff dir **`bundles/`** at **repo root**; details **`registry_stage/README.md`**. |
+| Add **Python env** deps as needed: `json` (stdlib), later `numpy`, `faiss-cpu` or `faiss`, `sentence-transformers` (for `BAAI/bge-base-en-v1.5` per spec), optional LLM SDK matching WFM harness. | **M0:** **`registry_stage/requirements.txt`** — `pytest` only; M2+ deps TBD / pinned when CI exists. |
+| **Fixture** `bundles/*.json`: minimal valid handoff (bundle fields + 1–3 per-line objects, mix PASS and optional OUT_OF_SCOPE). | **Done:** **`bundles/fixture_bu_001.json`** (`PASS`, `OUT_OF_SCOPE`, `line_index` 0-based per **`registry_persistence_v1.md`**). |
 
 **Exit:** `pytest` or smoke script runs zero tests but imports succeed; one fixture file committed.
+
+**M0 exit (implemented):** `python -m pytest registry_stage/tests -q` passes; handoff fixture committed under **`bundles/`**.
 
 ---
 
@@ -63,12 +65,14 @@ Steps **4–8** belong to **Phase 2**, which this file only **outlines**; they a
 
 | Task | Notes |
 |------|--------|
-| Parse **`bundles/{bundle_id}.json`** into typed structures (dataclasses / Pydantic optional). | Reject unknown required fields in strict mode later. |
-| Load **`registry.json`** into session model (may start **empty**). | Supports “warm start” from prior dev export. |
-| Implement **`validate_alignment` stub** — `pass` or TODO hooks; full checks land in Phase 2. | Spec reminder in **`registry_persistence_v1.md`** §7. |
-| **Dev export:** `export_session(path, session_snapshot)` writing JSON that **maps** to registry entry / line trace shapes (not necessarily a full production `registry.json` commit). | Label as `dev_export: true` in metadata if useful. |
+| Parse **`bundles/{bundle_id}.json`** into typed structures (dataclasses / Pydantic optional). | **Done:** `registry_stage.loaders.load_handoff_bundle` / `parse_handoff_bundle`. |
+| Load **`registry.json`** into session model (may start **empty**). | **Done:** `load_registry` (missing file → empty shell). |
+| Implement **`validate_alignment` stub** — `pass` or TODO hooks; full checks land in Phase 2. | **Done:** `registry_stage.validation.validate_alignment` (returns `[]`; see **`registry_persistence_v1.md`** §7). |
+| **Dev export:** `export_session(path, session_snapshot)` writing JSON that **maps** to registry entry / line trace shapes (not necessarily a full production `registry.json` commit). | **Done:** `registry_stage.export_session.export_session` + `DevSessionSnapshot.to_jsonable()` (`dev_export: true`). |
 
 **Exit:** Unit test: load fixture handoff + empty registry → no crash.
+
+**M1 exit (implemented):** `registry_stage/tests/test_m1_persistence.py`; run `python -m pytest registry_stage/tests -q` from repo root (directory containing `bundles/` and `registry_stage/`).
 
 ---
 
@@ -78,26 +82,50 @@ Steps **4–8** belong to **Phase 2**, which this file only **outlines**; they a
 
 | Task | Notes |
 |------|--------|
-| **`RegistrySession`:** CRUD for `entries[]` with ids `sort_` / `ent_` / `fn_`; enforce kind-specific fields. | Tombstone optional in v1 session. |
-| **Embedding:** for each entry, embed `nl_description + name` (spec); cache vectors in session. | Model: **`bge-base-en-v1.5`** per **`pipeline_spec.md`**. |
-| **FAISS:** build/update index when entries change; **search(query_embedding, k)** → entry ids + scores. | Empty registry: return []. |
-| **Stub mode:** keyword / hash fallback if GPU/CPU limits — **clearly flagged**, not default for “spec-accurate” demo. |
+| **`RegistrySession`:** CRUD for `entries[]` with ids `sort_` / `ent_` / `fn_`; enforce kind-specific fields. | **Done:** `registry_stage.registry_session` (`add_or_replace`, `remove`, `get`, `from_entries`; tombstoned excluded from index by default). |
+| **Embedding:** for each entry, embed `nl_description + name` (spec); cache vectors in session. | **Done:** `entry_embed_text`; BGE path caches `embedding` on each indexed entry after rebuild. |
+| **FAISS:** build/update index when entries change; **search(query_embedding, k)** → entry ids + scores. | **Done:** `BgeFaissSemanticIndex` + `RegistrySession.search` / `search_nl`; empty index → `[]`. |
+| **Stub mode:** keyword / hash fallback if GPU/CPU limits — **clearly flagged**, not default for “spec-accurate” demo. | **Done:** `StubKeywordSemanticIndex` (`backend_label` `stub_keyword_fallback`); `create_semantic_index(prefer="faiss")` falls back if BGE/FAISS init fails. |
 
 **Exit:** Test: insert 3 fake entries, search returns sensible neighbor for a short NL query.
 
+**M2 exit (implemented):** `registry_stage/tests/test_m2_registry_session.py` (stub tests + BGE+FAISS when `faiss` / `sentence-transformers` are installed; `REGISTRY_M2_SKIP_HEAVY=1` skips the heavy test). Deps: `registry_stage/requirements.txt` (`numpy`, `faiss-cpu`, `sentence-transformers`).
+
 ---
 
-### M3 — Line driver: search → extract gaps (skeleton)
+### M3 — Line driver: search → extract gaps
 
-**Goal:** For one **`statement_nl`** (in-scope line), run **search** then identify **gaps** per spec (entities/symbols **not** covered by authoritative hits).
+**Goal:** For one **`statement_nl`** (in-scope line), run **search** (including **LLM-backed query expansion**), then identify **gaps** per spec using **structured** extraction where coverage is incomplete—entities/symbols **not** already explained by **authoritative** hits.
+
+**Placement (why M3, not M4/M5):** **Search expansion** and **gap extraction** decide *what* is retrieved and *what* is still missing **before** resolution. **M4** consumes gaps (map to registry symbols, user disambiguation). **M5** materializes **post-resolve** rows. Putting LLM retrieval/extraction in M4 or M5 would invert dependencies and make traces misleading (you would be “resolving” before you know structured gaps). Therefore both capabilities are **explicit M3 requirements** below.
 
 | Task | Notes |
 |------|--------|
-| **Search terms:** start with **`statement_nl`** as query string (embed query); optional LLM to expand terms (prompt **To do** — start heuristic). | Align with **`pipeline_spec.md`** step 3 “generate search terms.” |
-| **Authoritative hits:** treat top-k + threshold as “covered”; never let gap extraction **override** existing entries. | |
-| **Gap extraction:** stub returns **placeholder** gaps (e.g. nouns / capitalized tokens) OR LLM structured output (prompt **To do**). | Log gaps per `line_index`. |
+| **Baseline search query** | **Done:** `build_search_query` — `statement_nl` + optional `LineDriverConfig.extra_search_context` (truncated); feeds `RegistrySession.search_nl`. |
+| **LLM-backed search term expansion** | **Done:** `registry_stage/llm/agents.py` (`expand_search_phrases`); prompts `registry_stage/prompts/registry_search_expand.md`; **Gemini** via `registry_stage/llm/gemini_call.py` (env contract aligned with **`test_sets/wfm_api_contract_gemini.md`**). Config: `LineDriverConfig.enable_llm`, `query_mode` (`multi_query_fuse` \| `single_concat`), caps. **Tests:** mock `llm_complete`. |
+| **Authoritative hits** | **Done:** `LineDriverConfig.authoritative_min_score` / backend defaults; hits are **authoritative** for coverage; extraction **must not** contradict them (`pipeline_spec.md` step 3). |
+| **Heuristic gap fallback** | **Done:** `extract_placeholder_gaps` (Title case + CamelCase) — keep when LLM disabled, for CI, or as hybrid merge input. |
+| **Structured gap extraction (LLM)** | **Done:** `extract_structured_gaps` in `registry_stage/llm/agents.py`; prompt `registry_stage/prompts/registry_gap_extract.md`; model `StructuredGap` + masking in `registry_stage/line_driver.py`. **Tests:** mocked LLM JSON. |
+| **Logging / observability** | **Done:** INFO log with `hits`, `gaps`, `expansion` phrases, truncated `queries_used`, baseline snippet. |
 
-**Exit:** For a line and a small registry fixture, logs show `hits` + `gaps`.
+**Exit (stub path — implemented):** For a line and a small registry fixture, logs show `hits` + heuristic `gaps`; `registry_stage/line_driver.py`, `registry_stage/tests/test_m3_line_driver.py`.
+
+**M3 exit (LLM path — implemented):** `enable_llm=False` default (heuristic-only, CI-safe); `enable_llm=True` runs expansion then extraction (two Gemini calls when `llm_complete` not injected). Tests: `registry_stage/tests/test_m3_llm_line_driver.py` (mocks) + existing `test_m3_line_driver.py`.
+
+**Gap schema evolution:** If new fields are added to each structured gap (e.g. placeholders for future `rule_id` / bundle trace), **M4** and **M5** must be updated in the same change (or immediately after): consume them in resolve/populate, persist them in the per-line trace, or **explicitly** document ignore rules. Extending the gap JSON without touching downstream consumers will break demos and exports.
+
+**M3 empirical validation — required before M4:** **M4 is not required** to choose retrieval/masking defaults: validation uses **M3-only** outputs (per-line traces with `hits`, expansion metadata, structured `gaps`) on a **fixed small eval set** (bundle fixture(s) + optional seeded `registry.json`). By **end of M3**, run and record **two** comparisons (same eval set, same prompts):
+
+1. **Query mode:** **multi-query + fusion** vs **single concatenated query** (defaults on until results decide). Capture precision/recall *for retrieval* you care about (e.g. “correct registry row in top‑k”), plus latency (# of embed/search calls).
+2. **Masking:** **less aggressive** vs **more aggressive** masking (config preset or threshold); capture gap lists and whether obvious unknowns are incorrectly suppressed.
+
+Pick defaults **before starting M4** so resolve and disambiguation (M4) do not churn. Re-run a lighter check after **M5** only if trace/populate changes what “gap” means in exports.
+
+**Gemini integration (recommended shape):** Implement a **thin caller under `registry_stage/`** (e.g. `registry_stage/llm/`) that uses the **same env contract** as **`test_sets/wfm_api_contract_gemini.md`** (`GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TEMPERATURE`, `GEMINI_MAX_OUTPUT_TOKENS`, `GEMINI_THINKING_LEVEL`, `google-genai` SDK). **Do not** import **`test_sets/scripts/*.py`** as a library (CLI scripts, not a stable API). Keep the caller minimal and **document “parity”** with `run_wfm_folio_gemini.py` / `call_gemini` so ops behavior stays aligned. **End of M3 review:** Revisit whether to extract a **shared** `gemini_client` module used by both `test_sets` and `registry_stage` to remove duplication (only after M3 retrieval/extraction work is done).
+
+**Implementation (M3 LLM path — done):** `registry_stage/llm/` (`gemini_call.py`, `agents.py`), prompts under `registry_stage/prompts/`; `LineDriverConfig.enable_llm`, `query_mode`, `masking_preset`; defaults per caps below. CI/tests use **mocks** (`llm_complete` inject); live Gemini requires `GEMINI_API_KEY` and `pip install google-genai` (see `registry_stage/requirements.txt`).
+
+**Default caps (v1 — adjust after empirical pass):** **Max expanded phrases:** 8 (plus one baseline query in multi-query mode). **Max characters per expansion phrase:** 512. **Max length of single concatenated query string:** 6000 characters (truncate with explicit log). Rationale: limits FAISS/embed cost and query drift; enough room for Gemini paraphrases without dumping whole bundles into one string.
 
 ---
 
@@ -148,7 +176,7 @@ Steps **4–8** belong to **Phase 2**, which this file only **outlines**; they a
 
 | Task | Notes |
 |------|--------|
-| **LLM-backed** search expansion + gap extraction + resolve polishing. | Add `registry_stage/prompts/`; mirror WFM prompt hygiene. |
+| **LLM resolve polishing** (tone, disambiguation hints, paraphrase suggestions for the user). | M4 prompts; does **not** replace M3 retrieval/extraction (those are **required in M3**). |
 | **Warm start** from real `registry.json` produced elsewhere. | M1 loader + M2 reindex. |
 
 ---
@@ -166,7 +194,7 @@ Steps **4–8** belong to **Phase 2**, which this file only **outlines**; they a
 
 | Risk | Mitigation |
 |------|------------|
-| LLM quality for gaps/resolve | Start M3–M4 with **deterministic stubs**; add LLM in Stretch. |
+| LLM quality for gaps/resolve | **M3** ships **LLM expansion + structured gaps** (with **heuristic fallback**); use **mocks/fixtures in CI**, live provider for manual demos; **Stretch** adds optional **resolve polishing** in M4. |
 | FAISS / model weight size | Document env; offer stub index for CI. |
 | Scope creep into formalizer | Gate PRs with “M5 trace only” acceptance. |
 
@@ -178,7 +206,7 @@ Steps **4–8** belong to **Phase 2**, which this file only **outlines**; they a
 |------|---------|
 | Structured **handoff ingestion** | M1, M6 |
 | **Semantic + structural** registry session | M2 |
-| **Step 3** pipeline: search, gaps, resolve, populate | M3–M5 |
+| **Step 3** pipeline: search (**+ LLM expansion**), **structured** gaps, resolve, populate | M3–M5 (retrieval/extraction **M3**) |
 | **User** agree / disambiguate / disagree path | M4 |
 | **Traceability** per `line_index` / `bundle_id` | M5 |
 | Alignment with **`registry_persistence_v1`** keys | M1, M5 exports |

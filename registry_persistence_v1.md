@@ -232,5 +232,5 @@ Goals that **stop before** the formalizer (`pipeline_spec.md` step 4) still **fu
 | **Playground vs production persistence** | **Resolved (nuanced)** | **Phase 1 / learning:** in-memory session and optional **dev exports** — not asserted as **production commit**. **Production:** **`registry.json`** / **`rules.json`** mutate per *Failure / commit contract* (typically after formalizer + checks in the full product). |
 | **Registry workflow (steps and behavior)** | **Resolved** | **`pipeline_spec.md` step 3**; no further architecture gate for “what happens before formalizer.” |
 | **Registry agent LLM prompts** | **To do when needed** | Author when you implement the LLM-backed registry step; not spelled out in `pipeline_spec.md`. |
-| **Repository layout / packaging** | **To do when needed** | Decide when you start coding (paths, packages). |
+| **Repository layout / packaging** | **Resolved (M0–M1)** | Python package **`registry_stage/`** (load handoff / registry, dev `export_session`, `validate_alignment` stub); **`bundles/`** at repo root; see **`registry_stage/README.md`**. |
 | **CI strategy (live LLM vs fixtures)** | **To do when needed** | Decide when registry code has automated tests. |

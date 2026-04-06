@@ -1,0 +1,7 @@
+# Registry stage dev deps. M2+: semantic search (BGE + FAISS). M3 LLM: Gemini (optional at runtime).
+pytest>=7.0,<9
+numpy>=1.22,<3
+faiss-cpu>=1.7.4,<2
+sentence-transformers>=2.2.0,<6
+google-genai>=1.0.0
+python-dotenv>=1.0.0
