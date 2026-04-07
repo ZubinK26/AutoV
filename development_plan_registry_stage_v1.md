@@ -135,12 +135,16 @@ Pick defaults **before starting M4** so resolve and disambiguation (M4) do not c
 
 | Task | Notes |
 |------|--------|
-| **Resolve:** substitute canonical **names + ids** into text (or parallel “resolved line” field) per **`pipeline_spec.md`** step 3. | Store **pre_resolved** / **resolved** strings per line. |
+| **Resolve:** substitute canonical **names + ids** into text per **`pipeline_spec.md`** step 3. | Persist **`pre_resolved_nl`** and **`registry_resolved_nl`** on a **single per-line result object** — the only source for later **`rules.json`** serialization (do not re-derive from **`statement_nl` alone**). |
 | **Auto-confirm:** if single unambiguous mapping per gap, accept without prompt. | |
 | **Ambiguity:** if multiple competing registry matches, **present options** (CLI: numbered menu; future: UI). | Record **user_choice** in trace. |
 | **Disagree / correct:** user can pick alternate id or type correction — session updates before populate. | Minimal: one correction round in v1. |
+| **Serialization:** one choke point (e.g. `to_rule_row` / `persist_bundle`) that **requires** **`registry_resolved_nl`** for in-scope lines that completed resolve. | Prevents ad-hoc dict drops. |
+| **Tests:** when resolve runs, assert **`registry_resolved_nl` non-null**; if substitutions occurred, assert it **differs from** **`statement_nl`** where expected. | Catches regressions that only save **`statement_nl`**. |
 
 **Exit:** Integration-style test with scripted “user” input completes resolve for 2 lines, one auto, one disambiguation.
+
+**Exit (trace / export):** Any persisted or **rule-shaped dev export** after resolve includes **`registry_resolved_nl`** wherever resolve ran (**`pipeline_spec.md`** + **`registry_persistence_v1.md`** §5).
 
 ---
 
@@ -151,7 +155,7 @@ Pick defaults **before starting M4** so resolve and disambiguation (M4) do not c
 | Task | Notes |
 |------|--------|
 | **Populate:** create tentative `sort_` / `ent_` / `fn_` rows; update FAISS. | No `rule_id` yet if formalizer not run — optional **`provisional_line_ref`** `{bundle_id, line_index}`. |
-| **Per-line trace object:** `{ bundle_id, line_index, statement_nl, agent3_verdict, hits, gaps, pre_resolved_nl, resolved_nl, user_decisions, new_entry_ids }`. | Serializable for dev export. |
+| **Per-line trace object:** `{ bundle_id, line_index, statement_nl, agent3_verdict, hits, gaps, pre_resolved_nl, registry_resolved_nl, user_decisions, new_entry_ids }`. | Use **`registry_resolved_nl`** (not a generic `resolved_nl`) to match **`registry_persistence_v1.md`** §5 and formalizer input in **`pipeline_spec.md`** step 4. Serializable for dev export. |
 | **OUT_OF_SCOPE lines:** skip formal pipeline steps; include in trace as **`skipped_reason`**. | Match **`pipeline_spec.md`**. |
 | **Optional:** write **`.pipeline.json`** with `pipeline_status: pending` for harness realism. | Does not imply production commit. |
 
@@ -231,10 +235,10 @@ After M0–M6, you can **design and implement** the rest of **`pipeline_spec.md`
 
 | Step | Work (summary) |
 |------|----------------|
-| **4** | Formalizer LLM + registry context → Z3/Python artifact. |
+| **4** | Formalizer LLM on **`registry_resolved_nl`** + registry context → Z3/Python artifact. |
 | **5** | Z3 parse/type check. |
 | **6** | Identifier extraction + fuzzy match + critic LLM. |
 | **7** | Repair loop (errors back to formalizer, iteration budget). |
 | **8** | User-approved **production commit**: `rules.json`, **`committed_edges`**, **`registry.json`**, **`bundles/*.pipeline.json`** per *Failure / commit contract*; full **`validate_alignment`**. |
 
-Until that plan exists, **steps 4–8 are not** in the “what you can do after” list for **Phase 1** — by design, Phase 1 stops at the **output that step 3 hands to step 4** (resolved NL + session registry context).
+Until that plan exists, **steps 4–8 are not** in the “what you can do after” list for **Phase 1** — by design, Phase 1 stops at the **output that step 3 hands to step 4** (**`registry_resolved_nl`** + session registry context; see **`pipeline_spec.md`** step 4).

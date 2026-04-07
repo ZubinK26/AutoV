@@ -143,6 +143,7 @@ Used in **`bundles/{bundle_id}.pipeline.json`**.
       "bundle_id": "bundle_7f3a",
       "line_index": 0,
       "statement_nl": "Every cat is a mammal.",
+      "registry_resolved_nl": "Every Cat is a Mammal.",
       "z3_python_source": "# z3 code or heredoc string",
       "committed_edges": [
         { "entry_id": "fn_020", "relationship": "CREATED_BY_RULE" },
@@ -157,6 +158,15 @@ Used in **`bundles/{bundle_id}.pipeline.json`**.
   ]
 }
 ```
+
+**`statement_nl` vs `registry_resolved_nl`:**
+
+| Field | Role |
+|-------|------|
+| **`statement_nl`** | From the WFM handoff — canonical line **into** the registry stage (**search** / **resolve** starting point). **Audit / lineage.** |
+| **`registry_resolved_nl`** | **After** step 3 resolve, user-approved — canonical registry wording (names / substitutions). **`pipeline_spec.md` step 4** — the formalizer **always** uses this (plus registry context), not **`statement_nl` alone**, when they differ. MUST be present for every **in-scope** persisted rule that completed resolve. **MAY equal** **`statement_nl`** when no substitution was needed. |
+
+**Trace / Phase 1:** Use the same names on the **per-line trace** (`pre_resolved_nl`, **`registry_resolved_nl`**) so session exports map to this row without rename. Build **`rules.json`** objects from that trace via a **single** serialization path so **`registry_resolved_nl`** is never dropped.
 
 **`committed_edges` row:** exactly **`entry_id`** + **`relationship`** (enum §2). **`rule_id`** is implicit from the parent object.
 
@@ -191,6 +201,7 @@ On commit, tooling SHOULD assert (policy from `pipeline_spec.md`):
 
 - For every `{ "entry_id", "relationship" }` in `committed_edges`, **`entry_id`** exists and `entries[].source_rule` contains **`rule_id`** (membership policy).
 - `CREATED_BY_RULE` only when the entry first appeared on that commit (implementation enforces).
+- For each in-scope rule row that completed resolve: **`registry_resolved_nl`** is present and non-empty; if substitutions occurred vs **`statement_nl`**, **`registry_resolved_nl`** reflects them (integration tests SHOULD catch accidental omission).
 
 ---
 
@@ -215,11 +226,13 @@ Goals that **stop before** the formalizer (`pipeline_spec.md` step 4) still **fu
 
 | In scope for Phase 1 | Out of scope (later) |
 |----------------------|----------------------|
-| Session registry + resolved NL + traceability keyed by `bundle_id` / `line_index` | Production **`rules.json`** rows |
+| Session registry + **`pre_resolved_nl`** / **`registry_resolved_nl`** on the per-line trace (same fields as §5 for future `rules.json`) + traceability keyed by `bundle_id` / `line_index` | Production **`rules.json`** rows |
 | Thin load/save helpers and optional session export aligned with this schema | **`committed_edges`** on persisted rules |
-| Mapping session outputs to keys in this doc for a smooth formalizer phase | Production **rule commit** and **`validate_alignment`** on full graph (until end-to-end exists) |
+| Mapping session outputs to keys in this doc for a smooth formalizer phase (including **`registry_resolved_nl`**) | Production **rule commit** and **`validate_alignment`** on full graph (until end-to-end exists) |
 
 **Note:** Phase 1 does **not** relax product rules for **production** files — it defers writing them until the full accept path (or uses **dev-only** exports). `registry_persistence_v1` still **defines** future fields so session data does not need a breaking rename.
+
+**`registry_resolved_nl` in Phase 1:** Populated at end of resolve (M4); carried in the **line result / trace** through M5 and any **rule-shaped dev export** — same requirement as production (non-null when resolve ran; differs from **`statement_nl`** when substitutions happened) so Phase 2 formalizer wiring does not rediscover missing text.
 
 ---
 
