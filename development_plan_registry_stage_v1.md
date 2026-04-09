@@ -196,6 +196,8 @@ Re-run a lighter M3 check after **M5** if populate/trace changes what “gap” 
 
 **Exit:** README section “Registry stage v1 demo” with copy-paste command. **Done:** `registry_stage/README.md` § **Registry stage v1 demo** ( **`run`** + **`m4_warm_eval`** pointers).
 
+**See also — full stakeholder e2e (WFM → registry):** **`development_plan_wfm_registry_e2e_demo.md`** (launcher, handoff JSON builder, read-only per-step viewers). That work is **orchestration / demo-layer** on top of M0–M6; it does **not** change registry milestone boundaries.
+
 ---
 
 ### Stretch (same phase, optional)
@@ -421,3 +423,4 @@ Until that plan exists, **steps 4–8 are not** in the “what you can do after�
 | 2026-04-09 | **M4 empirical (prompt + pipeline):** Gap / search-expand / resolve prompt refresh; **`line_driver`** — no heuristic merge into **`gap_spans`** when LLM extraction on. Summarized **`registry_stage/REGISTRY_M4_EVAL_DECISIONS.md`**. **Numeric M4 guardrails:** unchanged (still deferred). **M6 README** demo section completed. |
 | 2026-04-10 | **Guardrail follow-up:** After WFM → registry-resolve **e2e demo**, revisit whether distance/similarity (and other guardrail) failures stay **fail-the-line** only or add orchestration options (e.g. extra resolve-LLM pass); **Phase 1** unchanged until then. Cross-ref **`registry_stage/REGISTRY_M4_EVAL_DECISIONS.md`**. |
 | 2026-04-11 | **Edit distance / similarity** — **deferred to post–e2e demo** (WFM through registry workflow end): intentional to avoid brittle pre–e2e tuning; validator stays non-distance until then. **Next focus:** M6 **two-bundle** stakeholder / warm-registry demo (process guard). |
+| 2026-04-11 | **WFM → registry e2e demo plan:** **`development_plan_wfm_registry_e2e_demo.md`** (launcher, handoff JSON builder, read-only viewers); **M6** cross-ref under runnable harness. |
