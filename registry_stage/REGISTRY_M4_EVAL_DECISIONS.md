@@ -15,8 +15,9 @@ This file records **prompt and pipeline** tuning driven by **`m4_warm_eval_v1`**
 
 ## Numeric guardrails
 
-- **Not tuned in this round.** M4 validator still enforces schema, success predicate, and **`cited_entry_ids`** ⊆ authoritative hits; **no** edit-distance or similarity thresholds were added to code.
-- **Still owed (per dev plan inventory):** implement candidate-vs-`statement_nl` checks + calibrate cutoffs on a growing resolve eval set.
+- **Not tuned in this round.** M4 validator still enforces schema, success predicate, and **`cited_entry_ids`** ⊆ authoritative hits; **no** edit-distance or similarity thresholds in code.
+- **Edit distance / similarity (scheduling):** **Deferred** until **after** the **WFM → registry workflow** e2e demo (handoff through resolve + populate / export — see **`development_plan_registry_stage_v1.md`** Guardrail numbers + § **M6**). **Rationale:** brittle and tuning-heavy; implement + label + sweep **only after** e2e justifies the investment.
+- **When distance guardrails land:** On failure, **fail the line** per dev plan until product/orchestration documents alternatives (e.g. extra resolve pass) — see Guardrail numbers **follow-up**.
 
 ## Observations (single-fixture snapshot)
 
@@ -27,4 +28,4 @@ This file records **prompt and pipeline** tuning driven by **`m4_warm_eval_v1`**
 ## Next empirical pass
 
 - Re-run **`m4_warm_eval`** (or expand fixtures) after **any** prompt or `line_driver` change; stamp **header `prompt_sha256`** in JSONL.
-- When ready for **numeric M4 guardrails:** add validator code + labels, then sweep cutoffs (document results here or extend this file).
+- **Edit-distance / similarity guardrails:** **after** WFM → registry **e2e demo** — then add validator + labels + sweeps if still prioritized (document here).
