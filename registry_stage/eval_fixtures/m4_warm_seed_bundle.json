@@ -1,0 +1,25 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "m4_eval_seed_bu",
+  "user_original_input": "M4 warm-registry eval — seed bundle (introduces named entities for a later reuse bundle).",
+  "orchestration_run_id": "m4_warm_seed",
+  "provider_model": "m4-eval-fixture",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Meridian Analytics Inc. assigns exactly one certified reviewer to every Project Aurora deliverable before release.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": null
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Project Aurora stores compliance evidence in the shared Northstar metrics workspace.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": null
+    }
+  ]
+}

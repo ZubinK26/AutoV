@@ -77,6 +77,11 @@ def test_m3_llm_mock_expansion_and_structured_gaps() -> None:
     assert any("BetaCorp" in g for g in res.gap_spans)
     assert res.structured_gaps and res.structured_gaps[0].surface == "BetaCorp"
     assert isinstance(res.structured_gaps[0], StructuredGap)
+    assert len(res.raw_structured_gaps) == 1
+    assert res.raw_structured_gaps[0].surface == "BetaCorp"
+    assert res.raw_expansion_phrases == res.expansion_phrases
+    assert res.authoritative_min_score == 0.11
+    assert res.semantic_backend_label.startswith("stub_")
 
 
 def test_m3_llm_single_concat_mode_one_query_string() -> None:
@@ -113,4 +118,29 @@ def test_llm_logs_calls_for_observability() -> None:
         config=LineDriverConfig(enable_llm=True, llm_complete=llm),
     )
     assert len(log) == 2
+
+
+def test_raw_expansion_preserves_pre_cap_phrase_count() -> None:
+    many = [f"expansion_topic_{i}" for i in range(15)]
+
+    def fake(system: str, user: str) -> str:
+        if '"authoritative_registry_coverage"' in user:
+            return json.dumps({"gaps": []})
+        return json.dumps({"phrases": many})
+
+    session = _session_acme()
+    res = run_search_and_gaps_for_line(
+        session,
+        0,
+        "Acme meets BetaCorp.",
+        config=LineDriverConfig(
+            enable_llm=True,
+            llm_complete=fake,
+            query_mode="multi_query_fuse",
+            max_expanded_phrases=4,
+            max_chars_per_expansion=512,
+        ),
+    )
+    assert len(res.raw_expansion_phrases) == 15
+    assert len(res.expansion_phrases) == 4
 

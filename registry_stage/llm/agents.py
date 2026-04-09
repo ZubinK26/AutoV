@@ -49,6 +49,46 @@ def _cap_phrases(phrases: list[str], *, max_phrases: int, max_chars: int) -> lis
     return out
 
 
+def expand_search_phrases_parsed(
+    *,
+    statement_nl: str,
+    extra_context: str | None,
+    llm_complete: LlmComplete,
+) -> list[str]:
+    """Phrases from the model after JSON parse and strip, **before** count/char caps (Lane A raw layer)."""
+    path = PROMPTS_DIR / "registry_search_expand.md"
+    system = load_system_prompt(path)
+    payload = {
+        "statement_nl": statement_nl.strip(),
+        "extra_context": (extra_context or "")[:2000],
+    }
+    user = json.dumps(payload, ensure_ascii=False) + "\n\nRespond with JSON only: {\"phrases\": [\"...\", ...]}"
+    raw_text = llm_complete(system, user)
+    data = parse_json_object(raw_text)
+    raw_list = data.get("phrases")
+    if not isinstance(raw_list, list):
+        return []
+    return [str(x).strip() for x in raw_list if str(x).strip()]
+
+
+def expand_search_phrases_with_raw(
+    *,
+    statement_nl: str,
+    extra_context: str | None,
+    llm_complete: LlmComplete,
+    max_phrases: int,
+    max_chars: int,
+) -> tuple[list[str], list[str]]:
+    """Returns ``(raw_phrases_pre_cap, capped_phrases_for_search)``."""
+    raw = expand_search_phrases_parsed(
+        statement_nl=statement_nl,
+        extra_context=extra_context,
+        llm_complete=llm_complete,
+    )
+    capped = _cap_phrases(list(raw), max_phrases=max_phrases, max_chars=max_chars)
+    return raw, capped
+
+
 def expand_search_phrases(
     *,
     statement_nl: str,
@@ -57,20 +97,14 @@ def expand_search_phrases(
     max_phrases: int,
     max_chars: int,
 ) -> list[str]:
-    path = PROMPTS_DIR / "registry_search_expand.md"
-    system = load_system_prompt(path)
-    payload = {
-        "statement_nl": statement_nl.strip(),
-        "extra_context": (extra_context or "")[:2000],
-    }
-    user = json.dumps(payload, ensure_ascii=False) + "\n\nRespond with JSON only: {\"phrases\": [\"...\", ...]}"
-    raw = llm_complete(system, user)
-    data = parse_json_object(raw)
-    raw_list = data.get("phrases")
-    if not isinstance(raw_list, list):
-        return []
-    phrases = [str(x).strip() for x in raw_list if str(x).strip()]
-    return _cap_phrases(phrases, max_phrases=max_phrases, max_chars=max_chars)
+    _, capped = expand_search_phrases_with_raw(
+        statement_nl=statement_nl,
+        extra_context=extra_context,
+        llm_complete=llm_complete,
+        max_phrases=max_phrases,
+        max_chars=max_chars,
+    )
+    return capped
 
 
 def extract_structured_gaps(
@@ -120,6 +154,37 @@ def extract_structured_gaps(
             )
         )
     return out
+
+
+def resolve_registry_nl_parsed(
+    *,
+    statement_nl: str,
+    authoritative_hits_context: str,
+    gap_spans: list[str],
+    structured_gaps: list[dict],
+    llm_complete: LlmComplete,
+    validation_feedback: str | None = None,
+) -> dict:
+    """Single structured resolve call; returns parsed JSON dict (``resolve_v1``)."""
+    path = PROMPTS_DIR / "registry_resolve_automated.md"
+    system = load_system_prompt(path)
+    payload: dict = {
+        "statement_nl": statement_nl.strip(),
+        "authoritative_hits_context": authoritative_hits_context[:12000],
+        "gap_spans": gap_spans[:200],
+        "structured_gaps": structured_gaps[:80],
+    }
+    user = json.dumps(payload, ensure_ascii=False)
+    if validation_feedback:
+        user += (
+            "\n\nThe previous JSON failed validation:\n"
+            + validation_feedback[:4000]
+            + "\n\nReturn a corrected JSON object only."
+        )
+    else:
+        user += "\n\nReturn the JSON object only, no other text."
+    raw = llm_complete(system, user)
+    return parse_json_object(raw)
 
 
 def default_gemini_complete(system: str, user: str) -> str:

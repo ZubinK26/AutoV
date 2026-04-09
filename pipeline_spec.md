@@ -89,7 +89,7 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 **Pipeline stages (4 top-level agents):**
 
 1. **Well-formedness module (WFM)** — internal **four** sub-agents (see `WFM/Agent_WFM.md` and `WFM/prompts/`).
-2. **Registry agent** (extract → search → resolve with user → populate)
+2. **Registry agent** (search → extract gaps → resolve → populate; **Phase 1:** automated resolve per **`development_plan_registry_stage_v1.md`** — *Automated LLM resolution*)
 3. **Formalizer**
 4. **Identifier critic**
 
@@ -144,12 +144,17 @@ After **user acceptance** of the confirmation package (per **`WFM/Agent_WFM.md`*
 **ID policy (resolved):** Registry entry **IDs** and rule **IDs** are **immutable**; no silent reuse (tombstone or equivalent if entries are retired)—see **Graph-friendly shape** below.
 
 3. **Registry agent (LLM)** — multi-step workflow:
+
+   **Phase 1 (registry stage v1 — `development_plan_registry_stage_v1.md` M3–M5):** **automated resolve only**. A structured LLM emits **`registry_resolution_candidate_nl`** and related fields; **programmatic validation** commits to **`registry_resolved_nl`** or **fails the line** with structured reasons — see **Automated LLM resolution** in **`development_plan_registry_stage_v1.md`**. There is **no** interactive disambiguation or registry review UI in this phase.
+
+   **Full product (future):** optional **user** confirmation, structured choice among competing matches, and correction loops; background notes: **`archive/registry_resolution_interactive_design/`**.
+
    - **Search first:** generate search terms from **`statement_nl`** for each line (and optionally bundle-level `confirmation_package_style_a`), query registry via semantic search (embeddings). If registry is empty, skip search — everything is new.
    - **Extract gaps:** extract entities, types, functions, arities, constants from **`statement_nl`** for that line, but only for things *not already covered* by search results. Registry search results are authoritative — extraction never overrides or contradicts existing registry entries.
-   - **Resolve:** default is auto-confirm **per line**. Rewrite **`statement_nl`** with matched registry entries substituted in (showing IDs and canonical names), and present side-by-side with the pre-resolved line so user can scan and confirm at a glance. The **user-approved** result is **`registry_resolved_nl`** (same as **`statement_nl`** only when no substitution was required). Only interrupt the user with an explicit choice when multiple competing matches exist (e.g., "did you mean the weight of the package or the weight of the item?"). The agent may also ask the user clarifying questions for any other reason it deems necessary — all questions must be phrased in plain language or project domain terms, never in programming or logic terminology. **`pre_resolved_nl`** and **`registry_resolved_nl`** MUST be retained for traceability **per line** (keyed by `line_index` / `bundle_id`) and MUST be carried into the **persisted rule row** and any **per-line trace** (see **`registry_persistence_v1.md`**).
-   - **Populate:** after resolution (auto-confirmed or user-corrected), add new entries to registry and link existing entries. Return all relevant registry context for the formalizer **per in-scope line** (or once per bundle if implementation batches—context must remain attributable to each `rule_id` / `line_index`).
+   - **Resolve:** rewrite **`statement_nl`** with matched registry entries substituted in (canonical names / ids). The result that **proceeds to populate and (later) the formalizer** is **`registry_resolved_nl`** (may equal **`statement_nl`** when no substitution was required). In Phase 1, **`registry_resolved_nl`** is set only after **automated validation passes**. In the full product, additional **user** approval may be required by policy before that write. **`pre_resolved_nl`** and **`registry_resolved_nl`** MUST be retained for traceability **per line** (keyed by `line_index` / `bundle_id`) and MUST be carried into the **persisted rule row** and any **per-line trace** (see **`registry_persistence_v1.md`**).
+   - **Populate:** after a line **successfully** completes resolve (**`registry_resolved_nl`** set for that line), add new entries to registry and link existing entries. Return all relevant registry context for the formalizer **per in-scope line** (or once per bundle if implementation batches—context must remain attributable to each `rule_id` / `line_index`).
 
-4. **Formalizer (LLM)** — receives: **per-rule** **`registry_resolved_nl`** (the registry-aligned English sentence **after** step 3 resolve — canonical registry names / substitutions, user-approved) **plus** registry context (all relevant sorts, functions, constants with exact names and signatures) + instructions to produce Z3 Python code using only declared registry vocabulary. **Do not** formalize from **`statement_nl` alone** when it disagrees with **`registry_resolved_nl`** — doing so would mismatch vocabulary and user-approved alignments. **`statement_nl`** remains on the rule for **audit** (WFM lineage). **Skip** lines with `agent3_verdict: OUT_OF_SCOPE` (no formal unit). Lines in the same **`bundle_id`** share the same populated registry vocabulary for that acceptance.
+4. **Formalizer (LLM)** — receives: **per-rule** **`registry_resolved_nl`** (the registry-aligned English sentence **after** step 3 resolve — canonical registry names / substitutions; **Phase 1:** written by programmatic commit after automated resolve; **full product:** may also be user-approved) **plus** registry context (all relevant sorts, functions, constants with exact names and signatures) + instructions to produce Z3 Python code using only declared registry vocabulary. **Do not** formalize from **`statement_nl` alone** when it disagrees with **`registry_resolved_nl`** — doing so would mismatch vocabulary and accepted alignments. **`statement_nl`** remains on the rule for **audit** (WFM lineage). **Skip** lines with `agent3_verdict: OUT_OF_SCOPE` (no formal unit). Lines in the same **`bundle_id`** share the same populated registry vocabulary for that acceptance.
 
 5. **Z3 syntax/type check** — Z3 catches malformed code, type mismatches, undeclared identifiers for free.
 
@@ -171,7 +176,7 @@ The text diagram and build-status legend are in **`pipeline_diagram.md`** (repo 
 
 **Implementation contract (v1 JSON keys, enums, Phase 1 pre–formalizer scope, gap / deferral table):** **`registry_persistence_v1.md`** (§§9–10).
 
-**Development plan (milestones M0–M6 — registry stage before formalizer):** **`development_plan_registry_stage_v1.md`**.
+**Development plan (milestones M0–M6 — registry stage before formalizer):** **`development_plan_registry_stage_v1.md`** (includes **Phase 1 automated LLM resolution** spec as a dedicated section). **Future** interactive resolve (not Phase 1): **`archive/registry_resolution_interactive_design/README.md`**.
 
 ### Infrastructure:
 - **Embedding model:** `BAAI/bge-base-en-v1.5` (local, no API cost)

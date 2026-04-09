@@ -2,6 +2,42 @@
 
 This file supports the **3×2 configuration matrix** (two query modes × three masking presets): run **six** full pipelines per example, record **raw expansion**, **raw extraction**, and **post-mask** outputs for prompt tuning—**without** using strict “golden text” checks on live Gemini.
 
+You can still run the **full 2×3 matrix** for regression or prompt work by omitting ``--query-modes`` / ``--masking-presets`` on ``m3_lane_a`` (defaults unchanged).
+
+---
+
+## Defaults locked after Protocol A + B (2026-04-08)
+
+Empirical **Protocol A** (retrieval-only labels, ``m3_retrieval_eval_*``, FAISS+BGE) compared ``multi_query_fuse`` vs ``single_concat`` under **conservative** masking only. **Protocol B** swept ``authoritative_min_score`` under ``single_concat`` + conservative.
+
+| Knob | Locked value | Notes |
+|------|----------------|--------|
+| **``masking_preset``** | **``conservative``** | Standard/aggressive dropped required gap substrings on the business slice earlier; conservative matches declared expectations. |
+| **``query_mode``** | **``single_concat``** | On the 12-line retrieval eval, ``single_concat`` passed **12/12** authoritative checks; ``multi_query_fuse`` passed **7/12**. |
+| **``authoritative_min_score``** (BGE+FAISS) | **``0.35``** | ``default_authoritative_min_score`` in code. Rerun grid showed **0.35** as the stable passing cutoff on ``m3_retrieval_eval_labels.json`` for that snapshot; **not permanent** — LLM expansion variance, new lines, or index/prompt changes can require re-tuning (see below). |
+
+**Production-oriented Lane A narrow runs** should use ``--query-modes single_concat --masking-presets conservative`` unless you are explicitly re-benchmarking.
+
+**Caveat:** Treat **0.35** as **current** best judgment from the committed retrieval label set, not a theorem. After the next empirical eval (more lines, different registry, or prompt edits), re-run Protocol B or spot-check that authoritative expectations still hold.
+
+---
+
+## Protocol B — ``authoritative_min_score`` sweep (optional re-runs)
+
+**Goal:** Find a cutoff that satisfies **``m3_retrieval_eval_labels.json``** (authoritative only) under locked query mode + mask.
+
+**Run** (live Gemini, repo root)::
+
+    python -m registry_stage.m3_protocol_b_minscore --scores 0.18 0.22 0.28 0.32 0.35 0.40 --out-dir registry_stage/eval_runs
+
+This writes ``eval_protocol_b_minscore_<tag>.jsonl`` per score (``single_concat`` + ``conservative`` + retrieval fixtures by default).
+
+**Grade** each file (no API)::
+
+    python -m registry_stage.m3_eval_score --jsonl registry_stage/eval_runs/eval_protocol_b_minscore_0p350.jsonl --labels registry_stage/eval_fixtures/m3_retrieval_eval_labels.json
+
+**As of 2026-04-08:** code default for BGE+FAISS is **0.35** after Protocol B; repeat the sweep when you intentionally change expansion, embeddings, or the eval set.
+
 ---
 
 ## Lane A vs Lane B (agreed)

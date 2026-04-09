@@ -17,7 +17,7 @@ def _repo_root() -> Path:
 
 
 def test_m1_version() -> None:
-    assert registry_stage.__version__ == "0.0.m3"
+    assert registry_stage.__version__ == "0.0.m5"
 
 
 def test_load_fixture_handoff_and_empty_registry_no_crash(tmp_path: Path) -> None:

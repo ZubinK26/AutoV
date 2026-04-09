@@ -1,0 +1,38 @@
+{
+  "eval_label_set_id": "m3_business_labeled_v1",
+  "description": "Human expectations for retrieval (authoritative hits) and gaps. Used by m3_eval_score on Lane A JSONL — no API.",
+  "check_authoritative": true,
+  "check_gaps": true,
+  "lines": [
+    {
+      "id": "biz_po_pallets",
+      "required_authoritative_entry_ids": ["ent_acme_ltd", "sort_order", "ent_sku_7781"],
+      "expected_gap_substrings": ["PO-4492"],
+      "notes": "Purchase-order line should surface Acme, order sort, SKU constant; PO id should remain visible as a registrable gap after masking."
+    },
+    {
+      "id": "biz_betacorp_confirm",
+      "required_authoritative_entry_ids": ["ent_betacorp"],
+      "expected_gap_substrings": ["NetLedger"],
+      "notes": "BetaCorp in registry; NetLedger not in fixture registry — should stay as a gap."
+    },
+    {
+      "id": "biz_account_manager",
+      "required_authoritative_entry_ids": ["sort_order", "sort_employee"],
+      "expected_gap_substrings": ["account manager"],
+      "notes": "Sentence is about PO + SalesEmployee; both sorts should be retrieved; relation wording often survives as gap surface."
+    },
+    {
+      "id": "biz_northwind_style",
+      "required_authoritative_entry_ids": [],
+      "expected_gap_substrings": ["Northwind", "field agent", "regional lead"],
+      "notes": "No Northwind in fixture registry — organizational concepts should appear as gaps, not vanish entirely."
+    },
+    {
+      "id": "biz_gamma_vendor",
+      "required_authoritative_entry_ids": ["ent_acme_ltd"],
+      "expected_gap_substrings": ["GammaVendor", "RequestForQuote"],
+      "notes": "Acme is named; GammaVendor and RFQ are outside fixture — must remain gaps."
+    }
+  ]
+}

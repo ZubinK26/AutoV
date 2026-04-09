@@ -62,7 +62,7 @@ Companion to **`pipeline_spec.md`**. The numbered steps and full architecture ar
                           +---------------------------+
                           | 3. Registry agent         |  [ .. ]
                           |  search | extract |       |
-                          |  resolve | populate       |  (FAISS / JSON TBD)     |
+                          |  resolve | populate       |  Phase 1: auto only     |
                           +-------------+-------------+
                                         |
                                         v

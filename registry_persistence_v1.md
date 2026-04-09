@@ -164,7 +164,7 @@ Used in **`bundles/{bundle_id}.pipeline.json`**.
 | Field | Role |
 |-------|------|
 | **`statement_nl`** | From the WFM handoff — canonical line **into** the registry stage (**search** / **resolve** starting point). **Audit / lineage.** |
-| **`registry_resolved_nl`** | **After** step 3 resolve, user-approved — canonical registry wording (names / substitutions). **`pipeline_spec.md` step 4** — the formalizer **always** uses this (plus registry context), not **`statement_nl` alone**, when they differ. MUST be present for every **in-scope** persisted rule that completed resolve. **MAY equal** **`statement_nl`** when no substitution was needed. |
+| **`registry_resolved_nl`** | **After** step 3 resolve — canonical registry wording (names / substitutions). **Phase 1:** set only when **automated** resolve + validation succeed per **`development_plan_registry_stage_v1.md`** (*Automated LLM resolution*). **Full product:** may additionally require explicit user acceptance. **`pipeline_spec.md` step 4** — the formalizer **always** uses this (plus registry context), not **`statement_nl` alone**, when they differ. MUST be present for every **in-scope** persisted rule that completed resolve. **MAY equal** **`statement_nl`** when no substitution was needed. |
 
 **Trace / Phase 1:** Use the same names on the **per-line trace** (`pre_resolved_nl`, **`registry_resolved_nl`**) so session exports map to this row without rename. Build **`rules.json`** objects from that trace via a **single** serialization path so **`registry_resolved_nl`** is never dropped.
 
@@ -207,7 +207,7 @@ On commit, tooling SHOULD assert (policy from `pipeline_spec.md`):
 
 ## 8. What to design next: registry vs workflow
 
-**Executable milestones:** **`development_plan_registry_stage_v1.md`** (M0–M6, pre–formalizer).
+**Executable milestones:** **`development_plan_registry_stage_v1.md`** (M0–M6, pre–formalizer), including **Automated LLM resolution (Phase 1, normative spec)**. Interactive resolve design notes (not Phase 1): **`archive/registry_resolution_interactive_design/README.md`**.
 
 **Do both in one thin vertical slice**, in this order:
 
@@ -216,13 +216,13 @@ On commit, tooling SHOULD assert (policy from `pipeline_spec.md`):
 
 Pure **workflow-first** without frozen keys invites rename churn; pure **registry-first** without a scripted “happy path” risks over-modeling.
 
-**Vertical slice:** one handoff → one line → search (empty registry → create entries) → resolve → user confirmation → session populate. **Full product slice** then adds mock or real formalizer → Z3 → critic → **production commit** → `rules.json` + `registry.json` + `bundles/*.pipeline.json` per *Failure / commit contract*.
+**Vertical slice:** one handoff → one line → search (empty registry → create entries) → **automated** resolve + validation → session populate. **Full product slice** then adds mock or real formalizer → Z3 → critic → **production commit** → `rules.json` + `registry.json` + `bundles/*.pipeline.json` per *Failure / commit contract* (and may add interactive registry resolve per archive notes).
 
 ---
 
 ## 9. Phase 1 scope (pre–formalizer — agreed)
 
-Goals that **stop before** the formalizer (`pipeline_spec.md` step 4) still **fully use step 3** (Registry agent): search → gap extraction → resolve (substitution / side-by-side) → user agree or disagree → **populate in session** as context for the next stage.
+Goals that **stop before** the formalizer (`pipeline_spec.md` step 4) still **fully use step 3** (Registry agent): search → gap extraction → **automated** LLM resolve + validation (commit or fail per **`development_plan_registry_stage_v1.md`** — *Automated LLM resolution*) → **populate in session** for lines that **successfully** resolved. **Interactive** agree/disagree / disambiguation UI is **out of scope** for Phase 1 — see **`archive/registry_resolution_interactive_design/`**.
 
 | In scope for Phase 1 | Out of scope (later) |
 |----------------------|----------------------|

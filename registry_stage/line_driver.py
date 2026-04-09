@@ -55,7 +55,17 @@ LlmComplete = Callable[[str, str], str]
 
 @dataclass(frozen=True)
 class LineDriverConfig:
-    """Tuning for registry search, LLM expansion/extraction, and masking."""
+    """Tuning for registry search, LLM expansion/extraction, and masking.
+
+    **M3 eval (production-oriented):** ``single_concat`` + ``conservative``; **BGE+FAISS**
+    authoritative cutoff **0.35** (``default_authoritative_min_score``) from Protocol B
+    on ``m3_retrieval_eval_*`` — **revisit after more empirical runs** (expansion variance,
+    new lines, or registry/index changes can require a different cutoff).
+
+    **Dataclass defaults:** ``query_mode`` / ``masking_preset`` remain ``multi_query_fuse`` /
+    ``standard`` for historical test fixtures; wire Protocol A choices at the app boundary
+    or pass ``LineDriverConfig(...)`` explicitly — see ``REGISTRY_M3_EVAL_DECISIONS.md``.
+    """
 
     search_top_k: int = 8
     extra_search_context: str | None = None
@@ -89,6 +99,18 @@ class LineSearchGapsResult:
     expansion_phrases: tuple[str, ...] = ()
     structured_gaps: tuple[StructuredGap, ...] = ()
     search_queries_used: tuple[str, ...] = ()
+    authoritative_min_score: float = 0.0
+    """Effective cutoff used to select ``authoritative_hits`` from ``hits``."""
+
+    semantic_backend_label: str = ""
+    raw_expansion_phrases: tuple[str, ...] = ()
+    """Model expansion phrases before ``max_phrases`` / ``max_chars_per_expansion`` caps."""
+
+    raw_structured_gaps: tuple[StructuredGap, ...] = ()
+    """Structured gaps from the extractor **before** coverage masking (Lane A)."""
+
+    single_concat_query_truncated: bool = False
+    """True when ``single_concat`` search string was shortened to ``max_concat_query_chars``."""
 
 
 def build_search_query(statement_nl: str, extra_search_context: str | None) -> str:
@@ -102,11 +124,16 @@ def build_search_query(statement_nl: str, extra_search_context: str | None) -> s
 
 
 def default_authoritative_min_score(session: RegistrySession) -> float:
+    """Backend-specific cutoff when ``LineDriverConfig.authoritative_min_score`` is None.
+
+    **BGE+FAISS:** ``0.35`` from Protocol B (retrieval eval rerun); not final — adjust
+    when you expand the label set, change prompts/expansion, or see systematic misses.
+    """
     label = session.semantic_backend_label
     if label.startswith("stub_"):
         return 0.11
     if label.startswith("bge_faiss"):
-        return 0.28
+        return 0.35
     return 0.2
 
 
@@ -157,6 +184,11 @@ def _authoritative_registry_summary(session: RegistrySession, hits: Sequence[Sea
             f"id={e.id} kind={e.kind} name={e.name!r} nl_description={e.nl_description!r}"
         )
     return "\n".join(lines)
+
+
+def authoritative_hits_context_nl(session: RegistrySession, hits: Sequence[SearchHit]) -> str:
+    """Same lines as M3 gap/resolve LLM context: one line per hit with id, kind, name, description."""
+    return _authoritative_registry_summary(session, hits)
 
 
 def _candidate_covered_standard(candidate: str, coverage_lower: str) -> bool:
@@ -240,7 +272,9 @@ def run_search_and_gaps_for_line(
     baseline = build_search_query(statement_nl, cfg.extra_search_context)
 
     expansion_phrases: tuple[str, ...] = ()
+    raw_expansion_phrases: tuple[str, ...] = ()
     llm_fn: LlmComplete | None = None
+    single_concat_truncated = False
     if cfg.enable_llm:
         llm_fn = cfg.llm_complete
         if llm_fn is None:
@@ -252,20 +286,21 @@ def run_search_and_gaps_for_line(
             llm_fn = _wrap
 
         try:
-            from registry_stage.llm.agents import expand_search_phrases
+            from registry_stage.llm.agents import expand_search_phrases_with_raw
 
-            expansion_phrases = tuple(
-                expand_search_phrases(
-                    statement_nl=statement_nl,
-                    extra_context=cfg.extra_search_context,
-                    llm_complete=llm_fn,
-                    max_phrases=cfg.max_expanded_phrases,
-                    max_chars=cfg.max_chars_per_expansion,
-                )
+            raw_list, capped_list = expand_search_phrases_with_raw(
+                statement_nl=statement_nl,
+                extra_context=cfg.extra_search_context,
+                llm_complete=llm_fn,
+                max_phrases=cfg.max_expanded_phrases,
+                max_chars=cfg.max_chars_per_expansion,
             )
+            raw_expansion_phrases = tuple(raw_list)
+            expansion_phrases = tuple(capped_list)
         except Exception as exc:
             logger.warning("LLM search expansion failed: %s", exc)
             expansion_phrases = ()
+            raw_expansion_phrases = ()
 
     if cfg.enable_llm and expansion_phrases:
         if cfg.query_mode == "multi_query_fuse":
@@ -275,7 +310,8 @@ def run_search_and_gaps_for_line(
             hits = tuple(hits_list)
             search_queries_used = tuple(queries)
         else:
-            body = baseline + "\n" + "\n".join(expansion_phrases)
+            body_full = baseline + "\n" + "\n".join(expansion_phrases)
+            body = body_full
             if len(body) > cfg.max_concat_query_chars:
                 logger.warning(
                     "concatenated query truncated from %s to %s chars",
@@ -283,6 +319,7 @@ def run_search_and_gaps_for_line(
                     cfg.max_concat_query_chars,
                 )
                 body = body[: cfg.max_concat_query_chars]
+                single_concat_truncated = True
             hits = tuple(session.search_nl(body, cfg.search_top_k))
             search_queries_used = (body,)
     else:
@@ -295,14 +332,21 @@ def run_search_and_gaps_for_line(
     authoritative = tuple(h for h in hits if h.score >= min_score)
 
     coverage = _authoritative_coverage_blob(session, authoritative)
-    heuristic = [
-        c
-        for c in extract_placeholder_gaps(statement_nl)
-        if not candidate_covered(c, coverage, cfg.masking_preset)
-    ]
+    # When structured gap extraction runs (live LLM), omit Title-Case heuristic gaps so
+    # gap_spans come from the model only — avoids token shards merged alongside full spans.
+    # When ``enable_llm`` is False (CI / stub), keep heuristic gaps as the fallback.
+    use_llm_structured = cfg.enable_llm and llm_fn is not None
+    if use_llm_structured:
+        heuristic: list[str] = []
+    else:
+        heuristic = [
+            c
+            for c in extract_placeholder_gaps(statement_nl)
+            if not candidate_covered(c, coverage, cfg.masking_preset)
+        ]
 
     structured: list[StructuredGap] = []
-    if cfg.enable_llm and llm_fn is not None:
+    if use_llm_structured:
         try:
             from registry_stage.llm.agents import extract_structured_gaps
 
@@ -315,6 +359,8 @@ def run_search_and_gaps_for_line(
         except Exception as exc:
             logger.warning("LLM structured gap extraction failed: %s", exc)
             structured = []
+
+    raw_structured_gaps = tuple(structured)
 
     structured_kept = tuple(
         g
@@ -356,4 +402,9 @@ def run_search_and_gaps_for_line(
         expansion_phrases=expansion_phrases,
         structured_gaps=structured_kept,
         search_queries_used=search_queries_used,
+        authoritative_min_score=float(min_score),
+        semantic_backend_label=session.semantic_backend_label,
+        raw_expansion_phrases=raw_expansion_phrases,
+        raw_structured_gaps=raw_structured_gaps,
+        single_concat_query_truncated=single_concat_truncated,
     )

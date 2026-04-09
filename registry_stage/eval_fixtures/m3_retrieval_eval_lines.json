@@ -1,0 +1,66 @@
+{
+  "eval_set_id": "m3_retrieval_eval_v1",
+  "description": "Retrieval-stress lines for query-mode and min-score protocols (conservative masking + m3_retrieval_eval_labels.json). Pairs with m3_retrieval_eval_registry.json.",
+  "lines": [
+    {
+      "id": "ret_acme_po_sku",
+      "line_index": 0,
+      "statement_nl": "Acme Ltd placed purchase order PO-4492 for twelve pallets of SKU-7781 and expects dock scheduling within forty-eight hours."
+    },
+    {
+      "id": "ret_betacorp_confirm",
+      "line_index": 1,
+      "statement_nl": "BetaCorp Industries must receive written shipment confirmation before NetLedger closes the ledger for fiscal Q2."
+    },
+    {
+      "id": "ret_dual_customer_rfq",
+      "line_index": 2,
+      "statement_nl": "Acme Ltd and BetaCorp Industries both submitted bids referencing the heavy actuator line SKU-7781 on the same multi-vendor request."
+    },
+    {
+      "id": "ret_contoso_dispute_total",
+      "line_index": 3,
+      "statement_nl": "Contoso Trading disputed the order_pre_tax_total on their open PurchaseOrder after freight was rebilled."
+    },
+    {
+      "id": "ret_account_manager_policy",
+      "line_index": 4,
+      "statement_nl": "Every open PurchaseOrder must have exactly one responsible account manager drawn from the SalesEmployee roster."
+    },
+    {
+      "id": "ret_fabrikam_sku9910",
+      "line_index": 5,
+      "statement_nl": "Fabrikam LLC ordered forty units of catalog SKU-9910 with expedited handling."
+    },
+    {
+      "id": "ret_legalese_triple",
+      "line_index": 6,
+      "statement_nl": "Notwithstanding prior notices, Acme Ltd's PurchaseOrder covering SKU-7781 remains subject to BetaCorp Industries' carrier confirmation rules through period end."
+    },
+    {
+      "id": "ret_fn_shorthand",
+      "line_index": 7,
+      "statement_nl": "Apply order_pre_tax_total to Acme Ltd's open PO that still lists line items under SKU-7781."
+    },
+    {
+      "id": "ret_dual_sku_same_po",
+      "line_index": 8,
+      "statement_nl": "SKU-9910 may not ship on the same PurchaseOrder as SKU-7781 for Acme Ltd without procurement approval."
+    },
+    {
+      "id": "ret_employee_threshold",
+      "line_index": 9,
+      "statement_nl": "SalesEmployee approval is required before any PurchaseOrder exceeding the discretionary threshold is released."
+    },
+    {
+      "id": "ret_contoso_fabrikam_pallets",
+      "line_index": 10,
+      "statement_nl": "Contoso Trading and Fabrikam LLC use different pallet rounding rules when fulfilling StockKeepingUnit picks."
+    },
+    {
+      "id": "ret_money_tax_context",
+      "line_index": 11,
+      "statement_nl": "BetaCorp Industries' pretax MoneyAmount on the disputed PurchaseOrder did not match the vendor credit memo."
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import registry_stage
 
 
 def test_package_imports() -> None:
-    assert registry_stage.__version__ == "0.0.m3"
+    assert registry_stage.__version__ == "0.0.m5"
 
 
 def test_fixture_handoff_exists_and_minimal_shape() -> None:

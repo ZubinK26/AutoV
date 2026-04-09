@@ -15,6 +15,7 @@ from registry_stage.models import (
     HandoffLine,
     RegistryEntry,
     RegistryFile,
+    registry_file_to_dict,
 )
 
 
@@ -34,6 +35,15 @@ def load_registry(path: str | Path) -> RegistryFile:
         )
     data = json.loads(p.read_text(encoding="utf-8"))
     return parse_registry_file(data)
+
+
+def save_registry(path: str | Path, registry: RegistryFile, **json_dumps_kw: Any) -> None:
+    """Write ``registry`` as JSON (dev / warm-start; not a Phase 2 production commit)."""
+    p = Path(path)
+    payload = registry_file_to_dict(registry)
+    kwargs: dict[str, Any] = {"indent": 2, "ensure_ascii": False}
+    kwargs.update(json_dumps_kw)
+    p.write_text(json.dumps(payload, **kwargs) + "\n", encoding="utf-8")
 
 
 def parse_handoff_bundle(data: Any) -> HandoffBundle:

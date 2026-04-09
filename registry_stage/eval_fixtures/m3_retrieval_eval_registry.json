@@ -1,0 +1,104 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "entries": [
+    {
+      "id": "sort_customer",
+      "kind": "sort",
+      "name": "Customer",
+      "source_rule": [],
+      "nl_description": "Commercial customer organization that places purchase orders.",
+      "members": [
+        "ent_acme_ltd",
+        "ent_betacorp",
+        "ent_contoso_trading",
+        "ent_fabrikam_llc"
+      ]
+    },
+    {
+      "id": "sort_order",
+      "kind": "sort",
+      "name": "PurchaseOrder",
+      "source_rule": [],
+      "nl_description": "B2B purchase order header identified by a PO number."
+    },
+    {
+      "id": "sort_sku",
+      "kind": "sort",
+      "name": "StockKeepingUnit",
+      "source_rule": [],
+      "nl_description": "Catalog line item with a stable SKU identifier."
+    },
+    {
+      "id": "sort_employee",
+      "kind": "sort",
+      "name": "SalesEmployee",
+      "source_rule": [],
+      "nl_description": "Sales-side employee who owns customer relationships."
+    },
+    {
+      "id": "ent_acme_ltd",
+      "kind": "constant",
+      "name": "Acme Ltd",
+      "parent_sort_id": "sort_customer",
+      "source_rule": [],
+      "nl_description": "Longstanding buyer Acme Ltd; prefers pallet quantities on industrial SKUs."
+    },
+    {
+      "id": "ent_betacorp",
+      "kind": "constant",
+      "name": "BetaCorp Industries",
+      "parent_sort_id": "sort_customer",
+      "source_rule": [],
+      "nl_description": "BetaCorp Industries; requires written shipment confirmation before period close."
+    },
+    {
+      "id": "ent_contoso_trading",
+      "kind": "constant",
+      "name": "Contoso Trading",
+      "parent_sort_id": "sort_customer",
+      "source_rule": [],
+      "nl_description": "Wholesale account Contoso Trading; disputes totals and freight allocations."
+    },
+    {
+      "id": "ent_fabrikam_llc",
+      "kind": "constant",
+      "name": "Fabrikam LLC",
+      "parent_sort_id": "sort_customer",
+      "source_rule": [],
+      "nl_description": "Fabrikam LLC; high-volume orders on multiple catalog SKUs."
+    },
+    {
+      "id": "ent_sku_7781",
+      "kind": "constant",
+      "name": "SKU-7781",
+      "parent_sort_id": "sort_sku",
+      "source_rule": [],
+      "nl_description": "Heavy-duty actuator module, catalog SKU-7781."
+    },
+    {
+      "id": "ent_sku_9910",
+      "kind": "constant",
+      "name": "SKU-9910",
+      "parent_sort_id": "sort_sku",
+      "source_rule": [],
+      "nl_description": "Sealed bearing kit, catalog SKU-9910."
+    },
+    {
+      "id": "fn_order_total",
+      "kind": "function",
+      "name": "order_pre_tax_total",
+      "domain_sort_ids": ["sort_order"],
+      "codomain_sort_id": "sort_money",
+      "source_rule": [],
+      "nl_description": "Monetary total of a purchase order before tax lines."
+    },
+    {
+      "id": "sort_money",
+      "kind": "sort",
+      "name": "MoneyAmount",
+      "source_rule": [],
+      "nl_description": "Decimal currency amount in the company reporting currency."
+    }
+  ],
+  "entry_edges": []
+}

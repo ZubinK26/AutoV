@@ -1,0 +1,80 @@
+{
+  "eval_label_set_id": "m3_retrieval_eval_v1",
+  "description": "Authoritative-retrieval-only labels for query-mode and authoritative_min_score sweeps. check_gaps=false so failures indicate missing hits, not gap extraction. Use with --masking-presets conservative (~2x N API calls per protocol).",
+  "check_authoritative": true,
+  "check_gaps": false,
+  "lines": [
+    {
+      "id": "ret_acme_po_sku",
+      "required_authoritative_entry_ids": ["ent_acme_ltd", "sort_order", "ent_sku_7781"],
+      "expected_gap_substrings": [],
+      "notes": "Core PO + customer + SKU linkage."
+    },
+    {
+      "id": "ret_betacorp_confirm",
+      "required_authoritative_entry_ids": ["ent_betacorp"],
+      "expected_gap_substrings": [],
+      "notes": "Named customer only in registry."
+    },
+    {
+      "id": "ret_dual_customer_rfq",
+      "required_authoritative_entry_ids": ["ent_acme_ltd", "ent_betacorp", "ent_sku_7781"],
+      "expected_gap_substrings": [],
+      "notes": "Multi-entity sentence; stresses query breadth."
+    },
+    {
+      "id": "ret_contoso_dispute_total",
+      "required_authoritative_entry_ids": ["ent_contoso_trading", "sort_order", "fn_order_total"],
+      "expected_gap_substrings": [],
+      "notes": "Customer + PO sort + pre-tax function."
+    },
+    {
+      "id": "ret_account_manager_policy",
+      "required_authoritative_entry_ids": ["sort_order", "sort_employee"],
+      "expected_gap_substrings": [],
+      "notes": "Two sorts, no constants."
+    },
+    {
+      "id": "ret_fabrikam_sku9910",
+      "required_authoritative_entry_ids": ["ent_fabrikam_llc", "ent_sku_9910", "sort_order"],
+      "expected_gap_substrings": [],
+      "notes": "Different customer + second SKU."
+    },
+    {
+      "id": "ret_legalese_triple",
+      "required_authoritative_entry_ids": ["ent_acme_ltd", "ent_betacorp", "ent_sku_7781", "sort_order"],
+      "expected_gap_substrings": [],
+      "notes": "Long mixed sentence; may stress single_concat truncation."
+    },
+    {
+      "id": "ret_fn_shorthand",
+      "required_authoritative_entry_ids": ["fn_order_total", "ent_acme_ltd", "sort_order", "ent_sku_7781"],
+      "expected_gap_substrings": [],
+      "notes": "Function name + shorthand SKU token."
+    },
+    {
+      "id": "ret_dual_sku_same_po",
+      "required_authoritative_entry_ids": ["ent_acme_ltd", "ent_sku_9910", "ent_sku_7781", "sort_order"],
+      "expected_gap_substrings": [],
+      "notes": "Two SKUs + customer + PO sort."
+    },
+    {
+      "id": "ret_employee_threshold",
+      "required_authoritative_entry_ids": ["sort_employee", "sort_order"],
+      "expected_gap_substrings": [],
+      "notes": "Policy sentence with two sorts."
+    },
+    {
+      "id": "ret_contoso_fabrikam_pallets",
+      "required_authoritative_entry_ids": ["ent_contoso_trading", "ent_fabrikam_llc", "sort_sku"],
+      "expected_gap_substrings": [],
+      "notes": "Two customers + SKU sort."
+    },
+    {
+      "id": "ret_money_tax_context",
+      "required_authoritative_entry_ids": ["ent_betacorp", "sort_order", "sort_money"],
+      "expected_gap_substrings": [],
+      "notes": "Customer + PO + money sort."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "eval_set_id": "m3_business_v1",
+  "description": "Handoff-style and synthetic B2B lines for Lane A (registry_stage/eval_fixtures).",
+  "lines": [
+    {
+      "id": "biz_po_pallets",
+      "line_index": 0,
+      "statement_nl": "Acme Ltd placed purchase order PO-4492 for twelve pallets of SKU-7781."
+    },
+    {
+      "id": "biz_betacorp_confirm",
+      "line_index": 1,
+      "statement_nl": "BetaCorp Industries must receive shipment confirmation before NetLedger closes the books for fiscal Q2."
+    },
+    {
+      "id": "biz_account_manager",
+      "line_index": 2,
+      "statement_nl": "Every open PurchaseOrder has exactly one responsible account manager from the SalesEmployee pool."
+    },
+    {
+      "id": "biz_northwind_style",
+      "line_index": 3,
+      "statement_nl": "Northwind Logistics assigns every field agent to exactly one regional lead."
+    },
+    {
+      "id": "biz_gamma_vendor",
+      "line_index": 4,
+      "statement_nl": "GammaVendor SA submitted a conflicting quote on the same RequestForQuote as Acme Ltd."
+    }
+  ]
+}

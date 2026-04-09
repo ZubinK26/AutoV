@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from types import SimpleNamespace
 
 import pytest
 
@@ -10,6 +11,7 @@ import registry_stage
 from registry_stage.line_driver import (
     LineDriverConfig,
     build_search_query,
+    default_authoritative_min_score,
     extract_placeholder_gaps,
     run_search_and_gaps_for_line,
 )
@@ -43,7 +45,13 @@ def _acme_suite_session() -> RegistrySession:
 
 
 def test_m3_version() -> None:
-    assert registry_stage.__version__ == "0.0.m3"
+    assert registry_stage.__version__ == "0.0.m5"
+
+
+def test_default_authoritative_min_score_by_backend_label() -> None:
+    assert default_authoritative_min_score(SimpleNamespace(semantic_backend_label="stub_x")) == 0.11
+    assert default_authoritative_min_score(SimpleNamespace(semantic_backend_label="bge_faiss:test")) == 0.35
+    assert default_authoritative_min_score(SimpleNamespace(semantic_backend_label="other")) == 0.2
 
 
 def test_m3_hits_and_gaps_with_fixture(caplog: pytest.LogCaptureFixture) -> None:
@@ -55,6 +63,10 @@ def test_m3_hits_and_gaps_with_fixture(caplog: pytest.LogCaptureFixture) -> None
     assert any(h.entry_id == "ent_acme" for h in result.hits)
     assert "BetaCorp" in result.gap_spans
     assert "Acme" not in result.gap_spans
+    assert result.authoritative_min_score == 0.11
+    assert result.semantic_backend_label.startswith("stub_")
+    assert result.raw_expansion_phrases == ()
+    assert result.raw_structured_gaps == ()
 
     messages = " ".join(r.getMessage() for r in caplog.records)
     assert "line_driver" in messages
