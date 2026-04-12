@@ -41,6 +41,15 @@ from registry_stage.semantic_index import (
     entry_embed_text,
 )
 from registry_stage.validation import validate_alignment
+from registry_stage.wfm_acceptance_handoff import (
+    WfmAcceptanceLine,
+    WfmAcceptanceSnapshot,
+    acceptance_snapshot_from_jsonable,
+    build_handoff_bundle,
+    load_acceptance_snapshot,
+    validate_handoff_roundtrip,
+    write_handoff_bundle,
+)
 
 __all__ = [
     "SCHEMA_VERSION",
@@ -75,6 +84,13 @@ __all__ = [
     "structured_gaps_to_jsonable",
     "validate_alignment",
     "validate_session_entry",
+    "WfmAcceptanceLine",
+    "WfmAcceptanceSnapshot",
+    "acceptance_snapshot_from_jsonable",
+    "build_handoff_bundle",
+    "load_acceptance_snapshot",
+    "validate_handoff_roundtrip",
+    "write_handoff_bundle",
 ]
 
 __version__ = "0.0.m5"

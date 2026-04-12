@@ -1,0 +1,13 @@
+{
+  "schema_version": "wfm_demo_curated_v1",
+  "description": "Curated example ids for e2e demo (G6). FOLIO/P-FOLIO: medium+hard only (see section headers in source). Stress: R-* / E-* edge harness; E-5/E-6 replace lighter E-1/E-2.",
+  "sources": {
+    "folio": "test_sets/wfm_folio_pffolio_examples_en.md",
+    "pfolio": "test_sets/wfm_folio_pffolio_examples_en.md",
+    "stress": "test_sets/wfm_stress_examples_en.md"
+  },
+  "folio_example_ids": ["F-4", "F-5", "F-6", "F-7", "F-8", "F-9", "F-10"],
+  "pfolio_example_ids": ["PF-3", "PF-4", "PF-5", "PF-6", "PF-7", "PF-8", "PF-9", "PF-10"],
+  "stress_example_ids": ["R-1", "R-2", "R-3", "R-4", "R-5", "R-6", "E-3", "E-4", "E-5", "E-6"],
+  "manual_word_limit_extra": 15
+}

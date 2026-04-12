@@ -196,7 +196,7 @@ Re-run a lighter M3 check after **M5** if populate/trace changes what “gap” 
 
 **Exit:** README section “Registry stage v1 demo” with copy-paste command. **Done:** `registry_stage/README.md` § **Registry stage v1 demo** ( **`run`** + **`m4_warm_eval`** pointers).
 
-**See also — full stakeholder e2e (WFM → registry):** **`development_plan_wfm_registry_e2e_demo.md`** (launcher, handoff JSON builder, read-only per-step viewers). That work is **orchestration / demo-layer** on top of M0–M6; it does **not** change registry milestone boundaries.
+**See also — full stakeholder e2e (WFM → registry):** **`development_plan_wfm_registry_e2e_demo.md`** (launcher, automatic handoff at accept, Style-A loop automation, read-only viewers). **Requires new orchestration code** for **acceptance → `HandoffBundle`** and **merged-NL → Agent 1 re-entry** (see that file’s **G1** / **G2**); registry M0–M6 behavior is unchanged. That work is **orchestration / demo-layer** on top of M0–M6; it does **not** change registry milestone boundaries.
 
 ---
 
@@ -424,3 +424,4 @@ Until that plan exists, **steps 4–8 are not** in the “what you can do after�
 | 2026-04-10 | **Guardrail follow-up:** After WFM → registry-resolve **e2e demo**, revisit whether distance/similarity (and other guardrail) failures stay **fail-the-line** only or add orchestration options (e.g. extra resolve-LLM pass); **Phase 1** unchanged until then. Cross-ref **`registry_stage/REGISTRY_M4_EVAL_DECISIONS.md`**. |
 | 2026-04-11 | **Edit distance / similarity** — **deferred to post–e2e demo** (WFM through registry workflow end): intentional to avoid brittle pre–e2e tuning; validator stays non-distance until then. **Next focus:** M6 **two-bundle** stakeholder / warm-registry demo (process guard). |
 | 2026-04-11 | **WFM → registry e2e demo plan:** **`development_plan_wfm_registry_e2e_demo.md`** (launcher, handoff JSON builder, read-only viewers); **M6** cross-ref under runnable harness. |
+| 2026-04-12 | **E2e demo cross-ref:** M6 **See also** — orchestration **G1**/**G2** (**new code**: accept→handoff, Style-A loop); curated pools = **agreed content**, not open spec gap (see demo plan terminology §). |

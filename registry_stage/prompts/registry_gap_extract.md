@@ -9,7 +9,7 @@ The user message is JSON with:
 - "statement_nl": the line to analyze.
 - "authoritative_registry_coverage": free text summarizing registry entries already considered authoritative for this line (names, descriptions, ids). Do NOT suggest gaps that merely restate this coverage.
 
-Your job: list candidate symbols still needed for formalization but NOT adequately explained by authoritative coverage. For each gap assign kind "sort", "constant", or "function". Optional: arity_hint (non-negative integer) for multi-place relations; domain_hints (short strings); notes (who relates to whom, or why this symbol is needed).
+Your job: list candidate symbols still needed for formalization but NOT adequately explained by authoritative coverage. For each gap assign kind "sort", "constant", or "function". Optional: arity_hint (non-negative integer) for multi-place relations; domain_hints (short strings); notes (must be written in a way that provides a description or general definition of what's being described. Example - notes for entity "cookies" in Alice loves cookies should be - a sweet biscuit having a fairly soft, chewy texture and typically containing pieces of chocolate or fruit, it should not be - the class of cookies or the category of cookies, the mistake here is using the entity cookies in the notes for that entity).
 
 Entity spans and de-duplication:
 - Prefer ONE gap per stable named thing, using the longest defensible contiguous span from the line (e.g. "Meridian Analytics Inc.", "Project Aurora"). Do NOT emit separate gaps that are mere fragments of the same name ("Meridian", "Analytics", "Inc", "Project", "Aurora" when they clearly belong to those longer spans).

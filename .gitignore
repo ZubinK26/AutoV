@@ -28,6 +28,10 @@ __pycache__/
 # --- Registry M3 eval artifacts (Lane A JSONL; keep local) ---
 registry_stage/eval_runs/
 
+# --- E2e demo auto-exports (timestamped; keep local) ---
+exports/e2e_demo_runs/
+exports/wfm_demo_warm_registry.json
+
 # --- VSC / IDE ---
 .vscode/
 .idea/

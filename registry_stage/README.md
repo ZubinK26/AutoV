@@ -33,6 +33,14 @@ Warm start (second run uses saved registry):
 python -m registry_stage.run --bundle bundles/<another_bundle>.json --registry exports/registry_after.json --export exports/dev_session_2.json
 ```
 
+**G9 — one-command two-run** (seed bundle → **`--save-registry`** → reuse bundle → **`--registry`**) with defaults from **`eval_fixtures/m4_warm_*`**:
+
+```powershell
+python -m registry_stage.warm_registry_two_run --registry-out exports/warm_after_seed_registry.json
+```
+
+Optional **`--export-seed`** / **`--export-reuse`** for dev session JSON each phase. See **`development_plan_wfm_registry_e2e_demo.md`** § **8**.
+
 Use **`--index stub`** for fast local smoke without BGE/FAISS; **`--no-llm`** disables M3 Gemini expansion/extraction only (M4 resolve still uses Gemini unless you use tests with mocks).
 
 **M4 warm-registry eval** (seed bundle → save registry → reuse bundle → JSONL). Use a **unique `--out`** path each run so you do not overwrite prior results:
