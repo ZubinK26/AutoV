@@ -20,6 +20,8 @@ Empirical **Protocol A** (retrieval-only labels, ``m3_retrieval_eval_*``, FAISS+
 
 **Caveat:** Treat **0.35** as **current** best judgment from the committed retrieval label set, not a theorem. After the next empirical eval (more lines, different registry, or prompt edits), re-run Protocol B or spot-check that authoritative expectations still hold.
 
+**Product decision (2026-04-16):** **Systematic** re-sweeps and **mandatory** recalibration of M3 numeric defaults are **deferred** until **future evaluation** after **v1 e2e** completion — same gate as **M4** similarity guardrails in **`development_plan_registry_stage_v1.md`** (**Guardrail numbers**). **Ad-hoc** Protocol B or spot-checks remain appropriate when **you** change prompts, embeddings, or the eval set materially.
+
 ---
 
 ## Protocol B — ``authoritative_min_score`` sweep (optional re-runs)

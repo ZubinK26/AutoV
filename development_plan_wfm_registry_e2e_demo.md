@@ -153,12 +153,17 @@ The registry dev plan’s **two-bundle warm-registry** exercise is **scripted** 
 
 ---
 
-## 7. After this demo
+## 7. After this demo (v1 baseline → next workflow)
 
-- **Edit distance / similarity** guardrails remain **post–demo** per **`development_plan_registry_stage_v1.md`** (Guardrail numbers).
-- **Phase 2** formalizer / Z3 — out of scope for this plan.
-- **Post–v1 polish (landed):** e2e CLI loads **repo-root `.env`** before `GEMINI_API_KEY` checks; each successful accept→registry run writes **timestamped** artifacts under **`exports/e2e_demo_runs/<UTC>_<id>/`** (`dev_session.json` + G8 **`viewer/`**), unless **`--no-artifacts`**. Prior runs are preserved (new subfolder per run).
-- **Interactive demo warm registry:** before the FOLIO/P-FOLIO/stress menu, **`demo_launcher`** asks whether to **load/save** **`exports/wfm_demo_warm_registry.json`** and whether to **clear** that file; scripted runs use **`--warm-registry`** / **`--clear-warm-registry`** with **`--demo-choice`**.
+**v1 e2e status:** The **WFM → handoff → registry** demo track (**G1–G9**) is the **current** project baseline for orchestration + registry **Phase 1** (step 3 through populate / export).
+
+**Product decision (2026-04-16):** **Defer** (do not schedule next) **similarity / edit-distance** guardrails, **M4 numeric** calibration sweeps, and **systematic revisiting** of **existing** numeric knobs (e.g. **M3** Protocol B / `authoritative_min_score` / expansion and retrieval-margin prep) until a **later, explicit evaluation** after **v1 e2e** is treated as complete — i.e. guardrail work is **out of scope** for the **immediate** engineering milestone. Normative detail: **`development_plan_registry_stage_v1.md`** — **Guardrail numbers** § and **Numerical guardrails — inventory**.
+
+**Next in the end-to-end pipeline:** **`pipeline_spec.md` Phase 2** — **steps 4–8**: formalizer (**4**) → Z3 check (**5**) → identifier critic (**6**) → repair loop (**7**) → **production commit** (**8**). **Steps 4–5** dev plan: **`development_plan_pipeline_phase2.md`**. Full pointer table: **`development_plan_registry_stage_v1.md`** — **[Phase 2 pointer](development_plan_registry_stage_v1.md#phase-2-pointer-not-scheduled-here)**. It is **out of scope** for **this** e2e demo document to restate Phase 2 milestones.
+
+**Post–v1 polish (landed):** e2e CLI loads **repo-root `.env`** before `GEMINI_API_KEY` checks; each successful accept→registry run writes **timestamped** artifacts under **`exports/e2e_demo_runs/<UTC>_<id>/`** (`dev_session.json` + G8 **`viewer/`**), unless **`--no-artifacts`**. Prior runs are preserved (new subfolder per run).
+
+**Interactive demo warm registry:** before the FOLIO/P-FOLIO/stress menu, **`demo_launcher`** asks whether to **load/save** **`exports/wfm_demo_warm_registry.json`** and whether to **clear** that file; scripted runs use **`--warm-registry`** / **`--clear-warm-registry`** with **`--demo-choice`**.
 
 ---
 

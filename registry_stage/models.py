@@ -80,6 +80,7 @@ class DevSessionSnapshot:
     bundle: HandoffBundle | None = None
     line_traces: list[dict[str, Any]] = field(default_factory=list)
     notes: str = ""
+    formalization_line_traces: list[dict[str, Any]] = field(default_factory=list)
 
     def to_jsonable(self) -> dict[str, Any]:
         out: dict[str, Any] = {
@@ -87,6 +88,7 @@ class DevSessionSnapshot:
             "dev_export": True,
             "notes": self.notes,
             "line_traces": list(self.line_traces),
+            "formalization_line_traces": list(self.formalization_line_traces),
         }
         if self.bundle is not None:
             out["bundle_id"] = self.bundle.bundle_id

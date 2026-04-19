@@ -150,7 +150,7 @@ Re-run a lighter M3 check after **M5** if populate/trace changes what “gap” 
 | Task | Notes |
 |------|-------|
 | **LLM resolve** | **Done (v1):** `resolve_v1` JSON via `registry_stage/llm/agents.py` (`resolve_registry_nl_parsed`), prompt **`prompts/registry_resolve_automated.md`**; **`registry_stage/resolve_automated.py`** (`run_automated_resolve`) orchestrates up to **3** calls with validation feedback. |
-| **Validate** | **Done (v1 strict):** success predicate + **cited_entry_ids** ⊆ active session and ⊆ **authoritative** hits; parse errors retried. **Edit distance / similarity** vs `statement_nl` **deferred** until **after** WFM → registry **e2e demo** (brittleness / tuning — see **Guardrail numbers**). |
+| **Validate** | **Done (v1 strict):** success predicate + **cited_entry_ids** ⊆ active session and ⊆ **authoritative** hits; parse errors retried. **Edit distance / similarity** vs `statement_nl` **not implemented**; **2026-04-16** decision defers that and **systematic** numeric revisits until **future post–v1 evaluation** — see **Guardrail numbers**. |
 | **Commit** | **Done (in memory):** on pass, **`registry_resolved_nl`** = **`pre_resolved_nl`** = validated candidate in **`ResolveAutomatedOutcome`**. **M5** attaches the same fields to **per-line traces** and **dev export**. |
 | **Fail** | **Done:** bad JSON / checks / uncertainty → **no** **`registry_resolved_nl`**; `failure_reasons` + `raw_resolver_json`. |
 | **Substitutions / NL shape** | Matches **`pipeline_spec.md`** resolved NL fields; bundle-level serialization remains **M5/M6**. |
@@ -159,7 +159,7 @@ Re-run a lighter M3 check after **M5** if populate/trace changes what “gap” 
 
 **Why M5 is next (not “waiting on M4”):** The **callable** resolve+validate path is **complete** — **`run_automated_resolve`** is what M5 consumes. What was **partial** is only the **original M4 milestone wording** that bundled **per-line trace + export** and a **two-line integration demo**; those are **M5/M6** deliverables. Starting M5 does **not** require unfinished LLM resolve work.
 
-**Remaining (priority order):** **M6 process guard — two-bundle warm-registry e2e** (seed registry → persist → reuse bundle with **`--registry`**) so the **WFM → registry** stakeholder story cannot slip; see M6 table **Todo**. **Edit distance / similarity** in the validator is **explicitly after** that e2e demo — not the next coding milestone. Optional: **`m4_warm_eval`** / fixture expansion after prompt or `line_driver` changes; **Lane B** replay; resolve prompt polish (**Stretch**).
+**Remaining (priority order):** **M6** / **e2e demo** — **done** as the v1 baseline. **Next** workflow milestone: **`pipeline_spec`** **Phase 2** (steps 4–8) — see **[Phase 2 pointer](#phase-2-pointer-not-scheduled-here)**. **Guardrail** similarity / numeric **re-tuning** — **deferred** (**2026-04-16**); optional: **`m4_warm_eval`** / fixture expansion when changing prompts or `line_driver`; **Lane B** replay; resolve prompt polish (**Stretch**).
 
 **Exit (trace / export):** After **M5**, dev export includes **`registry_resolved_nl`** wherever resolve ran (**`pipeline_spec.md`** + **`registry_persistence_v1.md`** §5).
 
@@ -264,7 +264,7 @@ Former standalone **`REGISTRY_AUTOMATED_RESOLUTION_PLAN.md`** merged into this d
 
 1. **Input:** `statement_nl`, authoritative hits, structured gaps (from line driver / M3).
 2. **LLM resolve:** Single structured call → **`registry_resolution_candidate_nl`** + mapping metadata + optional flags (`confidence_tier`, `primary_review_reason`, etc.—schema aligned with archived design **A.4**).
-3. **Validate:** Referential closure (cited `entry_id`s in session), success predicate, structured checks (**A.7**-style strict bias: fail if uncertain). **Edit distance / similarity** vs `statement_nl` is **out of this step until after** e2e demo (Guardrail numbers §).
+3. **Validate:** Referential closure (cited `entry_id`s in session), success predicate, structured checks (**A.7**-style strict bias: fail if uncertain). **Edit distance / similarity** vs `statement_nl` is **out of this step** until a **future post–v1 evaluation** (Guardrail numbers § — **2026-04-16** deferral).
 4. **Commit:** If validation passes → set **`registry_resolved_nl`** = accepted candidate; persist trace (archived design **A.12** skeleton).
 5. **Fail:** If validation fails or model output unusable → **terminate line** with **error code + reasons** (reuse reason enum where useful); full attempt logged.
 
@@ -289,14 +289,15 @@ Only one outcome for success: **programmatic commit** (there is no **`USER_ACCEP
 
 ### Adopted design choices (plain language)
 
-**Status:** Recommendations below are **accepted** as the Phase 1 spec, **except** per-bundle “must not auto-resolve,” which is **out of scope**. **Note:** **M3** numeric knobs (**`authoritative_min_score`**, expansion caps, etc.) are **calibrated** per **`REGISTRY_M3_EVAL_DECISIONS.md`**. **M4 edit distance / similarity** is **scheduled separately** (Guardrail numbers §) — **deferred until after** the WFM → registry **e2e demo**, not “right after M4 smoke.”
+**Status:** Recommendations below are **accepted** as the Phase 1 spec, **except** per-bundle “must not auto-resolve,” which is **out of scope**. **Note:** **M3** numeric knobs (**`authoritative_min_score`**, expansion caps, etc.) are **calibrated** per **`REGISTRY_M3_EVAL_DECISIONS.md`** (locked defaults remain). **M4 edit distance / similarity** and **systematic M3 re-tuning** are **scheduled separately** (Guardrail numbers §) — **deferred** to **future post–v1 evaluation** (**2026-04-16**); **next** engineering focus is **Phase 2** (`pipeline_spec` steps 4–8).
 
 #### Guardrail numbers (edit distance, similarity, “how close is close”)
 
 - **Context:** Validation can compare candidate NL to `statement_nl`, referential closure, “smuggled” logic, etc. Distance/similarity-style checks imply **numeric** cutoffs and ongoing tuning.
-- **Scheduling (explicit):** **Edit distance / similarity** (candidate vs `statement_nl`) is **deferred** until **after** a **WFM → registry workflow** end-to-end demo: **structured handoff** through **search → gaps → automated resolve → populate / dev export** (the stakeholder slice in § **M6** — e.g. **`registry_stage.run`** / warm-registry story, with bundles standing in for or produced from WFM as your harness allows). **Rationale:** Likely **brittle** and **tuning-heavy** relative to value **before** the rest of the path is exercised; **defer coding and calibration** until e2e feedback justifies the investment. Until then, the validator stays on **schema**, **success predicate**, **`cited_entry_ids`** closure, and **retry** behavior only (see M4 **Validate** row).
-- **When edit distance is picked up (post–e2e demo):** Plan to start with **conservative** cutoffs and **fail the line** when borderline — prefer **more lines erroring** over wrong commits — then **tune** from a **small labeled resolve eval set**, not speculatively up front. **Bias toward error** until measurements justify relaxing thresholds.
-- **Follow-up (after e2e demo, when implementing or designing distance guardrails):** Revisit whether **distance/similarity failure** should **remain** “fail the line” only, or whether **orchestration** should try something else first (e.g. **extra resolve-LLM pass**, or another policy **TBD**). Document the choice in orchestration / product spec when it lands.
+- **Scheduling (explicit):** **Edit distance / similarity** (candidate vs `statement_nl`) was **deferred** until **after** a **WFM → registry workflow** end-to-end demo (**§ M6** / **`development_plan_wfm_registry_e2e_demo.md`**). That **v1 e2e** slice is now treated as the **current project baseline** (demo shipped).
+- **Product decision (2026-04-16):** **Do not** schedule **similarity / edit-distance** implementation, **M4 numeric guardrail** sweeps, or **revisiting / re-tuning** other **existing** numeric knobs (e.g. **M3** Protocol B re-runs, **`authoritative_min_score`**, expansion caps, retrieval **ε** / margin checks) until a **later, explicit evaluation** after **v1 e2e completion** — i.e. treat guardrail calibration as **out of scope** for the **next** workflow milestone; revisit only when the team opens a dedicated **post–v1** evaluation window. **Rationale:** move execution to **`pipeline_spec`** **Phase 2** (formalizer → Z3 → critic → repair → production commit) per **[Phase 2 pointer](#phase-2-pointer-not-scheduled-here)** below. Validator behavior stays: **schema**, **success predicate**, **`cited_entry_ids`** closure, **retry** chain (unchanged).
+- **When similarity / distance guardrails are picked up (future evaluation):** Plan to start with **conservative** cutoffs and **fail the line** when borderline — prefer **more lines erroring** over wrong commits — then **tune** from a **small labeled resolve eval set**, not speculatively up front. **Bias toward error** until measurements justify relaxing thresholds.
+- **Follow-up (when implementing distance guardrails):** Revisit whether **distance/similarity failure** should **remain** “fail the line” only, or whether **orchestration** should try something else first (e.g. **extra resolve-LLM pass**, or another policy **TBD**). Document the choice in orchestration / product spec when it lands.
 - **Related “smuggled text” / extra string heuristics:** Not split out in code yet; when needed, treat them as **separate** inventory rows or follow the **same post–e2e gate** as distance unless a lightweight heuristic is justified earlier.
 
 ##### Numerical guardrails — inventory (Phase 1; prevents silent drift)
@@ -310,11 +311,12 @@ Only one outcome for success: **programmatic commit** (there is no **`USER_ACCEP
 | **Expansion / query caps** (max phrases, max chars, concat length) | M3 cost + drift control | **Defaults** in dev plan § M3; “adjust after empirical pass” | Revisit alongside Lane A when behavior degrades |
 | **Success-predicate strictness** | M4 (`needs_human_review`, `primary_review_reason`, `confidence_tier`) | **Locked** policy (no numeric tuning — categorical) | Change only with product/policy decision, not a cutoff sweep |
 | **Validation retry budget** | M4 bad JSON / validation feedback | **Locked** 2 retries (3 calls max in chain) | Increase only if logs show recovery worth the cost |
-| **Edit distance / similarity** of candidate NL vs `statement_nl` | M4 validator | **Deferred post e2e demo** (WFM through end of registry workflow per § **M6** / stakeholder slice) — **intentional**; avoid pre–e2e tuning trap | **After** demo: decide implement + labeled eval + cutoff sweeps vs continue to deprioritize; bias: fail when borderline until data relaxes |
+| **Edit distance / similarity** of candidate NL vs `statement_nl` | M4 validator | **Deferred** — v1 e2e complete; **2026-04-16** decision: no implementation or sweeps until **future post–v1 evaluation** (see Guardrail numbers §) | Same as “when picked up” bullets: labeled eval + conservative cutoffs when scheduled |
+| **M3 numeric re-tuning** (Protocol B, `authoritative_min_score`, caps, ε prep) | M3 retrieval / search | **Locked values remain in code**; **2026-04-16** decision: **no** mandatory re-sweep or recalibration **until** future post–v1 evaluation — optional ad-hoc reruns if prompts/index change materially | **`REGISTRY_M3_EVAL_DECISIONS.md`**; defer systematic revisit per same gate as M4 distance |
 | **“Smuggled text” / extra NL heuristics** (non-distance) | M4 validator | **Not implemented** | Add when justified; may share the **post–e2e** gate with distance or land earlier if cheap and low-risk |
 | **Top-2 score margin (ε)** in retrieval | M3/M2 search layer | **Not used** in Phase 1 infrastructure | **Ambiguity thresholds** § below — add after **score logs** exist; optional resolver-only ambiguity until then |
 
-**Related:** M3 Lane A / Protocol B artifacts live under **`registry_stage/eval_runs/`** (often gitignored); decisions are summarized in **`REGISTRY_M3_EVAL_DECISIONS.md`**. **M4-side:** **`registry_stage/REGISTRY_M4_EVAL_DECISIONS.md`** covers **prompt + heuristic policy**; **edit distance / similarity** stays **out of code** until **after** the WFM → registry **e2e demo** (scheduling note above).
+**Related:** M3 Lane A / Protocol B artifacts live under **`registry_stage/eval_runs/`** (often gitignored); decisions are summarized in **`registry_stage/REGISTRY_M3_EVAL_DECISIONS.md`**. **M4-side:** **`registry_stage/REGISTRY_M4_EVAL_DECISIONS.md`** covers **prompt + heuristic policy**. **Edit distance / similarity** and **broad numeric guardrail revisits** stay **out of active schedule** until **future post–v1 evaluation** (**2026-04-16** decision above).
 
 #### Resolver JSON schema (exact field names, nesting)
 
@@ -393,17 +395,19 @@ Only one outcome for success: **programmatic commit** (there is no **`USER_ACCEP
 
 ## Phase 2 pointer (not scheduled here)
 
-After M0–M6, you can **design and implement** the rest of **`pipeline_spec.md`** **steps 4–8** in a **separate** plan:
+**Next workflow focus (after v1 WFM → registry e2e baseline):** **`pipeline_spec.md` steps 4–8** — formalizer through production commit — tracked here only as a pointer; author a dedicated plan (e.g. `development_plan_pipeline_phase2.md`) when implementation starts. **Automation mode** (no HITL between steps 4–8; automatic commit + view-only inspection) and **reinterpretation** of “user-approved” phrasing: **`pipeline_spec.md`** — *Phase 2 automation mode (extended e2e / no human-in-the-loop for steps 4–8)*.
 
-| Step | Work (summary) |
-|------|----------------|
-| **4** | Formalizer LLM on **`registry_resolved_nl`** + registry context → Z3/Python artifact. |
-| **5** | Z3 parse/type check. |
-| **6** | Identifier extraction + fuzzy match + critic LLM. |
-| **7** | Repair loop (errors back to formalizer, iteration budget). |
-| **8** | User-approved **production commit**: `rules.json`, **`committed_edges`**, **`registry.json`**, **`bundles/*.pipeline.json`** per *Failure / commit contract*; full **`validate_alignment`**. |
+After M0–M6, implement the rest of **`pipeline_spec.md`** **steps 4–8** in **separate** plans as needed.
 
-Until that plan exists, **steps 4–8 are not** in the “what you can do after” list for **Phase 1** — by design, Phase 1 stops at the **output that step 3 hands to step 4** (**`registry_resolved_nl`** + session registry context; see **`pipeline_spec.md`** step 4).
+| Step | Work (summary) | Plan |
+|------|----------------|------|
+| **4** | Formalizer LLM on **`registry_resolved_nl`** + registry context → Z3/Python artifact + **edge manifest**. | **`development_plan_pipeline_phase2.md`** |
+| **5** | Z3 parse/type check (execute generated code under safety constraints). | **`development_plan_pipeline_phase2.md`** |
+| **6** | Identifier extraction + fuzzy match + critic LLM. | TBD |
+| **7** | Repair loop (errors back to formalizer, iteration budget). | TBD |
+| **8** | **Production commit**: `rules.json`, **`committed_edges`**, **`registry.json`**, **`bundles/*.pipeline.json`** per *Failure / commit contract*; full **`validate_alignment`**. | TBD |
+
+**Steps 4–5** dev plan: **`development_plan_pipeline_phase2.md`**. **Phase 1** stops at the **output that step 3 hands to step 4** (**`registry_resolved_nl`** + session registry context; see **`pipeline_spec.md`** step 4).
 
 ---
 
@@ -425,3 +429,4 @@ Until that plan exists, **steps 4–8 are not** in the “what you can do after�
 | 2026-04-11 | **Edit distance / similarity** — **deferred to post–e2e demo** (WFM through registry workflow end): intentional to avoid brittle pre–e2e tuning; validator stays non-distance until then. **Next focus:** M6 **two-bundle** stakeholder / warm-registry demo (process guard). |
 | 2026-04-11 | **WFM → registry e2e demo plan:** **`development_plan_wfm_registry_e2e_demo.md`** (launcher, handoff JSON builder, read-only viewers); **M6** cross-ref under runnable harness. |
 | 2026-04-12 | **E2e demo cross-ref:** M6 **See also** — orchestration **G1**/**G2** (**new code**: accept→handoff, Style-A loop); curated pools = **agreed content**, not open spec gap (see demo plan terminology §). |
+| 2026-04-16 | **Guardrail deferral:** v1 e2e = baseline; **defer** similarity metrics, M4 numeric sweeps, and **systematic** M3 numeric re-tuning until **future post–v1 evaluation**; **next** engineering focus = **`pipeline_spec`** Phase 2 (steps 4–8). Guardrail numbers § + inventory table + Phase 2 pointer. |

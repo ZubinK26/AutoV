@@ -257,6 +257,40 @@ Orchestration persists **production** state alongside **`registry.json`** / **`r
 | **Idempotency** | **`bundle_id`** + **`orchestration_run_id`** (and **`pipeline_status`**) ensure a commit is not applied twice after retries. |
 | **Recovery** | **Corruption:** restore from **backup**. **Logical** errors: **forward** supersede / new material; **no** silent history rewrite. **Admin “uncommit” / revoke:** **deferred** until a concrete ops need. |
 
+### Phase 2 automation mode (extended e2e / no human-in-the-loop for steps 4–8)
+
+Elsewhere this document describes **production** persistence using phrases such as **user-approved commit**, **user-approved partial**, **user-directed partial commit**, and “present per-line outcome” for a **human** to abandon / commit a subset / fix and re-run. Those phrases describe the **full interactive product**. A separate **automation mode** applies to the **Phase 2** implementation path that **extends the existing WFM → registry e2e** through formalization and commit **without** inserting approval dialogs between steps **4** and **8**:
+
+| Spec language (interactive product) | Automation mode (default for extended e2e) |
+|--------------------------------------|---------------------------------------------|
+| **user-approved commit**; **Late durable registry** (“only when committing rules … **user-approved partial**”) | **Automatic commit** to `rules.json` / `registry.json` when **programmatic success** criteria are met for the run (per-line pass through steps 4–7; atomic write per policy). **No** separate human approval step before durable write. |
+| **User-directed partial commit** (abandon / commit successes / re-run) | Implemented as a **fixed automation policy** (e.g. commit all lines that passed; fail bundle with no partial write; or commit partial successes — **TBD in dev plan**) **without** interactive prompts in the default loop. |
+| Step **4** “**full product:** may also be **user-approved**” for **`registry_resolved_nl`** | **No** extra approval before formalization after **M4** validation has committed **`registry_resolved_nl`** for the line. |
+
+**Inspection:** Operators **review** formalization output, Z3/critic results, and final persisted state via **artifacts, exports, and viewers** (view-only). That is **not** a gating “approval” step.
+
+**Compatibility with bundle, entity, and structural navigation (Phase 2 does not require a prior “contradiction milestone”):** The **Rules store ↔ registry alignment** and **Graph-friendly shape** tables above already imply:
+
+- **Filter rules by `bundle_id`:** Each accepted rule row carries **`bundle_id`**; bundle records list **`rule_id`**s — sufficient to list or index all rules for a bundle.
+- **Rules involving a given registry entity (`entry_id`):** **`committed_edges`** on each rule reference **`entry_id`**s; registry entries carry **`source_rule`** listing **rule IDs** with **committed** links to that entry — sufficient for **entity-centric** rule lookup (reverse index from entry to rules, or scan rules).
+- **One-hop structural hops:** **Rule → entries:** **`committed_edges`** on the rule row. **Entry → rules:** **`source_rule`** on the entry (and/or scan **`committed_edges`**). Deeper or **semantic** rule–rule search (e.g. embeddings on rules) stays **deferred** per *Embeddings on rules* above.
+
+### Phase 2 — `committed_edges` extraction (contradiction-ready, single delivery)
+
+**Product intent:** Do **not** split “early Phase 2” vs “late Phase 2” for graph edges. **`committed_edges`** (closed **`relationship`** enum in **`registry_persistence_v1.md`** §2) must be populated to the **satisfaction of future contradiction / structural search** (rule↔entry, **`source_rule`** mirroring) in the **same** Phase 2 program that ships formalization through production commit — **no** separate follow-up project to “fix” edges.
+
+**Extraction approach (agreed):**
+
+1. **Structured output from the formalizer** (step 4): besides **`z3_python_source`**, emit a **machine-validated manifest** of **`entry_id`** references and proposed **`relationship`** labels drawn only from the **closed enum** — with the same style of checks as registry resolve (**every `entry_id` ∈ session**, no invented IDs).
+2. **Deterministic verification:** After step 5, **cross-check** (e.g. AST / identifier pass over the **accepted** formal artifact, and/or symbol reconciliation) so **`APPEARS_IN_FOL`** / **`LOADED_FOR_VALIDATION`**-style labels are **grounded** in the actual theory fragment, not LLM-only claims. **Pipeline-derived** edges take precedence over informal prose.
+3. **Persistence:** **`committed_edges`** on each rule row and **`source_rule`** on entries are written at the **production commit** point (step 8 in the full pipeline); steps 4–5 **produce** the validated manifest + traces that commit logic **consumes** without reinterpretation.
+
+**Normative reference:** **`registry_persistence_v1.md`** §2 (`relationship` enum), *Rules store ↔ registry alignment*, *Graph-friendly shape*.
+
+### Phase 2 — executing formalizer output (step 5, safety without weakening goals)
+
+Step 5 **runs** the generated Python that uses **`z3`** so malformed theories fail **with real Z3/Python errors** (feeding the repair loop). **Operational constraints** (subprocess, **timeout**, **import whitelist** — typically **`z3` only**, no network) **do not** relax formalization requirements: **`registry_resolved_nl`** grounding, declared vocabulary, critic, and repair semantics stay as in steps 4–7.
+
 ---
 
 ## Consistency Checking — Deferred

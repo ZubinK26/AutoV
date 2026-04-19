@@ -16,7 +16,8 @@ This file records **prompt and pipeline** tuning driven by **`m4_warm_eval_v1`**
 ## Numeric guardrails
 
 - **Not tuned in this round.** M4 validator still enforces schema, success predicate, and **`cited_entry_ids`** ⊆ authoritative hits; **no** edit-distance or similarity thresholds in code.
-- **Edit distance / similarity (scheduling):** **Deferred** until **after** the **WFM → registry workflow** e2e demo (handoff through resolve + populate / export — see **`development_plan_registry_stage_v1.md`** Guardrail numbers + § **M6**). **Rationale:** brittle and tuning-heavy; implement + label + sweep **only after** e2e justifies the investment.
+- **Product decision (2026-04-16):** Treat **v1 WFM → registry e2e** as complete; **defer** **similarity / edit-distance** implementation and **M4 numeric** sweeps until **future evaluation** after **v1 e2e** — not the next milestone. **Next workflow focus:** **`pipeline_spec`** Phase 2 (formalizer → Z3 → critic → repair → production commit); see **`development_plan_registry_stage_v1.md`** — **Phase 2 pointer** + **Guardrail numbers**.
+- **Edit distance / similarity (scheduling):** Was **deferred** until after the e2e demo; that bar is met. **No** new implementation or labeled sweeps until the **post–v1 evaluation** window above — cross-ref **`development_plan_registry_stage_v1.md`**.
 - **When distance guardrails land:** On failure, **fail the line** per dev plan until product/orchestration documents alternatives (e.g. extra resolve pass) — see Guardrail numbers **follow-up**.
 
 ## Observations (single-fixture snapshot)
@@ -28,4 +29,4 @@ This file records **prompt and pipeline** tuning driven by **`m4_warm_eval_v1`**
 ## Next empirical pass
 
 - Re-run **`m4_warm_eval`** (or expand fixtures) after **any** prompt or `line_driver` change; stamp **header `prompt_sha256`** in JSONL.
-- **Edit-distance / similarity guardrails:** **after** WFM → registry **e2e demo** — then add validator + labels + sweeps if still prioritized (document here).
+- **Edit-distance / similarity guardrails:** **Deferred** — **2026-04-16** decision; add validator + labels + sweeps only in a **future post–v1 evaluation** (see **`development_plan_registry_stage_v1.md`** Guardrail numbers). **Next** engineering focus: Phase 2 pipeline (**`pipeline_spec`** steps 4–8).

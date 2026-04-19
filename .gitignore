@@ -32,6 +32,11 @@ registry_stage/eval_runs/
 exports/e2e_demo_runs/
 exports/wfm_demo_warm_registry.json
 
+# --- Post-WFM SMT-LIB v3 (generated / run artifacts) ---
+policy_model.smt2
+bundles/*.log.jsonl
+bundles/demo_*.json
+
 # --- VSC / IDE ---
 .vscode/
 .idea/

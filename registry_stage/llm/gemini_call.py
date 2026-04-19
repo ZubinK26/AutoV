@@ -45,9 +45,17 @@ def env_thinking_level():
     return genai_types.ThinkingLevel.LOW
 
 
-def gemini_complete(*, system_instruction: str, user_text: str) -> str:
+def gemini_complete(
+    *,
+    system_instruction: str,
+    user_text: str,
+    max_output_tokens: int | None = None,
+) -> str:
     """
     One Gemini ``generate_content`` turn. Raises if ``GEMINI_API_KEY`` is missing.
+
+    If ``max_output_tokens`` is set, it overrides the ``GEMINI_MAX_OUTPUT_TOKENS`` env
+    for this call (used by bounded sub-pipelines such as ``smt_pipeline``).
     """
     load_repo_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -61,7 +69,10 @@ def gemini_complete(*, system_instruction: str, user_text: str) -> str:
 
     model = os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview").strip()
     temperature = float(os.environ.get("GEMINI_TEMPERATURE", "0.0"))
-    max_out = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "16384"))
+    if max_output_tokens is not None:
+        max_out = int(max_output_tokens)
+    else:
+        max_out = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "16384"))
     thinking_level = env_thinking_level()
 
     cfg_kwargs: dict = {

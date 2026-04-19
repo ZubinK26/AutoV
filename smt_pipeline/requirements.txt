@@ -1,0 +1,7 @@
+# smt_pipeline: Z3 + Gemini (optional; tests mock LLMs).
+# Importing registry_stage.loaders pulls registry_stage/__init__.py (needs numpy).
+pytest>=7.0,<9
+z3-solver>=4.12.0
+numpy>=1.22,<3
+google-genai>=1.0.0
+python-dotenv>=1.0.0
