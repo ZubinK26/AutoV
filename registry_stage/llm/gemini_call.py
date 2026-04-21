@@ -27,6 +27,18 @@ def load_repo_dotenv() -> None:
         load_dotenv(env_file, override=False)
 
 
+def _model_supports_thinking_config(model: str) -> bool:
+    """Keep in sync with ``test_sets/scripts/run_wfm_folio_gemini.model_supports_thinking_config``."""
+    m = (model or "").strip().lower()
+    if os.environ.get("GEMINI_FORCE_NO_THINKING", "").strip().lower() in ("1", "true", "yes"):
+        return False
+    if os.environ.get("GEMINI_FORCE_THINKING_CONFIG", "").strip().lower() in ("1", "true", "yes"):
+        return True
+    if m.startswith("gemini-2.5-pro"):
+        return False
+    return True
+
+
 def env_thinking_level():
     from google.genai import types as genai_types
 
@@ -67,7 +79,7 @@ def gemini_complete(
     from google import genai
     from google.genai import types as genai_types
 
-    model = os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview").strip()
+    model = os.environ.get("GEMINI_MODEL", "gemini-3-flash-preview").strip()
     temperature = float(os.environ.get("GEMINI_TEMPERATURE", "0.0"))
     if max_output_tokens is not None:
         max_out = int(max_output_tokens)
@@ -80,7 +92,7 @@ def gemini_complete(
         "temperature": temperature,
         "max_output_tokens": max_out,
     }
-    if thinking_level is not None:
+    if thinking_level is not None and _model_supports_thinking_config(model):
         cfg_kwargs["thinking_config"] = genai_types.ThinkingConfig(
             thinking_level=thinking_level,
         )

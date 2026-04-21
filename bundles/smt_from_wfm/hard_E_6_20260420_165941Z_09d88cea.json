@@ -1,0 +1,124 @@
+{
+  "bundle_id": "hard_E_6_20260420_165941Z_09d88cea",
+  "accepted_at": "2026-04-20T17:14:12Z",
+  "committed_at": "2026-04-20T17:14:26Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_a1484978daee",
+    "r_5e3716d5db53",
+    "r_302d6af2b65f",
+    "r_4241323464dc",
+    "r_ff29ab8b2e0c",
+    "r_b7fc57f202e0",
+    "r_0867e50c325c",
+    "r_50cab413e1be",
+    "r_28a7689f1d83"
+  ],
+  "out_of_scope_line_indices": [
+    2,
+    3
+  ],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "hard_E_6_20260420_165941Z_09d88cea",
+    "user_original_input": "If a book is **more than** twenty-one days overdue **and** the borrower **is** a library member, **then** **if** the accrued fine **exceeds** the member’s fine cap **and** the member has **not** enrolled in the amnesty weekend, the member is **suspended** from borrowing **and** the account is flagged for desk review; **if** the member **has** enrolled in the amnesty weekend, **then** **instead** only the suspension applies until the book is returned **and** the fine is paid down to zero. Riley’s book is twenty-four days overdue, Riley is a member, the fine exceeds Riley’s cap, Riley did **not** enroll in amnesty, and the book is **not** yet returned. In conclusion: Riley’s account is flagged for desk review.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "If a book is more than twenty-one days overdue and the borrower is a library member and the accrued fine exceeds the member’s fine cap and the member has not enrolled in the amnesty weekend, then the member is suspended from borrowing.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"If a book is more than twenty-one days overdue and the borrower is a library member and the accrued fine exceeds the member’s fine cap and the member has not enrolled in the amnesty weekend, then the member is suspended from borrowing.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "If a book is more than twenty-one days overdue and the borrower is a library member and the accrued fine exceeds the member’s fine cap and the member has not enrolled in the amnesty weekend, then the member's account is flagged for desk review.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"If a book is more than twenty-one days overdue and the borrower is a library member and the accrued fine exceeds the member’s fine cap and the member has not enrolled in the amnesty weekend, then the member's account is flagged for desk review.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "If a book is more than twenty-one days overdue and the borrower is a library member and the member has enrolled in the amnesty weekend, then the member is suspended from borrowing until the book is returned.",
+        "agent3_verdict": "OUT_OF_SCOPE",
+        "scope_report": "REPORT: This rule contains a temporal condition (\"until the book is returned\") which requires tracking state changes over time. The system can only evaluate rules based on a current snapshot of data.",
+        "diff_report": null,
+        "agent2_line_text": "3. \"If a book is more than twenty-one days overdue and the borrower is a library member and the member has enrolled in the amnesty weekend, then the member is suspended from borrowing until the book is returned.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "If a book is more than twenty-one days overdue and the borrower is a library member and the member has enrolled in the amnesty weekend, then the member is suspended from borrowing until the fine is paid down to zero.",
+        "agent3_verdict": "OUT_OF_SCOPE",
+        "scope_report": "REPORT: This rule contains a temporal condition (\"until the fine is paid down to zero\") which requires tracking state changes over time. The system can only evaluate rules based on a current snapshot of data.",
+        "diff_report": null,
+        "agent2_line_text": "4. \"If a book is more than twenty-one days overdue and the borrower is a library member and the member has enrolled in the amnesty weekend, then the member is suspended from borrowing until the fine is paid down to zero.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "If a book is more than twenty-one days overdue and the borrower is a library member and the member has enrolled in the amnesty weekend, then the account is not flagged for desk review.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"If a book is more than twenty-one days overdue and the borrower is a library member and the member has enrolled in the amnesty weekend, then the account is not flagged for desk review.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Riley is a library member.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Riley is a library member.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Riley has a book that is twenty-four days overdue.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Riley has a book that is twenty-four days overdue.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "The accrued fine for the book exceeds Riley’s fine cap.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"The accrued fine for the book exceeds Riley’s fine cap.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Riley has not enrolled in the amnesty weekend.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Riley has not enrolled in the amnesty weekend.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "The book has not been returned.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"The book has not been returned.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Riley’s account is flagged for desk review.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Riley’s account is flagged for desk review.\""
+      }
+    ],
+    "orchestration_run_id": "orr_hard_E_6_20260420_165941Z_09d88cea_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-20T16:59:58Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\smt_from_wfm\\policies\\hard_E_6_20260420_165941Z_09d88cea.smt2"
+}

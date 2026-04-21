@@ -1,0 +1,93 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "hard_PF_10_20260420_155733Z_107f0350",
+  "user_original_input": "If a man is taller than another man, the taller one can block the other's shooting. Michael is a man who is taller than everyone else in his class. If person x is taller than person y, and person y is taller than person z, then x is taller than z. Peter is a man who is taller than Michael. Michael can block any shooting from a person as long as the person does not jump when shooting. Michael cannot block Windy's shooting. Every shooter who can jump when shooting is a great shooter. In conclusion: Peter is shorter than a man in Michael's class.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "For every man x and every man y, if x is taller than y, then x can block the shooting of y.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"If a man is taller than another man, then the taller man can block the shooting of the shorter man.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Michael is a man.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Michael is a man.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "For every person p in Michael's class, if p is not Michael, then Michael is taller than p.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"For every person in Michael's class other than Michael, Michael is taller than that person.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "If person x is taller than person y and person y is taller than person z, then person x is taller than person z.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"If person x is taller than person y and person y is taller than person z, then person x is taller than person z.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Peter is a man.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Peter is a man.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Peter is taller than Michael.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Peter is taller than Michael.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "For every person, if that person does not jump when shooting, then Michael can block that person's shooting.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"For every person, if that person does not jump when shooting, then Michael can block that person's shooting.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Michael cannot block the shooting of Windy.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Michael cannot block the shooting of Windy.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Every shooter who can jump when shooting is a great shooter.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Every shooter who can jump when shooting is a great shooter.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "There exists a man m such that m is in Michael's class and Peter is shorter than m.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Peter is shorter than at least one man who is in Michael's class.\""
+    }
+  ],
+  "orchestration_run_id": "orr_hard_PF_10_20260420_155733Z_107f0350_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-20T15:58:01Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

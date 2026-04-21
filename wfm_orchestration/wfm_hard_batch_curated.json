@@ -1,0 +1,19 @@
+{
+  "schema_version": "wfm_hard_batch_v1",
+  "description": "12 hard-tier examples (FOLIO F-8–10, P-FOLIO PF-8–10, stress R-4–6 and E-4–6) for WFM → SMT pipeline evaluation.",
+  "example_ids": [
+    "F-8",
+    "F-9",
+    "F-10",
+    "PF-8",
+    "PF-9",
+    "PF-10",
+    "R-4",
+    "R-5",
+    "R-6",
+    "E-4",
+    "E-5",
+    "E-6"
+  ],
+  "sources_note": "Bodies loaded via demo_loader + demo_curated_pools.json source paths."
+}

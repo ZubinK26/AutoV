@@ -1,0 +1,77 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "hard_R_4_20260420_155826Z_490345e1",
+  "user_original_input": "If an aircraft has **never** completed the required pitot-static verification since its last heavy maintenance, and it has accumulated at least seventy thousand flight hours since that maintenance, and at least three independent sensor drift events were logged for the same air data computer chain during the preceding twelve months, then the aircraft is grounded until both the air data system and the pitot-static checks pass with signed maintenance releases. Bluewing 441 has seventy-one thousand flight hours since its last heavy maintenance and four drift events logged in the last year, but maintenance records show only partial pitot-static checks, not the full verification package. In conclusion: Bluewing 441 is grounded until the air data system and pitot-static checks pass with signed releases.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "If an aircraft has never completed the required pitot-static verification since its last heavy maintenance, and the aircraft has accumulated at least 70,000 flight hours since that maintenance, and at least three independent sensor drift events were logged for the same air data computer chain during the preceding 12 months, then the aircraft is grounded until the air data system checks pass with signed maintenance releases.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This statement involves state-history reasoning (\"never completed... since\"), temporal windows (\"preceding 12 months\"), and event logging, which are outside the system's snapshot-based logic.",
+      "diff_report": null,
+      "agent2_line_text": "1. \"If an aircraft has never completed the required pitot-static verification since its last heavy maintenance, and the aircraft has accumulated at least 70,000 flight hours since that maintenance, and at least three independent sensor drift events were logged for the same air data computer chain during the preceding 12 months, then the aircraft is grounded until the air data system checks pass with signed maintenance releases.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "If an aircraft has never completed the required pitot-static verification since its last heavy maintenance, and the aircraft has accumulated at least 70,000 flight hours since that maintenance, and at least three independent sensor drift events were logged for the same air data computer chain during the preceding 12 months, then the aircraft is grounded until the pitot-static checks pass with signed maintenance releases.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This statement involves state-history reasoning (\"never completed... since\"), temporal windows (\"preceding 12 months\"), and event logging, which are outside the system's snapshot-based logic.",
+      "diff_report": null,
+      "agent2_line_text": "2. \"If an aircraft has never completed the required pitot-static verification since its last heavy maintenance, and the aircraft has accumulated at least 70,000 flight hours since that maintenance, and at least three independent sensor drift events were logged for the same air data computer chain during the preceding 12 months, then the aircraft is grounded until the pitot-static checks pass with signed maintenance releases.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Bluewing 441 is an aircraft that has accumulated 71,000 flight hours since its last heavy maintenance.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Bluewing 441 is an aircraft that has accumulated 71,000 flight hours since its last heavy maintenance.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Bluewing 441 has four independent sensor drift events logged for the same air data computer chain in the last 12 months.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Bluewing 441 has four independent sensor drift events logged for the same air data computer chain in the last 12 months.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The maintenance records for Bluewing 441 show only partial pitot-static checks.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The maintenance records for Bluewing 441 show only partial pitot-static checks.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "The maintenance records for Bluewing 441 do not show the completion of the full required pitot-static verification package since its last heavy maintenance.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"The maintenance records for Bluewing 441 do not show the completion of the full required pitot-static verification package since its last heavy maintenance.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Bluewing 441 is grounded until the air data system checks pass with signed maintenance releases.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Bluewing 441 is grounded until the air data system checks pass with signed maintenance releases.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Bluewing 441 is grounded until the pitot-static checks pass with signed maintenance releases.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Bluewing 441 is grounded until the pitot-static checks pass with signed maintenance releases.\""
+    }
+  ],
+  "orchestration_run_id": "orr_hard_R_4_20260420_155826Z_490345e1_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-20T15:58:56Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

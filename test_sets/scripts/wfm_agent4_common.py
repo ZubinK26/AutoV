@@ -15,7 +15,7 @@ WFM_DIR = REPO_ROOT / "WFM"
 PROMPTS_DIR = WFM_DIR / "prompts"
 RESULTS_DIR = TEST_SETS / "run_results"
 
-DEFAULT_MODEL = "gemini-3.1-pro-preview"
+DEFAULT_MODEL = "gemini-3-flash-preview"
 DEFAULT_TEMPERATURE = 0.0
 DEFAULT_MAX_OUTPUT_TOKENS = 16384
 

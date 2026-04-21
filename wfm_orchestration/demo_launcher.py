@@ -241,7 +241,34 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--text", type=str, default="", help="Initial rule text (or with --demo-choice manual).")
     p.add_argument("--file", type=Path, default=None, help="UTF-8 file with initial text.")
     p.add_argument("--export", type=Path, default=None, help="Write DevSessionSnapshot JSON after registry.")
-    p.add_argument("--handoff", type=Path, default=None, help="Write HandoffBundle JSON before registry.")
+    p.add_argument("--handoff", type=Path, default=None, help="Explicit HandoffBundle JSON path (overrides default dir).")
+    p.add_argument(
+        "--handoff-dir",
+        type=Path,
+        default=None,
+        help="Directory for HandoffBundle JSON (default: bundles/wfm_artifacts).",
+    )
+    p.add_argument(
+        "--no-handoff-save",
+        action="store_true",
+        help="Do not auto-save handoff under bundles/wfm_artifacts.",
+    )
+    p.add_argument(
+        "--example-id",
+        type=str,
+        default=None,
+        help="Override manifest example id (curated runs set this from the pick when omitted).",
+    )
+    p.add_argument(
+        "--auto-accept",
+        action="store_true",
+        help="Accept confirmation without prompting.",
+    )
+    p.add_argument(
+        "--skip-registry",
+        action="store_true",
+        help="Stop after handoff JSON (no M4 / registry).",
+    )
     p.add_argument("--mock-resolve", action="store_true", help="Stub M4 resolver JSON (no Gemini for M4).")
     p.add_argument("--bundle-id", type=str, default=None, help="Override generated bundle_id (G3).")
     p.add_argument("--bundle-prefix", type=str, default="demo", help="Prefix when bundle_id is auto-generated.")
@@ -295,6 +322,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if not skip_rule_banner:
         _print_input_rule_banner(initial, ex_id)
+
+    if ex_id is not None and getattr(args, "example_id", None) is None:
+        args.example_id = ex_id
 
     if args.dry_run:
         wc = word_count(initial)

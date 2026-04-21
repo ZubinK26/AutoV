@@ -12,6 +12,8 @@ if str(_REPO / "test_sets" / "scripts") not in sys.path:
 
 import wfm_agent4_common as w4  # noqa: E402
 
+from wfm_orchestration.gemini_client import model_supports_thinking_config  # noqa: E402
+
 
 def call_agent4_gemini(user_payload: str, *, system: str | None = None) -> str:
     """Return Agent 4 assistant text (no file write)."""
@@ -49,7 +51,7 @@ def call_agent4_gemini(user_payload: str, *, system: str | None = None) -> str:
         "temperature": temperature,
         "max_output_tokens": max_out,
     }
-    if thinking_level is not None:
+    if thinking_level is not None and model_supports_thinking_config(model):
         cfg_kwargs["thinking_config"] = genai_types.ThinkingConfig(thinking_level=thinking_level)
 
     response = client.models.generate_content(

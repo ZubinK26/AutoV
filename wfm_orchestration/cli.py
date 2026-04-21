@@ -1,4 +1,4 @@
-"""CLI: WFM → registry e2e (Gemini). Run from repo root: ``python -m wfm_orchestration.cli``."""
+"""CLI: WFM to registry e2e (Gemini). Run from repo root: ``python -m wfm_orchestration.cli``."""
 
 from __future__ import annotations
 
@@ -33,6 +33,12 @@ def run_e2e(args: argparse.Namespace, initial_user_text: str) -> int:
         bundle_id_prefix=args.bundle_prefix,
         export_json=args.export,
         handoff_json=args.handoff,
+        repo_root=_REPO,
+        handoff_dir=getattr(args, "handoff_dir", None),
+        persist_handoff=not args.no_handoff_save,
+        example_id=getattr(args, "example_id", None),
+        auto_accept=getattr(args, "auto_accept", False),
+        skip_registry=getattr(args, "skip_registry", False),
         provider_model=ctx.model,
         auto_artifacts=not args.no_artifacts,
     )
@@ -50,7 +56,9 @@ def run_e2e(args: argparse.Namespace, initial_user_text: str) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="WFM Agents 1–3 (+4) → HandoffBundle → registry stage (Phase 1).")
+    p = argparse.ArgumentParser(
+        description="WFM Agents 1-3 (+4) to HandoffBundle to registry stage (Phase 1)."
+    )
     p.add_argument(
         "--text",
         type=str,
@@ -59,11 +67,38 @@ def main(argv: list[str] | None = None) -> int:
     )
     p.add_argument("--file", type=Path, default=None, help="UTF-8 file with initial user text.")
     p.add_argument("--export", type=Path, default=None, help="Write DevSessionSnapshot JSON after registry.")
-    p.add_argument("--handoff", type=Path, default=None, help="Write HandoffBundle JSON before registry.")
+    p.add_argument("--handoff", type=Path, default=None, help="Explicit HandoffBundle JSON path (overrides default dir).")
+    p.add_argument(
+        "--handoff-dir",
+        type=Path,
+        default=None,
+        help="Directory for HandoffBundle JSON (default: bundles/wfm_artifacts under repo root).",
+    )
+    p.add_argument(
+        "--no-handoff-save",
+        action="store_true",
+        help="Do not write bundles/wfm_artifacts/<bundle_id>.json or manifest line.",
+    )
+    p.add_argument(
+        "--example-id",
+        type=str,
+        default=None,
+        help="Label for manifest.jsonl (e.g. curated F-8), optional.",
+    )
+    p.add_argument(
+        "--auto-accept",
+        action="store_true",
+        help="Accept confirmation without prompting (for scripted / batch runs).",
+    )
+    p.add_argument(
+        "--skip-registry",
+        action="store_true",
+        help="Stop after handoff JSON (no M4 / registry); for smt_pipeline-only evaluation.",
+    )
     p.add_argument(
         "--mock-resolve",
         action="store_true",
-        help="Use a stub resolver JSON (no GEMINI for M4) — for dry integration tests.",
+        help="Use a stub resolver JSON (no GEMINI for M4), for dry integration tests.",
     )
     p.add_argument(
         "--bundle-id",

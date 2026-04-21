@@ -1,0 +1,114 @@
+{
+  "bundle_id": "hard_E_4_20260420_164419Z_29462944",
+  "accepted_at": "2026-04-20T17:12:52Z",
+  "committed_at": "2026-04-20T17:13:26Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_6b0a1ecab1ff",
+    "r_8154757d452d",
+    "r_893620dde5b6",
+    "r_2bf6bb82ac9c",
+    "r_078a263b495a",
+    "r_9a3a0cd533c5",
+    "r_51f45d690807",
+    "r_e2460d7de24d",
+    "r_292c2dec3499",
+    "r_fe62014fe24c"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "hard_E_4_20260420_164419Z_29462944",
+    "user_original_input": "Dock scheduling at Port Vale: a berth slot is **premium** if and only if the vessel’s declared LOA is **at most** two hundred forty meters **and** its arrival window fits entirely inside the morning tide gate, **or** the harbor master issues a paid priority token for that vessel. MV **Cornelia** declared two thirty-five meters, arrived inside the morning gate, and carries a priority token. Tonnage fees are waived **if and only if** the berth is premium **and** the carrier submits manifests **at least** forty-eight hours ahead **and** no hazardous class-1 cargo is declared. **Cornelia** filed manifests fifty hours early and declared only class-3 cargo. **If** tonnage fees are waived **then** the stevedore’s lift cap increases by **twenty** percent for that call. In conclusion: **Cornelia** receives the twenty-percent lift cap increase on this call.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "A berth slot is premium if and only if (the vessel’s declared length overall (LOA) is at most 240 meters and its arrival window fits entirely inside the morning tide gate) or the harbor master issues a paid priority token for that vessel.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"At Port Vale, a berth slot is premium if and only if the vessel’s declared length overall (LOA) is at most 240 meters and its arrival window fits entirely inside the morning tide gate, or the harbor master issues a paid priority token for that vessel.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "MV Cornelia is a vessel that declared a length overall (LOA) of 235 meters.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"MV Cornelia is a vessel that declared a length overall (LOA) of 235 meters.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "MV Cornelia's arrival window fits entirely inside the morning tide gate.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"MV Cornelia's arrival window fits entirely inside the morning tide gate.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "MV Cornelia carries a paid priority token issued by the harbor master.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"MV Cornelia carries a paid priority token issued by the harbor master.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Tonnage fees for a vessel are waived if and only if the vessel's berth slot is premium, the carrier submits manifests at least 48 hours ahead of the call, and no hazardous class-1 cargo is declared for that vessel.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Tonnage fees for a vessel are waived if and only if the vessel's berth slot is premium, the carrier submits manifests at least 48 hours ahead of the call, and no hazardous class-1 cargo is declared for that vessel.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "The carrier for MV Cornelia filed manifests 50 hours ahead of the call.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"The carrier for MV Cornelia filed manifests 50 hours ahead of the call.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The carrier for MV Cornelia declared only class-3 cargo.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The carrier for MV Cornelia declared only class-3 cargo.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "The declaration of only class-3 cargo implies no hazardous class-1 cargo was declared.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"The declaration of only class-3 cargo implies no hazardous class-1 cargo was declared.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "If tonnage fees for a vessel are waived, then the stevedore’s lift cap for that vessel's call increases by 20 percent.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"If tonnage fees for a vessel are waived, then the stevedore’s lift cap for that vessel's call increases by 20 percent.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "MV Cornelia receives a 20-percent lift cap increase for its current call.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"MV Cornelia receives a 20-percent lift cap increase for its current call.\""
+      }
+    ],
+    "orchestration_run_id": "orr_hard_E_4_20260420_164419Z_29462944_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-20T16:44:31Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\smt_from_wfm\\policies\\hard_E_4_20260420_164419Z_29462944.smt2"
+}

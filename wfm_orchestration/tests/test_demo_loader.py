@@ -9,11 +9,19 @@ import pytest
 from wfm_orchestration.demo_loader import (
     ManualInputRejected,
     compute_manual_word_limit,
+    get_curated_example_text,
     load_demo_pool_config,
     text_for_demo_choice,
     validate_manual_text,
     word_count,
 )
+
+
+def test_get_curated_example_text_known_ids():
+    cfg = load_demo_pool_config()
+    for ex_id in ("F-8", "PF-8", "R-4", "E-5"):
+        t = get_curated_example_text(ex_id, cfg=cfg)
+        assert len(t.strip()) > 10
 
 
 def test_load_demo_pool_config_has_expected_keys():

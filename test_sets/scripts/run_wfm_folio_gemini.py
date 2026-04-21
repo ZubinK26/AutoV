@@ -39,7 +39,7 @@ CONFIG_FILE = WFM_DIR / "config" / "wfm.json"
 RESULTS_DIR = TEST_SETS / "run_results"
 
 # --- defaults (see test_sets/wfm_api_contract_gemini.md) ---
-DEFAULT_MODEL = "gemini-3.1-pro-preview"
+DEFAULT_MODEL = "gemini-3-flash-preview"
 DEFAULT_TEMPERATURE = 0.0
 DEFAULT_MAX_OUTPUT_TOKENS = 16384
 
@@ -140,6 +140,27 @@ def _parse_example_blocks(section: str, block_pattern: str, label: str) -> list[
     return out
 
 
+def model_supports_thinking_config(model: str) -> bool:
+    """
+    Whether to send ``ThinkingConfig`` for ``generate_content``.
+
+    Gemini 3.x (e.g. ``gemini-3-flash-preview``, ``gemini-3.1-pro-preview``) supports
+    ``thinking_level``; ``gemini-2.5-pro`` does not (omit config).
+
+    Some models return 400 ``Thinking level is not supported for this model`` if
+    ``thinking_config`` is set. Override: ``GEMINI_FORCE_NO_THINKING=1`` (omit always),
+    ``GEMINI_FORCE_THINKING_CONFIG=1`` (send when ``thinking_level`` is set).
+    """
+    m = (model or "").strip().lower()
+    if os.environ.get("GEMINI_FORCE_NO_THINKING", "").strip().lower() in ("1", "true", "yes"):
+        return False
+    if os.environ.get("GEMINI_FORCE_THINKING_CONFIG", "").strip().lower() in ("1", "true", "yes"):
+        return True
+    if m.startswith("gemini-2.5-pro"):
+        return False
+    return True
+
+
 def env_thinking_level():
     """Parse GEMINI_THINKING_LEVEL; see wfm_api_contract_gemini.md."""
     from google.genai import types as genai_types
@@ -179,7 +200,7 @@ def call_gemini(
         "temperature": temperature,
         "max_output_tokens": max_output_tokens,
     }
-    if thinking_level is not None:
+    if thinking_level is not None and model_supports_thinking_config(model):
         cfg_kwargs["thinking_config"] = genai_types.ThinkingConfig(
             thinking_level=thinking_level,
         )

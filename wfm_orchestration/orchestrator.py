@@ -34,6 +34,7 @@ from registry_stage.wfm_acceptance_handoff import (
 
 from wfm_orchestration.agent4_call import call_agent4_gemini
 from wfm_orchestration.gemini_client import call_gemini, env_thinking_level
+from wfm_orchestration.handoff_artifacts import handoff_write_path, record_handoff_artifact
 from wfm_orchestration.prompts_wfm import load_wfm_prompts
 from wfm_orchestration.snapshot_from_agents import wfm_acceptance_snapshot_from_agent_outputs
 from wfm_orchestration.run_metadata import (
@@ -84,6 +85,13 @@ def _parse_int_list(s: str) -> list[int]:
     return out
 
 
+def _auto_accept_input_fn(prompt: str) -> str:
+    """Non-interactive accept for batch runs; aborts if a follow-up prompt appears."""
+    if "Accept entire confirmation" in prompt:
+        return "y"
+    return "abort"
+
+
 def run_wfm_registry_e2e(
     *,
     initial_user_text: str,
@@ -99,6 +107,12 @@ def run_wfm_registry_e2e(
     provider_model: str | None = None,
     export_json: Path | None = None,
     handoff_json: Path | None = None,
+    repo_root: Path | None = None,
+    handoff_dir: Path | None = None,
+    persist_handoff: bool = True,
+    example_id: str | None = None,
+    auto_accept: bool = False,
+    skip_registry: bool = False,
     auto_artifacts: bool = True,
     input_fn: Callable[[str], str] = input,
     print_fn: Callable[..., None] = print,
@@ -108,11 +122,26 @@ def run_wfm_registry_e2e(
     Interactive console session: WFM loop(s) then registry when user accepts.
 
     **Environment:** ``GEMINI_API_KEY`` required. Run from repo root so ``registry_stage`` imports work.
+
+    **Handoff artifacts:** When ``persist_handoff`` is True and ``handoff_json`` is not set, the bundle is
+    written to ``bundles/wfm_artifacts/<bundle_id>.json`` (or ``handoff_dir``). A line is appended to
+    ``manifest.jsonl``. Set ``persist_handoff=False`` to disable. ``skip_registry=True`` skips M4/registry
+    (handoff-only for ``smt_pipeline``); requires a handoff write path.
     """
+    root = repo_root or _REPO
+    if auto_accept:
+        input_fn = _auto_accept_input_fn
     p1, p2, p3, p4, compound_limit = load_wfm_prompts()
     bid = bundle_id or new_bundle_id(prefix=bundle_id_prefix)
     user_original_input = initial_user_text
     user_nl = initial_user_text
+
+    def _resolve_handoff_path() -> Path | None:
+        if handoff_json is not None:
+            return handoff_json
+        if not persist_handoff:
+            return None
+        return handoff_write_path(root, bid, handoff_dir=handoff_dir)
 
     for pass_ix in range(OUTER_PASSES_MAX):
         print_fn(f"\n--- WFM pass {pass_ix + 1}/{OUTER_PASSES_MAX} ---\n")
@@ -177,9 +206,25 @@ def run_wfm_registry_e2e(
                 wfm_compound_operator_limit=compound_limit,
             )
             bundle = validate_handoff_roundtrip(build_handoff_bundle(snap))
-            if handoff_json is not None:
-                write_handoff_bundle(handoff_json, bundle)
-                print_fn(f"Wrote handoff: {handoff_json}")
+            out_path = _resolve_handoff_path()
+            if skip_registry and out_path is None:
+                stderr.write(
+                    "skip_registry requires a handoff path (--handoff, or persist_handoff with default dir).\n"
+                )
+                return None
+            if out_path is not None:
+                out_path.parent.mkdir(parents=True, exist_ok=True)
+                write_handoff_bundle(out_path, bundle)
+                print_fn(f"Wrote handoff: {out_path}")
+                record_handoff_artifact(
+                    root,
+                    bundle_id=bundle.bundle_id,
+                    example_id=example_id,
+                    handoff_path=out_path,
+                    skip_registry=skip_registry,
+                )
+            if skip_registry:
+                return DevSessionSnapshot(bundle=bundle, notes="wfm_handoff_only")
             cfg = LineDriverConfig(enable_llm=True, llm_complete=llm_complete)
             dev = run_bundle_through_registry(
                 bundle,
@@ -191,7 +236,7 @@ def run_wfm_registry_e2e(
                 export_session(export_json, dev)
                 print_fn(f"Wrote dev export: {export_json}")
             if auto_artifacts:
-                _write_e2e_auto_artifacts(dev, repo_root=_REPO, print_fn=print_fn, stderr=stderr)
+                _write_e2e_auto_artifacts(dev, repo_root=root, print_fn=print_fn, stderr=stderr)
             return dev
 
         raw_d = input_fn(

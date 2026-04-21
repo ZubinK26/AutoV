@@ -1,0 +1,114 @@
+{
+  "bundle_id": "hard_PF_8_20260420_155230Z_bf9c42d7",
+  "accepted_at": "2026-04-20T17:10:03Z",
+  "committed_at": "2026-04-20T17:10:44Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_a901b61b209d",
+    "r_7e88a808d50f",
+    "r_ab080b40082f",
+    "r_4a5ba2b4123a",
+    "r_2ba5d7cddc84",
+    "r_479747f32ead",
+    "r_49909b0c8779",
+    "r_7e4a24b063ba",
+    "r_5ff67f391490",
+    "r_39326156259c"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "hard_PF_8_20260420_155230Z_bf9c42d7",
+    "user_original_input": "In superhero movies, the good guys always win. The Surprising Adventures of Sir Digby Chicken Caesar is a superhero movie. Good guys fight bad guys and vice versa. Sir Digby fights his nemesis. If a superhero movie is named after a character, that character is a good guy. The Surprising Adventures of Sir Digby Chicken Caesar is named after Sir Digby. If somebody wins a fight, the person they are fighting loses. If a superhero movie is named after a character, that character appears in the movie. In conclusion: Sir Digby’s nemesis loses.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "In every superhero movie, every good guy wins.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"In every superhero movie, every good guy wins.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The Surprising Adventures of Sir Digby Chicken Caesar is a superhero movie.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The Surprising Adventures of Sir Digby Chicken Caesar is a superhero movie.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Every good guy fights at least one bad guy.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Every good guy fights at least one bad guy.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Every bad guy fights at least one good guy.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Every bad guy fights at least one good guy.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Sir Digby fights Sir Digby's nemesis.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Sir Digby fights Sir Digby's nemesis.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "If a superhero movie is named after a character, then that character is a good guy.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"If a superhero movie is named after a character, then that character is a good guy.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The movie The Surprising Adventures of Sir Digby Chicken Caesar is named after the character Sir Digby.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The movie The Surprising Adventures of Sir Digby Chicken Caesar is named after the character Sir Digby.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "If a person wins a fight, then the person whom they are fighting loses that fight.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"If a person wins a fight, then the person whom they are fighting loses that fight.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "If a superhero movie is named after a character, then that character appears in that movie.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"If a superhero movie is named after a character, then that character appears in that movie.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Sir Digby’s nemesis loses.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Sir Digby’s nemesis loses.\""
+      }
+    ],
+    "orchestration_run_id": "orr_hard_PF_8_20260420_155230Z_bf9c42d7_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-20T15:52:47Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\smt_from_wfm\\policies\\hard_PF_8_20260420_155230Z_bf9c42d7.smt2"
+}

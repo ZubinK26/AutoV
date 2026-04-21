@@ -1,0 +1,102 @@
+{
+  "policy_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\smt_from_wfm\\policies",
+  "count": 11,
+  "sat": 10,
+  "unsat": 1,
+  "unknown": 0,
+  "errors": 0,
+  "files": {
+    "hard_E_4_20260420_164419Z_29462944.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_E_5_20260420_165746Z_bad4fdc5.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_E_6_20260420_165941Z_09d88cea.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_F_10_20260420_155111Z_b33172f7.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_F_8_20260420_154309Z_a3db088d.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_F_9_20260420_155037Z_96d0b8fe.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_PF_10_20260420_155733Z_107f0350.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_PF_8_20260420_155230Z_bf9c42d7.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_PF_9_20260420_155252Z_802696c5.smt2": {
+      "sat_result": "unsat",
+      "unsat_core": [
+        "r_51bb89c70964#0",
+        "r_a904f2e3069e#0",
+        "r_05ae9844e625#0",
+        "r_bd58be5404c1#0",
+        "r_9f6de8783a93#0"
+      ],
+      "core_rule_hints": [
+        {
+          "rule_id": "r_51bb89c70964",
+          "assert_index": 0,
+          "track": "r_51bb89c70964#0",
+          "line_index": 6
+        },
+        {
+          "rule_id": "r_a904f2e3069e",
+          "assert_index": 0,
+          "track": "r_a904f2e3069e#0",
+          "line_index": 7
+        },
+        {
+          "rule_id": "r_05ae9844e625",
+          "assert_index": 0,
+          "track": "r_05ae9844e625#0",
+          "line_index": 2
+        },
+        {
+          "rule_id": "r_bd58be5404c1",
+          "assert_index": 0,
+          "track": "r_bd58be5404c1#0",
+          "line_index": 9
+        },
+        {
+          "rule_id": "r_9f6de8783a93",
+          "assert_index": 0,
+          "track": "r_9f6de8783a93#0",
+          "line_index": 12
+        }
+      ]
+    },
+    "hard_R_4_20260420_155826Z_490345e1.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    },
+    "hard_R_5_20260420_155956Z_b96b26eb.smt2": {
+      "sat_result": "sat",
+      "unsat_core": null,
+      "core_rule_hints": null
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "hard_F_8_20260420_154309Z_a3db088d",
+  "user_original_input": "All employees who schedule a meeting with their customers will appear in the company today. Everyone who has lunch in the company schedules meetings with their customers. Employees will either have lunch in the company or have lunch at home. If an employee has lunch at home, then he/she is working remotely from home. All employees who are in other countries work remotely from home. No managers work remotely from home. James is either a manager and appears in the company today or neither a manager nor appears in the company today. In conclusion: James has lunch in the company.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every employee who schedules at least one meeting with their customers is present at the company today.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every employee who schedules at least one meeting with their customers is present at the company today.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every employee who has lunch at the company schedules at least one meeting with their customers.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every employee who has lunch at the company schedules at least one meeting with their customers.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every employee either has lunch at the company or has lunch at home.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every employee either has lunch at the company or has lunch at home.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "If an employee has lunch at home, then that employee is working remotely from home.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"If an employee has lunch at home, then that employee is working remotely from home.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every employee who is in a country other than the company's country works remotely from home.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every employee who is in a country other than the company's country works remotely from home.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "No manager works remotely from home.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"No manager works remotely from home.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "James is either both a manager and present at the company today, or James is neither a manager nor present at the company today.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"James is either both a manager and present at the company today, or James is neither a manager nor present at the company today.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "James has lunch at the company.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"James has lunch at the company.\""
+    }
+  ],
+  "orchestration_run_id": "orr_hard_F_8_20260420_154309Z_a3db088d_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-20T15:43:23Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

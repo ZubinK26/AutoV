@@ -1,0 +1,85 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "hard_F_9_20260420_155037Z_96d0b8fe",
+  "user_original_input": "A person is either a Grand Slam champion or an Oscar-nominated actor. All people who are Grand Slam champions are professional tennis players. All Oscar-nominated actors are celebrities. All professional tennis players are athletes. If a person is a celebrity then they are well paid. If a person is an athlete then they are famous. All well-paid people live in tax havens. If Djokovic is famous and is an athlete, then Djokovic lives in a tax haven. In conclusion: Djokovic is a Grand Slam champion.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every person is either a Grand Slam champion or an Oscar-nominated actor.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every person is either a Grand Slam champion or an Oscar-nominated actor.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every person who is a Grand Slam champion is a professional tennis player.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every person who is a Grand Slam champion is a professional tennis player.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every person who is an Oscar-nominated actor is a celebrity.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every person who is an Oscar-nominated actor is a celebrity.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every professional tennis player is an athlete.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every professional tennis player is an athlete.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "If a person is a celebrity, then that person is well paid.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"If a person is a celebrity, then that person is well paid.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "If a person is an athlete, then that person is famous.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"If a person is an athlete, then that person is famous.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every well-paid person lives in a tax haven.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every well-paid person lives in a tax haven.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "If Djokovic is famous and Djokovic is an athlete, then Djokovic lives in a tax haven.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"If Djokovic is famous and Djokovic is an athlete, then Djokovic lives in a tax haven.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Djokovic is a Grand Slam champion.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Djokovic is a Grand Slam champion.\""
+    }
+  ],
+  "orchestration_run_id": "orr_hard_F_9_20260420_155037Z_96d0b8fe_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-20T15:51:06Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

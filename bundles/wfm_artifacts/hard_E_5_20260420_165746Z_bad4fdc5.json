@@ -1,0 +1,69 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "hard_E_5_20260420_165746Z_bad4fdc5",
+  "user_original_input": "Every loan officer **that is** licensed in **both** California **and** Nevada **and** that has closed **at least** twelve rural-development deals in the **last** calendar year **has** an elevated approval ceiling of one-point-two million dollars for single-section manufactured housing, **unless** the borrower’s debt-to-income ratio **exceeds** forty-three percent **or** the census tract is flagged “infrastructure incomplete.” Jamie is licensed in both states, closed fifteen rural-development deals last year, but the subject tract is infrastructure-incomplete. The elevated ceiling **never** applies when the tract flag is set. In conclusion: Jamie may not use the elevated ceiling on this application.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "If a loan officer is licensed in California and the loan officer is licensed in Nevada and the loan officer has closed at least 12 rural-development deals in the last calendar year, then the loan officer has an elevated approval ceiling of $1,200,000 for single-section manufactured housing, unless the borrower’s debt-to-income ratio exceeds 43 percent or the census tract is flagged 'infrastructure incomplete'.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every loan officer who is licensed in both California and Nevada and who has closed at least twelve rural-development deals in the last calendar year has an elevated approval ceiling of $1,200,000 for single-section manufactured housing, unless the borrower’s debt-to-income ratio exceeds 43 percent or the census tract is flagged 'infrastructure incomplete'.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The elevated approval ceiling never applies when the census tract flag is set to 'infrastructure incomplete'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The elevated approval ceiling never applies when the census tract flag is set to 'infrastructure incomplete'.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Jamie is a loan officer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Jamie is a loan officer.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Jamie is licensed in both California and Nevada.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Jamie is licensed in both California and Nevada.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Jamie closed fifteen rural-development deals in the last calendar year.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Jamie closed fifteen rural-development deals in the last calendar year.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "For the current application, the subject census tract is flagged 'infrastructure incomplete'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"For the current application, the subject census tract is flagged 'infrastructure incomplete'.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Jamie is not allowed to use the elevated approval ceiling for this application.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Jamie is not allowed to use the elevated approval ceiling for this application.\""
+    }
+  ],
+  "orchestration_run_id": "orr_hard_E_5_20260420_165746Z_bad4fdc5_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-20T16:59:36Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

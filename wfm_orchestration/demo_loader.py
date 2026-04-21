@@ -86,6 +86,16 @@ def compute_manual_word_limit(cfg: dict[str, Any] | None = None) -> int:
     return max_w + extra
 
 
+def get_curated_example_text(ex_id: str, *, cfg: dict[str, Any] | None = None) -> str:
+    """Return the rule body for a curated id (FOLIO, P-FOLIO, or stress)."""
+    cfg = cfg or load_demo_pool_config()
+    by_id = _all_curated_examples(cfg)
+    ex = by_id.get(ex_id)
+    if ex is None:
+        raise KeyError(f"Unknown curated example id: {ex_id}")
+    return ex.text
+
+
 def text_for_demo_choice(
     choice: str,
     *,
