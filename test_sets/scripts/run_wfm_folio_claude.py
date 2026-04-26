@@ -13,6 +13,7 @@ API key: load from .env (ANTHROPIC_API_KEY) or environment. See .gitignore.
 Optional:
   python test_sets/scripts/run_wfm_folio_claude.py --dry-run
   python test_sets/scripts/run_wfm_folio_claude.py --stress   # edge/reject harness; wfm_stress_gemini-style outputs as wfm_stress_claude_*
+  python test_sets/scripts/run_wfm_folio_claude.py --clincon  # ClinCon fragment smoke (C-*); wfm_clincon_claude_*
   ANTHROPIC_MODEL=claude-3-5-sonnet-20241022 python ...
   ANTHROPIC_THINKING_BUDGET_TOKENS=0 python ...   # disable extended thinking (use temperature)
 """
@@ -35,6 +36,7 @@ WFM_DIR = REPO_ROOT / "WFM"
 PROMPTS_DIR = WFM_DIR / "prompts"
 EXAMPLES_FILE = TEST_SETS / "wfm_folio_pffolio_examples_en.md"
 STRESS_EXAMPLES_FILE = TEST_SETS / "wfm_stress_examples_en.md"
+CLINCON_EXAMPLES_FILE = TEST_SETS / "wfm_clincon_fragment_examples_en.md"
 CONFIG_FILE = WFM_DIR / "config" / "wfm.json"
 RESULTS_DIR = TEST_SETS / "run_results"
 
@@ -146,6 +148,19 @@ def parse_stress_examples(path: Path) -> list[Example]:
     )
 
 
+def parse_clincon_examples(path: Path) -> list[Example]:
+    text = path.read_text(encoding="utf-8")
+    m = re.search(r"## CLINCON\s*\n\n(.*)\Z", text, re.DOTALL)
+    if not m:
+        raise ValueError(f"Could not find ## CLINCON section in {path}")
+    section = m.group(1).strip()
+    return _parse_example_blocks(
+        section,
+        r"^### (C-\d+) \(([^)]+)\)\s*\n\n(.+?)(?=^### |\Z)",
+        "C-*",
+    )
+
+
 def call_claude(
     client: object,
     *,
@@ -186,18 +201,24 @@ def limit_exceeded(agent2_output: str) -> bool:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="WFM Agents 1–3 API smoke (FOLIO or stress harness).")
+    parser = argparse.ArgumentParser(description="WFM Agents 1–3 API smoke (FOLIO, stress, or ClinCon harness).")
     parser.add_argument("--dry-run", action="store_true", help="Parse prompts/examples only; no API.")
-    parser.add_argument(
+    mx = parser.add_mutually_exclusive_group()
+    mx.add_argument(
         "--stress",
         action="store_true",
         help="Use ## STRESS (R-* / E-*) from wfm_stress_examples_en.md by default; writes wfm_stress_claude_*.",
+    )
+    mx.add_argument(
+        "--clincon",
+        action="store_true",
+        help="Use ## CLINCON (C-*) from wfm_clincon_fragment_examples_en.md by default; writes wfm_clincon_claude_*.",
     )
     parser.add_argument(
         "--examples",
         type=Path,
         default=EXAMPLES_FILE,
-        help="Markdown with ## FOLIO or stress file when using --stress.",
+        help="Markdown: FOLIO+P-FOLIO default, or stress/ClinCon file when using --stress / --clincon.",
     )
     parser.add_argument(
         "--out-dir",
@@ -226,6 +247,13 @@ def main() -> int:
         example_set = "stress"
         out_prefix = "wfm_stress_claude"
         report_heading = "# WFM automated run — stress harness (R-* / E-*), Agents 1 → 2 → 3"
+    elif args.clincon:
+        clincon_path = args.examples if args.examples != EXAMPLES_FILE else CLINCON_EXAMPLES_FILE
+        examples = parse_clincon_examples(clincon_path)
+        examples_file_resolved = str(clincon_path.resolve())
+        example_set = "clincon"
+        out_prefix = "wfm_clincon_claude"
+        report_heading = "# WFM automated run — ClinCon fragment smoke (C-*), Agents 1 → 2 → 3"
     else:
         examples = parse_folio_examples(args.examples)
         examples_file_resolved = str(args.examples.resolve())
@@ -273,7 +301,13 @@ def main() -> int:
             if thinking_raw == ""
             else int(thinking_raw) or None
         )
-        label = "STRESS (R-* / E-*)" if args.stress else "FOLIO"
+        label = (
+            "STRESS (R-* / E-*)"
+            if args.stress
+            else "CLINCON (C-*)"
+            if args.clincon
+            else "FOLIO"
+        )
         print("Dry run OK — parsed", len(examples), f"{label} examples.")
         for e in examples:
             print(f"  {e.ex_id} ({e.difficulty}) {len(e.text)} chars")
@@ -300,6 +334,8 @@ def main() -> int:
 
     if example_set == "stress":
         set_bullet = "- **Example set:** `stress` (`test_sets/wfm_stress_examples_en.md`, ## STRESS)"
+    elif example_set == "clincon":
+        set_bullet = "- **Example set:** `clincon` (`test_sets/wfm_clincon_fragment_examples_en.md`, ## CLINCON)"
     else:
         set_bullet = "- **Example set:** `folio` (F-* blocks)"
     report_lines: list[str] = [

@@ -1,0 +1,160 @@
+{
+  "bundle_id": "symtex_batch_20260423_180627Z_efe566e3",
+  "accepted_at": "2026-04-23T18:16:27Z",
+  "committed_at": "2026-04-23T18:16:37Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_e83682fca3ed",
+    "r_8285081de52d",
+    "r_e2d2c2ce0a59",
+    "r_6b3517af9230",
+    "r_dbfa8d2694a4",
+    "r_8d64650d9808",
+    "r_1e25ea14e995",
+    "r_4ace96f7aaa0",
+    "r_8d9c77721954",
+    "r_05f26733e7c2",
+    "r_f7e91c81fdaa",
+    "r_07f797a3350c",
+    "r_9799ef84dea7",
+    "r_5c1889030e6c",
+    "r_0c01b5e88200"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260423_180627Z_efe566e3",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nyellowbelly_marmot(\"Mary\", \"Sabrina\") is explicitly false.\nbovine(\"Mary\", \"Alison\", \"Cynthia\") is explicitly false.\nhorn(\"Mary\", \"Sabrina\", \"Anthony\") is explicitly false.\nbullock(\"Mary\", \"Cynthia\", \"Anthony\") is true.\nhoary_marmot(\"Sabrina\", \"Cynthia\") is true.\nsight_organ(\"Mary\", \"Alison\", \"Sabrina\") is explicitly false.\nsquirrel(\"Sabrina\", \"Anthony\") is explicitly false.\nabrocome(\"Cynthia\", \"Anthony\") is explicitly false.\n\nRules:\nIf placental(V0, V2, V3) is explicitly false, then cattle(V0, V2, V3) is true.\nIf marmot(V0, V3) is true and squirrel(V2, V4) is explicitly false and there is no evidence that abrocome(V3, V4) is true, then rodent(V0, V3, V4) is true.\nIf yellowbelly_marmot(V0, V2) is explicitly false and hoary_marmot(V2, V3) is true and sight_organ(V0, V1, V2) is explicitly false, then marmot(V0, V3) is true.\nIf bovine(V0, V1, V3) is explicitly false and horn(V0, V2, V4) is explicitly false and there is no evidence that bullock(V0, V3, V4) is explicitly false, then bull(V0, V1, V2) is explicitly false.\nIf bovine(V0, V1, V3) is explicitly false and horn(V0, V2, V4) is explicitly false and there is no evidence that bullock(V0, V3, V4) is explicitly false, then udder(V0, V3, V4) is explicitly false.\nIf rodent(V0, V3, V4) is true and bull(V0, V1, V2) is explicitly false and there is no evidence that cow(V0, V1, V2) is true, then placental(V0, V2, V3) is explicitly false.\nIf rodent(V0, V3, V4) is true and there is no evidence that udder(V0, V3, V4) is true, then cow(V0, V0, V4) is explicitly false.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "It is explicitly false that Mary and Sabrina have the yellowbelly marmot relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"It is explicitly false that Mary and Sabrina have the yellowbelly marmot relationship.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "It is explicitly false that Mary, Alison, and Cynthia have the bovine relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"It is explicitly false that Mary, Alison, and Cynthia have the bovine relationship.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "It is explicitly false that Mary, Sabrina, and Anthony have the horn relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"It is explicitly false that Mary, Sabrina, and Anthony have the horn relationship.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "It is true that Mary, Cynthia, and Anthony have the bullock relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"It is true that Mary, Cynthia, and Anthony have the bullock relationship.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "It is true that Sabrina and Cynthia have the hoary marmot relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"It is true that Sabrina and Cynthia have the hoary marmot relationship.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "It is explicitly false that Mary, Alison, and Sabrina have the sight organ relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"It is explicitly false that Mary, Alison, and Sabrina have the sight organ relationship.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "It is explicitly false that Sabrina and Anthony have the squirrel relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"It is explicitly false that Sabrina and Anthony have the squirrel relationship.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "It is explicitly false that Cynthia and Anthony have the abrocome relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"It is explicitly false that Cynthia and Anthony have the abrocome relationship.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "If it is explicitly false that V0, V2, and V3 have the placental relationship, then it is true that V0, V2, and V3 have the cattle relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"If it is explicitly false that V0, V2, and V3 have the placental relationship, then it is true that V0, V2, and V3 have the cattle relationship.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "If it is true that V0 and V3 have the marmot relationship, and it is explicitly false that V2 and V4 have the squirrel relationship, and there is no evidence that it is true that V3 and V4 have the abrocome relationship, then it is true that V0, V3, and V4 have the rodent relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"If it is true that V0 and V3 have the marmot relationship, and it is explicitly false that V2 and V4 have the squirrel relationship, and there is no evidence that it is true that V3 and V4 have the abrocome relationship, then it is true that V0, V3, and V4 have the rodent relationship.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "If it is explicitly false that V0 and V2 have the yellowbelly marmot relationship, and it is true that V2 and V3 have the hoary marmot relationship, and it is explicitly false that V0, V1, and V2 have the sight organ relationship, then it is true that V0 and V3 have the marmot relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"If it is explicitly false that V0 and V2 have the yellowbelly marmot relationship, and it is true that V2 and V3 have the hoary marmot relationship, and it is explicitly false that V0, V1, and V2 have the sight organ relationship, then it is true that V0 and V3 have the marmot relationship.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "If it is explicitly false that V0, V1, and V3 have the bovine relationship, and it is explicitly false that V0, V2, and V4 have the horn relationship, and there is no evidence that it is explicitly false that V0, V3, and V4 have the bullock relationship, then it is explicitly false that V0, V1, and V2 have the bull relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"If it is explicitly false that V0, V1, and V3 have the bovine relationship, and it is explicitly false that V0, V2, and V4 have the horn relationship, and there is no evidence that it is explicitly false that V0, V3, and V4 have the bullock relationship, then it is explicitly false that V0, V1, and V2 have the bull relationship.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "If it is explicitly false that V0, V1, and V3 have the bovine relationship, and it is explicitly false that V0, V2, and V4 have the horn relationship, and there is no evidence that it is explicitly false that V0, V3, and V4 have the bullock relationship, then it is explicitly false that V0, V3, and V4 have the udder relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"If it is explicitly false that V0, V1, and V3 have the bovine relationship, and it is explicitly false that V0, V2, and V4 have the horn relationship, and there is no evidence that it is explicitly false that V0, V3, and V4 have the bullock relationship, then it is explicitly false that V0, V3, and V4 have the udder relationship.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "If it is true that V0, V3, and V4 have the rodent relationship, and it is explicitly false that V0, V1, and V2 have the bull relationship, and there is no evidence that it is true that V0, V1, and V2 have the cow relationship, then it is explicitly false that V0, V2, and V3 have the placental relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"If it is true that V0, V3, and V4 have the rodent relationship, and it is explicitly false that V0, V1, and V2 have the bull relationship, and there is no evidence that it is true that V0, V1, and V2 have the cow relationship, then it is explicitly false that V0, V2, and V3 have the placental relationship.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "If it is true that V0, V3, and V4 have the rodent relationship, and there is no evidence that it is true that V0, V3, and V4 have the udder relationship, then it is explicitly false that V0, V0, and V4 have the cow relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"If it is true that V0, V3, and V4 have the rodent relationship, and there is no evidence that it is true that V0, V3, and V4 have the udder relationship, then it is explicitly false that V0, V0, and V4 have the cow relationship.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260423_180627Z_efe566e3_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-23T18:06:51Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260423_180627Z_efe566e3.lp",
+  "pipeline_kind": "asp_clincon"
+}

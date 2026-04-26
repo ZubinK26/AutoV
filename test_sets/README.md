@@ -5,7 +5,11 @@
 - **`scripts/select_folio_examples.py`** — Regenerates the curated English example list from the FOLIO JSONL files.
 - **`wfm_folio_pffolio_examples_en.md`** — **10 FOLIO + 10 P-FOLIO–source** English blocks for WFM / Agent 1 browser tests (see file header for P-FOLIO caveats).
 - **`wfm_pfolio_expected_outcomes_manual_baseline.md`** — regression / benchmark expectations for **PF-*** automated runs (compare to `wfm_folio_expected_outcomes_manual_baseline.md` for F-*).
-- **`wfm_stress_examples_en.md`** — **12** medium–hard **reject** (R-*) and **edge** (E-*) blocks for Agents 1→3 stress testing; output files `wfm_stress_*_<UTC>.*`.
+- **`wfm_stress_examples_en.md`** — **12** medium–hard **reject** (R-*) and **edge** (E-*) blocks for Agents 1→3 stress testing; output files `wfm_stress_*_<UTC>.*`. (Labels predate **ClinCon** scope; see file header.)
+- **`wfm_clincon_fragment_examples_en.md`** — **6** smoke blocks (C-*) for **ClinCon-safe ASP** Agent 3 scope; run with `--clincon` → `wfm_clincon_*_<UTC>.*`.
+- **`datasets/aspbench/`** — README + optional git clone of [HomuraT/ASPBench](https://github.com/HomuraT/ASPBench) ([arXiv:2507.19749](https://arxiv.org/abs/2507.19749)).
+- **`datasets/asp_nl_bench/`** — where to fetch **NL → ASP** “ASP-Bench” ([arXiv:2602.01171](https://arxiv.org/abs/2602.01171)).
+- **`datasets/asp_competition/`** — Potassco / competition encodings (**solver-only**, not NL-paired; see folder README).
 - **`wfm_agent4_confirmation_manual_scenario.md`** — manual (or future automated) tests starting **after Agent 3**: confirmation package, disagreement, `WFM_PATCH`, Style A merge, loop-back; uses stress/FOLIO run artifacts as fixtures.
 - **`scripts/run_wfm_loopback_agent4_merge.py`** — run Agents **1→3** on **Style A** text extracted from Agent 4 interactive Markdown reports (`wfm_agent4_merge_loopback_gemini_*` in `run_results/`).
 
@@ -35,6 +39,8 @@ Optional: set `ANTHROPIC_API_KEY` in the shell environment instead of `.env`.
 Dry-run (no API): `python test_sets/scripts/run_wfm_folio_claude.py --dry-run`
 
 **Stress harness (R-* / E-*):** `python test_sets/scripts/run_wfm_folio_claude.py --stress` → `run_results/wfm_stress_claude_<UTC>.md` / `.jsonl`. Custom path: `--stress --examples path/to/file.md` (must contain `## STRESS`).
+
+**ClinCon fragment (C-*):** `python test_sets/scripts/run_wfm_folio_claude.py --clincon` (or `run_wfm_folio_gemini.py --clincon`) → `wfm_clincon_*_<UTC>.*`. Custom markdown must contain `## CLINCON`.
 
 ## Agent 4 from a saved run (Gemini)
 
@@ -159,7 +165,7 @@ See **`wfm_agent4_confirmation_manual_scenario.md`** and **`WFM/prompts/agent_4_
 
 ## Automated WFM pipeline (Gemini API, Agents 1→3)
 
-Contract: **`test_sets/wfm_api_contract_gemini.md`**. Set **`GEMINI_API_KEY`** in `.env` (see `.env.example`). FOLIO outputs: `wfm_folio_gemini_<UTC>.*`; P-FOLIO: **`--pfolio`** → `wfm_pfolio_gemini_<UTC>.*`; stress: **`--stress`** → `wfm_stress_gemini_<UTC>.*`. **`--pfolio`** and **`--stress`** are mutually exclusive.
+Contract: **`test_sets/wfm_api_contract_gemini.md`**. Set **`GEMINI_API_KEY`** in `.env` (see `.env.example`). FOLIO outputs: `wfm_folio_gemini_<UTC>.*`; P-FOLIO: **`--pfolio`** → `wfm_pfolio_gemini_<UTC>.*`; stress: **`--stress`** → `wfm_stress_gemini_<UTC>.*`; ClinCon smoke: **`--clincon`** → `wfm_clincon_gemini_<UTC>.*`. **`--pfolio`**, **`--stress`**, and **`--clincon`** are mutually exclusive.
 
 ```powershell
 pip install -r test_sets/requirements-wfm-test.txt
@@ -168,6 +174,8 @@ python test_sets/scripts/run_wfm_folio_gemini.py
 python test_sets/scripts/run_wfm_folio_gemini.py --pfolio
 python test_sets/scripts/run_wfm_folio_gemini.py --stress --dry-run
 python test_sets/scripts/run_wfm_folio_gemini.py --stress
+python test_sets/scripts/run_wfm_folio_gemini.py --clincon --dry-run
+python test_sets/scripts/run_wfm_folio_gemini.py --clincon
 ```
 
 ### Loopback — Agent 4 merge preview → Agents 1→3 (Gemini)

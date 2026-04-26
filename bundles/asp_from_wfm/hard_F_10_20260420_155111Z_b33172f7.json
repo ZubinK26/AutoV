@@ -1,0 +1,97 @@
+{
+  "bundle_id": "hard_F_10_20260420_155111Z_b33172f7",
+  "accepted_at": "2026-04-23T17:08:52Z",
+  "committed_at": "2026-04-23T17:09:38Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_7570eb6b3a92",
+    "r_f9c2048967af",
+    "r_cacf5de23370",
+    "r_0eb0a833e6d5",
+    "r_50e11f2d62cd",
+    "r_3bf1a5b4cd73",
+    "r_e080d04798ad",
+    "r_25a999456f69"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "hard_F_10_20260420_155111Z_b33172f7",
+    "user_original_input": "Symphony No. 9 is a music piece. Composers write music pieces. Beethoven wrote Symphony No. 9. Vienna Music Society premiered Symphony No. 9. Vienna Music Society is an orchestra. Beethoven leads the Vienna Music Society. Orchestras are led by conductors. In conclusion: Beethoven is a composer.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Symphony No. 9 is a music piece.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Symphony No. 9 is a music piece.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "For every person: if the person writes a music piece, then the person is a composer.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Every person who writes a music piece is a composer.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Beethoven wrote Symphony No. 9.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Beethoven wrote Symphony No. 9.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "The Vienna Music Society premiered Symphony No. 9.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"The Vienna Music Society premiered Symphony No. 9.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "The Vienna Music Society is an orchestra.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"The Vienna Music Society is an orchestra.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Beethoven leads the Vienna Music Society.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Beethoven leads the Vienna Music Society.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "For every orchestra, there exists exactly one conductor who leads that orchestra.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Every orchestra is led by exactly one conductor.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Beethoven is a composer.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Beethoven is a composer.\""
+      }
+    ],
+    "orchestration_run_id": "orr_hard_F_10_20260420_155111Z_b33172f7_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-20T15:52:25Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\hard_F_10_20260420_155111Z_b33172f7.lp",
+  "pipeline_kind": "asp_clincon"
+}

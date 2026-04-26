@@ -1,0 +1,214 @@
+{
+  "bundle_id": "symtex_batch_20260423_180522Z_8c01e0f8",
+  "accepted_at": "2026-04-23T18:15:50Z",
+  "committed_at": "2026-04-23T18:16:01Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_7fd72393ca89",
+    "r_4143a16c10ab",
+    "r_ca2297b297a4",
+    "r_463af2d960a0",
+    "r_3709fd52f8e5",
+    "r_cc3109ffc55d",
+    "r_9858405653f5",
+    "r_06fcb287f464",
+    "r_8fbd7fc0dcb2",
+    "r_f5b0d4c98430",
+    "r_addd3e577398",
+    "r_851db14611ed",
+    "r_f1312ea08a3b",
+    "r_db9d796d9057",
+    "r_e2f05b870fa4",
+    "r_0793a3a6b7d2",
+    "r_55ce692b98dd",
+    "r_d46b5c706b07",
+    "r_3cde05a6e9f9",
+    "r_0f7b402d4afb",
+    "r_41d917e3e80f"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260423_180522Z_8c01e0f8",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\ncavy(\"Sarah\", \"Nicole\") is explicitly false.\nsleep(\"Claire\", \"Lindsey\") is explicitly false.\nagent(\"Lindsey\", \"Nicole\") is true.\nbird(\"Lindsey\", \"Sarah\") is true.\ncrow(\"Claire\", \"Lindsey\") is true.\ndressing_sack(\"Sarah\", \"Nicole\") is true.\nfish(\"Sarah\", \"Nicole\") is true.\nhalitus(\"Claire\", \"Sarah\") is true.\nkite(\"Lindsey\", \"Sarah\") is true.\nlittle_office(\"Sarah\", \"Nicole\") is true.\nsex(\"Claire\") is true.\nsinging(\"Claire\") is true.\n\nRules:\nIf fly(V1, V2) is true and activity(V2, V3) is explicitly false, then action(V1) is explicitly false.\nIf sex(V0) is true and singing(V0) is true and sleep(V0, V1) is explicitly false and halitus(V0, V2) is true and agent(V1, V3) is true, then breath(V1, V2) is explicitly false or activity(V2, V3) is explicitly false or feel_good(V0) is true.\nIf bird(V1, V2) is true and there is no evidence that kite(V1, V2) is explicitly false, then flying(V2) is explicitly false or fly(V1, V2) is true.\nIf bat(V1, V2) is true and feel_good(V0) is true and bed(V1, V3) is true and there is no evidence that owl(V0) is true and there is no evidence that sleep(V0, V1) is true, then night(V0, V3) is explicitly false.\nIf gobbet(V2, V3) is true and there is no evidence that cavy(V2, V3) is true and there is no evidence that fish(V2, V3) is explicitly false and there is no evidence that little_office(V2, V3) is explicitly false and there is no evidence that dressing_sack(V2, V3) is explicitly false, then owl(V3) is explicitly false.\nIf flying(V2) is explicitly false and breath(V1, V2) is explicitly false and there is no evidence that kite(V1, V2) is explicitly false, then scratching(V1) is explicitly false or bat(V1, V2) is true or gobbet(V2, V2) is true.\nIf scratching(V1) is explicitly false and breath(V1, V2) is explicitly false and there is no evidence that action(V1) is true, then bed(V1, V1) is true.\nIf crow(V0, V1) is true, then black(V0, V1) is true.\nIf black(V0, V1) is true and night(V0, V3) is explicitly false, then dark(V0) is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "It is explicitly false that Sarah is a cavy of Nicole.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"It is explicitly false that Sarah is a cavy of Nicole.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "It is explicitly false that Claire sleeps with Lindsey.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"It is explicitly false that Claire sleeps with Lindsey.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Lindsey is an agent of Nicole.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Lindsey is an agent of Nicole.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Lindsey is a bird of Sarah.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Lindsey is a bird of Sarah.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Claire is a crow of Lindsey.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Claire is a crow of Lindsey.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Sarah is a dressing sack of Nicole.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Sarah is a dressing sack of Nicole.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Sarah is a fish of Nicole.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Sarah is a fish of Nicole.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Claire is a halitus of Sarah.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Claire is a halitus of Sarah.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Lindsey is a kite of Sarah.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Lindsey is a kite of Sarah.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Sarah is a little office of Nicole.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Sarah is a little office of Nicole.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Claire has the property of sex.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Claire has the property of sex.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "Claire has the property of singing.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"Claire has the property of singing.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "If V1 is a fly of V2 and it is explicitly false that V2 is an activity of V3, then it is explicitly false that V1 has the property of action.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"If V1 is a fly of V2 and it is explicitly false that V2 is an activity of V3, then it is explicitly false that V1 has the property of action.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "If V0 has the property of sex, V0 has the property of singing, it is explicitly false that V0 sleeps with V1, V0 is a halitus of V2, and V1 is an agent of V3, then it is explicitly false that V1 is a breath of V2, or it is explicitly false that V2 is an activity of V3, or V0 has the property of feel good.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"If V0 has the property of sex, V0 has the property of singing, it is explicitly false that V0 sleeps with V1, V0 is a halitus of V2, and V1 is an agent of V3, then it is explicitly false that V1 is a breath of V2, or it is explicitly false that V2 is an activity of V3, or V0 has the property of feel good.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "If V1 is a bird of V2 and there is no evidence that V1 is explicitly false to be a kite of V2, then it is explicitly false that V2 has the property of flying, or V1 is a fly of V2.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"If V1 is a bird of V2 and there is no evidence that V1 is explicitly false to be a kite of V2, then it is explicitly false that V2 has the property of flying, or V1 is a fly of V2.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "If V1 is a bat of V2, V0 has the property of feel good, V1 is a bed of V3, there is no evidence that V0 has the property of owl, and there is no evidence that V0 sleeps with V1, then it is explicitly false that V0 is a night of V3.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"If V1 is a bat of V2, V0 has the property of feel good, V1 is a bed of V3, there is no evidence that V0 has the property of owl, and there is no evidence that V0 sleeps with V1, then it is explicitly false that V0 is a night of V3.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "If V2 is a gobbet of V3, there is no evidence that V2 is a cavy of V3, there is no evidence that it is explicitly false that V2 is a fish of V3, there is no evidence that it is explicitly false that V2 is a little office of V3, and there is no evidence that it is explicitly false that V2 is a dressing sack of V3, then it is explicitly false that V3 has the property of owl.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"If V2 is a gobbet of V3, there is no evidence that V2 is a cavy of V3, there is no evidence that it is explicitly false that V2 is a fish of V3, there is no evidence that it is explicitly false that V2 is a little office of V3, and there is no evidence that it is explicitly false that V2 is a dressing sack of V3, then it is explicitly false that V3 has the property of owl.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "If it is explicitly false that V2 has the property of flying, it is explicitly false that V1 is a breath of V2, and there is no evidence that V1 is explicitly false to be a kite of V2, then it is explicitly false that V1 has the property of scratching, or V1 is a bat of V2, or V2 is a gobbet of V2.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"If it is explicitly false that V2 has the property of flying, it is explicitly false that V1 is a breath of V2, and there is no evidence that V1 is explicitly false to be a kite of V2, then it is explicitly false that V1 has the property of scratching, or V1 is a bat of V2, or V2 is a gobbet of V2.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "If it is explicitly false that V1 has the property of scratching, it is explicitly false that V1 is a breath of V2, and there is no evidence that V1 has the property of action, then V1 is a bed of V1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"If it is explicitly false that V1 has the property of scratching, it is explicitly false that V1 is a breath of V2, and there is no evidence that V1 has the property of action, then V1 is a bed of V1.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "If V0 is a crow of V1, then V0 is a black of V1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"If V0 is a crow of V1, then V0 is a black of V1.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "If V0 is a black of V1 and it is explicitly false that V0 is a night of V3, then V0 has the property of dark.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"If V0 is a black of V1 and it is explicitly false that V0 is a night of V3, then V0 has the property of dark.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260423_180522Z_8c01e0f8_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-23T18:05:45Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260423_180522Z_8c01e0f8.lp",
+  "pipeline_kind": "asp_clincon"
+}

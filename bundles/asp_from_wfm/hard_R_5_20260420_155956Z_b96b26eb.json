@@ -1,0 +1,89 @@
+{
+  "bundle_id": "hard_R_5_20260420_155956Z_b96b26eb",
+  "accepted_at": "2026-04-23T17:08:00Z",
+  "committed_at": "2026-04-23T17:08:52Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_d63efc807fc1",
+    "r_c116cd536c0b",
+    "r_4519f0941909",
+    "r_39867a8eac03",
+    "r_553d33feb21b",
+    "r_4931f189cbed"
+  ],
+  "out_of_scope_line_indices": [
+    3
+  ],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "hard_R_5_20260420_155956Z_b96b26eb",
+    "user_original_input": "For **every criterion the procurement compliance board might adopt** when it evaluates a cloud vendor’s resilience story, if the vendor satisfies that criterion under the board’s published stress-test scenarios, then the vendor qualifies for the restricted federal data path, provided no subsidiary appears on the sanctions watchlist during the review window. Nimbus Cloud satisfies every criterion the board actually published in the April addendum, and no Nimbus subsidiary was listed during review. A subsidiary is **sanction-sensitive** if there is **some** future board meeting at which a new criterion could be introduced that the vendor would fail. If Nimbus is sanction-sensitive, the federal data path offer is void. In conclusion: Nimbus Cloud qualifies for the restricted federal data path and the offer is not void.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "For every criterion in the set of criteria adopted by the procurement compliance board: if a vendor satisfies that criterion under the board’s published stress-test scenarios and no subsidiary of that vendor is on the sanctions watchlist during the review window, then that vendor qualifies for the restricted federal data path.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"For every criterion that the procurement compliance board might adopt when the board evaluates a cloud vendor’s resilience story, if a vendor satisfies that criterion under the board’s published stress-test scenarios and no subsidiary of that vendor appears on the sanctions watchlist during the review window, then that vendor qualifies for the restricted federal data path.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "Nimbus Cloud satisfies every criterion that the board published in the April addendum.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Nimbus Cloud satisfies every criterion that the board published in the April addendum.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "No subsidiary of Nimbus Cloud appeared on the sanctions watchlist during the review window.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"No subsidiary of Nimbus Cloud appeared on the sanctions watchlist during the review window.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "A subsidiary is sanction-sensitive if there is at least one future board meeting at which a new criterion could be introduced that the vendor would fail.",
+        "agent3_verdict": "OUT_OF_SCOPE",
+        "scope_report": "REPORT: This statement involves reasoning about future states and hypothetical possibilities (\"could be introduced\"), which falls under temporal or state-history reasoning outside the system's scope.",
+        "diff_report": null,
+        "agent2_line_text": "4. \"A subsidiary is sanction-sensitive if there is at least one future board meeting at which a new criterion could be introduced that the vendor would fail.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "If Nimbus Cloud is sanction-sensitive, then the offer for the restricted federal data path to Nimbus Cloud is void.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"If Nimbus Cloud is sanction-sensitive, then the offer for the restricted federal data path to Nimbus Cloud is void.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Nimbus Cloud qualifies for the restricted federal data path.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Nimbus Cloud qualifies for the restricted federal data path.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The offer for the restricted federal data path to Nimbus Cloud is not void.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The offer for the restricted federal data path to Nimbus Cloud is not void.\""
+      }
+    ],
+    "orchestration_run_id": "orr_hard_R_5_20260420_155956Z_b96b26eb_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-20T16:00:20Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\hard_R_5_20260420_155956Z_b96b26eb.lp",
+  "pipeline_kind": "asp_clincon"
+}

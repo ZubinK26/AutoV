@@ -1,0 +1,213 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260423_180733Z_b90b9304",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nP12('Chris') is explicitly false.\nP13('Chris', 'Steven') is true.\nP14('Chris', 'Steven') is explicitly false.\nP15 is explicitly false.\nP16('Chris', 'Tracey') is explicitly false.\nP17('Chris', 'Steven') is true.\nP18('Chris', 'Steven') is explicitly false.\nP19('Chris', 'Steven') is explicitly false.\nP20('Steven', 'Kevin') is explicitly false.\nP21('Steven', 'Kevin') is true.\nP22('Steven', 'Kevin') is true.\nP23('Chris', 'Kevin') is true.\nP24('Steven', 'Tracey') is explicitly false.\n\nRules:\nIf P2(V0, V3) is explicitly false and P4(V1, V2) is true and there is no evidence that P6(V2, V3) is explicitly false, then P11(V1, V2) is true.\nIf P12(V0) is explicitly false and P19(V0, V1) is explicitly false and P20(V1, V3) is explicitly false and there is no evidence that P21(V1, V3) is explicitly false and there is no evidence that P22(V1, V3) is explicitly false, then P0(V0, V1) is explicitly false.\nIf P12(V0) is explicitly false and P19(V0, V1) is explicitly false and P20(V1, V3) is explicitly false and there is no evidence that P21(V1, V3) is explicitly false and there is no evidence that P22(V1, V3) is explicitly false, then P1(V0, V1) is true.\nIf P0(V0, V1) is explicitly false and there is no evidence that P3(V0, V1) is true and there is no evidence that P5(V0, V1) is explicitly false and there is no evidence that P7(V0, V1) is true and there is no evidence that P10(V0, V1) is true, then P2(V0, V1) is explicitly false.\nIf P13(V0, V1) is true, then P3(V0, V1) is explicitly false.\nIf P14(V0, V1) is explicitly false and P23(V0, V3) is true and P24(V1, V2) is explicitly false, then P4(V1, V2) is true.\nIf P14(V0, V1) is explicitly false and P23(V0, V3) is true and P24(V1, V2) is explicitly false, then P5(V0, V1) is true.\nIf P13(V0, V1) is true and there is no evidence that P15 is true, then P6(V0, V0) is true.\nIf P13(V0, V1) is true and there is no evidence that P15 is true, then P7(V0, V1) is explicitly false.\nIf P13(V0, V1) is true and there is no evidence that P15 is true, then P8(V1, V0) is true.\nIf P16(V0, V2) is explicitly false, then P9(V0, V2) is explicitly false.\nIf P1(V0, V1) is true and P8(V1, V3) is true and P9(V0, V2) is explicitly false and there is no evidence that P17(V0, V1) is explicitly false and there is no evidence that P18(V0, V1) is true, then P10(V0, V1) is explicitly false.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "P12('Chris') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"P12('Chris') is explicitly false.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "P13('Chris', 'Steven') is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"P13('Chris', 'Steven') is true.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "P14('Chris', 'Steven') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"P14('Chris', 'Steven') is explicitly false.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "P15 is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"P15 is explicitly false.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "P16('Chris', 'Tracey') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"P16('Chris', 'Tracey') is explicitly false.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "P17('Chris', 'Steven') is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"P17('Chris', 'Steven') is true.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "P18('Chris', 'Steven') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"P18('Chris', 'Steven') is explicitly false.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "P19('Chris', 'Steven') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"P19('Chris', 'Steven') is explicitly false.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "P20('Steven', 'Kevin') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"P20('Steven', 'Kevin') is explicitly false.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "P21('Steven', 'Kevin') is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"P21('Steven', 'Kevin') is true.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "P22('Steven', 'Kevin') is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"P22('Steven', 'Kevin') is true.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "P23('Chris', 'Kevin') is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"P23('Chris', 'Kevin') is true.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "P24('Steven', 'Tracey') is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"P24('Steven', 'Tracey') is explicitly false.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "If P2(V0, V3) is explicitly false and P4(V1, V2) is true and there is no evidence that P6(V2, V3) is explicitly false, then P11(V1, V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"If P2(V0, V3) is explicitly false and P4(V1, V2) is true and there is no evidence that P6(V2, V3) is explicitly false, then P11(V1, V2) is true.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "If P12(V0) is explicitly false and P19(V0, V1) is explicitly false and P20(V1, V3) is explicitly false and there is no evidence that P21(V1, V3) is explicitly false and there is no evidence that P22(V1, V3) is explicitly false, then P0(V0, V1) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"If P12(V0) is explicitly false and P19(V0, V1) is explicitly false and P20(V1, V3) is explicitly false and there is no evidence that P21(V1, V3) is explicitly false and there is no evidence that P22(V1, V3) is explicitly false, then P0(V0, V1) is explicitly false.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "If P12(V0) is explicitly false and P19(V0, V1) is explicitly false and P20(V1, V3) is explicitly false and there is no evidence that P21(V1, V3) is explicitly false and there is no evidence that P22(V1, V3) is explicitly false, then P1(V0, V1) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"If P12(V0) is explicitly false and P19(V0, V1) is explicitly false and P20(V1, V3) is explicitly false and there is no evidence that P21(V1, V3) is explicitly false and there is no evidence that P22(V1, V3) is explicitly false, then P1(V0, V1) is true.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "If P0(V0, V1) is explicitly false and there is no evidence that P3(V0, V1) is true and there is no evidence that P5(V0, V1) is explicitly false and there is no evidence that P7(V0, V1) is true and there is no evidence that P10(V0, V1) is true, then P2(V0, V1) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"If P0(V0, V1) is explicitly false and there is no evidence that P3(V0, V1) is true and there is no evidence that P5(V0, V1) is explicitly false and there is no evidence that P7(V0, V1) is true and there is no evidence that P10(V0, V1) is true, then P2(V0, V1) is explicitly false.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "If P13(V0, V1) is true, then P3(V0, V1) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"If P13(V0, V1) is true, then P3(V0, V1) is explicitly false.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "If P14(V0, V1) is explicitly false and P23(V0, V3) is true and P24(V1, V2) is explicitly false, then P4(V1, V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"If P14(V0, V1) is explicitly false and P23(V0, V3) is true and P24(V1, V2) is explicitly false, then P4(V1, V2) is true.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "If P14(V0, V1) is explicitly false and P23(V0, V3) is true and P24(V1, V2) is explicitly false, then P5(V0, V1) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"If P14(V0, V1) is explicitly false and P23(V0, V3) is true and P24(V1, V2) is explicitly false, then P5(V0, V1) is true.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "If P13(V0, V1) is true and there is no evidence that P15 is true, then P6(V0, V0) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"If P13(V0, V1) is true and there is no evidence that P15 is true, then P6(V0, V0) is true.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "If P13(V0, V1) is true and there is no evidence that P15 is true, then P7(V0, V1) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"If P13(V0, V1) is true and there is no evidence that P15 is true, then P7(V0, V1) is explicitly false.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "If P13(V0, V1) is true and there is no evidence that P15 is true, then P8(V1, V0) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"If P13(V0, V1) is true and there is no evidence that P15 is true, then P8(V1, V0) is true.\""
+    },
+    {
+      "line_index": 23,
+      "statement_nl": "If P16(V0, V2) is explicitly false, then P9(V0, V2) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "24. \"If P16(V0, V2) is explicitly false, then P9(V0, V2) is explicitly false.\""
+    },
+    {
+      "line_index": 24,
+      "statement_nl": "If P1(V0, V1) is true and P8(V1, V3) is true and P9(V0, V2) is explicitly false and there is no evidence that P17(V0, V1) is explicitly false and there is no evidence that P18(V0, V1) is true, then P10(V0, V1) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "25. \"If P1(V0, V1) is true and P8(V1, V3) is true and P9(V0, V2) is explicitly false and there is no evidence that P17(V0, V1) is explicitly false and there is no evidence that P18(V0, V1) is true, then P10(V0, V1) is explicitly false.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260423_180733Z_b90b9304_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-23T18:07:47Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

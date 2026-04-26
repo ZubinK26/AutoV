@@ -1,0 +1,342 @@
+{
+  "bundle_id": "symtex_batch_20260423_180713Z_e28c4d4b",
+  "accepted_at": "2026-04-24T15:42:02Z",
+  "committed_at": "2026-04-24T15:44:20Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_711809d5c28f",
+    "r_42372fbafe31",
+    "r_3c6fe20982d1",
+    "r_19c636087dd2",
+    "r_13b70d61ccd2",
+    "r_99ebdcbdcc17",
+    "r_5e70af3957eb",
+    "r_b7a156907e12",
+    "r_52bc3fcbb87a",
+    "r_08037ea82c9d",
+    "r_9e13efac2b50",
+    "r_69e45543f35e",
+    "r_4b4edfa60c23",
+    "r_0cd54f502816",
+    "r_5d55e4cbb4ab",
+    "r_7f3840a2bb74",
+    "r_1cbc5b62ef68",
+    "r_0423519e6c35",
+    "r_d051057d6d39",
+    "r_8028fb75c244",
+    "r_fc2cfff656e5",
+    "r_be031b6586c6",
+    "r_3aa1d4a8f4c9",
+    "r_6244ad8826dc",
+    "r_5680586d1512",
+    "r_43cb94ad0088",
+    "r_5eb72b97cd7e",
+    "r_8fdff055c420",
+    "r_4d0200b50cbc",
+    "r_1660f8c206f8",
+    "r_4a45835d485e",
+    "r_96d52cea1974",
+    "r_61eba17473f2",
+    "r_09c62d41d036",
+    "r_3274c7ef5e4b"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260423_180713Z_e28c4d4b",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nborn(Shelley) is explicitly false.\ncrossing(Rose) is explicitly false.\ndie_horribly(Rose, Tara) is explicitly false.\nfur(Cynthia, Shelley) is explicitly false.\nmodification is explicitly false.\nnight_time(Rose, Shelley) is explicitly false.\nofferer(Shelley) is explicitly false.\nthysanuran_insect(Cynthia) is explicitly false.\ndouble_bed(Rose, Shelley) is true.\nmailbox(Cynthia, Rose) is true.\nmoo(Cynthia, Rose) is true.\ntraveling_faster(Cynthia, Tara) is true.\ntrunk(Shelley, Tara) is true.\ntugboat(Rose, Shelley) is true.\nwork_place(Rose, Shelley) is true.\n\nRules:\nIf crossing(V1) is explicitly false and mailbox(V0, V1) is true and traveling_faster(V0, V3) is true and night_time(V1, V2) is explicitly false and there is no evidence that trunk(V2, V3) is explicitly false, then body_armor(V2) is explicitly false.\nIf stepladder(V3) is true and guinea_worm(V0, V1) is true and there is no evidence that modification is true, then cliffhanger(V1, V3) is explicitly false.\nIf cliffhanger(V1, V2) is explicitly false and body_armor(V2) is true and guinea_worm(V0, V1) is true and playing_with_friends(V2) is explicitly false, then course(V1) is explicitly false.\nIf stepladder(V3) is true and guinea_worm(V0, V1) is true and playing_with_friends(V2) is explicitly false, then course(V1) is explicitly false.\nIf cliffhanger(V1, V2) is true, then guinea_worm(V2, V1) is explicitly false.\nIf sandwich_shop(V1, V2) is true and stepladder(V3) is true and palm(V1, V2) is explicitly false and nit(V1, V2) is explicitly false and there is no evidence that breadbasket(V1, V3) is true, then mailbox(V2, V1) is explicitly false.\nIf thysanuran_insect(V0) is explicitly false and moo(V0, V1) is true and work_place(V1, V2) is true and double_bed(V1, V2) is true and die_horribly(V1, V3) is explicitly false, then name_puppy(V1, V2) is explicitly false.\nIf course(V1) is explicitly false, then palm(V1, V1) is explicitly false.\nIf crossing(V1) is explicitly false and mailbox(V0, V1) is true and traveling_faster(V0, V3) is true and night_time(V1, V2) is explicitly false and there is no evidence that trunk(V2, V3) is explicitly false, then sandwich_shop(V1, V2) is explicitly false.\nIf fur(V0, V2) is explicitly false and tugboat(V1, V2) is true, then shetland_pony(V0, V1) is explicitly false.\nIf sandwich_shop(V1, V2) is explicitly false and there is no evidence that palm(V1, V2) is explicitly false and there is no evidence that nit(V1, V2) is explicitly false, then stepladder(V1) is explicitly false.\nIf body_armor(V2) is true and born(V2) is explicitly false and offerer(V2) is explicitly false, then traveling_faster(V2, V2) is explicitly false.\nIf there is no evidence that cliffhanger(V1, V2) is true and stepladder(V3) is true and nit(V1, V2) is explicitly false, then body_armor(V2) is true.\nIf body_armor(V2) is explicitly false and there is no evidence that playing_with_friends(V2) is explicitly false, then breadbasket(V2, V2) is true.\nIf crossing(V1) is explicitly false and mailbox(V0, V1) is true and traveling_faster(V0, V3) is true and night_time(V1, V2) is explicitly false and there is no evidence that trunk(V2, V3) is explicitly false, then cliffhanger(V1, V2) is true.\nIf stepladder(V3) is explicitly false and guinea_worm(V0, V1) is explicitly false and there is no evidence that breadbasket(V1, V3) is explicitly false, then course(V1) is true.\nIf sandwich_shop(V1, V2) is true and cliffhanger(V1, V2) is explicitly false and body_armor(V2) is true and breadbasket(V1, V3) is explicitly false and there is no evidence that course(V1) is true, then night_time(V1, V2) is true.\nIf palm(V1, V2) is true, then nit(V1, V2) is true.\nIf cliffhanger(V1, V2) is true, then palm(V1, V2) is true.\nIf cliffhanger(V1, V2) is true, then playing_with_friends(V2) is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Shelley is not born.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Shelley is not born.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "Rose is not crossing.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Rose is not crossing.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Rose does not die horribly with Tara.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Rose does not die horribly with Tara.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Cynthia does not have fur with Shelley.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Cynthia does not have fur with Shelley.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Modification is false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Modification is false.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Rose and Shelley do not have night time.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Rose and Shelley do not have night time.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Shelley is not an offerer.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Shelley is not an offerer.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Cynthia is not a thysanuran insect.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Cynthia is not a thysanuran insect.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Rose and Shelley have a double bed.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Rose and Shelley have a double bed.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Cynthia has a mailbox for Rose.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Cynthia has a mailbox for Rose.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Cynthia moos at Rose.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Cynthia moos at Rose.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "Cynthia is traveling faster than Tara.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"Cynthia is traveling faster than Tara.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "Shelley has a trunk for Tara.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"Shelley has a trunk for Tara.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "Rose is a tugboat for Shelley.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"Rose is a tugboat for Shelley.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "Rose has a work place with Shelley.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"Rose has a work place with Shelley.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "If V1 is not crossing, V0 has a mailbox for V1, V0 is traveling faster than V3, V1 and V2 do not have night time, and there is no evidence that V2 has a trunk for V3 being false, then V2 does not have body armor.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"If V1 is not crossing, V0 has a mailbox for V1, V0 is traveling faster than V3, V1 and V2 do not have night time, and there is no evidence that V2 has a trunk for V3 being false, then V2 does not have body armor.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "If V3 is a stepladder, V0 has a guinea worm with V1, and there is no evidence that modification is true, then V1 and V3 do not have a cliffhanger.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"If V3 is a stepladder, V0 has a guinea worm with V1, and there is no evidence that modification is true, then V1 and V3 do not have a cliffhanger.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "If V1 and V2 do not have a cliffhanger, V2 has body armor, V0 has a guinea worm with V1, and V2 is not playing with friends, then V1 is not a course.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"If V1 and V2 do not have a cliffhanger, V2 has body armor, V0 has a guinea worm with V1, and V2 is not playing with friends, then V1 is not a course.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "If V3 is a stepladder, V0 has a guinea worm with V1, and V2 is not playing with friends, then V1 is not a course.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"If V3 is a stepladder, V0 has a guinea worm with V1, and V2 is not playing with friends, then V1 is not a course.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "If V1 and V2 have a cliffhanger, then V2 does not have a guinea worm with V1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"If V1 and V2 have a cliffhanger, then V2 does not have a guinea worm with V1.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "If V1 and V2 have a sandwich shop, V3 is a stepladder, V1 and V2 do not have a palm, V1 and V2 do not have a nit, and there is no evidence that V1 has a breadbasket for V3, then V2 does not have a mailbox for V1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"If V1 and V2 have a sandwich shop, V3 is a stepladder, V1 and V2 do not have a palm, V1 and V2 do not have a nit, and there is no evidence that V1 has a breadbasket for V3, then V2 does not have a mailbox for V1.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "If V0 is not a thysanuran insect, V0 moos at V1, V1 has a work place with V2, V1 and V2 have a double bed, and V1 does not die horribly with V3, then V1 and V2 do not have a name puppy.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"If V0 is not a thysanuran insect, V0 moos at V1, V1 has a work place with V2, V1 and V2 have a double bed, and V1 does not die horribly with V3, then V1 and V2 do not have a name puppy.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "If V1 is not a course, then V1 and V1 do not have a palm.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"If V1 is not a course, then V1 and V1 do not have a palm.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If V1 is not crossing, V0 has a mailbox for V1, V0 is traveling faster than V3, V1 and V2 do not have night time, and there is no evidence that V2 has a trunk for V3 being false, then V1 and V2 do not have a sandwich shop.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If V1 is not crossing, V0 has a mailbox for V1, V0 is traveling faster than V3, V1 and V2 do not have night time, and there is no evidence that V2 has a trunk for V3 being false, then V1 and V2 do not have a sandwich shop.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If V0 and V2 do not have fur and V1 is a tugboat for V2, then V0 and V1 do not have a shetland pony.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If V0 and V2 do not have fur and V1 is a tugboat for V2, then V0 and V1 do not have a shetland pony.\""
+      },
+      {
+        "line_index": 25,
+        "statement_nl": "If V1 and V2 do not have a sandwich shop, there is no evidence that V1 and V2 do not have a palm, and there is no evidence that V1 and V2 do not have a nit, then V1 is not a stepladder.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "26. \"If V1 and V2 do not have a sandwich shop, there is no evidence that V1 and V2 do not have a palm, and there is no evidence that V1 and V2 do not have a nit, then V1 is not a stepladder.\""
+      },
+      {
+        "line_index": 26,
+        "statement_nl": "If V2 has body armor, V2 is not born, and V2 is not an offerer, then V2 is not traveling faster than V2.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "27. \"If V2 has body armor, V2 is not born, and V2 is not an offerer, then V2 is not traveling faster than V2.\""
+      },
+      {
+        "line_index": 27,
+        "statement_nl": "If there is no evidence that V1 and V2 have a cliffhanger, V3 is a stepladder, and V1 and V2 do not have a nit, then V2 has body armor.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "28. \"If there is no evidence that V1 and V2 have a cliffhanger, V3 is a stepladder, and V1 and V2 do not have a nit, then V2 has body armor.\""
+      },
+      {
+        "line_index": 28,
+        "statement_nl": "If V2 does not have body armor and there is no evidence that V2 is not playing with friends, then V2 has a breadbasket for V2.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "29. \"If V2 does not have body armor and there is no evidence that V2 is not playing with friends, then V2 has a breadbasket for V2.\""
+      },
+      {
+        "line_index": 29,
+        "statement_nl": "If V1 is not crossing, V0 has a mailbox for V1, V0 is traveling faster than V3, V1 and V2 do not have night time, and there is no evidence that V2 has a trunk for V3 being false, then V1 and V2 have a cliffhanger.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "30. \"If V1 is not crossing, V0 has a mailbox for V1, V0 is traveling faster than V3, V1 and V2 do not have night time, and there is no evidence that V2 has a trunk for V3 being false, then V1 and V2 have a cliffhanger.\""
+      },
+      {
+        "line_index": 30,
+        "statement_nl": "If V3 is not a stepladder, V0 does not have a guinea worm with V1, and there is no evidence that V1 has a breadbasket for V3 being false, then V1 is a course.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "31. \"If V3 is not a stepladder, V0 does not have a guinea worm with V1, and there is no evidence that V1 has a breadbasket for V3 being false, then V1 is a course.\""
+      },
+      {
+        "line_index": 31,
+        "statement_nl": "If V1 and V2 have a sandwich shop, V1 and V2 do not have a cliffhanger, V2 has body armor, V1 has a breadbasket for V3 being false, and there is no evidence that V1 is a course, then V1 and V2 have night time.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "32. \"If V1 and V2 have a sandwich shop, V1 and V2 do not have a cliffhanger, V2 has body armor, V1 has a breadbasket for V3 being false, and there is no evidence that V1 is a course, then V1 and V2 have night time.\""
+      },
+      {
+        "line_index": 32,
+        "statement_nl": "If V1 and V2 have a palm, then V1 and V2 have a nit.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "33. \"If V1 and V2 have a palm, then V1 and V2 have a nit.\""
+      },
+      {
+        "line_index": 33,
+        "statement_nl": "If V1 and V2 have a cliffhanger, then V1 and V2 have a palm.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "34. \"If V1 and V2 have a cliffhanger, then V1 and V2 have a palm.\""
+      },
+      {
+        "line_index": 34,
+        "statement_nl": "If V1 and V2 have a cliffhanger, then V2 is playing with friends.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "35. \"If V1 and V2 have a cliffhanger, then V2 is playing with friends.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260423_180713Z_e28c4d4b_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-23T18:07:28Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm_formalizer_new\\policies\\symtex_batch_20260423_180713Z_e28c4d4b.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "4f10abb085e2353a454fe7491358fc2b0655386db5e75231f6980ee8de9a1c36"
+}

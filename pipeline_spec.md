@@ -1,12 +1,16 @@
 # NL→Z3 Formalization Pipeline — Scope & Architecture
 
+**Operational pipeline (what we ship today):** WFM → `HandoffBundle` JSON → `smt_pipeline` → SMT-LIB policy. See **`docs/pipeline_wfm_to_smt.md`** for the canonical story, CLI entry points, and artifact layout. This file focuses on **logic-language scope** (what NL fragments are in/out) and historical architecture notes.
+
+**ClinCon / ASP product line (`ClinCon-version`):** Downstream formalization is **`asp_pipeline`** → ClinCon (`.lp`). **Agent 3 scope** and NL ↔ logic boundaries for that line are defined by the **ClinCon-safe ASP fragment** in **`docs/pipeline_wfm_to_asp.md` §2**, not by the many-sorted FOL section below (which remains the reference for **SMT**).
+
 This document describes the end-to-end pipeline. **Well-formedness (WFM)** behavior is defined in **`WFM/Agent_WFM.md`**; where details differ, **`WFM/Agent_WFM.md` takes precedence.**
 
 **WFM config (defaults):** `WFM/config/wfm.json` — e.g. `max_input_code_points` (**4096** by default; see `WFM/Agent_WFM.md` for rationale).
 
 **WFM LLM prompts:** `WFM/prompts/` (per-agent instruction files; see `WFM/prompts/README.md`).
 
-**ASCII diagram (flow + what is built in repo):** [`pipeline_diagram.md`](pipeline_diagram.md)
+**ASCII diagram (flow + what is built in repo):** [`pipeline_diagram.md`](pipeline_diagram.md) — diagram steps after WFM include a **registry-first** sketch; the **current** formalization path is **`smt_pipeline`** (see link above).
 
 ---
 

@@ -37,6 +37,9 @@ policy_model.smt2
 bundles/*.log.jsonl
 bundles/demo_*.json
 
+# Optional: large cloned benchmark repos (see test_sets/datasets/*/README.md)
+test_sets/datasets/aspbench/repo/
+
 # --- VSC / IDE ---
 .vscode/
 .idea/

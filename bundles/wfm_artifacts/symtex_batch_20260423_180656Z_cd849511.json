@@ -1,0 +1,293 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260423_180656Z_cd849511",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nbeef(\"Jeremy\") is explicitly false.\ncut is explicitly false.\ngun_enclosure(\"Joel\") is explicitly false.\nhawk is explicitly false.\ninteger(\"Joel\") is explicitly false.\nsad(\"Joel\") is explicitly false.\nsemi_detached_house(\"Joel\") is explicitly false.\nauxiliary_engine(\"Joel\") is true.\nbeard is true.\nberber(\"Joel\") is true.\nblock(\"Jeremy\") is true.\ncalabar_bean(\"Joel\") is true.\ncomputers(\"Joel\") is true.\nnorse_deity(\"Joel\") is true.\npapal_cross(Joel) is true.\nstratum_granulosum(Joel) is true.\n\nRules:\nIf beef(V1) is explicitly false, then australian_freeway(V1) is explicitly false.\nIf there is no evidence that steer(V0) is true and eating_meals_together(V0) is true, then beast(V0) is explicitly false.\nIf domestic_fowl(V0) is explicitly false, then binder(V0) is explicitly false.\nIf block(V1) is true, then board(V1) is explicitly false.\nIf fragment(V0) is true and there is no evidence that gun_enclosure(V0) is true, then domestic_fowl(V0) is explicitly false.\nIf binder(V0) is explicitly false and there is no evidence that steer(V0) is explicitly false and there is no evidence that beast(V0) is explicitly false, then eating_meals_together(V0) is explicitly false.\nIf binder(V0) is true and feed_babies(V0) is explicitly false and there is no evidence that papal_cross(V0) is explicitly false, then fragment(V0) is explicitly false.\nIf board(V1) is true and there is no evidence that steer(V0) is true and feed_babies(V0) is explicitly false, then fragment(V0) is explicitly false.\nIf eating_meals_together(V0) is true, then fragment(V0) is explicitly false.\nIf feed_babies(V0) is true, then beast(V0) is true.\nIf board(V1) is true and there is no evidence that steer(V0) is true and feed_babies(V0) is explicitly false, then binder(V0) is true.\nIf beast(V0) is explicitly false and beard is true, then board(V0) is true.\nIf beast(V0) is explicitly false and there is no evidence that feed_babies(V0) is true, then eating_meals_together(V0) is true.\nIf there is no evidence that binder(V0) is explicitly false and steer(V0) is explicitly false and there is no evidence that feed_babies(V0) is true, then eating_meals_together(V0) is true.\nIf stratum_granulosum(V0) is true and there is no evidence that semi_detached_house(V0) is true and there is no evidence that gun_enclosure(V0) is true, then feed_babies(V0) is true.\nIf invasion(V0) is true and there is no evidence that integer(V0) is true and there is no evidence that berber(V0) is explicitly false, then fragment(V0) is true.\nIf board(V1) is explicitly false and there is no evidence that cut is true and there is no evidence that hawk is true, then invasion(V1) is true.\nIf auxiliary_engine(V0) is true and sad(V0) is explicitly false, then launch_space_shuttle_into_orbit(V0) is true.\nIf computers(V0) is true and there is no evidence that calabar_bean(V0) is explicitly false and there is no evidence that norse_deity(V0) is explicitly false, then steer(V0) is true.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Jeremy is not beef.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Jeremy is not beef.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The cut is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The cut is explicitly false.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Joel is not a gun enclosure.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Joel is not a gun enclosure.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "The hawk is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The hawk is explicitly false.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Joel is not an integer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Joel is not an integer.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Joel is not sad.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Joel is not sad.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Joel is not a semi-detached house.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Joel is not a semi-detached house.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Joel is an auxiliary engine.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Joel is an auxiliary engine.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The beard is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"The beard is true.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Joel is a berber.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Joel is a berber.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Jeremy is a block.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Jeremy is a block.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Joel is a calabar bean.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Joel is a calabar bean.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Joel is computers.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Joel is computers.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "Joel is a norse deity.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"Joel is a norse deity.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "Joel is a papal cross.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"Joel is a papal cross.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "Joel is a stratum granulosum.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"Joel is a stratum granulosum.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "If V1 is not beef, then V1 is not an australian freeway.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"If V1 is not beef, then V1 is not an australian freeway.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "If there is no evidence that V0 is a steer and V0 is eating meals together, then V0 is not a beast.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"If there is no evidence that V0 is a steer and V0 is eating meals together, then V0 is not a beast.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "If V0 is not a domestic fowl, then V0 is not a binder.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"If V0 is not a domestic fowl, then V0 is not a binder.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "If V1 is a block, then V1 is not a board.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"If V1 is a block, then V1 is not a board.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "If V0 is a fragment and there is no evidence that V0 is a gun enclosure, then V0 is not a domestic fowl.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"If V0 is a fragment and there is no evidence that V0 is a gun enclosure, then V0 is not a domestic fowl.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "If V0 is not a binder and there is no evidence that V0 is not a steer and there is no evidence that V0 is not a beast, then V0 is not eating meals together.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"If V0 is not a binder and there is no evidence that V0 is not a steer and there is no evidence that V0 is not a beast, then V0 is not eating meals together.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "If V0 is a binder and V0 is not feed babies and there is no evidence that V0 is not a papal cross, then V0 is not a fragment.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"If V0 is a binder and V0 is not feed babies and there is no evidence that V0 is not a papal cross, then V0 is not a fragment.\""
+    },
+    {
+      "line_index": 23,
+      "statement_nl": "If V1 is a board and there is no evidence that V0 is a steer and V0 is not feed babies, then V0 is not a fragment.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "24. \"If V1 is a board and there is no evidence that V0 is a steer and V0 is not feed babies, then V0 is not a fragment.\""
+    },
+    {
+      "line_index": 24,
+      "statement_nl": "If V0 is eating meals together, then V0 is not a fragment.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "25. \"If V0 is eating meals together, then V0 is not a fragment.\""
+    },
+    {
+      "line_index": 25,
+      "statement_nl": "If V0 is feed babies, then V0 is a beast.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "26. \"If V0 is feed babies, then V0 is a beast.\""
+    },
+    {
+      "line_index": 26,
+      "statement_nl": "If V1 is a board and there is no evidence that V0 is a steer and V0 is not feed babies, then V0 is a binder.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "27. \"If V1 is a board and there is no evidence that V0 is a steer and V0 is not feed babies, then V0 is a binder.\""
+    },
+    {
+      "line_index": 27,
+      "statement_nl": "If V0 is not a beast and the beard is true, then V0 is a board.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "28. \"If V0 is not a beast and the beard is true, then V0 is a board.\""
+    },
+    {
+      "line_index": 28,
+      "statement_nl": "If V0 is not a beast and there is no evidence that V0 is feed babies, then V0 is eating meals together.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "29. \"If V0 is not a beast and there is no evidence that V0 is feed babies, then V0 is eating meals together.\""
+    },
+    {
+      "line_index": 29,
+      "statement_nl": "If there is no evidence that V0 is not a binder and V0 is not a steer and there is no evidence that V0 is feed babies, then V0 is eating meals together.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "30. \"If there is no evidence that V0 is not a binder and V0 is not a steer and there is no evidence that V0 is feed babies, then V0 is eating meals together.\""
+    },
+    {
+      "line_index": 30,
+      "statement_nl": "If V0 is a stratum granulosum and there is no evidence that V0 is a semi-detached house and there is no evidence that V0 is a gun enclosure, then V0 is feed babies.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "31. \"If V0 is a stratum granulosum and there is no evidence that V0 is a semi-detached house and there is no evidence that V0 is a gun enclosure, then V0 is feed babies.\""
+    },
+    {
+      "line_index": 31,
+      "statement_nl": "If V0 is an invasion and there is no evidence that V0 is an integer and there is no evidence that V0 is not a berber, then V0 is a fragment.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "32. \"If V0 is an invasion and there is no evidence that V0 is an integer and there is no evidence that V0 is not a berber, then V0 is a fragment.\""
+    },
+    {
+      "line_index": 32,
+      "statement_nl": "If V1 is not a board and there is no evidence that the cut is true and there is no evidence that the hawk is true, then V1 is an invasion.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "33. \"If V1 is not a board and there is no evidence that the cut is true and there is no evidence that the hawk is true, then V1 is an invasion.\""
+    },
+    {
+      "line_index": 33,
+      "statement_nl": "If V0 is an auxiliary engine and V0 is not sad, then V0 is launch space shuttle into orbit.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "34. \"If V0 is an auxiliary engine and V0 is not sad, then V0 is launch space shuttle into orbit.\""
+    },
+    {
+      "line_index": 34,
+      "statement_nl": "If V0 is computers and there is no evidence that V0 is not a calabar bean and there is no evidence that V0 is not a norse deity, then V0 is a steer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "35. \"If V0 is computers and there is no evidence that V0 is not a calabar bean and there is no evidence that V0 is not a norse deity, then V0 is a steer.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260423_180656Z_cd849511_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-23T18:07:08Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

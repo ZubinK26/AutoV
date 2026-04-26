@@ -52,6 +52,7 @@ def run_e2e(args: argparse.Namespace, initial_user_text: str) -> int:
             p.parent.mkdir(parents=True, exist_ok=True)
             save_registry(p, registry_session_to_registry_file(ctx.registry_session))
             print(f"Saved warm registry for next demo: {p.resolve()}")
+    setattr(args, "_last_dev_session", out)
     return 0 if out is not None else 1
 
 
@@ -117,6 +118,29 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip automatic exports/e2e_demo_runs/<timestamp>_<id>/ (dev_session.json + G8 viewer).",
     )
+    p.add_argument(
+        "--formalize-asp",
+        action="store_true",
+        help="After WFM, run ClinCon/Clingo pipeline (Clingo parse/ground, critic) on the handoff.",
+    )
+    p.add_argument(
+        "--asp-policy",
+        type=Path,
+        default=None,
+        help="Output .lp path (default: bundles/asp_from_wfm/policies/<bundle_id>.lp).",
+    )
+    p.add_argument(
+        "--asp-bundle-out",
+        type=Path,
+        default=None,
+        help="ASP bundle records dir (default: bundles/asp_from_wfm).",
+    )
+    p.add_argument(
+        "--asp-formalizer-prompt",
+        type=str,
+        default=None,
+        help="Basename of formalizer under asp_pipeline/prompts/ (default: formalizer_new.md).",
+    )
     args = p.parse_args(argv)
 
     if args.file is not None:
@@ -139,7 +163,12 @@ def main(argv: list[str] | None = None) -> int:
         print("error: pip install -r test_sets/requirements-wfm-test.txt", file=sys.stderr)
         return 2
 
-    return run_e2e(args, initial)
+    rc0 = run_e2e(args, initial)
+    if not getattr(args, "formalize_asp", False) or rc0 != 0:
+        return rc0
+    from asp_pipeline.wfm_hook import run_asp_formalize_after_wfm
+
+    return run_asp_formalize_after_wfm(session=getattr(args, "_last_dev_session", None), args=args, repo_root=_REPO)
 
 
 if __name__ == "__main__":

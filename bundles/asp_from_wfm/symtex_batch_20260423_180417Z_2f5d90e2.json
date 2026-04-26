@@ -1,0 +1,367 @@
+{
+  "bundle_id": "symtex_batch_20260423_180417Z_2f5d90e2",
+  "accepted_at": "2026-04-23T18:15:29Z",
+  "committed_at": "2026-04-23T18:15:45Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_1b7548ba264b",
+    "r_cfc617011660",
+    "r_23e9892e435c",
+    "r_cb97d4676d3c",
+    "r_5f77c6ce2122",
+    "r_0c2105289da8",
+    "r_e4c85a3a90c6",
+    "r_54c9a6835e51",
+    "r_253d9b9dd8b0",
+    "r_ceeb5bc63efb",
+    "r_ce6d3f683a1e",
+    "r_2b63138dd621",
+    "r_45d47bc9dbff",
+    "r_b9675c223a8b",
+    "r_a85058e03cd6",
+    "r_5fe0af14408b",
+    "r_0bbb7befdc89",
+    "r_071429b2e405",
+    "r_ef194671f890",
+    "r_453e0ae697e7",
+    "r_a049021ce454",
+    "r_411fe4dc777e",
+    "r_f6ad4e75f452",
+    "r_aaf74cdd0a31",
+    "r_f556a1a1089f",
+    "r_0f40999b62ed",
+    "r_7e348147c43c",
+    "r_eede64981612",
+    "r_914f2da4d5c2",
+    "r_dea0ba5f9499",
+    "r_4864f7226fd0",
+    "r_779c6cd1d024",
+    "r_78721a70e4ea",
+    "r_e57eb463e60d",
+    "r_7f808e9dce3d",
+    "r_593a0b6a6748",
+    "r_9470e966b351",
+    "r_1d1b2e3008e5"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260423_180417Z_2f5d90e2",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nchick(\"Aaron\", \"Kimberly\") is explicitly false.\nexodus(\"Richard\", \"Aaron\") is explicitly false.\nmist(\"Richard\", \"Kimberly\") is explicitly false.\nplaying_harp(\"Kimberly\", \"Daniel\") is explicitly false.\nprotection(\"Aaron\", \"Kimberly\") is explicitly false.\nriding_boot(\"Kimberly\", \"Daniel\") is explicitly false.\nroom(\"Kimberly\", \"Daniel\") is explicitly false.\nsummer(\"Richard\", \"Daniel\") is explicitly false.\nbakery(\"Richard\", \"Aaron\") is true.\ncold(\"Daniel\") is true.\ncreation(\"Richard\", \"Aaron\") is true.\ndrop(\"Aaron\", \"Kimberly\") is true.\ngarment_cutter(\"Richard\", \"Aaron\") is true.\nheat(\"Daniel\") is true.\nprocedure(\"Kimberly\", \"Daniel\") is true.\nsoup(\"Aaron\", \"Daniel\") is true.\nsteam(\"Daniel\") is true.\n\nRules:\nIf summer(V0, V3) is explicitly false and chick(V1, V2) is explicitly false and there is no evidence that soup(V1, V3) is explicitly false, then after(V1) is explicitly false.\nIf thunder(V1, V2) is true and zebu(V1, V3) is true and there is no evidence that playing_harp(V2, V3) is true, then angels(V1) is explicitly false.\nIf mist(V0, V2) is explicitly false and drop(V1, V2) is true and room(V2, V3) is explicitly false, then dew(V0, V1) is explicitly false.\nIf dew(V0, V1) is true and smoke(V1, V3) is explicitly false and angels(V1) is true, then drop(V1, V0) is explicitly false.\nIf hot(V3) is true and after(V1) is true and there is no evidence that angels(V1) is explicitly false, then drop(V1, V3) is explicitly false.\nIf summer(V0, V3) is explicitly false and chick(V1, V2) is explicitly false and there is no evidence that soup(V1, V3) is explicitly false, then hot(V3) is explicitly false.\nIf dew(V0, V1) is true and there is no evidence that bakery(V0, V1) is explicitly false, then morning(V1, V1) is explicitly false.\nIf hot(V3) is explicitly false and there is no evidence that heat(V3) is explicitly false and there is no evidence that cold(V3) is explicitly false, then temperature(V3, V3) is explicitly false.\nIf hot(V3) is true, then thunder(V3, V3) is explicitly false.\nIf creation(V0, V1) is true and protection(V1, V2) is explicitly false and procedure(V2, V3) is true, then activity(V1, V3) is true.\nIf thunder(V1, V2) is explicitly false and temperature(V0, V3) is true and morning(V1, V3) is explicitly false, then after(V1) is true.\nIf fire(V1, V3) is explicitly false and there is no evidence that hot(V3) is explicitly false and temperature(V0, V3) is true, then angels(V1) is true.\nIf hot(V3) is true, then angels(V3) is true.\nIf riding_boot(V2, V3) is explicitly false, then boot(V2, V3) is true.\nIf exodus(V0, V1) is explicitly false, then escape(V0, V1) is true.\nIf hot(V3) is explicitly false and temperature(V0, V3) is explicitly false and smoke(V1, V3) is true, then fire(V1, V3) is true.\nIf fire(V1, V3) is explicitly false and after(V1) is true and temperature(V0, V3) is true, then hot(V3) is true.\nIf dew(V0, V1) is explicitly false and there is no evidence that after(V1) is true and there is no evidence that garment_cutter(V0, V1) is explicitly false, then morning(V1, V1) is true.\nIf hot(V3) is explicitly false and there is no evidence that steam(V3) is explicitly false, then smoke(V3, V3) is true.\nIf creation(V0, V1) is true and protection(V1, V2) is explicitly false and procedure(V2, V3) is true, then thunder(V1, V2) is true.\nIf activity(V1, V3) is true and there is no evidence that fire(V1, V3) is explicitly false and there is no evidence that morning(V1, V3) is explicitly false, then zebu(V1, V3) is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "The fact that Aaron is a chick of Kimberly is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"The fact that Aaron is a chick of Kimberly is explicitly false.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The fact that Richard is an exodus of Aaron is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The fact that Richard is an exodus of Aaron is explicitly false.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "The fact that Richard is a mist of Kimberly is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"The fact that Richard is a mist of Kimberly is explicitly false.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "The fact that Kimberly is playing harp with Daniel is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"The fact that Kimberly is playing harp with Daniel is explicitly false.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "The fact that Aaron is a protection of Kimberly is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"The fact that Aaron is a protection of Kimberly is explicitly false.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "The fact that Kimberly is a riding boot of Daniel is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"The fact that Kimberly is a riding boot of Daniel is explicitly false.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The fact that Kimberly is a room of Daniel is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The fact that Kimberly is a room of Daniel is explicitly false.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "The fact that Richard is a summer of Daniel is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"The fact that Richard is a summer of Daniel is explicitly false.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "The fact that Richard is a bakery of Aaron is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"The fact that Richard is a bakery of Aaron is true.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "The fact that Daniel is cold is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"The fact that Daniel is cold is true.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "The fact that Richard is a creation of Aaron is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"The fact that Richard is a creation of Aaron is true.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "The fact that Aaron is a drop of Kimberly is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"The fact that Aaron is a drop of Kimberly is true.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "The fact that Richard is a garment cutter of Aaron is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"The fact that Richard is a garment cutter of Aaron is true.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "The fact that Daniel is heat is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"The fact that Daniel is heat is true.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "The fact that Kimberly is a procedure of Daniel is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"The fact that Kimberly is a procedure of Daniel is true.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "The fact that Aaron is a soup of Daniel is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"The fact that Aaron is a soup of Daniel is true.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "The fact that Daniel is steam is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"The fact that Daniel is steam is true.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "If V0 is a summer of V3 is explicitly false and V1 is a chick of V2 is explicitly false and there is no evidence that V1 is a soup of V3 is explicitly false, then the fact that V1 is after is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"If V0 is a summer of V3 is explicitly false and V1 is a chick of V2 is explicitly false and there is no evidence that V1 is a soup of V3 is explicitly false, then the fact that V1 is after is explicitly false.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "If V1 is a thunder of V2 is true and V1 is a zebu of V3 is true and there is no evidence that V2 is playing harp with V3 is true, then the fact that V1 is angels is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"If V1 is a thunder of V2 is true and V1 is a zebu of V3 is true and there is no evidence that V2 is playing harp with V3 is true, then the fact that V1 is angels is explicitly false.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "If V0 is a mist of V2 is explicitly false and V1 is a drop of V2 is true and V2 is a room of V3 is explicitly false, then the fact that V0 is a dew of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"If V0 is a mist of V2 is explicitly false and V1 is a drop of V2 is true and V2 is a room of V3 is explicitly false, then the fact that V0 is a dew of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "If V0 is a dew of V1 is true and V1 is a smoke of V3 is explicitly false and V1 is angels is true, then the fact that V1 is a drop of V0 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"If V0 is a dew of V1 is true and V1 is a smoke of V3 is explicitly false and V1 is angels is true, then the fact that V1 is a drop of V0 is explicitly false.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "If V3 is hot is true and V1 is after is true and there is no evidence that V1 is angels is explicitly false, then the fact that V1 is a drop of V3 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"If V3 is hot is true and V1 is after is true and there is no evidence that V1 is angels is explicitly false, then the fact that V1 is a drop of V3 is explicitly false.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "If V0 is a summer of V3 is explicitly false and V1 is a chick of V2 is explicitly false and there is no evidence that V1 is a soup of V3 is explicitly false, then the fact that V3 is hot is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"If V0 is a summer of V3 is explicitly false and V1 is a chick of V2 is explicitly false and there is no evidence that V1 is a soup of V3 is explicitly false, then the fact that V3 is hot is explicitly false.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If V0 is a dew of V1 is true and there is no evidence that V0 is a bakery of V1 is explicitly false, then the fact that V1 is a morning of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If V0 is a dew of V1 is true and there is no evidence that V0 is a bakery of V1 is explicitly false, then the fact that V1 is a morning of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If V3 is hot is explicitly false and there is no evidence that V3 is heat is explicitly false and there is no evidence that V3 is cold is explicitly false, then the fact that V3 is a temperature of V3 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If V3 is hot is explicitly false and there is no evidence that V3 is heat is explicitly false and there is no evidence that V3 is cold is explicitly false, then the fact that V3 is a temperature of V3 is explicitly false.\""
+      },
+      {
+        "line_index": 25,
+        "statement_nl": "If V3 is hot is true, then the fact that V3 is a thunder of V3 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "26. \"If V3 is hot is true, then the fact that V3 is a thunder of V3 is explicitly false.\""
+      },
+      {
+        "line_index": 26,
+        "statement_nl": "If V0 is a creation of V1 is true and V1 is a protection of V2 is explicitly false and V2 is a procedure of V3 is true, then V1 is an activity of V3 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "27. \"If V0 is a creation of V1 is true and V1 is a protection of V2 is explicitly false and V2 is a procedure of V3 is true, then V1 is an activity of V3 is true.\""
+      },
+      {
+        "line_index": 27,
+        "statement_nl": "If V1 is a thunder of V2 is explicitly false and V0 is a temperature of V3 is true and V1 is a morning of V3 is explicitly false, then V1 is after is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "28. \"If V1 is a thunder of V2 is explicitly false and V0 is a temperature of V3 is true and V1 is a morning of V3 is explicitly false, then V1 is after is true.\""
+      },
+      {
+        "line_index": 28,
+        "statement_nl": "If V1 is a fire of V3 is explicitly false and there is no evidence that V3 is hot is explicitly false and V0 is a temperature of V3 is true, then V1 is angels is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "29. \"If V1 is a fire of V3 is explicitly false and there is no evidence that V3 is hot is explicitly false and V0 is a temperature of V3 is true, then V1 is angels is true.\""
+      },
+      {
+        "line_index": 29,
+        "statement_nl": "If V3 is hot is true, then V3 is angels is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "30. \"If V3 is hot is true, then V3 is angels is true.\""
+      },
+      {
+        "line_index": 30,
+        "statement_nl": "If V2 is a riding boot of V3 is explicitly false, then V2 is a boot of V3 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "31. \"If V2 is a riding boot of V3 is explicitly false, then V2 is a boot of V3 is true.\""
+      },
+      {
+        "line_index": 31,
+        "statement_nl": "If V0 is an exodus of V1 is explicitly false, then V0 is an escape of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "32. \"If V0 is an exodus of V1 is explicitly false, then V0 is an escape of V1 is true.\""
+      },
+      {
+        "line_index": 32,
+        "statement_nl": "If V3 is hot is explicitly false and V0 is a temperature of V3 is explicitly false and V1 is a smoke of V3 is true, then V1 is a fire of V3 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "33. \"If V3 is hot is explicitly false and V0 is a temperature of V3 is explicitly false and V1 is a smoke of V3 is true, then V1 is a fire of V3 is true.\""
+      },
+      {
+        "line_index": 33,
+        "statement_nl": "If V1 is a fire of V3 is explicitly false and V1 is after is true and V0 is a temperature of V3 is true, then V3 is hot is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "34. \"If V1 is a fire of V3 is explicitly false and V1 is after is true and V0 is a temperature of V3 is true, then V3 is hot is true.\""
+      },
+      {
+        "line_index": 34,
+        "statement_nl": "If V0 is a dew of V1 is explicitly false and there is no evidence that V1 is after is true and there is no evidence that V0 is a garment cutter of V1 is explicitly false, then V1 is a morning of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "35. \"If V0 is a dew of V1 is explicitly false and there is no evidence that V1 is after is true and there is no evidence that V0 is a garment cutter of V1 is explicitly false, then V1 is a morning of V1 is true.\""
+      },
+      {
+        "line_index": 35,
+        "statement_nl": "If V3 is hot is explicitly false and there is no evidence that V3 is steam is explicitly false, then V3 is a smoke of V3 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "36. \"If V3 is hot is explicitly false and there is no evidence that V3 is steam is explicitly false, then V3 is a smoke of V3 is true.\""
+      },
+      {
+        "line_index": 36,
+        "statement_nl": "If V0 is a creation of V1 is true and V1 is a protection of V2 is explicitly false and V2 is a procedure of V3 is true, then V1 is a thunder of V2 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "37. \"If V0 is a creation of V1 is true and V1 is a protection of V2 is explicitly false and V2 is a procedure of V3 is true, then V1 is a thunder of V2 is true.\""
+      },
+      {
+        "line_index": 37,
+        "statement_nl": "If V1 is an activity of V3 is true and there is no evidence that V1 is a fire of V3 is explicitly false and there is no evidence that V1 is a morning of V3 is explicitly false, then V1 is a zebu of V3 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "38. \"If V1 is an activity of V3 is true and there is no evidence that V1 is a fire of V3 is explicitly false and there is no evidence that V1 is a morning of V3 is explicitly false, then V1 is a zebu of V3 is true.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260423_180417Z_2f5d90e2_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-23T18:04:47Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260423_180417Z_2f5d90e2.lp",
+  "pipeline_kind": "asp_clincon"
+}

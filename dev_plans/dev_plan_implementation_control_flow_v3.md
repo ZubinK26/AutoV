@@ -172,7 +172,7 @@ These satisfy **`control_flow_v3.md`** intent: same control flow, failure catego
 
 - Registry embeddings, semantic search, `registry_stage` features
 - Contradiction detection, graph edges
-- `control_flow_v1.md` per-line isolated Z3 semantics (different product)
+- Legacy per-line isolated Z3 semantics (historical; v1 specs removed from `dev_plans/`)
 - **Final** formalizer/critic prompt prose — **stubs** required per §7; quality iteration is ongoing
 
 ---

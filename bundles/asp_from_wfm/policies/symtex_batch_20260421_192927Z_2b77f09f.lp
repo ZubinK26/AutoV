@@ -1,0 +1,106 @@
+% Bundle: symtex_batch_20260421_192927Z_2b77f09f
+
+person(alan).
+person(elizabeth).
+person(kristina).
+person(mark).
+person(theresa).
+
+% Rule: r_0aee761b582c  |  line_index: 0  |  NL: It is explicitly false that Alan is anyone.
+-anyone(alan).
+
+% Rule: r_b76d948ebb6d  |  line_index: 1  |  NL: It is explicitly false that Elizabeth is anyone.
+-anyone(elizabeth).
+
+% Rule: r_8a012923a96d  |  line_index: 2  |  NL: It is explicitly false that Kristina is anyone.
+-anyone(kristina).
+
+% Rule: r_19aea5d05019  |  line_index: 3  |  NL: It is explicitly false that Alan is a bruin.
+-bruin(alan).
+
+% Rule: r_b2d3672b9d7a  |  line_index: 4  |  NL: It is explicitly false that Elizabeth is a bruin.
+-bruin(elizabeth).
+
+% Rule: r_bf98fbb878de  |  line_index: 5  |  NL: It is explicitly false that Mark is a bruin.
+-bruin(mark).
+
+% Rule: r_643d6e54b6e3  |  line_index: 6  |  NL: It is explicitly false that Alan is a dais.
+-dais(alan).
+
+% Rule: r_cf7996eee070  |  line_index: 7  |  NL: It is explicitly false that Alan eats meat.
+-eats_meat(alan).
+
+% Rule: r_6c099b5ab4e2  |  line_index: 8  |  NL: It is explicitly false that Alan is entering a building.
+-entering_building(alan).
+
+% Rule: r_573ac1ea030b  |  line_index: 9  |  NL: It is explicitly false that Alan measures Mark.
+-measures(alan, mark).
+
+% Rule: r_6ac042ce63c9  |  line_index: 10  |  NL: It is explicitly false that Theresa is a priest.
+-priest(theresa).
+
+% Rule: r_fe595d9b2981  |  line_index: 11  |  NL: It is explicitly false that Elizabeth is a priest.
+-priest(elizabeth).
+
+% Rule: r_ea0772f814b9  |  line_index: 12  |  NL: It is explicitly false that Kristina is a priest.
+-priest(kristina).
+
+% Rule: r_832ae97ad2ca  |  line_index: 13  |  NL: It is explicitly false that Alan is a profit.
+-profit(alan).
+
+% Rule: r_bd49d7c3234f  |  line_index: 14  |  NL: It is explicitly false that Alan is sao goncalo.
+-sao_goncalo(alan).
+
+% Rule: r_a968c922fb09  |  line_index: 15  |  NL: It is explicitly false that Elizabeth is sao goncalo.
+-sao_goncalo(elizabeth).
+
+% Rule: r_6f6a59b4184f  |  line_index: 16  |  NL: It is explicitly false that Kristina is sao goncalo.
+-sao_goncalo(kristina).
+
+% Rule: r_3346d2aeb817  |  line_index: 17  |  NL: It is explicitly false that Theresa is yak butter.
+-yak_butter(theresa).
+
+% Rule: r_f223ce5191a7  |  line_index: 18  |  NL: It is explicitly false that Alan is yak butter.
+-yak_butter(alan).
+
+% Rule: r_442270e508aa  |  line_index: 19  |  NL: It is explicitly false that Kristina is yak butter.
+-yak_butter(kristina).
+
+% Rule: r_f6bcbb8446ab  |  line_index: 20  |  NL: Theresa and Alan are carancha.
+carancha(theresa, alan).
+
+% Rule: r_ba90bbfd47ab  |  line_index: 21  |  NL: Theresa, Elizabeth, and Kristina are flank.
+flank(theresa, elizabeth, kristina).
+
+% Rule: r_5aca5b8863ab  |  line_index: 22  |  NL: Theresa and Alan are an object.
+object(theresa, alan).
+
+% Rule: r_af945629b3b7  |  line_index: 23  |  NL: Theresa and Alan are a pancreas.
+pancreas(theresa, alan).
+
+% Rule: r_7edc8ea89746  |  line_index: 24  |  NL: If it is explicitly false that V0, V2, and V4 are kids, then it is explicitly false that V0 is coming back home to V0.
+-coming_back_home(V0, V0) :- -kids(V0, V2, V4), person(V0), person(V2), person(V4).
+
+% Rule: r_5d88c09a76b5  |  line_index: 25  |  NL: If it is explicitly false that V1 eats meat, it is explicitly false that V0, V1, and V3 are yak butter, V0, V2, and V3 are flank, it is explicitly false that V0, V2, and V3 are priests, and it is explicitly false that V1, V2, and V4 are bruins, then it is explicitly false that V0 is the head of V1 or it is explicitly false that V0, V2, and V4 are kids or it is explicitly false that V1 and V4 are a zebra or it is explicitly false that V0 and V4 are a waiter.
+1 { -head_of(V0, V1); -kids(V0, V2, V4); -zebra(V1, V4); -waiter(V0, V4) } :- -eats_meat(V1), -yak_butter(V0, V1, V3), flank(V0, V2, V3), -priest(V0, V2, V3), -bruin(V1, V2, V4), person(V0), person(V1), person(V2), person(V3), person(V4).
+
+% Rule: r_d7df9c123343  |  line_index: 26  |  NL: If it is explicitly false that V1 is coming back home to V3 and there is no evidence that V1 is a dais, then it is explicitly false that V3 and V1 are a jackdaw.
+-jackdaw(V3, V1) :- -coming_back_home(V1, V3), not dais(V1), person(V1), person(V3).
+
+% Rule: r_22dc4b8a0fb3  |  line_index: 27  |  NL: If V0 and V1 are a mailer, there is no evidence that V0 and V1 are a jackdaw, there is no evidence that it is explicitly false that V0 and V1 are an object, there is no evidence that it is explicitly false that V0 and V1 are a pancreas, and there is no evidence that it is explicitly false that V0 and V1 are carancha, then it is explicitly false that V0, V1, and V0 are a liberian dollar.
+-liberian_dollar(V0, V1, V0) :- mailer(V0, V1), not jackdaw(V0, V1), not -object(V0, V1), not -pancreas(V0, V1), not -carancha(V0, V1), person(V0), person(V1).
+
+% Rule: r_4a9f1e252157  |  line_index: 28  |  NL: If it is explicitly false that V0 and V4 are a waiter and V0 and V2 are having to eat, then it is explicitly false that V4, V2, and V4 are linoleum or V2, V2, and V0 are a character.
+1 { -linoleum(V4, V2, V4); -character(V2, V2, V0) } :- -waiter(V0, V4), having_to_eat(V0, V2), person(V0), person(V2), person(V4).
+
+% Rule: r_1e2aed41025c  |  line_index: 29  |  NL: If it is explicitly false that V1 eats meat, there is no evidence that V1 is entering a building, there is no evidence that V1 is a dais, and there is no evidence that V1 is a profit, then V1 and V1 are a gleaner or V1 and V1 are a mailer or V1, V1, and V1 are bittersweet chocolate.
+1 { gleaner(V1, V1); mailer(V1, V1); bittersweet_chocolate(V1, V1, V1) } :- -eats_meat(V1), not entering_building(V1), not dais(V1), not profit(V1), person(V1).
+
+% Rule: r_190a28e803ff  |  line_index: 30  |  NL: If it is explicitly false that V1 and V4 are a zebra and there is no evidence that V1 measures V4, then V1 and V4 are having to eat.
+having_to_eat(V1, V4) :- -zebra(V1, V4), not measures(V1, V4), person(V1), person(V4).
+
+% Rule: r_f057e2c5a1ea  |  line_index: 31  |  NL: If V1, V2, and V3 are bittersweet chocolate, V1, V2, and V3 are a character, it is explicitly false that V1, V2, and V3 are sao goncalo, it is explicitly false that V1 measures V4, and there is no evidence that V1, V2, and V3 are anyone, then V4, V2, and V3 are a row of bricks.
+row_of_bricks(V4, V2, V3) :- bittersweet_chocolate(V1, V2, V3), character(V1, V2, V3), -sao_goncalo(V1, V2, V3), -measures(V1, V4), not anyone(V1, V2, V3), person(V1), person(V2), person(V3), person(V4).
+
+% Rule: r_ec373e0abf08  |  line_index: 32  |  NL: If it is explicitly false that V0 is the head of V1, V3 and V4 are a gleaner, it is explicitly false that V0, V1, and V2 are a liberian dollar, there is no evidence that it is explicitly false that V0, V2, and V3 are a row of bricks, and there is no evidence that V1, V2, and V4 are linoleum, then V4 is a two wheeled vehicle.
+two_wheeled_vehicle(V4) :- -head_of(V0, V1), gleaner(V3, V4), -liberian_dollar(V0, V1, V2), not -row_of_bricks(V0, V2, V3), not linoleum(V1, V2, V4), person(V0), person(V1), person(V2), person(V3), person(V4).

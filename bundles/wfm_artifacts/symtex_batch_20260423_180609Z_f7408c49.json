@@ -1,0 +1,197 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260423_180609Z_f7408c49",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\ntrotter(Carrie, Jennifer, Donald) is explicitly false.\nbeef_loin(Carrie, Jennifer, Donald) is explicitly false.\nruminant(Carrie, Jennifer, Donald) is true.\newe(Carrie, Jennifer, Donald) is true.\nground_beef(Carrie, Jennifer, Donald) is explicitly false.\nantelope(Carrie, Jennifer, Donald) is true.\ntank(Derrick, Carrie, Donald) is true.\nbucket(Derrick, Carrie, Donald) is explicitly false.\nmouthful(Derrick, Carrie, Donald) is explicitly false.\nvagina(Nicholas) is explicitly false.\nproperty(Derrick, Donald, Nicholas) is true.\nextent(Carrie, Jennifer, Donald) is true.\n\nRules:\nIf goat(V3) is true and antelope(V1, V2, V3) is true, then bovid(V1, V2, V3) is explicitly false.\nIf trotter(V1, V2, V3) is explicitly false and there is no evidence that ruminant(V1, V2, V3) is explicitly false and there is no evidence that ewe(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true and there is no evidence that antelope(V1, V2, V3) is explicitly false, then sheep(V3, V1, V3) is true.\nIf trotter(V1, V2, V3) is explicitly false and there is no evidence that ruminant(V1, V2, V3) is explicitly false and there is no evidence that ewe(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true and there is no evidence that antelope(V1, V2, V3) is explicitly false, then ox(V3) is explicitly false.\nIf sheep(V0, V1, V3) is true and there is no evidence that containerful(V0, V1, V3) is true, then goat(V3) is true.\nIf indefinite_quantity(V3) is true and bovine(V4) is true and vagina(V4) is explicitly false and property(V0, V3, V4) is true and extent(V1, V2, V3) is true, then teacup(V0, V1, V3) is true.\nIf teacup(V0, V1, V3) is true and there is no evidence that can(V0, V1, V3) is true and there is no evidence that tank(V0, V1, V3) is explicitly false and there is no evidence that bucket(V0, V1, V3) is true and there is no evidence that mouthful(V0, V1, V3) is true, then containerful(V0, V1, V3) is explicitly false.\nIf beef_loin(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true, then beef(V2) is explicitly false.\nIf beef_loin(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true, then indefinite_quantity(V3) is true.\nIf beef(V0) is explicitly false, then can(V0, V0, V0) is explicitly false.\nIf beef(V0) is explicitly false, then cattle(V0, V0, V0) is true.\nIf ox(V3) is explicitly false and indefinite_quantity(V3) is true and cattle(V0, V3, V4) is true, then bovine(V4) is true.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "The relationship trotter(Carrie, Jennifer, Donald) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"The relationship trotter(Carrie, Jennifer, Donald) is explicitly false.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The relationship beef_loin(Carrie, Jennifer, Donald) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The relationship beef_loin(Carrie, Jennifer, Donald) is explicitly false.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "The relationship ruminant(Carrie, Jennifer, Donald) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"The relationship ruminant(Carrie, Jennifer, Donald) is true.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "The relationship ewe(Carrie, Jennifer, Donald) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The relationship ewe(Carrie, Jennifer, Donald) is true.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The relationship ground_beef(Carrie, Jennifer, Donald) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The relationship ground_beef(Carrie, Jennifer, Donald) is explicitly false.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "The relationship antelope(Carrie, Jennifer, Donald) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"The relationship antelope(Carrie, Jennifer, Donald) is true.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "The relationship tank(Derrick, Carrie, Donald) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"The relationship tank(Derrick, Carrie, Donald) is true.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "The relationship bucket(Derrick, Carrie, Donald) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"The relationship bucket(Derrick, Carrie, Donald) is explicitly false.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The relationship mouthful(Derrick, Carrie, Donald) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"The relationship mouthful(Derrick, Carrie, Donald) is explicitly false.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "The property vagina(Nicholas) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"The property vagina(Nicholas) is explicitly false.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "The relationship property(Derrick, Donald, Nicholas) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"The relationship property(Derrick, Donald, Nicholas) is true.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "The relationship extent(Carrie, Jennifer, Donald) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"The relationship extent(Carrie, Jennifer, Donald) is true.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "If goat(V3) is true and antelope(V1, V2, V3) is true, then bovid(V1, V2, V3) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"If goat(V3) is true and antelope(V1, V2, V3) is true, then bovid(V1, V2, V3) is explicitly false.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "If trotter(V1, V2, V3) is explicitly false, and there is no evidence that ruminant(V1, V2, V3) is explicitly false, and there is no evidence that ewe(V1, V2, V3) is explicitly false, and there is no evidence that ground_beef(V1, V2, V3) is true, and there is no evidence that antelope(V1, V2, V3) is explicitly false, then sheep(V3, V1, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"If trotter(V1, V2, V3) is explicitly false, and there is no evidence that ruminant(V1, V2, V3) is explicitly false, and there is no evidence that ewe(V1, V2, V3) is explicitly false, and there is no evidence that ground_beef(V1, V2, V3) is true, and there is no evidence that antelope(V1, V2, V3) is explicitly false, then sheep(V3, V1, V3) is true.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "If trotter(V1, V2, V3) is explicitly false, and there is no evidence that ruminant(V1, V2, V3) is explicitly false, and there is no evidence that ewe(V1, V2, V3) is explicitly false, and there is no evidence that ground_beef(V1, V2, V3) is true, and there is no evidence that antelope(V1, V2, V3) is explicitly false, then ox(V3) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"If trotter(V1, V2, V3) is explicitly false, and there is no evidence that ruminant(V1, V2, V3) is explicitly false, and there is no evidence that ewe(V1, V2, V3) is explicitly false, and there is no evidence that ground_beef(V1, V2, V3) is true, and there is no evidence that antelope(V1, V2, V3) is explicitly false, then ox(V3) is explicitly false.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "If sheep(V0, V1, V3) is true and there is no evidence that containerful(V0, V1, V3) is true, then goat(V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"If sheep(V0, V1, V3) is true and there is no evidence that containerful(V0, V1, V3) is true, then goat(V3) is true.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "If indefinite_quantity(V3) is true, and bovine(V4) is true, and vagina(V4) is explicitly false, and property(V0, V3, V4) is true, and extent(V1, V2, V3) is true, then teacup(V0, V1, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"If indefinite_quantity(V3) is true, and bovine(V4) is true, and vagina(V4) is explicitly false, and property(V0, V3, V4) is true, and extent(V1, V2, V3) is true, then teacup(V0, V1, V3) is true.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "If teacup(V0, V1, V3) is true, and there is no evidence that can(V0, V1, V3) is true, and there is no evidence that tank(V0, V1, V3) is explicitly false, and there is no evidence that bucket(V0, V1, V3) is true, and there is no evidence that mouthful(V0, V1, V3) is true, then containerful(V0, V1, V3) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"If teacup(V0, V1, V3) is true, and there is no evidence that can(V0, V1, V3) is true, and there is no evidence that tank(V0, V1, V3) is explicitly false, and there is no evidence that bucket(V0, V1, V3) is true, and there is no evidence that mouthful(V0, V1, V3) is true, then containerful(V0, V1, V3) is explicitly false.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "If beef_loin(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true, then beef(V2) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"If beef_loin(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true, then beef(V2) is explicitly false.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "If beef_loin(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true, then indefinite_quantity(V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"If beef_loin(V1, V2, V3) is explicitly false and there is no evidence that ground_beef(V1, V2, V3) is true, then indefinite_quantity(V3) is true.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "If beef(V0) is explicitly false, then can(V0, V0, V0) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"If beef(V0) is explicitly false, then can(V0, V0, V0) is explicitly false.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "If beef(V0) is explicitly false, then cattle(V0, V0, V0) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"If beef(V0) is explicitly false, then cattle(V0, V0, V0) is true.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "If ox(V3) is explicitly false, and indefinite_quantity(V3) is true, and cattle(V0, V3, V4) is true, then bovine(V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"If ox(V3) is explicitly false, and indefinite_quantity(V3) is true, and cattle(V0, V3, V4) is true, then bovine(V4) is true.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260423_180609Z_f7408c49_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-23T18:06:22Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

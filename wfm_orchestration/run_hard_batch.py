@@ -14,6 +14,10 @@ Environment:
 
 Resume: by default, skips any example that already has ``bundles/wfm_artifacts/hard_<id>_*.json``.
 Use ``--force-rerun`` to ignore that and run all 12 again (new bundle ids; does not delete old files).
+
+By default, **only** example ids that have a reference ``.lp`` in ``wfm_ground_truth_asp_map.json``
+(on disk) are scheduled — the rest are skipped for API (FOLIO/P-FOLIO/stress text alone is not
+scorable for ASP). Use ``--curated-without-asp-reference`` to run the full list anyway.
 """
 
 from __future__ import annotations
@@ -56,6 +60,14 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Run every example even if a handoff file already exists for that id.",
     )
+    ap.add_argument(
+        "--curated-without-asp-reference",
+        action="store_true",
+        help=(
+            "Ignore wfm_ground_truth_asp_map.json and run all batch ids (WFM on narrative-only problems "
+            "with no in-repo reference LP; not for automatic ASP scoring)."
+        ),
+    )
     args = ap.parse_args(argv)
 
     batch_path = args.batch_json or Path(os.environ.get("WFM_BATCH_JSON", str(_DEFAULT_BATCH)))
@@ -80,16 +92,43 @@ def main(argv: list[str] | None = None) -> int:
 
     skip_existing = not args.force_rerun
 
+    from wfm_orchestration.ground_truth_asp import (
+        curated_id_has_ground_truth_lp,
+        load_ground_truth_asp_map,
+        truth_assessment_curated_wfm,
+    )
+
+    gmap = load_ground_truth_asp_map(_REPO)
+    if args.curated_without_asp_reference:
+        scheduled_ids: list[str] = list(ids)
+        not_assessable: list[str] = []
+    else:
+        scheduled_ids = [eid for eid in ids if curated_id_has_ground_truth_lp(_REPO, eid, gmap)]
+        not_assessable = [eid for eid in ids if eid not in set(scheduled_ids)]
+
     if args.dry_run:
         print(f"batch_json={batch_path}")
         print(f"delay_sec={delay}")
         print(f"skip_existing={skip_existing}")
-        for ex_id in ids:
-            existing = list_existing_handoffs_for_batch_example(_REPO, ex_id) if skip_existing else []
-            if existing:
-                print(f"  {ex_id}  [skip - handoff exists: {existing[-1].name}]")
-            else:
-                print(f"  {ex_id}  [run]")
+        if not args.curated_without_asp_reference:
+            print("ground_truth_gate=manifest (wfm_ground_truth_asp_map.json)")
+        else:
+            print("ground_truth_gate=off (--curated-without-asp-reference)")
+        if not args.curated_without_asp_reference and not_assessable:
+            print("Not schedulable (no reference .lp in manifest):")
+            for ex_id in not_assessable:
+                t = truth_assessment_curated_wfm(ex_id, repo_root=_REPO, m=gmap)
+                print(f"  {ex_id}  assessable_against_stored_reference_asp={t.get('assessable_against_stored_reference_asp')!r}")
+        if not args.curated_without_asp_reference and not scheduled_ids:
+            print("Schedulable with stored reference LP: (none) — add paths to the manifest to run WFM for ASP scoring.")
+        else:
+            print("Schedulable with stored reference LP:" if not args.curated_without_asp_reference else "All batch ids (no manifest gate):")
+            for ex_id in scheduled_ids:
+                existing = list_existing_handoffs_for_batch_example(_REPO, ex_id) if skip_existing else []
+                if existing:
+                    print(f"  {ex_id}  [skip - handoff exists: {existing[-1].name}]")
+                else:
+                    print(f"  {ex_id}  [run]")
         return 0
 
     from wfm_orchestration.demo_loader import get_curated_example_text, load_demo_pool_config
@@ -112,7 +151,7 @@ def main(argv: list[str] | None = None) -> int:
 
     to_run: list[str] = []
     skipped: list[str] = []
-    for ex_id in ids:
+    for ex_id in scheduled_ids:
         if skip_existing and list_existing_handoffs_for_batch_example(_REPO, ex_id):
             skipped.append(ex_id)
         else:
@@ -123,6 +162,13 @@ def main(argv: list[str] | None = None) -> int:
             f"[batch] Skipping {len(skipped)} example(s) with existing handoff JSON: {', '.join(skipped)}\n",
             flush=True,
         )
+    if not scheduled_ids and not args.curated_without_asp_reference:
+        print(
+            "[batch] No example ids have a reference .lp in wfm_ground_truth_asp_map.json. "
+            "Add curated_id_to_reference_lp entries (paths must exist), or pass "
+            "--curated-without-asp-reference to run the narrative batch anyway.\n"
+        )
+        return 0
     if not to_run:
         print("[batch] Nothing left to run (all examples already have handoff files). Use --force-rerun to redo.")
         return 0
@@ -139,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"error: {e}", file=sys.stderr)
             return 2
         print(
-            f"\n========== Batch {j + 1}/{len(to_run)} (list {len(ids)})  "
+            f"\n========== Batch {j + 1}/{len(to_run)} (manifest-eligible {len(scheduled_ids)} of {len(ids)} in file)  "
             f"example_id={ex_id}  bundle_prefix={prefix} ==========\n"
         )
         out = run_wfm_registry_e2e(

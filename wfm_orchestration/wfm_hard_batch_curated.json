@@ -1,6 +1,6 @@
 {
   "schema_version": "wfm_hard_batch_v1",
-  "description": "12 hard-tier examples (FOLIO F-8–10, P-FOLIO PF-8–10, stress R-4–6 and E-4–6) for WFM → SMT pipeline evaluation.",
+  "description": "12 hard-tier examples (FOLIO F-8–10, P-FOLIO PF-8–10, stress R-4–6 and E-4–6) for WFM. For on-disk reference ASP, see wfm_ground_truth_asp_map.json; run_hard_batch only schedules entries present there (unless you pass --curated-without-asp-reference).",
   "example_ids": [
     "F-8",
     "F-9",

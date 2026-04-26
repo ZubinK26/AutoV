@@ -1,0 +1,250 @@
+{
+  "bundle_id": "symtex_batch_20260423_180307Z_00085890",
+  "accepted_at": "2026-04-23T18:15:11Z",
+  "committed_at": "2026-04-23T18:15:24Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_6e0798297f00",
+    "r_7d56be210d4e",
+    "r_1acca1d2486f",
+    "r_dfd753a66c2f",
+    "r_619e996ff99a",
+    "r_6d3a278a5d3f",
+    "r_3b08c67f3b34",
+    "r_89c29a98bea0",
+    "r_403519554134",
+    "r_e5f936a2d0d6",
+    "r_eea403be0525",
+    "r_b8e75d4815b4",
+    "r_8239d285272d",
+    "r_ba205e0ec8d7",
+    "r_62fa0f76324f",
+    "r_fb3af7a04869",
+    "r_7886c3cc891d",
+    "r_616054a12880",
+    "r_b2d9995d10b6",
+    "r_9608afaf25f4",
+    "r_fdfb1db85a39",
+    "r_ed0c37ba1068",
+    "r_ef018628c325",
+    "r_817867d69ef6",
+    "r_7715e605e606"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260423_180307Z_00085890",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nasthenosphere(\"Shawn\") is explicitly false.\nblack_rat(\"Judy\", \"Shawn\") is explicitly false.\ncorn(\"Mary\", \"Stephanie\") is explicitly false.\ncorncob(\"Stephanie\", \"Shawn\") is explicitly false.\nfield_corn(\"Mary\", \"Stephanie\") is explicitly false.\nrota(\"Judy\", \"Ryan\", \"Shawn\") is explicitly false.\nwear(\"Judy\", \"Stephanie\") is explicitly false.\ndeal_drugs(\"Judy\", \"Stephanie\") is true.\near(\"Ryan\", \"Shawn\") is true.\njerboa_rat(\"Judy\", \"Shawn\") is true.\nmost_commonly(\"Judy\", \"Mary\") is true.\nradio_operator(\"Judy\", \"Ryan\", \"Mary\") is true.\nsweet_corn(\"Ryan\", \"Mary\") is true.\nswiss_pine(\"Judy\", \"Shawn\") is true.\ntropopause(Shawn) is true.\n\nRules:\nIf rice(V4) is true and millet(V4) is explicitly false and barley(V0, V1, V2) is true and P7(V2, V3, V4) is true, then cereal(V1, V2) is explicitly false.\nIf bandicoot_rat(V0, V4) is true and there is no evidence that rice_rat(V0, V4) is explicitly false and there is no evidence that swiss_pine(V0, V4) is explicitly false and there is no evidence that jerboa_rat(V0, V4) is explicitly false and there is no evidence that black_rat(V0, V4) is true, then millet(V4) is explicitly false.\nIf bandicoot_rat(V0, V4) is true and there is no evidence that rice_rat(V0, V4) is explicitly false and there is no evidence that swiss_pine(V0, V4) is explicitly false and there is no evidence that jerboa_rat(V0, V4) is explicitly false and there is no evidence that black_rat(V0, V4) is true, then rat(V0, V4) is explicitly false.\nIf sweet_corn(V1, V2) is true and ear(V1, V4) is true and corn(V2, V3) is explicitly false and there is no evidence that field_corn(V2, V3) is true and there is no evidence that corncob(V3, V4) is true, then P7(V2, V3, V4) is true.\nIf rota(V0, V1, V4) is explicitly false, then bandicoot_rat(V0, V4) is true.\nIf most_commonly(V0, V2) is true and wear(V0, V3) is explicitly false and radio_operator(V0, V1, V2) is true, then barley(V0, V1, V2) is true.\nIf millet(V4) is explicitly false and there is no evidence that asthenosphere(V4) is true, then crust(V4, V4) is true.\nIf asthenosphere(V4) is explicitly false and there is no evidence that tropopause(V4) is explicitly false, then layer(V4, V4, V4) is true.\nIf crust(V1, V3) is true and rat(V2, V3) is explicitly false and layer(V1, V3, V4) is true, then rice(V4) is true.\nIf deal_drugs(V0, V3) is true and there is no evidence that wear(V0, V3) is true, then rice_rat(V0, V0) is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "It is explicitly false that Shawn is an asthenosphere.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"It is explicitly false that Shawn is an asthenosphere.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "It is explicitly false that Judy and Shawn have a black rat relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"It is explicitly false that Judy and Shawn have a black rat relationship.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "It is explicitly false that Mary and Stephanie have a corn relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"It is explicitly false that Mary and Stephanie have a corn relationship.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "It is explicitly false that Stephanie and Shawn have a corncob relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"It is explicitly false that Stephanie and Shawn have a corncob relationship.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "It is explicitly false that Mary and Stephanie have a field corn relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"It is explicitly false that Mary and Stephanie have a field corn relationship.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "It is explicitly false that Judy, Ryan, and Shawn have a rota relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"It is explicitly false that Judy, Ryan, and Shawn have a rota relationship.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "It is explicitly false that Judy and Stephanie have a wear relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"It is explicitly false that Judy and Stephanie have a wear relationship.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "It is true that Judy and Stephanie have a deal drugs relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"It is true that Judy and Stephanie have a deal drugs relationship.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "It is true that Ryan and Shawn have an ear relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"It is true that Ryan and Shawn have an ear relationship.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "It is true that Judy and Shawn have a jerboa rat relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"It is true that Judy and Shawn have a jerboa rat relationship.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "It is true that Judy and Mary have a most commonly relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"It is true that Judy and Mary have a most commonly relationship.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "It is true that Judy, Ryan, and Mary have a radio operator relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"It is true that Judy, Ryan, and Mary have a radio operator relationship.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "It is true that Ryan and Mary have a sweet corn relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"It is true that Ryan and Mary have a sweet corn relationship.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "It is true that Judy and Shawn have a swiss pine relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"It is true that Judy and Shawn have a swiss pine relationship.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "It is true that Shawn is a tropopause.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"It is true that Shawn is a tropopause.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "If V4 is a rice and V4 is explicitly false as a millet and V0, V1, and V2 have a barley relationship and V2, V3, and V4 have a P7 relationship, then V1 and V2 are explicitly false as a cereal.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"If V4 is a rice and V4 is explicitly false as a millet and V0, V1, and V2 have a barley relationship and V2, V3, and V4 have a P7 relationship, then V1 and V2 are explicitly false as a cereal.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "If V0 and V4 have a bandicoot rat relationship and there is no evidence that V0 and V4 are explicitly false as a rice rat and there is no evidence that V0 and V4 are explicitly false as a swiss pine and there is no evidence that V0 and V4 are explicitly false as a jerboa rat and there is no evidence that V0 and V4 have a black rat relationship, then V4 is explicitly false as a millet.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"If V0 and V4 have a bandicoot rat relationship and there is no evidence that V0 and V4 are explicitly false as a rice rat and there is no evidence that V0 and V4 are explicitly false as a swiss pine and there is no evidence that V0 and V4 are explicitly false as a jerboa rat and there is no evidence that V0 and V4 have a black rat relationship, then V4 is explicitly false as a millet.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "If V0 and V4 have a bandicoot rat relationship and there is no evidence that V0 and V4 are explicitly false as a rice rat and there is no evidence that V0 and V4 are explicitly false as a swiss pine and there is no evidence that V0 and V4 are explicitly false as a jerboa rat and there is no evidence that V0 and V4 have a black rat relationship, then V0 and V4 are explicitly false as a rat.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"If V0 and V4 have a bandicoot rat relationship and there is no evidence that V0 and V4 are explicitly false as a rice rat and there is no evidence that V0 and V4 are explicitly false as a swiss pine and there is no evidence that V0 and V4 are explicitly false as a jerboa rat and there is no evidence that V0 and V4 have a black rat relationship, then V0 and V4 are explicitly false as a rat.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "If V1 and V2 have a sweet corn relationship and V1 and V4 have an ear relationship and V2 and V3 are explicitly false as a corn and there is no evidence that V2 and V3 have a field corn relationship and there is no evidence that V3 and V4 have a corncob relationship, then V2, V3, and V4 have a P7 relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"If V1 and V2 have a sweet corn relationship and V1 and V4 have an ear relationship and V2 and V3 are explicitly false as a corn and there is no evidence that V2 and V3 have a field corn relationship and there is no evidence that V3 and V4 have a corncob relationship, then V2, V3, and V4 have a P7 relationship.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "If V0, V1, and V4 are explicitly false as a rota, then V0 and V4 have a bandicoot rat relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"If V0, V1, and V4 are explicitly false as a rota, then V0 and V4 have a bandicoot rat relationship.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "If V0 and V2 have a most commonly relationship and V0 and V3 are explicitly false as a wear and V0, V1, and V2 have a radio operator relationship, then V0, V1, and V2 have a barley relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"If V0 and V2 have a most commonly relationship and V0 and V3 are explicitly false as a wear and V0, V1, and V2 have a radio operator relationship, then V0, V1, and V2 have a barley relationship.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "If V4 is explicitly false as a millet and there is no evidence that V4 is an asthenosphere, then V4 and V4 have a crust relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"If V4 is explicitly false as a millet and there is no evidence that V4 is an asthenosphere, then V4 and V4 have a crust relationship.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "If V4 is explicitly false as an asthenosphere and there is no evidence that V4 is explicitly false as a tropopause, then V4, V4, and V4 have a layer relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"If V4 is explicitly false as an asthenosphere and there is no evidence that V4 is explicitly false as a tropopause, then V4, V4, and V4 have a layer relationship.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If V1 and V3 have a crust relationship and V2 and V3 are explicitly false as a rat and V1, V3, and V4 have a layer relationship, then V4 is a rice.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If V1 and V3 have a crust relationship and V2 and V3 are explicitly false as a rat and V1, V3, and V4 have a layer relationship, then V4 is a rice.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If V0 and V3 have a deal drugs relationship and there is no evidence that V0 and V3 have a wear relationship, then V0 and V0 have a rice rat relationship.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If V0 and V3 have a deal drugs relationship and there is no evidence that V0 and V3 have a wear relationship, then V0 and V0 have a rice rat relationship.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260423_180307Z_00085890_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-23T18:03:43Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260423_180307Z_00085890.lp",
+  "pipeline_kind": "asp_clincon"
+}

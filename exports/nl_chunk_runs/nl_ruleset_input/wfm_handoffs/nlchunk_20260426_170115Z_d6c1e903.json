@@ -1,0 +1,125 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260426_170115Z_d6c1e903",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_ruleset_input.md' (1-based global rule indices 1–10).\n\nRules in this chunk:\n1. There are three resource managers named rm1, rm2, and rm3.\n2. There is one transaction manager named tm.\n3. Time proceeds in steps numbered 0 through 12.\n4. At time 0, every resource manager is in the working state.\n5. At time 0, the transaction manager is in the init state.\n6. At time 0, no resource manager has crashed.\n7. At time 0, the transaction manager has not crashed.\n8. A resource manager is in exactly one state at each time step.\n9. The possible states for a resource manager are working, prepared, committed, and aborted.\n10. The transaction manager is in exactly one state at each time step.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "There are exactly three resource managers.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"There are exactly three resource managers.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "rm1 is a resource manager.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"rm1 is a resource manager.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "rm2 is a resource manager.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"rm2 is a resource manager.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "rm3 is a resource manager.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"rm3 is a resource manager.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "There is exactly one transaction manager.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"There is exactly one transaction manager.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "tm is a transaction manager.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"tm is a transaction manager.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Time proceeds in discrete steps numbered 0 through 12.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Time proceeds in discrete steps numbered 0 through 12.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "At time step 0, every resource manager is in the working state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"At time step 0, every resource manager is in the working state.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "At time step 0, the transaction manager is in the init state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"At time step 0, the transaction manager is in the init state.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "At time step 0, no resource manager has crashed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"At time step 0, no resource manager has crashed.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "At time step 0, the transaction manager has not crashed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"At time step 0, the transaction manager has not crashed.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every resource manager is in exactly one state at each time step.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every resource manager is in exactly one state at each time step.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "The possible states for a resource manager are working, prepared, committed, and aborted.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"The possible states for a resource manager are working, prepared, committed, and aborted.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "The transaction manager is in exactly one state at each time step.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"The transaction manager is in exactly one state at each time step.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260426_170115Z_d6c1e903_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-26T17:02:21Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

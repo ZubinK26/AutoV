@@ -1,5 +1,7 @@
 # NL→Z3 pipeline — ASCII diagram & build status
 
+**Status:** The **shipping** path from confirmed WFM to logic is **`smt_pipeline`** (SMT-LIB + Z3 parse checks in-loop). See **`docs/pipeline_wfm_to_smt.md`**. The diagram below still shows a **registry-centric** sequence (registry before formalizer) that matches older planning; treat it as **conceptual**, not an exact mirror of `smt_pipeline` wiring.
+
 Companion to **`pipeline_spec.md`**. The numbered steps and full architecture are defined there; this file is only the **diagram** and **legend**.
 
 ---

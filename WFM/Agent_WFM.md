@@ -26,7 +26,7 @@ Ensures **complete**, **unambiguous** (including coreference), and **within-scop
 
 | **Unambiguous information** | LLM flags ambiguity **including coreference**. Coreference is **not** a separate agent step; it is handled **under ambiguity**. |
 
-| **Within-scope** | LLM flags against in-scope / out-of-scope patterns; scope lists are in the Agent 3 prompt and **`pipeline_spec.md`**. |
+| **Within-scope** | LLM flags against in-scope / out-of-scope patterns for the **ClinCon-safe ASP** target (see **`docs/pipeline_wfm_to_asp.md` §2**); the Agent 3 prompt and **`pipeline_spec.md`** (ClinCon note) are the practical references. Legacy **many-sorted FOL** scope in **`pipeline_spec.md`** applies to the **SMT** product line only. |
 
 
 
@@ -380,5 +380,5 @@ The **Agent 4 LLM** **does not** inject extra context into Agents 1–3 on loop-
 
 
 
-This document is the **source of truth** for WFM behavior; **`pipeline_spec.md`** aligns to it.
+This document is the **source of truth** for WFM behavior. **`pipeline_spec.md`** aligns for shared handoff/registry contracts; **formalization scope** for the ClinCon product line is **`docs/pipeline_wfm_to_asp.md` §2** in addition to Agent 3.
 

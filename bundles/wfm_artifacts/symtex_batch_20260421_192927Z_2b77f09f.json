@@ -1,0 +1,277 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260421_192927Z_2b77f09f",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nanyone(Alan, Elizabeth, Kristina) is explicitly false.\nbruin(Alan, Elizabeth, Mark) is explicitly false.\ndais(Alan) is explicitly false.\neat_meat(Alan) is explicitly false.\nentering_building(Alan) is explicitly false.\nmeasure(Alan, Mark) is explicitly false.\npriest(Theresa, Elizabeth, Kristina) is explicitly false.\nprofit(Alan) is explicitly false.\nsao_goncalo(Alan, Elizabeth, Kristina) is explicitly false.\nyak_butter(Theresa, Alan, Kristina) is explicitly false.\ncarancha(Theresa, Alan) is true.\nflank(Theresa, Elizabeth, Kristina) is true.\nobject(Theresa, Alan) is true.\npancreas(Theresa, Alan) is true.\n\nRules:\nIf kids(V0, V2, V4) is explicitly false, then coming_back_home(V0, V0) is explicitly false.\nIf eat_meat(V1) is explicitly false and yak_butter(V0, V1, V3) is explicitly false and flank(V0, V2, V3) is true and priest(V0, V2, V3) is explicitly false and bruin(V1, V2, V4) is explicitly false, then head(V0, V1) is explicitly false or kids(V0, V2, V4) is explicitly false or zebra(V1, V4) is explicitly false or waiter(V0, V4) is explicitly false.\nIf coming_back_home(V1, V3) is explicitly false and there is no evidence that dais(V1) is true, then jackdaw(V3, V1) is explicitly false.\nIf mailer(V0, V1) is true and there is no evidence that jackdaw(V0, V1) is true and there is no evidence that object(V0, V1) is explicitly false and there is no evidence that pancreas(V0, V1) is explicitly false and there is no evidence that carancha(V0, V1) is explicitly false, then liberian_dollar(V0, V1, V0) is explicitly false.\nIf waiter(V0, V4) is explicitly false and having_to_eat(V0, V2) is true, then linoleum(V4, V2, V4) is explicitly false or character(V2, V2, V0) is true.\nIf eat_meat(V1) is explicitly false and there is no evidence that entering_building(V1) is true and there is no evidence that dais(V1) is true and there is no evidence that profit(V1) is true, then gleaner(V1, V1) is true or mailer(V1, V1) is true or bittersweet_chocolate(V1, V1, V1) is true.\nIf zebra(V1, V4) is explicitly false and there is no evidence that measure(V1, V4) is true, then having_to_eat(V1, V4) is true.\nIf bittersweet_chocolate(V1, V2, V3) is true and character(V1, V2, V3) is true and sao_goncalo(V1, V2, V3) is explicitly false and measure(V1, V4) is explicitly false and there is no evidence that anyone(V1, V2, V3) is true, then row_of_bricks(V4, V2, V3) is true.\nIf head(V0, V1) is explicitly false and gleaner(V3, V4) is true and liberian_dollar(V0, V1, V2) is explicitly false and there is no evidence that row_of_bricks(V0, V2, V3) is explicitly false and there is no evidence that linoleum(V1, V2, V4) is true, then two_wheeled_vehicles(V4) is true.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "It is explicitly false that Alan is anyone.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"It is explicitly false that Alan is anyone.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "It is explicitly false that Elizabeth is anyone.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"It is explicitly false that Elizabeth is anyone.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "It is explicitly false that Kristina is anyone.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"It is explicitly false that Kristina is anyone.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "It is explicitly false that Alan is a bruin.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"It is explicitly false that Alan is a bruin.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "It is explicitly false that Elizabeth is a bruin.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"It is explicitly false that Elizabeth is a bruin.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "It is explicitly false that Mark is a bruin.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"It is explicitly false that Mark is a bruin.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "It is explicitly false that Alan is a dais.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"It is explicitly false that Alan is a dais.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "It is explicitly false that Alan eats meat.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"It is explicitly false that Alan eats meat.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "It is explicitly false that Alan is entering a building.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"It is explicitly false that Alan is entering a building.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "It is explicitly false that Alan measures Mark.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"It is explicitly false that Alan measures Mark.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "It is explicitly false that Theresa is a priest.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"It is explicitly false that Theresa is a priest.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "It is explicitly false that Elizabeth is a priest.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"It is explicitly false that Elizabeth is a priest.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "It is explicitly false that Kristina is a priest.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"It is explicitly false that Kristina is a priest.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "It is explicitly false that Alan is a profit.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"It is explicitly false that Alan is a profit.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "It is explicitly false that Alan is sao goncalo.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"It is explicitly false that Alan is sao goncalo.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "It is explicitly false that Elizabeth is sao goncalo.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"It is explicitly false that Elizabeth is sao goncalo.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "It is explicitly false that Kristina is sao goncalo.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"It is explicitly false that Kristina is sao goncalo.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "It is explicitly false that Theresa is yak butter.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"It is explicitly false that Theresa is yak butter.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "It is explicitly false that Alan is yak butter.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"It is explicitly false that Alan is yak butter.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "It is explicitly false that Kristina is yak butter.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"It is explicitly false that Kristina is yak butter.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "Theresa and Alan are carancha.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"Theresa and Alan are carancha.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "Theresa, Elizabeth, and Kristina are flank.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"Theresa, Elizabeth, and Kristina are flank.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "Theresa and Alan are an object.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"Theresa and Alan are an object.\""
+    },
+    {
+      "line_index": 23,
+      "statement_nl": "Theresa and Alan are a pancreas.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "24. \"Theresa and Alan are a pancreas.\""
+    },
+    {
+      "line_index": 24,
+      "statement_nl": "If it is explicitly false that V0, V2, and V4 are kids, then it is explicitly false that V0 is coming back home to V0.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "25. \"If it is explicitly false that V0, V2, and V4 are kids, then it is explicitly false that V0 is coming back home to V0.\""
+    },
+    {
+      "line_index": 25,
+      "statement_nl": "If it is explicitly false that V1 eats meat, it is explicitly false that V0, V1, and V3 are yak butter, V0, V2, and V3 are flank, it is explicitly false that V0, V2, and V3 are priests, and it is explicitly false that V1, V2, and V4 are bruins, then it is explicitly false that V0 is the head of V1 or it is explicitly false that V0, V2, and V4 are kids or it is explicitly false that V1 and V4 are a zebra or it is explicitly false that V0 and V4 are a waiter.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "26. \"If it is explicitly false that V1 eats meat, it is explicitly false that V0, V1, and V3 are yak butter, V0, V2, and V3 are flank, it is explicitly false that V0, V2, and V3 are priests, and it is explicitly false that V1, V2, and V4 are bruins, then it is explicitly false that V0 is the head of V1 or it is explicitly false that V0, V2, and V4 are kids or it is explicitly false that V1 and V4 are a zebra or it is explicitly false that V0 and V4 are a waiter.\""
+    },
+    {
+      "line_index": 26,
+      "statement_nl": "If it is explicitly false that V1 is coming back home to V3 and there is no evidence that V1 is a dais, then it is explicitly false that V3 and V1 are a jackdaw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "27. \"If it is explicitly false that V1 is coming back home to V3 and there is no evidence that V1 is a dais, then it is explicitly false that V3 and V1 are a jackdaw.\""
+    },
+    {
+      "line_index": 27,
+      "statement_nl": "If V0 and V1 are a mailer, there is no evidence that V0 and V1 are a jackdaw, there is no evidence that it is explicitly false that V0 and V1 are an object, there is no evidence that it is explicitly false that V0 and V1 are a pancreas, and there is no evidence that it is explicitly false that V0 and V1 are carancha, then it is explicitly false that V0, V1, and V0 are a liberian dollar.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "28. \"If V0 and V1 are a mailer, there is no evidence that V0 and V1 are a jackdaw, there is no evidence that it is explicitly false that V0 and V1 are an object, there is no evidence that it is explicitly false that V0 and V1 are a pancreas, and there is no evidence that it is explicitly false that V0 and V1 are carancha, then it is explicitly false that V0, V1, and V0 are a liberian dollar.\""
+    },
+    {
+      "line_index": 28,
+      "statement_nl": "If it is explicitly false that V0 and V4 are a waiter and V0 and V2 are having to eat, then it is explicitly false that V4, V2, and V4 are linoleum or V2, V2, and V0 are a character.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "29. \"If it is explicitly false that V0 and V4 are a waiter and V0 and V2 are having to eat, then it is explicitly false that V4, V2, and V4 are linoleum or V2, V2, and V0 are a character.\""
+    },
+    {
+      "line_index": 29,
+      "statement_nl": "If it is explicitly false that V1 eats meat, there is no evidence that V1 is entering a building, there is no evidence that V1 is a dais, and there is no evidence that V1 is a profit, then V1 and V1 are a gleaner or V1 and V1 are a mailer or V1, V1, and V1 are bittersweet chocolate.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "30. \"If it is explicitly false that V1 eats meat, there is no evidence that V1 is entering a building, there is no evidence that V1 is a dais, and there is no evidence that V1 is a profit, then V1 and V1 are a gleaner or V1 and V1 are a mailer or V1, V1, and V1 are bittersweet chocolate.\""
+    },
+    {
+      "line_index": 30,
+      "statement_nl": "If it is explicitly false that V1 and V4 are a zebra and there is no evidence that V1 measures V4, then V1 and V4 are having to eat.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "31. \"If it is explicitly false that V1 and V4 are a zebra and there is no evidence that V1 measures V4, then V1 and V4 are having to eat.\""
+    },
+    {
+      "line_index": 31,
+      "statement_nl": "If V1, V2, and V3 are bittersweet chocolate, V1, V2, and V3 are a character, it is explicitly false that V1, V2, and V3 are sao goncalo, it is explicitly false that V1 measures V4, and there is no evidence that V1, V2, and V3 are anyone, then V4, V2, and V3 are a row of bricks.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "32. \"If V1, V2, and V3 are bittersweet chocolate, V1, V2, and V3 are a character, it is explicitly false that V1, V2, and V3 are sao goncalo, it is explicitly false that V1 measures V4, and there is no evidence that V1, V2, and V3 are anyone, then V4, V2, and V3 are a row of bricks.\""
+    },
+    {
+      "line_index": 32,
+      "statement_nl": "If it is explicitly false that V0 is the head of V1, V3 and V4 are a gleaner, it is explicitly false that V0, V1, and V2 are a liberian dollar, there is no evidence that it is explicitly false that V0, V2, and V3 are a row of bricks, and there is no evidence that V1, V2, and V4 are linoleum, then V4 is a two wheeled vehicle.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "33. \"If it is explicitly false that V0 is the head of V1, V3 and V4 are a gleaner, it is explicitly false that V0, V1, and V2 are a liberian dollar, there is no evidence that it is explicitly false that V0, V2, and V3 are a row of bricks, and there is no evidence that V1, V2, and V4 are linoleum, then V4 is a two wheeled vehicle.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260421_192927Z_2b77f09f_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-21T19:29:51Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

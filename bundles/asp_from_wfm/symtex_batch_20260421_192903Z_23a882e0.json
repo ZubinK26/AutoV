@@ -1,0 +1,439 @@
+{
+  "bundle_id": "symtex_batch_20260421_192903Z_23a882e0",
+  "accepted_at": "2026-04-23T17:05:13Z",
+  "committed_at": "2026-04-23T17:05:39Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_cace532777c2",
+    "r_fd21ede045c2",
+    "r_9fdbb2625eea",
+    "r_86f441234005",
+    "r_d9cc1a5e8633",
+    "r_e9828dd1bc29",
+    "r_bec699278f14",
+    "r_a890a88d95e8",
+    "r_cbee74f0806e",
+    "r_8dd4af12eb6b",
+    "r_2caba6189656",
+    "r_171aab24470f",
+    "r_676a6b407406",
+    "r_8956ce96fbe9",
+    "r_4afea342f192",
+    "r_98973a2a9c86",
+    "r_c9ce12331dd3",
+    "r_ea92fa2257fa",
+    "r_af788951377c",
+    "r_35f995a4609f",
+    "r_434c8aa55f50",
+    "r_7e9398a25b0e",
+    "r_843abf27cd8c",
+    "r_f526d8911398",
+    "r_e54d006be874",
+    "r_68c2abc404d6",
+    "r_21dbe66d2dd2",
+    "r_e75aa5560080",
+    "r_ce3938b98da0",
+    "r_aec8f76365ad",
+    "r_ea77ea7b0b8b",
+    "r_1c61b7d117f4",
+    "r_9025318028af",
+    "r_0c15ca96772f",
+    "r_1ccf744cd386",
+    "r_5b111083365d",
+    "r_44186527a5cd",
+    "r_e256a9e3d568",
+    "r_38d7052288b2",
+    "r_9696c55e6e82",
+    "r_dd09fa2d021d",
+    "r_27555d1f4245",
+    "r_b7b77cd3ae89",
+    "r_279ba3dfbc8d",
+    "r_fb8568f8904a",
+    "r_9a01f9215bbb"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260421_192903Z_23a882e0",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\narrive is explicitly false.\ncaste is explicitly false.\nfinancial_institution is explicitly false.\nfuzzy is explicitly false.\nhoneycreeper is explicitly false.\nlifting_things is explicitly false.\nlumberjack is explicitly false.\nmenorrhea is explicitly false.\nquagga is explicitly false.\nsnow is explicitly false.\nspoon is explicitly false.\nstoner is explicitly false.\nstore_farm_equipment_and_animals is explicitly false.\nburn_bag is true.\nchina is true.\ndigging is true.\nelderberry is true.\nentrance is true.\newe is true.\nrace is true.\nskull_and_crossbones is true.\nspur is true.\nwear_sweater is true.\n\nRules:\nIf there is no evidence that spoon is true and there is no evidence that race is explicitly false and there is no evidence that menorrhea is true and entrance is true, then center is explicitly false.\nIf dishes is explicitly false and there is no evidence that writing_story is explicitly false and there is no evidence that salmon is true and there is no evidence that possible is true and there is no evidence that commander is true, then digging is explicitly false.\nIf spur is true, then eddy is explicitly false.\nIf spur is true, then georgia is explicitly false.\nIf commander is true and there is no evidence that snow is true and there is no evidence that lifting_things is true and there is no evidence that china is explicitly false and there is no evidence that fuzzy is true, then pear is explicitly false.\nIf dishes is true and there is no evidence that writing_story is true and there is no evidence that georgia is true, then repeat is explicitly false.\nIf basket_star is explicitly false and there is no evidence that eddy is explicitly false and there is no evidence that lumberjack is true and there is no evidence that financial_institution is true, then skeletal_structure is explicitly false.\nIf there is no evidence that petitioner is true and there is no evidence that writing_story is explicitly false and repeat is true, then spur is explicitly false.\nIf honeycreeper is explicitly false and there is no evidence that digging is explicitly false and there is no evidence that wear_sweater is explicitly false and there is no evidence that burn_bag is explicitly false and there is no evidence that arrive is true, then victimless_crime is explicitly false.\nIf petitioner is true and there is no evidence that victimless_crime is true and there is no evidence that possible is explicitly false and there is no evidence that beer_mug is explicitly false and there is no evidence that quagga is true, then writing_story is explicitly false.\nIf pear is explicitly false, then basket_star is true.\nIf stoner is explicitly false, then beer_mug is true.\nIf eddy is explicitly false and there is no evidence that caste is true, then commander is true.\nIf honeycreeper is explicitly false and there is no evidence that digging is explicitly false and there is no evidence that wear_sweater is explicitly false and there is no evidence that burn_bag is explicitly false and there is no evidence that arrive is true, then dishes is true.\nIf victimless_crime is true and there is no evidence that writing_story is explicitly false and there is no evidence that salmon is true and there is no evidence that possible is true and pear is true, then fuzzy is true.\nIf there is no evidence that store_farm_equipment_and_animals is true and elderberry is true, then golf is true.\nIf beer_mug is explicitly false and repeat is true, then honeycreeper is true.\nIf victimless_crime is true and writing_story is true and salmon is explicitly false and skull_and_crossbones is true, then pear is true.\nIf basket_star is true and there is no evidence that salmon is explicitly false and there is no evidence that eddy is true and there is no evidence that ewe is explicitly false, then petitioner is true.\nIf eddy is explicitly false and there is no evidence that caste is true, then possible is true.\nIf there is no evidence that dishes is true and georgia is true and beer_mug is explicitly false, then repeat is true.\nIf there is no evidence that petitioner is true and basket_star is explicitly false and there is no evidence that salmon is true, then repeat is true.\nIf eddy is explicitly false and there is no evidence that caste is true, then salmon is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Arrive is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Arrive is explicitly false.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "Caste is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Caste is explicitly false.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Financial institution is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Financial institution is explicitly false.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Fuzzy is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Fuzzy is explicitly false.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Honeycreeper is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Honeycreeper is explicitly false.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Lifting things is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Lifting things is explicitly false.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Lumberjack is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Lumberjack is explicitly false.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Menorrhea is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Menorrhea is explicitly false.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Quagga is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Quagga is explicitly false.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Snow is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Snow is explicitly false.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Spoon is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Spoon is explicitly false.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "Stoner is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"Stoner is explicitly false.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "Store farm equipment and animals is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"Store farm equipment and animals is explicitly false.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "Burn bag is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"Burn bag is true.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "China is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"China is true.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "Digging is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"Digging is true.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "Elderberry is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"Elderberry is true.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "Entrance is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"Entrance is true.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "Ewe is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"Ewe is true.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "Race is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"Race is true.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "Skull and crossbones is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"Skull and crossbones is true.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "Spur is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"Spur is true.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "Wear sweater is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"Wear sweater is true.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If there is no evidence that spoon is true, and there is no evidence that race is explicitly false, and there is no evidence that menorrhea is true, and entrance is true, then center is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If there is no evidence that spoon is true, and there is no evidence that race is explicitly false, and there is no evidence that menorrhea is true, and entrance is true, then center is explicitly false.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If dishes is explicitly false, and there is no evidence that writing story is explicitly false, and there is no evidence that salmon is true, and there is no evidence that possible is true, and there is no evidence that commander is true, then digging is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If dishes is explicitly false, and there is no evidence that writing story is explicitly false, and there is no evidence that salmon is true, and there is no evidence that possible is true, and there is no evidence that commander is true, then digging is explicitly false.\""
+      },
+      {
+        "line_index": 25,
+        "statement_nl": "If spur is true, then eddy is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "26. \"If spur is true, then eddy is explicitly false.\""
+      },
+      {
+        "line_index": 26,
+        "statement_nl": "If spur is true, then georgia is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "27. \"If spur is true, then georgia is explicitly false.\""
+      },
+      {
+        "line_index": 27,
+        "statement_nl": "If commander is true, and there is no evidence that snow is true, and there is no evidence that lifting things is true, and there is no evidence that china is explicitly false, and there is no evidence that fuzzy is true, then pear is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "28. \"If commander is true, and there is no evidence that snow is true, and there is no evidence that lifting things is true, and there is no evidence that china is explicitly false, and there is no evidence that fuzzy is true, then pear is explicitly false.\""
+      },
+      {
+        "line_index": 28,
+        "statement_nl": "If dishes is true, and there is no evidence that writing story is true, and there is no evidence that georgia is true, then repeat is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "29. \"If dishes is true, and there is no evidence that writing story is true, and there is no evidence that georgia is true, then repeat is explicitly false.\""
+      },
+      {
+        "line_index": 29,
+        "statement_nl": "If basket star is explicitly false, and there is no evidence that eddy is explicitly false, and there is no evidence that lumberjack is true, and there is no evidence that financial institution is true, then skeletal structure is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "30. \"If basket star is explicitly false, and there is no evidence that eddy is explicitly false, and there is no evidence that lumberjack is true, and there is no evidence that financial institution is true, then skeletal structure is explicitly false.\""
+      },
+      {
+        "line_index": 30,
+        "statement_nl": "If there is no evidence that petitioner is true, and there is no evidence that writing story is explicitly false, and repeat is true, then spur is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "31. \"If there is no evidence that petitioner is true, and there is no evidence that writing story is explicitly false, and repeat is true, then spur is explicitly false.\""
+      },
+      {
+        "line_index": 31,
+        "statement_nl": "If honeycreeper is explicitly false, and there is no evidence that digging is explicitly false, and there is no evidence that wear sweater is explicitly false, and there is no evidence that burn bag is explicitly false, and there is no evidence that arrive is true, then victimless crime is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "32. \"If honeycreeper is explicitly false, and there is no evidence that digging is explicitly false, and there is no evidence that wear sweater is explicitly false, and there is no evidence that burn bag is explicitly false, and there is no evidence that arrive is true, then victimless crime is explicitly false.\""
+      },
+      {
+        "line_index": 32,
+        "statement_nl": "If petitioner is true, and there is no evidence that victimless crime is true, and there is no evidence that possible is explicitly false, and there is no evidence that beer mug is explicitly false, and there is no evidence that quagga is true, then writing story is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "33. \"If petitioner is true, and there is no evidence that victimless crime is true, and there is no evidence that possible is explicitly false, and there is no evidence that beer mug is explicitly false, and there is no evidence that quagga is true, then writing story is explicitly false.\""
+      },
+      {
+        "line_index": 33,
+        "statement_nl": "If pear is explicitly false, then basket star is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "34. \"If pear is explicitly false, then basket star is true.\""
+      },
+      {
+        "line_index": 34,
+        "statement_nl": "If stoner is explicitly false, then beer mug is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "35. \"If stoner is explicitly false, then beer mug is true.\""
+      },
+      {
+        "line_index": 35,
+        "statement_nl": "If eddy is explicitly false and there is no evidence that caste is true, then commander is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "36. \"If eddy is explicitly false and there is no evidence that caste is true, then commander is true.\""
+      },
+      {
+        "line_index": 36,
+        "statement_nl": "If honeycreeper is explicitly false, and there is no evidence that digging is explicitly false, and there is no evidence that wear sweater is explicitly false, and there is no evidence that burn bag is explicitly false, and there is no evidence that arrive is true, then dishes is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "37. \"If honeycreeper is explicitly false, and there is no evidence that digging is explicitly false, and there is no evidence that wear sweater is explicitly false, and there is no evidence that burn bag is explicitly false, and there is no evidence that arrive is true, then dishes is true.\""
+      },
+      {
+        "line_index": 37,
+        "statement_nl": "If victimless crime is true, and there is no evidence that writing story is explicitly false, and there is no evidence that salmon is true, and there is no evidence that possible is true, and pear is true, then fuzzy is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "38. \"If victimless crime is true, and there is no evidence that writing story is explicitly false, and there is no evidence that salmon is true, and there is no evidence that possible is true, and pear is true, then fuzzy is true.\""
+      },
+      {
+        "line_index": 38,
+        "statement_nl": "If there is no evidence that store farm equipment and animals is true and elderberry is true, then golf is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "39. \"If there is no evidence that store farm equipment and animals is true and elderberry is true, then golf is true.\""
+      },
+      {
+        "line_index": 39,
+        "statement_nl": "If beer mug is explicitly false and repeat is true, then honeycreeper is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "40. \"If beer mug is explicitly false and repeat is true, then honeycreeper is true.\""
+      },
+      {
+        "line_index": 40,
+        "statement_nl": "If victimless crime is true, and writing story is true, and salmon is explicitly false, and skull and crossbones is true, then pear is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "41. \"If victimless crime is true, and writing story is true, and salmon is explicitly false, and skull and crossbones is true, then pear is true.\""
+      },
+      {
+        "line_index": 41,
+        "statement_nl": "If basket star is true, and there is no evidence that salmon is explicitly false, and there is no evidence that eddy is true, and there is no evidence that ewe is explicitly false, then petitioner is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "42. \"If basket star is true, and there is no evidence that salmon is explicitly false, and there is no evidence that eddy is true, and there is no evidence that ewe is explicitly false, then petitioner is true.\""
+      },
+      {
+        "line_index": 42,
+        "statement_nl": "If eddy is explicitly false and there is no evidence that caste is true, then possible is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "43. \"If eddy is explicitly false and there is no evidence that caste is true, then possible is true.\""
+      },
+      {
+        "line_index": 43,
+        "statement_nl": "If there is no evidence that dishes is true, and georgia is true, and beer mug is explicitly false, then repeat is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "44. \"If there is no evidence that dishes is true, and georgia is true, and beer mug is explicitly false, then repeat is true.\""
+      },
+      {
+        "line_index": 44,
+        "statement_nl": "If there is no evidence that petitioner is true, and basket star is explicitly false, and there is no evidence that salmon is true, then repeat is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "45. \"If there is no evidence that petitioner is true, and basket star is explicitly false, and there is no evidence that salmon is true, then repeat is true.\""
+      },
+      {
+        "line_index": 45,
+        "statement_nl": "If eddy is explicitly false and there is no evidence that caste is true, then salmon is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "46. \"If eddy is explicitly false and there is no evidence that caste is true, then salmon is true.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260421_192903Z_23a882e0_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-21T19:29:24Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260421_192903Z_23a882e0.lp",
+  "pipeline_kind": "asp_clincon"
+}

@@ -1,0 +1,349 @@
+{
+  "bundle_id": "symtex_batch_20260421_192951Z_f3e21224",
+  "accepted_at": "2026-04-23T17:06:15Z",
+  "committed_at": "2026-04-23T17:08:00Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_f9119c510d7c",
+    "r_75df3dd384ba",
+    "r_a2dc318141d2",
+    "r_73730d815e6b",
+    "r_873a7d874c45",
+    "r_e293e93fd778",
+    "r_2292f4e5cb99",
+    "r_41dee07507f7",
+    "r_bfc4c1a9138e",
+    "r_d93165433312",
+    "r_cb3d7c4974cb",
+    "r_6a3ad1fc8fcf",
+    "r_d626e38e9a4f",
+    "r_cbe433634743",
+    "r_2507978615f2",
+    "r_7227a3653020",
+    "r_d2c31df07c25",
+    "r_e0926677d69f",
+    "r_a5b293d2fcc6",
+    "r_15365e271d38",
+    "r_6046bdc23c2f",
+    "r_f6efbf06689b",
+    "r_6d97a0913014",
+    "r_50199b02c59e",
+    "r_c9dd038f940d",
+    "r_affbaca6e963",
+    "r_a8906181db3f",
+    "r_49a0a44df292",
+    "r_7d214733c4c5",
+    "r_792f8b1e00a9",
+    "r_02ab4c965950",
+    "r_b85c5a2e6978",
+    "r_3409da2241b7",
+    "r_57ac0f30fbee",
+    "r_f26261f75b27",
+    "r_080e1980669c"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260421_192951Z_f3e21224",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nP12(\"David\", \"Michelle\") is explicitly false.\nP15(\"David\", \"Michelle\") is explicitly false.\nP18(\"David\", \"Joe\") is explicitly false.\nP19(\"David\", \"Joe\") is explicitly false.\nP20(\"Michelle\") is explicitly false.\nP24(\"David\", \"Michelle\") is explicitly false.\nP26(\"David\", \"Michelle\") is explicitly false.\nP31(\"David\", \"Diana\") is explicitly false.\nP32(\"David\", \"Joe\") is explicitly false.\nP13(David) is true.\nP14(\"David\", \"Michelle\") is true.\nP16(Michelle) is true.\nP17(\"David\", \"Michelle\") is true.\nP21(Michelle) is true.\nP22(David) is true.\nP23(David) is true.\nP28(Diana) is true.\nP29(Diana) is true.\nP30(\"David\", \"Michelle\") is true.\n\nRules:\nIf P12(V0, V1) is explicitly false, then P1(V0, V1) is explicitly false or P2(V0) is true.\nIf P0(V1) is true and P3(V0, V1) is true and there is no evidence that P5(V0, V1) is true and there is no evidence that P9(V0, V1) is explicitly false, then P11(V0, V1) is explicitly false.\nIf there is no evidence that P2(V0) is true and there is no evidence that P4(V1) is explicitly false and P6(V0, V1) is explicitly false and P8(V1) is explicitly false and there is no evidence that P11(V0, V1) is explicitly false, then P16(V1) is explicitly false.\nIf P1(V0, V1) is true and P3(V0, V1) is explicitly false and P6(V0, V1) is explicitly false and P24(V0, V1) is explicitly false, then P2(V0) is explicitly false.\nIf P28(V2) is true and P29(V2) is true and P30(V0, V1) is true and P31(V0, V2) is explicitly false and P32(V0, V3) is explicitly false, then P27(V3) is explicitly false.\nIf P4(V1) is explicitly false and there is no evidence that P7(V1) is true and there is no evidence that P10(V1) is true and there is no evidence that P20(V1) is true and there is no evidence that P21(V1) is explicitly false, then P5(V1, V1) is explicitly false.\nIf P1(V0, V1) is explicitly false and there is no evidence that P6(V0, V1) is explicitly false and there is no evidence that P9(V0, V1) is explicitly false and there is no evidence that P14(V0, V1) is explicitly false and there is no evidence that P15(V0, V1) is true, then P0(V1) is true.\nIf P1(V0, V1) is true and P7(V1) is true and P10(V1) is true, then P11(V0, V1) is true.\nIf P4(V1) is true, then P11(V1, V1) is true.\nIf P0(V1) is explicitly false and there is no evidence that P2(V0) is true and P6(V0, V1) is explicitly false and there is no evidence that P10(V1) is explicitly false and there is no evidence that P11(V0, V1) is explicitly false, then P18(V0, V1) is true.\nIf P8(V1) is explicitly false, then P20(V1) is true.\nIf there is no evidence that P0(V1) is true and P1(V0, V1) is true and there is no evidence that P6(V0, V1) is true and P9(V0, V1) is explicitly false and there is no evidence that P10(V1) is explicitly false, then P20(V1) is true.\nIf P26(V0, V1) is explicitly false, then P25(V0, V1) is true.\nIf P13(V0) is true and P16(V1) is true and P17(V0, V1) is true and P18(V0, V3) is explicitly false and there is no evidence that P19(V0, V3) is true, then P3(V0, V1) is true or P4(V1) is explicitly false.\nIf P4(V1) is true, then P5(V1, V1) is true.\nIf P2(V0) is true and there is no evidence that P22(V0) is explicitly false and there is no evidence that P23(V0) is explicitly false, then P6(V0, V0) is true or P7(V0) is explicitly false or P8(V0) is true.\nIf P8(V1) is true, then P9(V1, V1) is true or P10(V1) is explicitly false.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "The relationship P12 between David and Michelle is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"The relationship P12 between David and Michelle is explicitly false.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The relationship P15 between David and Michelle is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The relationship P15 between David and Michelle is explicitly false.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "The relationship P18 between David and Joe is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"The relationship P18 between David and Joe is explicitly false.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "The relationship P19 between David and Joe is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"The relationship P19 between David and Joe is explicitly false.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "The property P20 of Michelle is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"The property P20 of Michelle is explicitly false.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "The relationship P24 between David and Michelle is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"The relationship P24 between David and Michelle is explicitly false.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The relationship P26 between David and Michelle is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The relationship P26 between David and Michelle is explicitly false.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "The relationship P31 between David and Diana is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"The relationship P31 between David and Diana is explicitly false.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "The relationship P32 between David and Joe is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"The relationship P32 between David and Joe is explicitly false.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "The property P13 of David is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"The property P13 of David is true.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "The relationship P14 between David and Michelle is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"The relationship P14 between David and Michelle is true.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "The property P16 of Michelle is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"The property P16 of Michelle is true.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "The relationship P17 between David and Michelle is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"The relationship P17 between David and Michelle is true.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "The property P21 of Michelle is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"The property P21 of Michelle is true.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "The property P22 of David is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"The property P22 of David is true.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "The property P23 of David is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"The property P23 of David is true.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "The property P28 of Diana is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"The property P28 of Diana is true.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "The property P29 of Diana is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"The property P29 of Diana is true.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "The relationship P30 between David and Michelle is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"The relationship P30 between David and Michelle is true.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "If the relationship P12 between entity V0 and entity V1 is explicitly false, then the relationship P1 between V0 and V1 is explicitly false or the property P2 of V0 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"If the relationship P12 between entity V0 and entity V1 is explicitly false, then the relationship P1 between V0 and V1 is explicitly false or the property P2 of V0 is true.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "If the property P0 of entity V1 is true and the relationship P3 between entity V0 and V1 is true and there is no evidence that the relationship P5 between V0 and V1 is true and there is no evidence that the relationship P9 between V0 and V1 is explicitly false, then the relationship P11 between V0 and V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"If the property P0 of entity V1 is true and the relationship P3 between entity V0 and V1 is true and there is no evidence that the relationship P5 between V0 and V1 is true and there is no evidence that the relationship P9 between V0 and V1 is explicitly false, then the relationship P11 between V0 and V1 is explicitly false.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "If there is no evidence that the property P2 of entity V0 is true and there is no evidence that the property P4 of entity V1 is explicitly false and the relationship P6 between V0 and V1 is explicitly false and the property P8 of V1 is explicitly false and there is no evidence that the relationship P11 between V0 and V1 is explicitly false, then the property P16 of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"If there is no evidence that the property P2 of entity V0 is true and there is no evidence that the property P4 of entity V1 is explicitly false and the relationship P6 between V0 and V1 is explicitly false and the property P8 of V1 is explicitly false and there is no evidence that the relationship P11 between V0 and V1 is explicitly false, then the property P16 of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "If the relationship P1 between entity V0 and entity V1 is true and the relationship P3 between V0 and V1 is explicitly false and the relationship P6 between V0 and V1 is explicitly false and the relationship P24 between V0 and V1 is explicitly false, then the property P2 of V0 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"If the relationship P1 between entity V0 and entity V1 is true and the relationship P3 between V0 and V1 is explicitly false and the relationship P6 between V0 and V1 is explicitly false and the relationship P24 between V0 and V1 is explicitly false, then the property P2 of V0 is explicitly false.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If the property P28 of entity V2 is true and the property P29 of V2 is true and the relationship P30 between entity V0 and entity V1 is true and the relationship P31 between V0 and V2 is explicitly false and the relationship P32 between V0 and entity V3 is explicitly false, then the property P27 of V3 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If the property P28 of entity V2 is true and the property P29 of V2 is true and the relationship P30 between entity V0 and entity V1 is true and the relationship P31 between V0 and V2 is explicitly false and the relationship P32 between V0 and entity V3 is explicitly false, then the property P27 of V3 is explicitly false.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If the property P4 of entity V1 is explicitly false and there is no evidence that the property P7 of V1 is true and there is no evidence that the property P10 of V1 is true and there is no evidence that the property P20 of V1 is true and there is no evidence that the property P21 of V1 is explicitly false, then the relationship P5 between V1 and V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If the property P4 of entity V1 is explicitly false and there is no evidence that the property P7 of V1 is true and there is no evidence that the property P10 of V1 is true and there is no evidence that the property P20 of V1 is true and there is no evidence that the property P21 of V1 is explicitly false, then the relationship P5 between V1 and V1 is explicitly false.\""
+      },
+      {
+        "line_index": 25,
+        "statement_nl": "If the relationship P1 between entity V0 and entity V1 is explicitly false and there is no evidence that the relationship P6 between V0 and V1 is explicitly false and there is no evidence that the relationship P9 between V0 and V1 is explicitly false and there is no evidence that the relationship P14 between V0 and V1 is explicitly false and there is no evidence that the relationship P15 between V0 and V1 is true, then the property P0 of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "26. \"If the relationship P1 between entity V0 and entity V1 is explicitly false and there is no evidence that the relationship P6 between V0 and V1 is explicitly false and there is no evidence that the relationship P9 between V0 and V1 is explicitly false and there is no evidence that the relationship P14 between V0 and V1 is explicitly false and there is no evidence that the relationship P15 between V0 and V1 is true, then the property P0 of V1 is true.\""
+      },
+      {
+        "line_index": 26,
+        "statement_nl": "If the relationship P1 between entity V0 and entity V1 is true and the property P7 of V1 is true and the property P10 of V1 is true, then the relationship P11 between V0 and V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "27. \"If the relationship P1 between entity V0 and entity V1 is true and the property P7 of V1 is true and the property P10 of V1 is true, then the relationship P11 between V0 and V1 is true.\""
+      },
+      {
+        "line_index": 27,
+        "statement_nl": "If the property P4 of entity V1 is true, then the relationship P11 between V1 and V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "28. \"If the property P4 of entity V1 is true, then the relationship P11 between V1 and V1 is true.\""
+      },
+      {
+        "line_index": 28,
+        "statement_nl": "If the property P0 of entity V1 is explicitly false and there is no evidence that the property P2 of entity V0 is true and the relationship P6 between V0 and V1 is explicitly false and there is no evidence that the property P10 of V1 is explicitly false and there is no evidence that the relationship P11 between V0 and V1 is explicitly false, then the relationship P18 between V0 and V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "29. \"If the property P0 of entity V1 is explicitly false and there is no evidence that the property P2 of entity V0 is true and the relationship P6 between V0 and V1 is explicitly false and there is no evidence that the property P10 of V1 is explicitly false and there is no evidence that the relationship P11 between V0 and V1 is explicitly false, then the relationship P18 between V0 and V1 is true.\""
+      },
+      {
+        "line_index": 29,
+        "statement_nl": "If the property P8 of entity V1 is explicitly false, then the property P20 of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "30. \"If the property P8 of entity V1 is explicitly false, then the property P20 of V1 is true.\""
+      },
+      {
+        "line_index": 30,
+        "statement_nl": "If there is no evidence that the property P0 of entity V1 is true and the relationship P1 between entity V0 and V1 is true and there is no evidence that the relationship P6 between V0 and V1 is true and the relationship P9 between V0 and V1 is explicitly false and there is no evidence that the property P10 of V1 is explicitly false, then the property P20 of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "31. \"If there is no evidence that the property P0 of entity V1 is true and the relationship P1 between entity V0 and V1 is true and there is no evidence that the relationship P6 between V0 and V1 is true and the relationship P9 between V0 and V1 is explicitly false and there is no evidence that the property P10 of V1 is explicitly false, then the property P20 of V1 is true.\""
+      },
+      {
+        "line_index": 31,
+        "statement_nl": "If the relationship P26 between entity V0 and entity V1 is explicitly false, then the relationship P25 between V0 and V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "32. \"If the relationship P26 between entity V0 and entity V1 is explicitly false, then the relationship P25 between V0 and V1 is true.\""
+      },
+      {
+        "line_index": 32,
+        "statement_nl": "If the property P13 of entity V0 is true and the property P16 of entity V1 is true and the relationship P17 between V0 and V1 is true and the relationship P18 between V0 and entity V3 is explicitly false and there is no evidence that the relationship P19 between V0 and V3 is true, then the relationship P3 between V0 and V1 is true or the property P4 of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "33. \"If the property P13 of entity V0 is true and the property P16 of entity V1 is true and the relationship P17 between V0 and V1 is true and the relationship P18 between V0 and entity V3 is explicitly false and there is no evidence that the relationship P19 between V0 and V3 is true, then the relationship P3 between V0 and V1 is true or the property P4 of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 33,
+        "statement_nl": "If the property P4 of entity V1 is true, then the relationship P5 between V1 and V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "34. \"If the property P4 of entity V1 is true, then the relationship P5 between V1 and V1 is true.\""
+      },
+      {
+        "line_index": 34,
+        "statement_nl": "If the property P2 of entity V0 is true and there is no evidence that the property P22 of V0 is explicitly false and there is no evidence that the property P23 of V0 is explicitly false, then the relationship P6 between V0 and V0 is true or the property P7 of V0 is explicitly false or the property P8 of V0 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "35. \"If the property P2 of entity V0 is true and there is no evidence that the property P22 of V0 is explicitly false and there is no evidence that the property P23 of V0 is explicitly false, then the relationship P6 between V0 and V0 is true or the property P7 of V0 is explicitly false or the property P8 of V0 is true.\""
+      },
+      {
+        "line_index": 35,
+        "statement_nl": "If the property P8 of entity V1 is true, then the relationship P9 between V1 and V1 is true or the property P10 of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "36. \"If the property P8 of entity V1 is true, then the relationship P9 between V1 and V1 is true or the property P10 of V1 is explicitly false.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260421_192951Z_f3e21224_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-21T19:30:10Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260421_192951Z_f3e21224.lp",
+  "pipeline_kind": "asp_clincon"
+}

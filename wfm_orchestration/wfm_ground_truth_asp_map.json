@@ -1,0 +1,5 @@
+{
+  "schema_version": "wfm_ground_truth_asp_map_v1",
+  "description": "Maps curated FOLIO / P-FOLIO / stress example ids to a reference .lp in the repo. run_hard_batch only runs ids listed here (paths must exist) unless you pass --curated-without-asp-reference. SymTex and asp_nl_bench are paired separately and do not use this file.",
+  "curated_id_to_reference_lp": {}
+}

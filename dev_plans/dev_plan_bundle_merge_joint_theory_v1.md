@@ -2,13 +2,13 @@
 
 ## Purpose
 
-Extend the product so that, **after** per-line NL→Z3 work exists (today’s `nl_z3_pipeline` v1), we can optionally run a **bundle-level** step that:
+Extend the product so that, **after** per-line NL→SMT-LIB work exists (today’s `smt_pipeline` per bundle / per policy file), we can optionally run a **bundle-level** step that:
 
 1. Produces a **single merged formalization** (or a well-defined artifact that compiles to one Z3 script) for the **whole** WFM-accepted bundle.
 2. Runs **reliable programmatic checks** on that artifact (syntax, sandbox, **joint** `check()`, registry alignment).
 3. Uses an **LLM only as a builder** under a **structured contract**; **correctness** of satisfiability is **always** decided by **Z3** (and static validators), not by the model’s prose.
 
-This document **does not** replace `control_flow_v1.md` per-line semantics; it **adds** an optional downstream phase with explicit scope.
+This document **does not** replace `control_flow_v3.md` / `smt_pipeline` per-line semantics; it **adds** an optional downstream phase with explicit scope.
 
 ---
 
@@ -37,10 +37,10 @@ This document **does not** replace `control_flow_v1.md` per-line semantics; it *
 
 ---
 
-## Relationship to existing `nl_z3_pipeline` v1
+## Relationship to existing `smt_pipeline` (v3)
 
-- **Keep** per-line isolated Z3 + per-line registry commit as **Phase A** (current milestone): fast feedback, partial commit, line indexing.
-- **Add** optional **Phase B — bundle merge** (this plan): runs **after** Phase A completes (or after a defined checkpoint), consumes **committed** registry + **per-line artifacts** + **WFM bundle text**, emits **merge artifact** + **joint Z3** + **alignment report**.
+- **Keep** per-line / per-bundle SMT-LIB commits via `smt_pipeline` as **Phase A** (current milestone): formalizer + critic + policy file, optional registry elsewhere.
+- **Add** optional **Phase B — bundle merge** (this plan): runs **after** Phase A completes (or after a defined checkpoint), consumes **committed** line artifacts + **WFM bundle text** (+ registry snapshot if used), emits **merge artifact** + **joint theory** + **alignment report**.
 
 Phase B **does not** retroactively invalidate Phase A; it **adds** a bundle-level verdict and optional new **bundle_rule** / **merge_record** artifacts.
 
@@ -68,7 +68,7 @@ Phase B **does not** retroactively invalidate Phase A; it **adds** a bundle-leve
 WFM HandoffBundle
        │
        ▼
-[Phase A] nl_z3_pipeline v1 (per line) ──► registry session + line artifacts
+[Phase A] smt_pipeline (per bundle / policy file) ──► SMT-LIB + bundle JSON (+ optional registry session)
        │
        ▼
 [Phase B] Bundle merge service (NEW)

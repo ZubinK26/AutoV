@@ -2,6 +2,8 @@
 
 **Purpose:** Automated runs (same choreography as FOLIO / P-FOLIO) with **medium–hard**-sized blocks. A case is **acceptable** if the pipeline **stops safely by the Agent 3 outcome** (inclusive of **Agent 2 `LIMIT_EXCEEDED`** or **Agent 3 `OUT_OF_SCOPE`**), or **passes with honest REWRITE** for edge items — **which agent** catches it is not scored here.
 
+**ClinCon-version note:** Agent 3 scope was originally aligned with **many-sorted FOL / SMT** (e.g. “no recursion”, “no temporal”). Under the **ClinCon-safe ASP** fragment (**`docs/pipeline_wfm_to_asp.md` §2**), some cases here (e.g. finite-domain chains, finite-step fluents) may warrant **re-baselining** — use **`wfm_clincon_fragment_examples_en.md`** (`--clincon`) for smoke against the new prompt.
+
 **Layout:** `### R-n` = **reject** (intended out-of-band for fully in-scope formalization per `agent_3_scope_rewrite.md` or too dense for Agent 2’s compound-operator budget). `### E-n` = **edge** (boundary / stress; may **PASS**, **REWRITE**, or legitimately **OUT_OF_SCOPE** depending on model).
 
 **Run:** `python test_sets/scripts/run_wfm_folio_gemini.py --stress` (or `--examples` pointing here with stress mode per script). **Do not** mix this section into `wfm_folio_pffolio_examples_en.md`; this file is standalone.

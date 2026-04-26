@@ -9,11 +9,13 @@ Usage (from repo root that contains WFM/ and test_sets/):
   python test_sets/scripts/run_wfm_folio_gemini.py
   python test_sets/scripts/run_wfm_folio_gemini.py --pfolio   # P-FOLIO base text (PF-*); separate output files
   python test_sets/scripts/run_wfm_folio_gemini.py --stress  # edge/reject harness (R-* / E-*); wfm_stress_examples_en.md
+  python test_sets/scripts/run_wfm_folio_gemini.py --clincon  # ClinCon fragment smoke (C-*); wfm_clincon_fragment_examples_en.md
 
 Optional:
   python test_sets/scripts/run_wfm_folio_gemini.py --dry-run
   python test_sets/scripts/run_wfm_folio_gemini.py --pfolio --dry-run
   python test_sets/scripts/run_wfm_folio_gemini.py --stress --dry-run
+  python test_sets/scripts/run_wfm_folio_gemini.py --clincon --dry-run
   GEMINI_MODEL=gemini-3.1-pro-preview python ...
 """
 from __future__ import annotations
@@ -35,6 +37,7 @@ WFM_DIR = REPO_ROOT / "WFM"
 PROMPTS_DIR = WFM_DIR / "prompts"
 EXAMPLES_FILE = TEST_SETS / "wfm_folio_pffolio_examples_en.md"
 STRESS_EXAMPLES_FILE = TEST_SETS / "wfm_stress_examples_en.md"
+CLINCON_EXAMPLES_FILE = TEST_SETS / "wfm_clincon_fragment_examples_en.md"
 CONFIG_FILE = WFM_DIR / "config" / "wfm.json"
 RESULTS_DIR = TEST_SETS / "run_results"
 
@@ -122,6 +125,19 @@ def parse_stress_examples(path: Path) -> list[Example]:
         section,
         r"^### ((?:R|E)-\d+) \(([^)]+)\)\s*\n\n(.+?)(?=^### |\Z)",
         "R-* / E-*",
+    )
+
+
+def parse_clincon_examples(path: Path) -> list[Example]:
+    text = path.read_text(encoding="utf-8")
+    m = re.search(r"## CLINCON\s*\n\n(.*)\Z", text, re.DOTALL)
+    if not m:
+        raise ValueError(f"Could not find ## CLINCON section in {path}")
+    section = m.group(1).strip()
+    return _parse_example_blocks(
+        section,
+        r"^### (C-\d+) \(([^)]+)\)\s*\n\n(.+?)(?=^### |\Z)",
+        "C-*",
     )
 
 
@@ -238,11 +254,16 @@ def main() -> int:
         action="store_true",
         help="Use ## STRESS section (R-* / E-*) from wfm_stress_examples_en.md by default; writes wfm_stress_gemini_*.",
     )
+    mx.add_argument(
+        "--clincon",
+        action="store_true",
+        help="Use ## CLINCON section (C-*) from wfm_clincon_fragment_examples_en.md by default; writes wfm_clincon_gemini_*.",
+    )
     parser.add_argument(
         "--examples",
         type=Path,
         default=EXAMPLES_FILE,
-        help="Example markdown (FOLIO+P-FOLIO combined, or stress file if --stress).",
+        help="Example markdown (FOLIO+P-FOLIO, or stress/ClinCon file with --stress / --clincon).",
     )
     parser.add_argument(
         "--out-dir",
@@ -273,6 +294,13 @@ def main() -> int:
         report_title = (
             "# WFM automated run — stress harness (R-* / E-*), Agents 1 → 2 → 3, Gemini"
         )
+    elif args.clincon:
+        clincon_path = args.examples if args.examples != EXAMPLES_FILE else CLINCON_EXAMPLES_FILE
+        examples = parse_clincon_examples(clincon_path)
+        examples_file_resolved = str(clincon_path.resolve())
+        example_set = "clincon"
+        out_prefix = "wfm_clincon_gemini"
+        report_title = "# WFM automated run — ClinCon fragment smoke (C-*), Agents 1 → 2 → 3, Gemini"
     elif args.pfolio:
         examples = parse_pfolio_examples(args.examples)
         examples_file_resolved = str(args.examples.resolve())
@@ -319,6 +347,8 @@ def main() -> int:
     if args.dry_run:
         if args.stress:
             set_label = "STRESS (R-* / E-*)"
+        elif args.clincon:
+            set_label = "CLINCON (C-*)"
         elif args.pfolio:
             set_label = "P-FOLIO (PF-*)"
         else:
@@ -357,6 +387,8 @@ def main() -> int:
         set_bullet = "- **Example set:** `pfolio` (P-FOLIO base text, PF-* blocks in source markdown)"
     elif example_set == "stress":
         set_bullet = "- **Example set:** `stress` (`test_sets/wfm_stress_examples_en.md`, ## STRESS)"
+    elif example_set == "clincon":
+        set_bullet = "- **Example set:** `clincon` (`test_sets/wfm_clincon_fragment_examples_en.md`, ## CLINCON)"
     else:
         set_bullet = "- **Example set:** `folio` (F-* blocks)"
     report_lines: list[str] = [

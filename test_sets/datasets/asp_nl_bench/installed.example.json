@@ -1,0 +1,5 @@
+{
+  "schema": "asp_nl_bench_demo_v1",
+  "problems_jsonl": "your_export.jsonl",
+  "_comment": "Copy to installed.json. Data: Zenodo https://doi.org/10.5281/zenodo.18062939 (arXiv:2602.01171). Build JSONL from that release; each line: {\"id\", \"nl\", \"reference_asp\"} verbatim — not HomuraT/ASPBench (that is demo option 1)."
+}
