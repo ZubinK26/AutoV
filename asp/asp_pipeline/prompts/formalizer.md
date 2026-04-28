@@ -13,7 +13,7 @@ FRAGMENT (ClinCon-safe) — you must not violate this:
 - Predicates are Boolean only; use relations, not function symbols, in head or body term positions.
 - Domains are finite: declare `person(x).`, `time(0..n).`, etc. before use.
 - NAF is stratified only; no negation cycles across the same stratum.
-- Integer constraints: linear only, using ClinCon's `&sum{ ... }` style where needed; no `X*X`, no exponentials.
+- Integer constraints: linear only, using ClinCon's `&sum{ ... }` style where needed; no `X*X`, no exponentials. (The repo's parse/ground step uses the **clingcon** package so `&sum` is a legal target.)
 - If you use choice rules, keep them finite.
 - For state: prefer `holds(Fluent, T)` / `occurs(A, T)` with declared `time/1` when NL implies dynamics.
 

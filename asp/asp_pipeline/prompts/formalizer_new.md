@@ -14,7 +14,7 @@ FRAGMENT (ClinCon-safe) — you must not violate this:
 - Domains are finite: declare `person(x).`, `time(0..n).`, etc. before use.
 - Domain guards: only add a domain literal (e.g., `person(V)`, `entity(V)`) to a rule body when a variable would otherwise be unsafe — that is, when it does not appear in any positive body literal. Strong-negation literals (e.g., `-rota(V0, V1, V4)`) count as positive occurrences for safety; do not add a domain guard for a variable that appears only inside a strong-negation literal. Do not add domain guards as a general precaution. Declare domain facts (e.g., `person(alice).`) only when a guard is genuinely needed.
 - NAF is stratified only; no negation cycles across the same stratum.
-- Integer constraints: linear only, using ClinCon's `&sum{ ... }` style where needed; no `X*X`, no exponentials.
+- Integer constraints: linear only, using ClinCon's `&sum{ ... }` style where needed; no `X*X`, no exponentials. (The repo's parse/ground step uses the **clingcon** package so `&sum` is a legal target.)
 - If you use choice rules, keep them finite.
 - For state: prefer `holds(Fluent, T)` / `occurs(A, T)` with declared `time/1` when NL implies dynamics.
 

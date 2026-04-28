@@ -1,7 +1,7 @@
 # Dev plan — Pivot to WFM → ClinCon / ASP (`asp_pipeline`)
 
 **Branch / product line:** `ClinCon-version` (and descendants).  
-**Normative product spec:** [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) — step contracts, prompts, repair budgets, verification, CLI. This document is the **engineering plan** to reach that spec starting from the existing **WFM → `smt_pipeline`** codebase.
+**Normative product spec:** [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) — step contracts, prompts, repair budgets, verification, CLI. This document is the **engineering plan** to reach that spec starting from the existing **WFM → `smt_pipeline`** codebase.
 
 **Principle:** Reuse everything that is already correct (handoff schema, orchestration entrypoints, Gemini wiring, batch pacing, bundle records, atomic commit patterns). Replace the **formalization vertical** (SMT-LIB + Z3 in-loop) with **ClinCon / Clingo `.lp`** + **parse/ground** checks + **answer-set** verification.
 
@@ -26,7 +26,7 @@
 
 | Existing (`smt_pipeline`) | New (`asp_pipeline`) |
 |---------------------------|------------------------|
-| `pipeline.py` | `asp_pipeline/pipeline.py` — steps 1–6 per [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) §6 |
+| `pipeline.py` | `asp_pipeline/pipeline.py` — steps 1–6 per [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) §6 |
 | `config.py` | `asp_pipeline/config.py` — `ASP_PIPELINE_*` env vars per spec §9 |
 | `llm_steps.py` | `asp_pipeline/llm_steps.py` — load `prompts/formalizer.md` + `critic.md`; no hardcoded prose |
 | `smt_parse.py` (Z3 parse) | **`asp_pipeline/clingo_check.py`** — `clingo --parse-only`, `clingo --ground` |
@@ -101,10 +101,10 @@ Implement in **dependency order**:
 
 ## 6. Workstream C — Documentation & repo hygiene
 
-- [ ] **`docs/pipeline_wfm_to_asp.md`** is the canonical ASP story (committed from product draft).
-- [ ] **`docs/pipeline_wfm_to_smt.md`**: add one line at top — “Superseded for ClinCon product line by `pipeline_wfm_to_asp.md`; retained for SMT track / comparison.”
+- [ ] **`asp/pipeline_wfm_to_asp.md`** is the canonical ASP story (committed from product draft).
+- [ ] **`smt/pipeline_wfm_to_smt.md`**: add one line at top — “Superseded for ClinCon product line by `asp/pipeline_wfm_to_asp.md`; retained for SMT track / comparison.”
 - [ ] Update **`dev_plans/dev_plan_implementation_control_flow_v3.md`** footer: note ASP pivot; SMT milestones remain historical reference.
-- [ ] **`pipeline_spec.md`**: add pointer to ClinCon fragment scope or defer to `docs/pipeline_wfm_to_asp.md` §2.
+- [ ] **`pipeline_spec.md`**: add pointer to ClinCon fragment scope or defer to `asp/pipeline_wfm_to_asp.md` §2.
 
 ---
 
@@ -123,7 +123,7 @@ Implement in **dependency order**:
 | Risk | Mitigation |
 |------|------------|
 | Grounding blowups / infinite domains | Grounding timeout → repair loop; Agent 3 trains on “finite domain” discipline |
-| ClinCon vs plain Clingo feature gap | Document which constructs require ClinCon binary; CI uses same binary as prod |
+| ClinCon vs plain Clingo feature gap | **Addressed** for `&sum` via `clingcon` in `asp_pipeline` (see `dev_plans/dev_plan_clincon_theory_grounding_v1.md`, `asp/pipeline_wfm_to_asp.md` Tooling / oracle) |
 | Critic approves bad ASP | Same as SMT: caps + human review + golden tests |
 | Rule counting / corruption checks for `.lp` | Define stable `% Rule:` or `%% track:` convention shared by `pipeline` and `policy_check` |
 
@@ -142,7 +142,7 @@ Implement in **dependency order**:
 
 ## 10. References
 
-- [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) — authoritative pipeline behavior.
-- [`docs/pipeline_wfm_to_smt.md`](../docs/pipeline_wfm_to_smt.md) — prior SMT path (reference implementation).
+- [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) — authoritative pipeline behavior.
+- [`smt/pipeline_wfm_to_smt.md`](../smt/pipeline_wfm_to_smt.md) — prior SMT path (reference implementation).
 - [`dev_plans/control_flow_v3.md`](control_flow_v3.md) — control-flow ideas transferable to repair/commit semantics.
 - [`dev_plans/dev_plan_bundle_merge_joint_theory_v1.md`](dev_plan_bundle_merge_joint_theory_v1.md) — future multi-bundle joint theory (post–per-line ASP).

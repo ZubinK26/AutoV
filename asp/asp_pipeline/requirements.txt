@@ -1,0 +1,3 @@
+# ASP / ClinCon pipeline (pip install -r asp_pipeline/requirements.txt)
+clingo>=5.7.0
+clingcon>=5.0.0

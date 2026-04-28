@@ -2,6 +2,9 @@
 Clingo satisfiability / answer-set check for a committed ``.lp`` (``docs/pipeline_wfm_to_asp.md`` §8).
 
 Run: ``python -m asp_pipeline.policy_check <file.lp>``
+
+Programs with ClinCon ``&sum{...}`` are solved via **clingcon** (Python API); plain ``clingo`` on PATH
+does not load the constraint theory.
 """
 
 from __future__ import annotations
@@ -14,6 +17,11 @@ from pathlib import Path
 from typing import Any
 
 from asp_pipeline.clingo_check import _resolve_clingo_exe
+from asp_pipeline.clingcon_api import (
+    program_uses_clincon_sum,
+    solve_clincon,
+    use_clincon_grounding_enabled,
+)
 
 
 def _run_policy_check_embedded(policy_lp: Path) -> dict[str, Any]:
@@ -67,6 +75,28 @@ def run_policy_check(
 ) -> dict[str, Any]:
     if not policy_lp.is_file():
         return {"status": "ERROR", "answer_set_count": None, "unsat_core": None, "detail": f"file not found: {policy_lp}"}
+    text = policy_lp.read_text(encoding="utf-8")
+
+    if program_uses_clincon_sum(text):
+        if not use_clincon_grounding_enabled():
+            return {
+                "status": "ERROR",
+                "answer_set_count": None,
+                "unsat_core": None,
+                "detail": "policy uses &sum{...}; set ASP_PIPELINE_USE_CLINGCON=1 (default) and pip install clingcon",
+            }
+        st, n, det = solve_clincon(text, max_models=max_models, timeout_sec=timeout_sec)
+        if st == "SATISFIABLE":
+            return {"status": "SATISFIABLE", "answer_set_count": n, "unsat_core": None}
+        if st == "UNSATISFIABLE":
+            return {"status": "UNSATISFIABLE", "answer_set_count": 0, "unsat_core": None}
+        return {
+            "status": "ERROR",
+            "answer_set_count": None,
+            "unsat_core": None,
+            "detail": det or "clingcon solve error",
+        }
+
     exe = _resolve_clingo_exe()
     if not exe:
         return _run_policy_check_embedded(policy_lp)

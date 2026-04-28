@@ -8,7 +8,13 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Tuple
+
+from asp_pipeline.clingcon_api import (
+    ground_clincon,
+    parse_only_clincon,
+    program_uses_clincon_sum,
+    use_clincon_grounding_enabled,
+)
 
 
 def clingo_path() -> str | None:
@@ -115,7 +121,12 @@ def check_parse_only(
     Run ``clingo --parse-only`` on a temp file. Pass if exit 0 and stderr does not look like a hard error.
     If the ``clingo`` executable is missing, fall back to the **Python** ``clingo`` package (``pip install clingo``),
     which provides the same parse check via the C API.
+
+    Programs with ClinCon ``&sum{{...}}`` require **clingcon** and use the Python AST+theory path (``pip install clingcon``);
+    a plain ``clingo`` subprocess cannot define theory atom ``sum/0``.
     """
+    if use_clincon_grounding_enabled() and program_uses_clincon_sum(proposed_lp):
+        return parse_only_clincon(proposed_lp, timeout_sec=timeout_sec)
     p = _write_temp_lp(proposed_lp)
     try:
         code, _, err = _run_clingo(
@@ -157,8 +168,14 @@ def check_ground(
     """
     Concatenate existing + proposed, then ``clingo --ground --output=text`` per spec.
     If the ``clingo`` executable is missing, fall back to grounding via the **Python** ``clingo`` package.
+
+    If the **combined** program uses ``&sum{{...}}`` (e.g. from an earlier commit or the new chunk), grounding runs
+    through **clingcon** in-process (``asp_pipeline.clingcon_api``); a subprocess ``clingo --ground`` is not used.
     """
-    p = _write_temp_lp(_combined_text(existing_policy, proposed_lp))
+    comb = _combined_text(existing_policy, proposed_lp)
+    if use_clincon_grounding_enabled() and program_uses_clincon_sum(comb):
+        return ground_clincon(comb, timeout_sec=timeout_sec)
+    p = _write_temp_lp(comb)
     try:
         code, combined, err = _run_clingo(
             ["--ground", "--output=text", "--outf=0"],

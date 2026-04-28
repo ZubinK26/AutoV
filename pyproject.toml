@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autov-workspace"
+version = "0.0.0"
+description = "AutoV workspace (ASP + SMT pipelines, WFM, registry)."
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.setuptools]
+packages = ["registry_stage", "wfm_orchestration", "asp_pipeline", "smt_pipeline"]
+
+[tool.setuptools.package-dir]
+"registry_stage" = "registry_stage"
+"wfm_orchestration" = "wfm_orchestration"
+"asp_pipeline" = "asp/asp_pipeline"
+"smt_pipeline" = "smt/smt_pipeline"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "asp/asp_pipeline/tests",
+    "smt/smt_pipeline/tests",
+    "registry_stage/tests",
+    "wfm_orchestration/tests",
+]

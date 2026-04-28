@@ -1,7 +1,7 @@
 # Dev plan — Full ClinCon fragment: theory-aware grounding & solving (`&sum` / clingcon)
 
-**Status:** Plan only — **no implementation** until approved.  
-**Drives:** Align [`asp_pipeline`](../asp_pipeline/) with the **normative** ClinCon-safe fragment in [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) §2.1 (notably “Bounded integer arithmetic via ClinCon constraint variables” and `&sum{...}`), and with prompts that tell the LLM to use that syntax.
+**Status:** **Implemented** in `asp_pipeline/clingcon_api.py`, `clingo_check.py`, `policy_check.py` (see git history on `ClinCon-version` after 2026-04-26). Optional: re-run the nl chunk `pending_asp` case to confirm end-to-end.  
+**Align [`asp_pipeline`](../asp/asp_pipeline/)** with the **normative** ClinCon-safe fragment in [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) §2.1 (notably “Bounded integer arithmetic via ClinCon constraint variables” and `&sum{...}`), and with prompts that tell the LLM to use that syntax.
 
 **Post-implementation validation (explicit):** Re-run the NL chunk flow that previously failed with **`PARSE_GROUND_FAIL`** / `theory atom: sum/0` (same handoff / `pending_asp` path under [`wfm_orchestration/nl_chunk_policy_pipeline.py`](../wfm_orchestration/nl_chunk_policy_pipeline.py)) and confirm **parse+ground** (and, where applicable, **policy_check**) succeed for the same bundle.
 
@@ -11,7 +11,7 @@
 
 | Layer | What we have today | What the docs / prompts say |
 |--------|---------------------|-----------------------------|
-| **Spec** | [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) §2.1 | ✅ `&sum{...}` in scope; line 143 says ClinCon constraint syntax is used for numeric constraints. |
+| **Spec** | [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) §2.1 | ✅ `&sum{...}` in scope; line 143 says ClinCon constraint syntax is used for numeric constraints. |
 | **WFM** | [`WFM/prompts/agent_3_scope_rewrite.md`](../WFM/prompts/agent_3_scope_rewrite.md) | “Linear integer constraints (ClinCon-style sums, …)”. |
 | **Formalizer** | [`asp_pipeline/prompts/formalizer_new.md`](../asp_pipeline/prompts/formalizer_new.md) | Instructs `&sum{...}`-style for integers (line 17). |
 | **Oracle** | [`asp_pipeline/clingo_check.py`](../asp_pipeline/clingo_check.py) | `Control().add(...); .ground()` and/or **`clingo --ground`** on a temp file — **no** registered **constraint theory**. |
@@ -52,7 +52,7 @@
 
 3. **Clarify** whether **`clingo` subprocess** (`clingo --ground file.lp`) can ground **the same** programs without a Python-side theory (often **no** for `&sum`). Outcome: either document **“ground check = Python+clingcon only”** for theory programs, or find a **supported CLI** (e.g. a `clingcon` or `clingo` mode) and wrap it — **one** supported approach only, clearly documented.
 
-4. **Windows:** Confirm wheels or build steps for the team’s main OS; if fragile, document WSL or conda fallback in [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) install section.
+4. **Windows:** Confirm wheels or build steps for the team’s main OS; if fragile, document WSL or conda fallback in [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) install section.
 
 **Exit criterion:** A minimal `.lp` from §2.1 using `&sum` **grounds** (and, if the spike shows solve is required to validate sat, **solves**) under the chosen approach, plus a second fixture **without** `&` that still passes on the same path (or a documented **fast** path for theory-free programs).
 
@@ -79,11 +79,11 @@
 ### 5.3 Config / env
 
 - New optional env, e.g. `ASP_PIPELINE_CLINGCON=1` (default **on** after cutover) or `ASP_PIPELINE_USE_CLINGCON=1`, plus optional **disable** for debugging core-only programs.
-- Document **`pip install clingo clingcon`** (or exact pins) in [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) and [`.env.example`](../.env.example) if present.
+- Document **`pip install clingo clingcon`** (or exact pins) in [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) and [`.env.example`](../.env.example) if present.
 
 ### 5.4 Documentation
 
-- In [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) §4 (or a new “Tooling / oracle” subsection): state that **theory atoms in §2.1** require the **clingcon** integration; the **plain** `clingo` CLI **without** that stack may **not** be sufficient for `&sum`.
+- In [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) §4 (or a new “Tooling / oracle” subsection): state that **theory atoms in §2.1** require the **clingcon** integration; the **plain** `clingo` CLI **without** that stack may **not** be sufficient for `&sum`.
 - In [`dev_plans/dev_plan_implementation_clincon_asp_v1.md`](dev_plan_implementation_clincon_asp_v1.md): add a **pointer** to this plan and mark the prior “Clingo vs ClinCon feature gap” item as **addressed** when this ships.
 
 **Prompts:** No **mandatory** change if they already match §2.1; optional: one line that “grounding in CI uses **clingcon** for `&sum`” to reduce model confusion. **Do not** strip `&sum` from prompts — that would contradict the full scope you are enabling.
@@ -128,7 +128,7 @@
 
 ## 9. References
 
-- Product spec: [`docs/pipeline_wfm_to_asp.md`](../docs/pipeline_wfm_to_asp.md) §2.1, §4, line 143.  
+- Product spec: [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) §2.1, §4, line 143.  
 - Current oracle: [`asp_pipeline/clingo_check.py`](../asp_pipeline/clingo_check.py).  
 - Policy solve: [`asp_pipeline/policy_check.py`](../asp_pipeline/policy_check.py).  
 - Potassco: [clingo `Theory` + clingcon](https://potassco.org/clingo/python-api/5.5/clingo/theory.html) (example with `&sum` and `clingcon`).  

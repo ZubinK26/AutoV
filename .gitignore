@@ -18,6 +18,7 @@ id_rsa
 *_rsa
 
 # --- Python / tooling artifacts ---
+*.egg-info/
 __pycache__/
 *.py[cod]
 *$py.class
