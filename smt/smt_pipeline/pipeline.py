@@ -17,10 +17,23 @@ from .json_utils import extract_first_json_object
 from .models import CriticContext, FormalizerContext, PipelineRunResult
 from .rule_count import rule_count
 from .smt_parse import parse_smt2_string_check
+from .unsat_core import analyze_policy_sat_and_core, report_to_jsonable
 
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def _merged_policy_text(existing: str, new_block: str, bundle_id: str) -> tuple[str, str]:
+    committed_iso = _utc_now_iso()
+    header = (
+        f"; ============================================================\n"
+        f"; Bundle: {bundle_id}  |  Committed: {committed_iso}\n"
+        f"; ============================================================\n"
+    )
+    block_out = new_block if "; Bundle:" in new_block[:800] else header + new_block
+    full = existing + "\n\n" + block_out if existing.strip() else block_out
+    return full, committed_iso
 
 
 def _log_line(path: Path, obj: dict[str, Any]) -> None:
@@ -268,6 +281,66 @@ def run_smt_pipeline(
         )
         return critic_fn(cctx)
 
+    def commit_after_sat(proposed_block: str) -> PipelineRunResult:
+        full, committed_iso = _merged_policy_text(existing, proposed_block, bundle_id)
+        if not cfg.skip_global_sat_check:
+            try:
+                sat_rep = analyze_policy_sat_and_core(full)
+            except Exception as e:
+                _log_line(
+                    log_path,
+                    {
+                        "bundle_id": bundle_id,
+                        "timestamp": _utc_now_iso(),
+                        "loop": "global_sat",
+                        "iteration": 1,
+                        "input_to_formalizer": {},
+                        "formalizer_output_smtlib": "",
+                        "check_result": "fail",
+                        "check_detail": str(e),
+                    },
+                )
+                return finalize(
+                    "failed",
+                    failure=_failure_record("POLICY_SAT_CHECK_ERROR", str(e)),
+                    rule_ids=rule_ids,
+                )
+            sat_json = report_to_jsonable(sat_rep)
+            if sat_rep.sat_result != "sat":
+                detail = json.dumps(sat_json, ensure_ascii=False)
+                cat = "POLICY_UNSAT" if sat_rep.sat_result == "unsat" else "POLICY_SAT_UNKNOWN"
+                _log_line(
+                    log_path,
+                    {
+                        "bundle_id": bundle_id,
+                        "timestamp": _utc_now_iso(),
+                        "loop": "global_sat",
+                        "iteration": 1,
+                        "input_to_formalizer": {},
+                        "formalizer_output_smtlib": "",
+                        "check_result": "fail",
+                        "check_detail": detail[:8000] + ("..." if len(detail) > 8000 else ""),
+                        "sat_report": sat_json,
+                    },
+                )
+                return finalize("failed", failure=_failure_record(cat, detail), rule_ids=rule_ids)
+            _log_line(
+                log_path,
+                {
+                    "bundle_id": bundle_id,
+                    "timestamp": _utc_now_iso(),
+                    "loop": "global_sat",
+                    "iteration": 1,
+                    "input_to_formalizer": {},
+                    "formalizer_output_smtlib": "",
+                    "check_result": "pass",
+                    "check_detail": sat_rep.sat_result,
+                    "sat_report": sat_json,
+                },
+            )
+        atomic_write_text(policy_model_path, full)
+        return finalize("success", committed_at=committed_iso, rule_ids=rule_ids)
+
     try:
         cr0 = run_critic(block)
     except Exception as e:
@@ -279,15 +352,7 @@ def run_smt_pipeline(
 
     approved = bool(cr0.get("approved"))
     if approved:
-        committed = _commit_bundle(
-            policy_model_path,
-            existing,
-            block,
-            bundle_id,
-            rule_ids,
-            in_scope_sorted,
-        )
-        return finalize("success", committed_at=committed, rule_ids=rule_ids)
+        return commit_after_sat(block)
 
     objections_txt = json.dumps(cr0.get("objections", []), ensure_ascii=False)
     loop2_left = cfg.semantic_repair_cap
@@ -375,15 +440,7 @@ def run_smt_pipeline(
             continue
 
         if bool(cr.get("approved")):
-            committed = _commit_bundle(
-                policy_model_path,
-                existing,
-                block,
-                bundle_id,
-                rule_ids,
-                in_scope_sorted,
-            )
-            return finalize("success", committed_at=committed, rule_ids=rule_ids)
+            return commit_after_sat(block)
 
         loop2_left -= 1
         objections_txt = json.dumps(cr.get("objections", []), ensure_ascii=False)
@@ -399,25 +456,4 @@ def run_smt_pipeline(
         failure=_failure_record("SEMANTIC_FAIL", "exhausted semantic repair budget"),
         rule_ids=rule_ids,
     )
-
-
-def _commit_bundle(
-    policy_model_path: Path,
-    existing: str,
-    new_block: str,
-    bundle_id: str,
-    _rule_ids: list,
-    _in_scope_sorted: list,
-) -> str:
-    committed_iso = _utc_now_iso()
-    header = (
-        f"; ============================================================\n"
-        f"; Bundle: {bundle_id}  |  Committed: {committed_iso}\n"
-        f"; ============================================================\n"
-    )
-    # Prepend normative bundle header when the formalizer block omits it (Rule lines also start with `;`).
-    block_out = new_block if "; Bundle:" in new_block[:800] else header + new_block
-    full = existing + "\n\n" + block_out if existing.strip() else block_out
-    atomic_write_text(policy_model_path, full)
-    return committed_iso
 

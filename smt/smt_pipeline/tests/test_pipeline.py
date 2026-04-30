@@ -264,6 +264,124 @@ def test_context_limit(tmp_path):
     assert res.failure_reason == "CONTEXT_LIMIT_EXCEEDED"
 
 
+def test_global_sat_rejects_unsat_first_commit(tmp_path):
+    handoff = tmp_path / "h.json"
+    policy = tmp_path / "policy_model.smt2"
+    bundles = tmp_path / "bundles"
+    _handoff(handoff)
+
+    def formalizer(ctx: FormalizerContext) -> str:
+        rid = ctx.in_scope_lines[0].split()[0].split("=")[1]
+        return "\n".join(
+            [
+                f"; Rule: {rid}  |  Line: 0",
+                "(set-logic ALL)",
+                "(assert false)",
+            ]
+        )
+
+    def critic(ctx: CriticContext) -> dict:
+        return {"approved": True, "objections": []}
+
+    res = run_smt_pipeline(
+        handoff_path=handoff,
+        policy_model_path=policy,
+        bundle_out_dir=bundles,
+        cfg=SmtPipelineConfig(parse_timeout_sec=30.0),
+        formalizer_fn=formalizer,
+        critic_fn=critic,
+    )
+    assert res.status == "failed"
+    assert res.failure_reason == "POLICY_UNSAT"
+    assert not policy.is_file()
+
+
+def test_global_sat_rejects_unsat_on_append(tmp_path):
+    handoff1 = tmp_path / "h1.json"
+    handoff2 = tmp_path / "h2.json"
+    policy = tmp_path / "policy_model.smt2"
+    bundles = tmp_path / "bundles"
+    _handoff(handoff1, bundle_id="b_bundle_one0000001")
+    _handoff(
+        handoff2,
+        bundle_id="b_bundle_two0000002",
+        lines=[{"line_index": 0, "statement_nl": "Second rule.", "agent3_verdict": "PASS"}],
+    )
+
+    def formalizer(ctx: FormalizerContext) -> str:
+        rid = ctx.in_scope_lines[0].split()[0].split("=")[1]
+        inc = not ctx.policy_text.strip()
+        base = [f"; Rule: {rid}  |  Line: 0", "(assert true)"]
+        if inc:
+            base.insert(1, "(set-logic ALL)")
+        return "\n".join(base)
+
+    def formalizer2(ctx: FormalizerContext) -> str:
+        rid = ctx.in_scope_lines[0].split()[0].split("=")[1]
+        return "\n".join([f"; Rule: {rid}  |  Line: 0", "(assert false)"])
+
+    def critic(ctx: CriticContext) -> dict:
+        return {"approved": True, "objections": []}
+
+    cfg = SmtPipelineConfig(parse_timeout_sec=30.0)
+    r1 = run_smt_pipeline(
+        handoff_path=handoff1,
+        policy_model_path=policy,
+        bundle_out_dir=bundles,
+        cfg=cfg,
+        formalizer_fn=formalizer,
+        critic_fn=critic,
+    )
+    assert r1.status == "success"
+    before = policy.read_text(encoding="utf-8")
+    r2 = run_smt_pipeline(
+        handoff_path=handoff2,
+        policy_model_path=policy,
+        bundle_out_dir=bundles,
+        cfg=cfg,
+        formalizer_fn=formalizer2,
+        critic_fn=critic,
+    )
+    assert r2.status == "failed"
+    assert r2.failure_reason == "POLICY_UNSAT"
+    assert policy.read_text(encoding="utf-8") == before
+
+
+def test_skip_global_sat_env_commits_contradiction(tmp_path, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("SMT_PIPELINE_SKIP_GLOBAL_SAT", "1")
+    from smt_pipeline.config import smt_config_from_env
+
+    handoff = tmp_path / "h.json"
+    policy = tmp_path / "policy_model.smt2"
+    bundles = tmp_path / "bundles"
+    _handoff(handoff)
+
+    def formalizer(ctx: FormalizerContext) -> str:
+        rid = ctx.in_scope_lines[0].split()[0].split("=")[1]
+        return "\n".join(
+            [
+                f"; Rule: {rid}  |  Line: 0",
+                "(set-logic ALL)",
+                "(assert false)",
+            ]
+        )
+
+    def critic(ctx: CriticContext) -> dict:
+        return {"approved": True, "objections": []}
+
+    res = run_smt_pipeline(
+        handoff_path=handoff,
+        policy_model_path=policy,
+        bundle_out_dir=bundles,
+        cfg=smt_config_from_env(),
+        formalizer_fn=formalizer,
+        critic_fn=critic,
+    )
+    assert res.status == "success"
+    assert policy.is_file()
+    assert "assert false" in policy.read_text(encoding="utf-8").lower()
+
+
 def test_bundle_id_generated_when_missing(tmp_path):
     handoff = tmp_path / "h.json"
     policy = tmp_path / "policy_model.smt2"

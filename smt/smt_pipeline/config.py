@@ -16,6 +16,8 @@ class SmtPipelineConfig:
     context_char_limit: int = 900_000
     formalizer_max_output_tokens: int = 16_384
     critic_max_output_tokens: int = 8_192
+    # When False (default): after critic approval, Z3 check-sat on full merged policy; commit only if sat.
+    skip_global_sat_check: bool = False
 
 
 def smt_config_from_env() -> SmtPipelineConfig:
@@ -27,6 +29,12 @@ def smt_config_from_env() -> SmtPipelineConfig:
         raw = os.environ.get(name, "").strip()
         return float(raw) if raw else default
 
+    skip_sat = os.environ.get("SMT_PIPELINE_SKIP_GLOBAL_SAT", "").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+
     return SmtPipelineConfig(
         syntax_repair_cap=_i("SMT_PIPELINE_SYNTAX_REPAIR_CAP", 3),
         semantic_repair_cap=_i("SMT_PIPELINE_SEMANTIC_REPAIR_CAP", 3),
@@ -35,4 +43,5 @@ def smt_config_from_env() -> SmtPipelineConfig:
         context_char_limit=_i("SMT_PIPELINE_CONTEXT_CHAR_LIMIT", 900_000),
         formalizer_max_output_tokens=_i("SMT_PIPELINE_FORMALIZER_MAX_OUTPUT_TOKENS", 16384),
         critic_max_output_tokens=_i("SMT_PIPELINE_CRITIC_MAX_OUTPUT_TOKENS", 8192),
+        skip_global_sat_check=skip_sat,
     )
