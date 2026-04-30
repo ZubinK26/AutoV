@@ -42,7 +42,7 @@ CONFIG_FILE = WFM_DIR / "config" / "wfm.json"
 RESULTS_DIR = TEST_SETS / "run_results"
 
 # --- defaults (see test_sets/wfm_api_contract_gemini.md) ---
-DEFAULT_MODEL = "gemini-3-flash-preview"
+DEFAULT_MODEL = "gemini-3.1-pro-preview"
 DEFAULT_TEMPERATURE = 0.0
 DEFAULT_MAX_OUTPUT_TOKENS = 16384
 

@@ -79,7 +79,7 @@ def gemini_complete(
     from google import genai
     from google.genai import types as genai_types
 
-    model = os.environ.get("GEMINI_MODEL", "gemini-3-flash-preview").strip()
+    model = os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview").strip()
     temperature = float(os.environ.get("GEMINI_TEMPERATURE", "0.0"))
     if max_output_tokens is not None:
         max_out = int(max_output_tokens)

@@ -63,8 +63,8 @@ def create_e2e_context(*, mock_resolve: bool = False, registry_session: Registry
     from google import genai
 
     client = genai.Client(api_key=api_key)
-    # Default when GEMINI_MODEL unset: Gemini 3 Flash preview (supports ThinkingConfig like 3.1 Pro).
-    model = os.environ.get("GEMINI_MODEL", "gemini-3-flash-preview").strip()
+    # Default when GEMINI_MODEL unset: Gemini 3.1 Pro preview (ThinkingConfig-capable).
+    model = os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview").strip()
     temperature = float(os.environ.get("GEMINI_TEMPERATURE", "0"))
     max_out = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "16384"))
     tl = env_thinking_level()
