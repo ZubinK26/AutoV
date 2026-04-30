@@ -1,10 +1,12 @@
+# Agentic guardrails — NL rules for WFM→SMT (one rule per line). Source: mirrors 04_agentic_guardrails.txt.
 A customer is identified by a unique customer identifier and has a KYC status that is either VERIFIED, PENDING, or FAILED.
 A customer has an account tier that is one of STANDARD, PLUS, PREMIUM, or BUSINESS.
 A customer has a vulnerable flag that is either true or false.
 A customer has a politically exposed person flag that is either true or false.
 A customer has a sanctions flag that is either true or false.
-A customer has a count of disputes opened in the last twelve months which is a non-negative integer.
-A customer has a sum of goodwill credits received in the last twelve months which is a non-negative amount in pence.
+A customer has a field named recent dispute count which is a non-negative integer maintained by the runtime.
+A customer has a field named recent goodwill credit total which is a non-negative amount in pence maintained by the runtime.
+A customer has a field named has previously failed documentation request which is a boolean maintained by the runtime.
 An account is identified by a unique account identifier and belongs to exactly one customer.
 An account has a status that is one of ACTIVE, FROZEN, CLOSED, or RESTRICTED.
 An account has zero or more active restrictions.
@@ -13,9 +15,11 @@ A card has a status that is one of ACTIVE, FROZEN, BLOCKED, CANCELLED, or EXPIRE
 A transaction is identified by a unique transaction identifier and belongs to exactly one account.
 A transaction has an amount in pence which is a positive integer for debits and a negative integer for credits.
 A transaction has a status that is one of PENDING, POSTED, REVERSED, or DISPUTED.
-A transaction has a posted date which is a date.
+A transaction has a field named days since posted which is a non-negative integer maintained by the runtime.
+A transaction has a field named has duplicate candidate within window which is a boolean maintained by the runtime.
 A transaction has a section seventy five eligibility flag that is either true or false.
 A transaction has a chargeback window in days which is a non-negative integer.
+A transaction has a field named fee already reversed which is a boolean maintained by the runtime.
 A dispute is identified by a unique dispute identifier and references exactly one transaction.
 A dispute has a type that is one of UNAUTHORIZED, MERCHANT_REFUSED, GOODS_NOT_RECEIVED, GOODS_NOT_AS_DESCRIBED, SECTION_75, or DUPLICATE_CHARGE.
 A dispute has a status that is one of OPEN, UNDER_REVIEW, APPROVED, REJECTED, ESCALATED, or WITHDRAWN.
@@ -25,9 +29,9 @@ A restriction is identified by a unique restriction identifier and has a type th
 A restriction has a flag indicating whether human action is required to lift it.
 A fraud report is identified by a unique fraud report identifier and has a status that is one of REPORTED, INVESTIGATING, CONFIRMED, or REJECTED.
 A consumer duty assessment is identified by a unique assessment identifier and records whether a fair value check passed and whether a clear communication check passed.
-The current date is a known date provided by the simulation clock.
+The current interaction has a field named has been escalated which is a boolean maintained by the runtime.
 A tool call is one of the defined write tool calls and carries typed parameters.
-
+ 
 A call to apply a refund of any type requires that the affected customer exists in the database.
 A call to apply a refund of any type requires that the affected account exists in the database.
 A call to apply a refund where the refund type is MERCHANT_REFUND or DISPUTE_REFUND or SECTION_75_REFUND requires that the referenced transaction exists in the database.
@@ -37,26 +41,26 @@ A call to apply a refund where the refund type is DISPUTE_REFUND requires that a
 A call to apply a refund of any type with an amount greater than fifty thousand pence requires human approval.
 A call to apply a refund of any type with an amount greater than the original transaction amount is not permitted.
 A call to apply a goodwill credit with an amount greater than ten thousand pence requires human approval.
-A call to apply a goodwill credit is not permitted if the customer has already received goodwill credits totaling more than fifty thousand pence in the preceding twelve months.
+A call to apply a goodwill credit is not permitted if the customer's recent goodwill credit total exceeds fifty thousand pence.
 A call to apply any refund or goodwill credit is not permitted if the affected account has any active restriction of type SANCTIONS_BLOCK.
 A call to apply any refund or goodwill credit is not permitted if the affected account has any active restriction of type COURT_ORDER.
 A call to apply a refund of any type where the affected customer has a vulnerable flag set to true requires that a consumer duty assessment exists for the current interaction.
 A call to apply a fee reversal requires that the referenced transaction has a positive amount and is classified as a fee.
-A call to apply a fee reversal is not permitted if the same fee has already been reversed.
-
+A call to apply a fee reversal is not permitted if the referenced transaction's fee already reversed flag is set to true.
+ 
 A call to initiate a dispute requires that the referenced transaction exists.
 A call to initiate a dispute requires that the referenced transaction has status POSTED.
 A call to initiate a dispute requires that no other open dispute exists for the same transaction.
 A call to initiate a dispute of type SECTION_75 requires that the referenced transaction has its section seventy five eligibility flag set to true.
 A call to initiate a dispute of type SECTION_75 requires that the referenced transaction amount is at least ten thousand pence and at most thirty million pence.
-A call to initiate a dispute of type UNAUTHORIZED requires that the time between the transaction posted date and the current date is at most one hundred twenty days.
-A call to initiate a dispute of type GOODS_NOT_RECEIVED requires that the time between the transaction posted date and the current date is at least fifteen days.
-A call to initiate a dispute of type DUPLICATE_CHARGE requires that another transaction exists with the same merchant and the same amount and a posted date within seven days of the disputed transaction.
-A call to initiate a dispute is not permitted if the customer has more than ten disputes opened in the preceding twelve months unless the dispute type is UNAUTHORIZED.
+A call to initiate a dispute of type UNAUTHORIZED requires that the referenced transaction's days since posted is at most one hundred twenty.
+A call to initiate a dispute of type GOODS_NOT_RECEIVED requires that the referenced transaction's days since posted is at least fifteen.
+A call to initiate a dispute of type DUPLICATE_CHARGE requires that the referenced transaction's has duplicate candidate within window flag is set to true.
+A call to initiate a dispute is not permitted if the customer's recent dispute count exceeds ten unless the dispute type is UNAUTHORIZED.
 A call to initiate a dispute is not permitted if the customer's KYC status is FAILED.
 A call to cancel a dispute requires that the dispute exists and has status OPEN or UNDER_REVIEW.
 A call to cancel a dispute is not permitted if the dispute has status APPROVED, REJECTED, ESCALATED, or WITHDRAWN.
-
+ 
 A call to freeze a card requires that the card exists.
 A call to freeze a card requires that the card has status ACTIVE.
 A call to unfreeze a card requires that the card exists and has status FROZEN.
@@ -74,35 +78,33 @@ A call to lift an account restriction is not permitted if the restriction has it
 A call to lift an account restriction of type AML_REVIEW requires human approval regardless of the requires-human-to-lift flag.
 A call to lift an account restriction of type SANCTIONS_BLOCK requires human approval regardless of the requires-human-to-lift flag.
 A call to lift an account restriction of type COURT_ORDER is not permitted under any circumstances.
-
+ 
 A call to report fraud requires that the customer exists.
 A call to report fraud requires that all referenced transactions exist and belong to the same customer.
 A call to report fraud of type APP_FRAUD requires that at least one referenced transaction has status POSTED.
 A call to report fraud of type CARD_FRAUD requires that at least one referenced transaction has a card identifier.
-A call to report fraud of type ACCOUNT_TAKEOVER requires escalation to a human within the same interaction.
-A call to report fraud of type IDENTITY_THEFT requires escalation to a human within the same interaction.
-A call to report fraud results in an active fraud hold restriction being applied to the account if not already present.
+A call to report fraud of type ACCOUNT_TAKEOVER requires that the current interaction's has been escalated flag is set to true.
+A call to report fraud of type IDENTITY_THEFT requires that the current interaction's has been escalated flag is set to true.
 A call to apply a refund of type DISPUTE_REFUND is not permitted if a fraud report with status CONFIRMED references the same transaction.
 A call to initiate a dispute is not permitted if a fraud report with status CONFIRMED references the same transaction.
-
+ 
 A call to apply any refund or goodwill credit affecting a customer with a vulnerable flag set to true is not permitted unless a consumer duty assessment for the current interaction has its fair value check passed flag set to true.
 A call to send a customer message of category PROMOTIONAL is not permitted if the recipient customer has a vulnerable flag set to true.
-A call to send a customer message of category COLLECTIONS is not permitted if the recipient customer has a vulnerable flag set to true unless the interaction has been escalated to a human.
+A call to send a customer message of category COLLECTIONS is not permitted if the recipient customer has a vulnerable flag set to true unless the current interaction's has been escalated flag is set to true.
 A call to escalate to a human is permitted in any state in which the customer exists.
-A call to escalate to a human with urgency HIGH is required when the customer reports potential APP fraud and the customer's vulnerable flag is set to true.
 A call to log a consumer duty assessment requires that the customer exists and that the current interaction exists.
 A call to apply any refund of an amount exceeding twenty thousand pence to a customer with a vulnerable flag set to true requires that a consumer duty assessment exists for the current interaction with both checks passed.
-
+ 
 A call to request documentation requires that the customer exists.
-A call to request documentation with a deadline less than three business days from the current date is not permitted unless the customer has previously failed to provide the same documentation.
+A call to request documentation with a deadline business days field of less than three is not permitted unless the customer's has previously failed documentation request flag is set to true.
 A call to request documentation of type PROOF_OF_ADDRESS is not permitted if the customer's KYC status is VERIFIED unless an active restriction of type COMPLIANCE_REVIEW is present.
-
+ 
 A call of any write type is not permitted if the affected account has status CLOSED.
 A call of any write type other than escalate to human is not permitted if the affected customer's sanctions flag is set to true.
 A call of any write type that modifies financial state requires that the affected account has status ACTIVE or RESTRICTED.
 A call of any write type other than escalate to human and other than send customer message is not permitted if the affected customer's KYC status is FAILED.
 A call to apply any refund or goodwill credit is not permitted if the affected account's status is FROZEN unless the refund is the result of an APPROVED dispute.
-
+ 
 A tool call carrying parameters that reference an entity not present in the database is not permitted.
 A tool call carrying a numeric parameter outside the declared bounds for that parameter is not permitted.
 A tool call carries a field named is duplicate of prior allowed call in interaction which is a boolean maintained by the runtime.
