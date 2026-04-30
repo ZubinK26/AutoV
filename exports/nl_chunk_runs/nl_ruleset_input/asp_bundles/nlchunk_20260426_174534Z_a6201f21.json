@@ -1,0 +1,81 @@
+{
+  "bundle_id": "nlchunk_20260426_174534Z_a6201f21",
+  "accepted_at": "2026-04-26T17:45:54Z",
+  "committed_at": "2026-04-26T17:46:26Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_76b8862a5db3",
+    "r_e23239b422e3",
+    "r_0b6af779f589",
+    "r_19c8c49b0b8e",
+    "r_2d25082a9794",
+    "r_08a76163f6a8"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunk_20260426_174534Z_a6201f21",
+    "user_original_input": "Incremental policy ruleset chunk from file 'nl_ruleset_input.md' (1-based global rule indices 31–33).\n\nRules in this chunk:\n31. A resource manager or the transaction manager may crash at any time step.\n32. The committed state is terminal: once a resource manager is in the committed state, it remains in the committed state.\n33. The aborted state is terminal: once a resource manager is in the aborted state, it remains in the aborted state.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every resource manager may crash at any time step.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every resource manager may crash at any time step.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The transaction manager may crash at any time step.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The transaction manager may crash at any time step.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "The committed state is terminal.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"The committed state is terminal.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "If a resource manager is in the committed state, then that resource manager remains in the committed state for all subsequent time steps.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"If a resource manager is in the committed state, then that resource manager remains in the committed state for all subsequent time steps.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "The aborted state is terminal.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"The aborted state is terminal.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "If a resource manager is in the aborted state, then that resource manager remains in the aborted state for all subsequent time steps.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"If a resource manager is in the aborted state, then that resource manager remains in the aborted state for all subsequent time steps.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunk_20260426_174534Z_a6201f21_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-26T17:45:54Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_runs\\nl_ruleset_input\\policy_model.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
+}

@@ -1,0 +1,351 @@
+{
+  "bundle_id": "symtex_batch_20260428_225403Z_66ae3414",
+  "accepted_at": "2026-04-28T22:56:54Z",
+  "committed_at": "2026-04-28T22:57:37Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_53dd21a7e06a",
+    "r_8354e1fb7018",
+    "r_9cdc836bc26c",
+    "r_7bbf006a2ec6",
+    "r_bd4eb88cf523",
+    "r_c424a34e7136",
+    "r_d2711596390a",
+    "r_1803550b13b1",
+    "r_9aab42522274",
+    "r_dad01bf856f4",
+    "r_ac3e7ce14f28",
+    "r_144100e656b3",
+    "r_de9a0687d5fe",
+    "r_46d0c5d2b477",
+    "r_f847ab9b2a93",
+    "r_2aa7d7b29a26",
+    "r_bb88533c3274",
+    "r_eabcaec6c179",
+    "r_4ea576778dbc",
+    "r_77d6c9c8fa42",
+    "r_a4009daab7a8",
+    "r_daa94b500cce",
+    "r_e7c311aef8a7",
+    "r_271b34c34ad3",
+    "r_fd7165c7e5c4",
+    "r_94e55c9373a8",
+    "r_e0615274db1f",
+    "r_a3b2500fbced",
+    "r_fccb248cbe1e",
+    "r_fb76a0348c15",
+    "r_8c6e84733502",
+    "r_288332fe109b",
+    "r_74a3d4e40303",
+    "r_927b05fa351a",
+    "r_f36d59aafd7b",
+    "r_9d01b48ae934"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260428_225403Z_66ae3414",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nadult(\"Christina\") is explicitly false.\nbass(\"Benjamin\", \"Christina\") is explicitly false.\nberyl(\"Joy\", \"Leonard\") is explicitly false.\nbureaucratic_procedure(\"Joy\", \"Christina\") is explicitly false.\nerectile_tissue(\"Leonard\", \"Christina\") is explicitly false.\nhong_kong_dollar(\"Joy\") is explicitly false.\nmother_of_pearl(\"Benjamin\", \"Joy\") is explicitly false.\nninian(\"Leonard\", \"Christina\") is explicitly false.\nopen_sesame(\"Leonard\") is explicitly false.\nsawdust_doll(\"Benjamin\", \"Leonard\") is explicitly false.\nskin(\"Christina\") is explicitly false.\nsmall_print(\"Joy\", \"Christina\") is explicitly false.\nsmoke(\"Benjamin\", \"Joy\") is explicitly false.\nutensil(\"Joy\", \"Christina\") is explicitly false.\ncarbonado(\"Benjamin\", \"Joy\") is true.\ncoloring(\"Benjamin\", \"Joy\") is true.\ndimension(\"Leonard\", \"Christina\") is true.\nheating_element(\"Benjamin\", \"Joy\") is true.\nkill(\"Benjamin\", \"Joy\") is true.\nrace(\"Joy\", \"Christina\") is true.\nsing_songs(Benjamin, Joy) is true.\n\nRules:\nIf connect_to_hallways(V0, V1) is true, then acculturation(V1) is explicitly false.\nIf drinking_establishment(V1, V3) is true and connect_to_hallways(V0, V1) is true and holding(V2, V3) is explicitly false, then acculturation(V1) is explicitly false.\nIf connect_to_hallways(V0, V1) is explicitly false and mother_of_pearl(V0, V1) is not true and smoke(V0, V1) is not true, then coinage(V1, V0) is explicitly false.\nIf hong_kong_dollar(V1) is explicitly false and sawdust_doll(V0, V2) is explicitly false and beryl(V1, V2) is explicitly false and erectile_tissue(V2, V3) is explicitly false and ninian(V2, V3) is explicitly false, then fishing_trip(V1) is explicitly false.\nIf hand_luggage(V1, V2) is explicitly false, then solleret(V1) is explicitly false.\nIf hand_luggage(V1, V2) is true and warner(V1, V3) is true and there is no evidence that holding(V2, V3) is explicitly false, then acculturation(V1) is true.\nIf adult(V3) is explicitly false and kill(V0, V1) is true and there is no evidence that bass(V0, V3) is true, then cinnamon_bread(V1) is true.\nIf there is no evidence that warner(V1, V3) is true and there is no evidence that central_america(V1, V3) is true and bureaucratic_procedure(V1, V3) is explicitly false, then connect_to_hallways(V3, V1) is true.\nIf open_sesame(V2) is explicitly false and skin(V3) is explicitly false and coloring(V0, V1) is true and there is no evidence that race(V1, V3) is explicitly false and there is no evidence that dimension(V2, V3) is explicitly false, then hand_luggage(V1, V2) is true or drinking_establishment(V1, V3) is explicitly false or solleret(V3) is true or connect_to_hallways(V0, V1) is explicitly false.\nIf solleret(V3) is true, then holding(V3, V3) is true or central_america(V3, V3) is true.\nIf there is no evidence that connect_to_hallways(V0, V1) is explicitly false and warner(V1, V3) is explicitly false and there is no evidence that heating_element(V0, V1) is explicitly false and sing_songs(V0, V1) is true and carbonado(V0, V1) is true, then mother_of_pearl(V0, V1) is true.\nIf connect_to_hallways(V0, V1) is true, then open_sesame(V0) is true.\nIf acculturation(V1) is explicitly false, then open_sesame(V1) is true.\nIf holding(V2, V3) is explicitly false and there is no evidence that central_america(V1, V3) is true and acculturation(V1) is explicitly false, then open_sesame(V2) is true.\nIf drinking_establishment(V1, V3) is explicitly false and there is no evidence that central_america(V1, V3) is explicitly false and there is no evidence that coinage(V1, V3) is true and there is no evidence that small_print(V1, V3) is true and there is no evidence that utensil(V1, V3) is true, then warner(V1, V3) is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Christina is not an adult.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Christina is not an adult.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The relationship bass between Benjamin and Christina is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The relationship bass between Benjamin and Christina is explicitly false.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "The relationship beryl between Joy and Leonard is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"The relationship beryl between Joy and Leonard is explicitly false.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "The relationship bureaucratic procedure between Joy and Christina is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"The relationship bureaucratic procedure between Joy and Christina is explicitly false.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "The relationship erectile tissue between Leonard and Christina is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"The relationship erectile tissue between Leonard and Christina is explicitly false.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Joy is not a Hong Kong dollar.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Joy is not a Hong Kong dollar.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The relationship mother of pearl between Benjamin and Joy is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The relationship mother of pearl between Benjamin and Joy is explicitly false.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "The relationship ninian between Leonard and Christina is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"The relationship ninian between Leonard and Christina is explicitly false.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Leonard is not an open sesame.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Leonard is not an open sesame.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "The relationship sawdust doll between Benjamin and Leonard is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"The relationship sawdust doll between Benjamin and Leonard is explicitly false.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Christina is not a skin.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Christina is not a skin.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "The relationship small print between Joy and Christina is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"The relationship small print between Joy and Christina is explicitly false.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "The relationship smoke between Benjamin and Joy is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"The relationship smoke between Benjamin and Joy is explicitly false.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "The relationship utensil between Joy and Christina is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"The relationship utensil between Joy and Christina is explicitly false.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "The relationship carbonado between Benjamin and Joy is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"The relationship carbonado between Benjamin and Joy is true.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "The relationship coloring between Benjamin and Joy is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"The relationship coloring between Benjamin and Joy is true.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "The relationship dimension between Leonard and Christina is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"The relationship dimension between Leonard and Christina is true.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "The relationship heating element between Benjamin and Joy is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"The relationship heating element between Benjamin and Joy is true.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "Benjamin kills Joy.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"Benjamin kills Joy.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "The relationship race between Joy and Christina is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"The relationship race between Joy and Christina is true.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "Benjamin sings songs to Joy.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"Benjamin sings songs to Joy.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "If V0 connects to hallways V1, then acculturation of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"If V0 connects to hallways V1, then acculturation of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "If V1 is a drinking establishment for V3 and V0 connects to hallways V1 and V2 is not holding V3, then acculturation of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"If V1 is a drinking establishment for V3 and V0 connects to hallways V1 and V2 is not holding V3, then acculturation of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If V0 does not connect to hallways V1 and the relationship mother of pearl between V0 and V1 is not true and V0 does not smoke with V1, then the coinage of V1 for V0 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If V0 does not connect to hallways V1 and the relationship mother of pearl between V0 and V1 is not true and V0 does not smoke with V1, then the coinage of V1 for V0 is explicitly false.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If V1 is not a Hong Kong dollar and the relationship sawdust doll between V0 and V2 is explicitly false and the relationship beryl between V1 and V2 is explicitly false and the relationship erectile tissue between V2 and V3 is explicitly false and the relationship ninian between V2 and V3 is explicitly false, then the fishing trip of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If V1 is not a Hong Kong dollar and the relationship sawdust doll between V0 and V2 is explicitly false and the relationship beryl between V1 and V2 is explicitly false and the relationship erectile tissue between V2 and V3 is explicitly false and the relationship ninian between V2 and V3 is explicitly false, then the fishing trip of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 25,
+        "statement_nl": "If the hand luggage relationship between V1 and V2 is explicitly false, then the solleret of V1 is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "26. \"If the hand luggage relationship between V1 and V2 is explicitly false, then the solleret of V1 is explicitly false.\""
+      },
+      {
+        "line_index": 26,
+        "statement_nl": "If the hand luggage relationship between V1 and V2 is true and V1 is a warner for V3 and there is no evidence that V2 is not holding V3, then the acculturation of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "27. \"If the hand luggage relationship between V1 and V2 is true and V1 is a warner for V3 and there is no evidence that V2 is not holding V3, then the acculturation of V1 is true.\""
+      },
+      {
+        "line_index": 27,
+        "statement_nl": "If V3 is not an adult and Benjamin kills Joy and there is no evidence that the relationship bass between V0 and V3 is true, then the cinnamon bread of V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "28. \"If V3 is not an adult and Benjamin kills Joy and there is no evidence that the relationship bass between V0 and V3 is true, then the cinnamon bread of V1 is true.\""
+      },
+      {
+        "line_index": 28,
+        "statement_nl": "If there is no evidence that V1 is a warner for V3 and there is no evidence that the relationship central America exists between V1 and V3 and the relationship bureaucratic procedure between V1 and V3 is explicitly false, then V3 connects to hallways V1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "29. \"If there is no evidence that V1 is a warner for V3 and there is no evidence that the relationship central America exists between V1 and V3 and the relationship bureaucratic procedure between V1 and V3 is explicitly false, then V3 connects to hallways V1.\""
+      },
+      {
+        "line_index": 29,
+        "statement_nl": "If V2 is not an open sesame and V3 is not a skin and the relationship coloring between V0 and V1 is true and there is no evidence that the relationship race between V1 and V3 is explicitly false and there is no evidence that the relationship dimension between V2 and V3 is explicitly false, then the hand luggage relationship between V1 and V2 is true or V1 is not a drinking establishment for V3 or the solleret of V3 is true or V0 does not connect to hallways V1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "30. \"If V2 is not an open sesame and V3 is not a skin and the relationship coloring between V0 and V1 is true and there is no evidence that the relationship race between V1 and V3 is explicitly false and there is no evidence that the relationship dimension between V2 and V3 is explicitly false, then the hand luggage relationship between V1 and V2 is true or V1 is not a drinking establishment for V3 or the solleret of V3 is true or V0 does not connect to hallways V1.\""
+      },
+      {
+        "line_index": 30,
+        "statement_nl": "If the solleret of V3 is true, then V3 is holding V3 or the relationship central America exists between V3 and V3.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "31. \"If the solleret of V3 is true, then V3 is holding V3 or the relationship central America exists between V3 and V3.\""
+      },
+      {
+        "line_index": 31,
+        "statement_nl": "If there is no evidence that V0 does not connect to hallways V1 and the relationship warner between V1 and V3 is explicitly false and there is no evidence that the relationship heating element between V0 and V1 is explicitly false and Benjamin sings songs to Joy and the relationship carbonado between V0 and V1 is true, then the relationship mother of pearl between V0 and V1 is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "32. \"If there is no evidence that V0 does not connect to hallways V1 and the relationship warner between V1 and V3 is explicitly false and there is no evidence that the relationship heating element between V0 and V1 is explicitly false and Benjamin sings songs to Joy and the relationship carbonado between V0 and V1 is true, then the relationship mother of pearl between V0 and V1 is true.\""
+      },
+      {
+        "line_index": 32,
+        "statement_nl": "If V0 connects to hallways V1, then V0 is an open sesame.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "33. \"If V0 connects to hallways V1, then V0 is an open sesame.\""
+      },
+      {
+        "line_index": 33,
+        "statement_nl": "If the acculturation of V1 is explicitly false, then V1 is an open sesame.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "34. \"If the acculturation of V1 is explicitly false, then V1 is an open sesame.\""
+      },
+      {
+        "line_index": 34,
+        "statement_nl": "If V2 is not holding V3 and there is no evidence that the relationship central America exists between V1 and V3 and the acculturation of V1 is explicitly false, then V2 is an open sesame.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "35. \"If V2 is not holding V3 and there is no evidence that the relationship central America exists between V1 and V3 and the acculturation of V1 is explicitly false, then V2 is an open sesame.\""
+      },
+      {
+        "line_index": 35,
+        "statement_nl": "If V1 is not a drinking establishment for V3 and there is no evidence that the relationship central America between V1 and V3 is explicitly false and there is no evidence that the relationship coinage between V1 and V3 is true and there is no evidence that the relationship small print between V1 and V3 is true and there is no evidence that the relationship utensil between V1 and V3 is true, then V1 is a warner for V3.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "36. \"If V1 is not a drinking establishment for V3 and there is no evidence that the relationship central America between V1 and V3 is explicitly false and there is no evidence that the relationship coinage between V1 and V3 is true and there is no evidence that the relationship small print between V1 and V3 is true and there is no evidence that the relationship utensil between V1 and V3 is true, then V1 is a warner for V3.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260428_225403Z_66ae3414_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-28T22:54:16Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260428_225403Z_66ae3414.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
+}

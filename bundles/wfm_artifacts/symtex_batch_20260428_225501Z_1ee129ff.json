@@ -1,0 +1,165 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260428_225501Z_1ee129ff",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nP11(Jeffery) is explicitly false.\nP12(Jonathan, Jocelyn, Jennifer) is true.\nP13(Jonathan, Jocelyn, Jennifer) is explicitly false.\nP14(Melissa, Jennifer) is explicitly false.\nP15(Melissa) is explicitly false.\nP16(Jeffery, Jocelyn) is true.\nP17(Jocelyn, Melissa) is explicitly false.\nP18(Jonathan, Melissa, Jennifer) is explicitly false.\n\nRules:\nIf P0(V0, V3) is explicitly false and P2(V2, V4) is true and P4(V3, V4) is true and P6(V0, V1, V2) is true and there is no evidence that P8(V1, V3, V4) is explicitly false, then P10(V0, V3, V4) is true.\nIf P11(V1) is explicitly false and P15(V3) is explicitly false and P16(V1, V2) is true and P17(V2, V3) is explicitly false and P18(V0, V3, V4) is explicitly false, then P0(V0, V3) is explicitly false.\nIf P11(V1) is explicitly false and P15(V3) is explicitly false and P16(V1, V2) is true and P17(V2, V3) is explicitly false and P18(V0, V3, V4) is explicitly false, then P1(V0, V2, V3) is true.\nIf P12(V0, V2, V4) is true, then P2(V2, V4) is true.\nIf P12(V0, V2, V4) is true, then P3(V0, V2) is explicitly false.\nIf P12(V0, V2, V4) is true and there is no evidence that P13(V0, V2, V4) is true, then P4(V4, V4) is true.\nIf P12(V0, V2, V4) is true and there is no evidence that P13(V0, V2, V4) is true, then P5(V0, V2, V4) is explicitly false.\nIf P1(V0, V2, V3) is true and there is no evidence that P7(V0, V2, V3) is explicitly false, then P6(V0, V2, V2) is true.\nIf P3(V0, V2) is explicitly false and there is no evidence that P9(V0, V2) is explicitly false, then P7(V0, V2, V2) is true.\nIf P4(V3, V4) is true and there is no evidence that P14(V3, V4) is true, then P8(V3, V3, V4) is true.\nIf P5(V0, V1, V4) is explicitly false and P14(V3, V4) is explicitly false, then P9(V0, V4) is true.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "P11(Jeffery) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"P11(Jeffery) is explicitly false.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "P12(Jonathan, Jocelyn, Jennifer) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"P12(Jonathan, Jocelyn, Jennifer) is true.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "P13(Jonathan, Jocelyn, Jennifer) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"P13(Jonathan, Jocelyn, Jennifer) is explicitly false.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "P14(Melissa, Jennifer) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"P14(Melissa, Jennifer) is explicitly false.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "P15(Melissa) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"P15(Melissa) is explicitly false.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "P16(Jeffery, Jocelyn) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"P16(Jeffery, Jocelyn) is true.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "P17(Jocelyn, Melissa) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"P17(Jocelyn, Melissa) is explicitly false.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "P18(Jonathan, Melissa, Jennifer) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"P18(Jonathan, Melissa, Jennifer) is explicitly false.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "If P0(V0, V3) is explicitly false and P2(V2, V4) is true and P4(V3, V4) is true and P6(V0, V1, V2) is true and there is no evidence that P8(V1, V3, V4) is explicitly false, then P10(V0, V3, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"If P0(V0, V3) is explicitly false and P2(V2, V4) is true and P4(V3, V4) is true and P6(V0, V1, V2) is true and there is no evidence that P8(V1, V3, V4) is explicitly false, then P10(V0, V3, V4) is true.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "If P11(V1) is explicitly false and P15(V3) is explicitly false and P16(V1, V2) is true and P17(V2, V3) is explicitly false and P18(V0, V3, V4) is explicitly false, then P0(V0, V3) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"If P11(V1) is explicitly false and P15(V3) is explicitly false and P16(V1, V2) is true and P17(V2, V3) is explicitly false and P18(V0, V3, V4) is explicitly false, then P0(V0, V3) is explicitly false.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "If P11(V1) is explicitly false and P15(V3) is explicitly false and P16(V1, V2) is true and P17(V2, V3) is explicitly false and P18(V0, V3, V4) is explicitly false, then P1(V0, V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"If P11(V1) is explicitly false and P15(V3) is explicitly false and P16(V1, V2) is true and P17(V2, V3) is explicitly false and P18(V0, V3, V4) is explicitly false, then P1(V0, V2, V3) is true.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "If P12(V0, V2, V4) is true, then P2(V2, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"If P12(V0, V2, V4) is true, then P2(V2, V4) is true.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "If P12(V0, V2, V4) is true, then P3(V0, V2) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"If P12(V0, V2, V4) is true, then P3(V0, V2) is explicitly false.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "If P12(V0, V2, V4) is true and there is no evidence that P13(V0, V2, V4) is true, then P4(V4, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"If P12(V0, V2, V4) is true and there is no evidence that P13(V0, V2, V4) is true, then P4(V4, V4) is true.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "If P12(V0, V2, V4) is true and there is no evidence that P13(V0, V2, V4) is true, then P5(V0, V2, V4) is explicitly false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"If P12(V0, V2, V4) is true and there is no evidence that P13(V0, V2, V4) is true, then P5(V0, V2, V4) is explicitly false.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "If P1(V0, V2, V3) is true and there is no evidence that P7(V0, V2, V3) is explicitly false, then P6(V0, V2, V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"If P1(V0, V2, V3) is true and there is no evidence that P7(V0, V2, V3) is explicitly false, then P6(V0, V2, V2) is true.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "If P3(V0, V2) is explicitly false and there is no evidence that P9(V0, V2) is explicitly false, then P7(V0, V2, V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"If P3(V0, V2) is explicitly false and there is no evidence that P9(V0, V2) is explicitly false, then P7(V0, V2, V2) is true.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "If P4(V3, V4) is true and there is no evidence that P14(V3, V4) is true, then P8(V3, V3, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"If P4(V3, V4) is true and there is no evidence that P14(V3, V4) is true, then P8(V3, V3, V4) is true.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "If P5(V0, V1, V4) is explicitly false and P14(V3, V4) is explicitly false, then P9(V0, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"If P5(V0, V1, V4) is explicitly false and P14(V3, V4) is explicitly false, then P9(V0, V4) is true.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260428_225501Z_1ee129ff_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-28T22:55:11Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

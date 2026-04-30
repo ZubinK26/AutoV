@@ -1,0 +1,93 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260426_182611Z_7764180c",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_policy_next.md' (1-based global rule indices 11–20).\n\nRules in this chunk:\n11. At time step 0, the transaction manager is in the init state.\n12. At time step 0, no resource manager has crashed.\n13. At time step 0, the transaction manager has not crashed.\n14. A resource manager either has crashed at a given time step or it has not.\n15. The transaction manager either has crashed at a given time step or it has not.\n16. If a resource manager has crashed at time T, then that resource manager has crashed at every later time step.\n17. If the transaction manager has crashed at time T, then the transaction manager has crashed at every later time step.\n18. If a resource manager is in the working state at time T and has not crashed at time T, then exactly one of the following holds at time T plus 1: the resource manager is in the working state, the resource manager is in the prepared state, or the resource manager is in the aborted state.\n19. If a resource manager transitions from the working state at time T to the prepared state at time T plus 1, then a prepared message from that resource manager is sent at time T plus 1.\n20. If a resource manager transitions from the working state at time T to the aborted state at time T plus 1, then an abort vote message from that resource manager is sent at time T plus 1.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "At time step 0, the transaction manager is in the init state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"At time step 0, the transaction manager is in the init state.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "At time step 0, every resource manager has not crashed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"At time step 0, every resource manager has not crashed.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "At time step 0, the transaction manager has not crashed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"At time step 0, the transaction manager has not crashed.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every resource manager either has crashed at a given time step or has not crashed at that time step.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every resource manager either has crashed at a given time step or has not crashed at that time step.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The transaction manager either has crashed at a given time step or has not crashed at that time step.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The transaction manager either has crashed at a given time step or has not crashed at that time step.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "If a resource manager has crashed at time step T, then that resource manager has crashed at time step T + 1.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"If a resource manager has crashed at time step T, then that resource manager has crashed at every time step after T.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "If the transaction manager has crashed at time step T, then the transaction manager has crashed at time step T + 1.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"If the transaction manager has crashed at time step T, then the transaction manager has crashed at every time step after T.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "If a resource manager is in the working state at time step T and has not crashed at time step T, then exactly one of the following holds at time step T + 1: the resource manager is in the working state, the resource manager is in the prepared state, or the resource manager is in the aborted state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"If a resource manager is in the working state at time step T and has not crashed at time step T, then exactly one of the following holds at time step T + 1: the resource manager is in the working state, the resource manager is in the prepared state, or the resource manager is in the aborted state.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "If a resource manager is in the working state at time step T and is in the prepared state at time step T + 1, then exactly one prepared message from that resource manager is sent at time step T + 1.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"If a resource manager is in the working state at time step T and is in the prepared state at time step T + 1, then exactly one prepared message from that resource manager is sent at time step T + 1.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "If a resource manager is in the working state at time step T and is in the aborted state at time step T + 1, then exactly one abort vote message from that resource manager is sent at time step T + 1.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"If a resource manager is in the working state at time step T and is in the aborted state at time step T + 1, then exactly one abort vote message from that resource manager is sent at time step T + 1.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260426_182611Z_7764180c_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-26T18:26:29Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

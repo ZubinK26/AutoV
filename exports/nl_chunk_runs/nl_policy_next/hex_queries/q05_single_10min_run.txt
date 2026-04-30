@@ -1,0 +1,6 @@
+timestamp_utc≈run_script
+elapsed_sec=600.2
+wall_limit_sec=600
+config=--configuration=trendy --rand-freq=0.2
+query=q05_center_opening_blue_wins.lp
+outcome=RESULT: TIMEOUT (no sat/unsat within 600s wall clock)

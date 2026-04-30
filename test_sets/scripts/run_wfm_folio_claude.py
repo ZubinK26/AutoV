@@ -3,7 +3,7 @@
 Run FOLIO-only examples from wfm_folio_pffolio_examples_en.md through Agents 1→2→3
 via Anthropic Claude (contract-frozen defaults). Agent 4 is skipped.
 
-Usage (from repo root that contains WFM/ and test_sets/):
+Usage (from repo root that contains asp/wfm/ and test_sets/):
   pip install -r test_sets/requirements-wfm-test.txt
   copy .env.example .env   # then edit .env — never commit .env
   python test_sets/scripts/run_wfm_folio_claude.py
@@ -31,8 +31,8 @@ from pathlib import Path
 # --- paths ---
 SCRIPT_DIR = Path(__file__).resolve().parent
 TEST_SETS = SCRIPT_DIR.parent
-REPO_ROOT = TEST_SETS.parent  # directory containing WFM/ and test_sets/
-WFM_DIR = REPO_ROOT / "WFM"
+REPO_ROOT = TEST_SETS.parent  # directory containing asp/wfm/ and test_sets/
+WFM_DIR = REPO_ROOT / "asp" / "wfm"
 PROMPTS_DIR = WFM_DIR / "prompts"
 EXAMPLES_FILE = TEST_SETS / "wfm_folio_pffolio_examples_en.md"
 STRESS_EXAMPLES_FILE = TEST_SETS / "wfm_stress_examples_en.md"

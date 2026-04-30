@@ -57,6 +57,8 @@ flowchart LR
 
 **Input:** Free-text policy (examples: FOLIO/P-FOLIO/stress examples, or ad hoc rules). Loaded from CLI (`--text` / `--file`), demo pools, or batch harnesses.
 
+**WFM (many-sorted FOL):** Orchestration loads prompts from **`smt/wfm/`** (frozen copy of the `smt-pipeline` branch `WFM/` tree). Run WFM with **`python -m wfm_orchestration.cli --wfm-profile smt --skip-registry`** (plus `--text` / `--file`) when producing handoffs for **`smt_pipeline`**. The **ASP / ClinCon** profile uses **`asp/wfm/`** (`--wfm-profile asp`, default). A stub **`WFM/README.md`** at repo root points here for old links.
+
 **Execution:** `wfm_orchestration` runs **Agents 1 → 2 → 3** via Gemini (`call_gemini` in `test_sets/scripts/run_wfm_folio_gemini.py`), then prompts for **acceptance** of the confirmation package. Users may **disagree** and trigger **Agent 4** plus Style-A merge, with up to **four** outer passes.
 
 **Configuration:** Model and generation knobs come from environment (e.g. `GEMINI_MODEL`, `GEMINI_THINKING_LEVEL`, temperature, max output tokens). Some models omit **thinking config** when the API rejects it (`model_supports_thinking_config`).
@@ -163,6 +165,8 @@ The **registry stage** (`run_bundle_through_registry`) remains the path for **en
 | WFM → handoff only (batch) | `python -m wfm_orchestration.run_hard_batch --delay-sec 30` |
 | SMT one handoff | `python -m smt_pipeline --handoff ... --policy-model ... --out-bundle-dir ...` |
 | SMT batch from WFM dir | `python -m smt_pipeline.run_wfm_handoff_batch --delay-sec 30` |
+| Chunked NL → one growing `policy_model.smt2` | `python -m wfm_orchestration.nl_chunk_smt_policy_pipeline --nl-file path/to/rules.md` (state: `exports/nl_chunk_smt_runs/<stem>/`; WFM uses `smt/wfm/`) |
+| FOLIO JSONL → WFM (smt) → SMT (resume) | `python -m smt_pipeline.run_folio_wfm_smt_batch --limit 5 --split validation` (state: `exports/folio_smt_batch/`) |
 | SAT / unsat core (one file) | `python -m smt_pipeline.policy_check <policy.smt2>` |
 | SAT batch | `python -m smt_pipeline.run_policy_batch_check --out-json ...` |
 

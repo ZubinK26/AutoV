@@ -1,0 +1,36 @@
+conditions_query_results.txt — scenario-pinned violation queries
+Pattern: pins + viol + :- not viol.  SAT => violation exists; UNSAT => consequent forced.
+=== run 2026-04-28T21:20:35Z ===
+
+rank01_nl28_grappled_speed.lp (NL#28 grappled speed 0)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+
+rank02_nl61_restrained_speed.lp (NL#61 restrained speed 0)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+
+rank03_nl55_poisoned_attack_disadv.lp (NL#55 poisoned attack disadvantage)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+
+rank04_nl18_exhaustion_cap_death.lp (NL#18 exhaustion 5+2 cap at 6 and die)
+  result=SAT
+  interpretation: violation witness exists — pinned scenario allows consequent to fail (policy gap / unpinned interaction)
+
+rank05_nl86_paralyzed_incapacitated.lp (NL#86 paralyzed inherits incapacitated)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+
+rank06_nl84_blinded_two_instances_one_expired.lp (NL#84 blinded persists while second instance active)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+
+rank07_nl25_frightened_no_los_ability_disadv.lp (NL#25 frightened without LOS no ability-check disadv)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+
+rank08_nl20_remove_exhaustion_falls_below_one.lp (NL#20 remove 2 from level 1 clamps to 0)
+  result=UNSAT
+  interpretation: no violation witness — consequent enforced for pinned scenario (policy passes this check)
+

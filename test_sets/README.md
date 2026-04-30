@@ -17,10 +17,10 @@
 
 **Contract defaults** are documented in **`wfm_api_contract_frozen.md`** (model Sonnet 4, `temperature=0`, etc.).
 
-One-shot run from the repo folder that contains `WFM/` and `test_sets/`:
+One-shot run from the repo folder that contains `asp/wfm/` and `test_sets/`:
 
 ```powershell
-cd <repo-root>   # folder that contains WFM/ and test_sets/
+cd <repo-root>   # folder that contains asp/wfm/ and test_sets/
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r test_sets/requirements-wfm-test.txt
@@ -32,7 +32,7 @@ python test_sets/scripts/run_wfm_folio_claude.py
 Optional: set `ANTHROPIC_API_KEY` in the shell environment instead of `.env`.
 
 - Parses the **## FOLIO** section only from `wfm_folio_pffolio_examples_en.md`.
-- Loads system prompts verbatim from `WFM/prompts/agent_{1,2,3}_*.md` and injects `compound_operator_limit` from `WFM/config/wfm.json` into Agent 2.
+- Loads system prompts verbatim from `asp/wfm/prompts/agent_{1,2,3}_*.md` and injects `compound_operator_limit` from `asp/wfm/config/wfm.json` into Agent 2.
 - Writes **`run_results/wfm_folio_run_<UTC>.md`** (human-readable, notebook-style) and **`.jsonl`** (one row per example with usage).
 - **Agent 4** is not invoked. If Agent 2 returns `LIMIT_EXCEEDED`, Agent 3 is skipped (matches WFM termination).
 
@@ -83,13 +83,13 @@ If a run has `OUT_OF_SCOPE` text that cannot be matched to Agent 2 numbered line
 | Parse **`wfm_patch`** and print a **Style A merge preview** (`--merge-preview`) | Yes (best-effort) |
 | **Automatically** run **Agent 1 → 2 → 3** again on the merged text | **No** — not implemented in this script |
 
-The **product** flow in **`WFM/Agent_WFM.md`** is: confirm merged NL → **full WFM re-entry at Agent 1** → … → confirmation again (subject to outer budget). This repository’s Agent 4 script is a **slice** of that: it exercises **Agent 4 + merge preview** only. After you inspect the merge preview (or copy the merged text), you **manually** feed that text into **`run_wfm_folio_gemini.py`** (or a future single orchestrator that chains the steps). Wiring the full loop into **one** command is **orchestration work**, not done here yet.
+The **product** flow in **`asp/wfm/Agent_WFM.md`** is: confirm merged NL → **full WFM re-entry at Agent 1** → … → confirmation again (subject to outer budget). This repository’s Agent 4 script is a **slice** of that: it exercises **Agent 4 + merge preview** only. After you inspect the merge preview (or copy the merged text), you **manually** feed that text into **`run_wfm_folio_gemini.py`** (or a future single orchestrator that chains the steps). Wiring the full loop into **one** command is **orchestration work**, not done here yet.
 
 ---
 
 ### API key
 
-The script uses the **same** **`GEMINI_API_KEY`** as `run_wfm_folio_gemini.py` (loaded from **`.env`** at the repo root, next to `WFM/` and `test_sets/`).
+The script uses the **same** **`GEMINI_API_KEY`** as `run_wfm_folio_gemini.py` (loaded from **`.env`** at the repo root, next to `asp/wfm/` and `test_sets/`).
 
 - If the key is **already** set and Gemini 1–3 runs work, you do **not** do anything extra for Agent 4.
 - You only need to edit `.env` if the script prints **`ERROR: Set GEMINI_API_KEY`** (missing or empty).
@@ -161,7 +161,7 @@ python test_sets/scripts/run_wfm_agent4_from_run.py --run-jsonl test_sets/run_re
 
 **Eligible row:** Agent 3 has output (not skipped) and Agent 2 is not `LIMIT_EXCEEDED`.
 
-See **`wfm_agent4_confirmation_manual_scenario.md`** and **`WFM/prompts/agent_4_user_interaction.md`** (`WFM_PATCH`).
+See **`wfm_agent4_confirmation_manual_scenario.md`** and **`asp/wfm/prompts/agent_4_user_interaction.md`** (`WFM_PATCH`).
 
 ## Automated WFM pipeline (Gemini API, Agents 1→3)
 

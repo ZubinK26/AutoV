@@ -394,6 +394,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Stop after handoff JSON (no M4 / registry).",
     )
+    p.add_argument(
+        "--wfm-profile",
+        choices=("asp", "smt"),
+        default="asp",
+        help="WFM prompts: asp=asp/wfm/ (ClinCon), smt=smt/wfm/ (SMT-LIB scope).",
+    )
     p.add_argument("--mock-resolve", action="store_true", help="Stub M4 resolver JSON (no Gemini for M4).")
     p.add_argument("--bundle-id", type=str, default=None, help="Override generated bundle_id (G3).")
     p.add_argument("--bundle-prefix", type=str, default="demo", help="Prefix when bundle_id is auto-generated.")

@@ -25,7 +25,7 @@
 
 | Source | What it locks |
 |--------|----------------|
-| **`WFM/Agent_WFM.md`** | Confirmation flow; **Style A** join for loop-back; **outer** full-WFM budget **1 initial + 3 reruns** (**4** total full passes) unless product changes; Agent 4 retry budget; **OUT_OF_SCOPE** require disagree+comment or **confirmed omit** before merge; **accept in full** → may proceed downstream **without** Agent 4. |
+| **`asp/wfm/Agent_WFM.md`** | Confirmation flow; **Style A** join for loop-back; **outer** full-WFM budget **1 initial + 3 reruns** (**4** total full passes) unless product changes; Agent 4 retry budget; **OUT_OF_SCOPE** require disagree+comment or **confirmed omit** before merge; **accept in full** → may proceed downstream **without** Agent 4. |
 | **`pipeline_spec.md`** | WFM → registry **handoff** field meanings; per-line **`statement_nl`** as registry input lineage. |
 | **`registry_persistence_v1.md`** | Bundle / line JSON shape consumed by **`registry_stage.loaders`**. |
 | **`registry_stage/models.py`** | **`HandoffBundle`** / **`HandoffLine`** required fields and verdict set (`PASS` \| `REWRITE` \| `OUT_OF_SCOPE`). |

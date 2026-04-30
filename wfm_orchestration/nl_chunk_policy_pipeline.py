@@ -1,6 +1,10 @@
 """
 Chunked NL file → WFM (Agents 1–3) → one shared ClinCon policy (``asp_pipeline``).
 
+**SMT-LIB equivalent:** :mod:`wfm_orchestration.nl_chunk_smt_policy_pipeline` — same rule file,
+chunk size, progress + ``pending_*`` resume; uses ``wfm_profile="smt"`` and
+:func:`smt_pipeline.pipeline.run_smt_pipeline` into one ``policy_model.smt2``.
+
 **Spec alignment**
 
 - **Shared policy, sequential bundles:** :mod:`docs.pipeline_wfm_to_asp` §10 — point one ``--policy-model``

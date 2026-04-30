@@ -1,0 +1,413 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260428_203936Z_f10b5fb4",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_rules_input.md' (1-based global rule indices 1–10).\n\nRules in this chunk:\n1. A creature either holds a condition or it does not; there is no intermediate state. When multiple effects impose the same condition on a creature, each instance carries its own duration, but the effects of that condition do not increase beyond what a single instance produces. A condition ends when it is countered by a specified action or when its duration expires.\n2. A blinded creature cannot see. A blinded creature fails any ability check that requires sight. Attack rolls made against a blinded creature have advantage. Attack rolls made by a blinded creature have disadvantage.\n3. A charmed creature cannot make attack rolls targeting the charmer. A charmed creature cannot target the charmer with harmful abilities. A charmed creature cannot target the charmer with harmful magical effects. Any ability check the charmer makes to interact socially with the charmed creature has advantage.\n4. A deafened creature cannot hear. A deafened creature fails any ability check that requires hearing.\n5. A creature's exhaustion level is an integer value between 0 and 6. A creature with an exhaustion level of 0 is not exhausted. When an effect imposes exhaustion on a creature, the creature's exhaustion level increases by the amount specified by that effect. A creature's exhaustion level cannot exceed 6. A creature with an exhaustion level of 6 dies. A creature with an exhaustion level of 5 or higher has a speed of 0. A creature with an exhaustion level of 4 or higher has a hit point maximum equal to half its normal hit point maximum, rounded down. A creature with an exhaustion level of 3 or higher has disadvantage on attack rolls. A creature with an exhaustion level of 3 or higher has disadvantage on saving throws. A creature with an exhaustion level of 2 or higher has a speed equal to half its normal speed, rounded down. A creature with an exhaustion level of 1 or higher has disadvantage on ability checks. When an effect removes exhaustion from a creature, the creature's exhaustion level decreases by the amount specified by that effect. If a creature's exhaustion level would fall below 1 as a result of removal, it is set to 0. A creature that finishes a long rest and has consumed both food and drink during that rest has its exhaustion level reduced by 1.\n6. A frightened creature has disadvantage on ability checks while the source of its fear is within its line of sight. A frightened creature has disadvantage on attack rolls while the source of its fear is within its line of sight. A frightened creature cannot willingly move to any position that is closer to the source of its fear than its current position.\n7. A grappled creature has a speed of 0. A grappled creature cannot gain any bonus to its speed. A grapple condition on a creature ends if the grappler becomes unable to take actions or reactions. A grapple condition on a creature ends if an effect moves the grappled creature to a position outside the reach of the grappler.\n8. A creature that cannot take actions or reactions is incapacitated.\n9. An invisible creature cannot be seen by any means except magic or a special sense. For the purpose of determining whether an invisible creature can hide, it is treated as heavily obscured. The location of an invisible creature can be detected through sounds it produces or tracks it leaves. Attack rolls made against an invisible creature have disadvantage. Attack rolls made by an invisible creature have advantage.\n10. A paralyzed creature cannot take actions or reactions. A paralyzed creature cannot move. A paralyzed creature cannot speak. A paralyzed creature fails any Strength saving throw. A paralyzed creature fails any Dexterity saving throw. Attack rolls made against a paralyzed creature have advantage. Any attack roll that hits a paralyzed creature is a critical hit if the attacker's distance to the paralyzed creature is 5 feet or less.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every creature either has a specific condition or does not have that condition.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every creature either has a specific condition or does not have that condition.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "When multiple effects impose the same condition on a creature, each instance of that condition has its own duration.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"When multiple effects impose the same condition on a creature, each instance of that condition has its own duration.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "When multiple effects impose the same condition on a creature, the effects of that condition do not stack beyond the effects of a single instance.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"When multiple effects impose the same condition on a creature, the effects of that condition do not stack beyond the effects of a single instance.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "A condition ends when a specified action counters it.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"A condition ends when a specified action counters it.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "A condition ends when its duration expires.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"A condition ends when its duration expires.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every blinded creature cannot see.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every blinded creature cannot see.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every blinded creature fails every ability check that requires sight.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every blinded creature fails every ability check that requires sight.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Every attack roll made against a blinded creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Every attack roll made against a blinded creature has advantage.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Every attack roll made by a blinded creature has disadvantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Every attack roll made by a blinded creature has disadvantage.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Every charmed creature cannot make an attack roll that targets the charmer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Every charmed creature cannot make an attack roll that targets the charmer.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every charmed creature cannot target the charmer with any harmful ability.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every charmed creature cannot target the charmer with any harmful ability.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every charmed creature cannot target the charmer with any harmful magical effect.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every charmed creature cannot target the charmer with any harmful magical effect.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Every ability check that the charmer makes to interact socially with the charmed creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Every ability check that the charmer makes to interact socially with the charmed creature has advantage.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "Every deafened creature cannot hear.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"Every deafened creature cannot hear.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "Every deafened creature fails every ability check that requires hearing.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"Every deafened creature fails every ability check that requires hearing.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "Every creature has an exhaustion level that is an integer between 0 and 6 inclusive.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"Every creature has an exhaustion level that is an integer between 0 and 6 inclusive.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "A creature with an exhaustion level of 0 is not exhausted.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"A creature with an exhaustion level of 0 is not exhausted.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "When an effect imposes exhaustion on a creature, the creature's exhaustion level increases by the amount specified by that effect.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"When an effect imposes exhaustion on a creature, the creature's exhaustion level increases by the amount specified by that effect.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "A creature's exhaustion level cannot exceed 6.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"A creature's exhaustion level cannot exceed 6.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "A creature with an exhaustion level of 6 dies.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"A creature with an exhaustion level of 6 dies.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "A creature with an exhaustion level of 5 or higher has a speed of 0.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"A creature with an exhaustion level of 5 or higher has a speed of 0.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "A creature with an exhaustion level of 4 or higher has a hit point maximum equal to half of its normal hit point maximum, rounded down.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"A creature with an exhaustion level of 4 or higher has a hit point maximum equal to half of its normal hit point maximum, rounded down.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "A creature with an exhaustion level of 3 or higher has disadvantage on every attack roll.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"A creature with an exhaustion level of 3 or higher has disadvantage on every attack roll.\""
+    },
+    {
+      "line_index": 23,
+      "statement_nl": "A creature with an exhaustion level of 3 or higher has disadvantage on every saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "24. \"A creature with an exhaustion level of 3 or higher has disadvantage on every saving throw.\""
+    },
+    {
+      "line_index": 24,
+      "statement_nl": "A creature with an exhaustion level of 2 or higher has a speed equal to half of its normal speed, rounded down.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "25. \"A creature with an exhaustion level of 2 or higher has a speed equal to half of its normal speed, rounded down.\""
+    },
+    {
+      "line_index": 25,
+      "statement_nl": "A creature with an exhaustion level of 1 or higher has disadvantage on every ability check.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "26. \"A creature with an exhaustion level of 1 or higher has disadvantage on every ability check.\""
+    },
+    {
+      "line_index": 26,
+      "statement_nl": "When an effect removes exhaustion from a creature, the creature's exhaustion level decreases by the amount specified by that effect.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "27. \"When an effect removes exhaustion from a creature, the creature's exhaustion level decreases by the amount specified by that effect.\""
+    },
+    {
+      "line_index": 27,
+      "statement_nl": "If an effect removes exhaustion and the level would fall below 1, it is set to 0.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "28. \"If an effect removes exhaustion and the level would fall below 1, it is set to 0.\""
+    },
+    {
+      "line_index": 28,
+      "statement_nl": "If a creature finishes a long rest and has consumed both food and drink during that rest, its exhaustion level decreases by 1.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "29. \"If a creature finishes a long rest and has consumed both food and drink during that rest, its exhaustion level decreases by 1.\""
+    },
+    {
+      "line_index": 29,
+      "statement_nl": "Every frightened creature has disadvantage on every ability check while the source of its fear is within its line of sight.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "30. \"Every frightened creature has disadvantage on every ability check while the source of its fear is within its line of sight.\""
+    },
+    {
+      "line_index": 30,
+      "statement_nl": "Every frightened creature has disadvantage on every attack roll while the source of its fear is within its line of sight.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "31. \"Every frightened creature has disadvantage on every attack roll while the source of its fear is within its line of sight.\""
+    },
+    {
+      "line_index": 31,
+      "statement_nl": "Every frightened creature cannot willingly move to any position that is closer to the source of its fear than its current position.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "32. \"Every frightened creature cannot willingly move to any position that is closer to the source of its fear than its current position.\""
+    },
+    {
+      "line_index": 32,
+      "statement_nl": "Every grappled creature has a speed of 0.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "33. \"Every grappled creature has a speed of 0.\""
+    },
+    {
+      "line_index": 33,
+      "statement_nl": "Every grappled creature cannot gain any bonus to its speed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "34. \"Every grappled creature cannot gain any bonus to its speed.\""
+    },
+    {
+      "line_index": 34,
+      "statement_nl": "A grapple condition on a creature ends if the grappler becomes unable to take actions or reactions.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "35. \"A grapple condition on a creature ends if the grappler becomes unable to take actions or reactions.\""
+    },
+    {
+      "line_index": 35,
+      "statement_nl": "A grapple condition on a creature ends if an effect moves the grappled creature to a position outside the reach of the grappler.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "36. \"A grapple condition on a creature ends if an effect moves the grappled creature to a position outside the reach of the grappler.\""
+    },
+    {
+      "line_index": 36,
+      "statement_nl": "Every creature that cannot take actions and cannot take reactions is incapacitated.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "37. \"Every creature that cannot take actions and cannot take reactions is incapacitated.\""
+    },
+    {
+      "line_index": 37,
+      "statement_nl": "Every invisible creature cannot be seen by any means except through magic or a special sense.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "38. \"Every invisible creature cannot be seen by any means except through magic or a special sense.\""
+    },
+    {
+      "line_index": 38,
+      "statement_nl": "Every invisible creature is treated as heavily obscured for the purpose of determining whether the creature can hide.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "39. \"Every invisible creature is treated as heavily obscured for the purpose of determining whether the creature can hide.\""
+    },
+    {
+      "line_index": 39,
+      "statement_nl": "The location of an invisible creature can be detected through sounds the creature produces.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "40. \"The location of an invisible creature can be detected through sounds the creature produces.\""
+    },
+    {
+      "line_index": 40,
+      "statement_nl": "The location of an invisible creature can be detected through tracks the creature leaves.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "41. \"The location of an invisible creature can be detected through tracks the creature leaves.\""
+    },
+    {
+      "line_index": 41,
+      "statement_nl": "Every attack roll made against an invisible creature has disadvantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "42. \"Every attack roll made against an invisible creature has disadvantage.\""
+    },
+    {
+      "line_index": 42,
+      "statement_nl": "Every attack roll made by an invisible creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "43. \"Every attack roll made by an invisible creature has advantage.\""
+    },
+    {
+      "line_index": 43,
+      "statement_nl": "Every paralyzed creature cannot take actions or reactions.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "44. \"Every paralyzed creature cannot take actions or reactions.\""
+    },
+    {
+      "line_index": 44,
+      "statement_nl": "Every paralyzed creature cannot move.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "45. \"Every paralyzed creature cannot move.\""
+    },
+    {
+      "line_index": 45,
+      "statement_nl": "Every paralyzed creature cannot speak.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "46. \"Every paralyzed creature cannot speak.\""
+    },
+    {
+      "line_index": 46,
+      "statement_nl": "Every paralyzed creature fails every Strength saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "47. \"Every paralyzed creature fails every Strength saving throw.\""
+    },
+    {
+      "line_index": 47,
+      "statement_nl": "Every paralyzed creature fails every Dexterity saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "48. \"Every paralyzed creature fails every Dexterity saving throw.\""
+    },
+    {
+      "line_index": 48,
+      "statement_nl": "Every attack roll made against a paralyzed creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "49. \"Every attack roll made against a paralyzed creature has advantage.\""
+    },
+    {
+      "line_index": 49,
+      "statement_nl": "Every attack roll that hits a paralyzed creature is a critical hit if the attacker is 5 feet or less from the paralyzed creature.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "50. \"Every attack roll that hits a paralyzed creature is a critical hit if the attacker is 5 feet or less from the paralyzed creature.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260428_203936Z_f10b5fb4_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-28T20:39:56Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

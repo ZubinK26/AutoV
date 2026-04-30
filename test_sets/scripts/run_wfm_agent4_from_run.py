@@ -8,7 +8,7 @@ Prereq: JSONL from run_wfm_folio_gemini.py (--stress / default FOLIO / --pfolio)
 For a menu-driven flow (latest FOLIO / P-FOLIO / STRESS Gemini JSONL, OUT_OF_SCOPE examples only), use:
   python test_sets/scripts/run_wfm_agent4_interactive.py
 
-See test_sets/wfm_api_contract_gemini.md, test_sets/README.md, WFM/prompts/agent_4_user_interaction.md.
+See test_sets/wfm_api_contract_gemini.md, test_sets/README.md, asp/wfm/prompts/agent_4_user_interaction.md.
 """
 from __future__ import annotations
 

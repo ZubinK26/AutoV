@@ -1,0 +1,23 @@
+=== q01_neither_wins_completion.lp ===
+RESULT: UNSAT
+
+
+=== q02_red_wins_by_turn_25.lp ===
+RESULT: SAT
+
+SHOWN:
+witness_win_turn(25)
+
+=== q03_blue_wins_by_turn_25.lp ===
+RESULT: UNSAT
+
+
+=== q04_red_center_red_wins_optimal_note.lp ===
+RESULT: SAT
+
+SHOWN:
+witness
+
+=== q05_center_opening_blue_wins.lp ===
+RESULT: UNSAT
+

@@ -1,0 +1,77 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260426_224415Z_df5d8a6f",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_policy_next.md' (1-based global rule indices 81–85).\n\nRules in this chunk:\n81. A blue chain is a set of cells such that every cell in the set is in the blue state, and for every two cells in the set there is a sequence of cells in the set, starting with the first cell and ending with the second cell, in which each consecutive pair of cells in the sequence are adjacent to each other.\n82. The red player wins on a turn if there is a red chain that contains at least one cell on the top edge and at least one cell on the bottom edge.\n83. The blue player wins on a turn if there is a blue chain that contains at least one cell on the left edge and at least one cell on the right edge.\n84. The game ends as soon as one player wins.\n85. The game cannot end in a draw.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A blue chain is a set of cells such that every cell in the set is in the blue state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"A blue chain is a set of cells such that every cell in the set is in the blue state.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "A blue chain is a set of cells such that every cell in the set is reachable from every other cell in the set through a path of adjacent cells that are all in the set.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"A blue chain is a set of cells such that for every two cells in the set, there is a sequence of cells in the set, starting with the first cell and ending with the second cell, in which each consecutive pair of cells in the sequence are adjacent to each other.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "A red chain is a set of cells such that every cell in the set is in the red state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"A red chain is a set of cells such that every cell in the set is in the red state.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "A red chain is a set of cells such that every cell in the set is reachable from every other cell in the set through a path of adjacent cells that are all in the set.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"A red chain is a set of cells such that for every two cells in the set, there is a sequence of cells in the set, starting with the first cell and ending with the second cell, in which each consecutive pair of cells in the sequence are adjacent to each other.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The red player wins on a turn if there is at least one red chain that contains at least one cell on the top edge and at least one cell on the bottom edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The red player wins on a turn if there is at least one red chain that contains at least one cell on the top edge and at least one cell on the bottom edge.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "The blue player wins on a turn if there is at least one blue chain that contains at least one cell on the left edge and at least one cell on the right edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"The blue player wins on a turn if there is at least one blue chain that contains at least one cell on the left edge and at least one cell on the right edge.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "The game ends as soon as one player wins.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"The game ends as soon as one player wins.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "The game cannot end in a draw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"The game cannot end in a draw.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260426_224415Z_df5d8a6f_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-26T22:44:29Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

@@ -241,7 +241,7 @@ Goals that **stop before** the formalizer (`pipeline_spec.md` step 4) still **fu
 | Item | Status | Notes |
 |------|--------|-------|
 | **WFM ↔ orchestrator input (dev / simulation)** | **Resolved** | After user acceptance, treat **structured handoff** as the boundary: **fixtures**, **in-process** calls, **`bundles/{bundle_id}.json`**. Enough to implement and **try** the registry stage without a network API. |
-| **WFM ↔ orchestrator (production)** | **Follow-up when needed** | Live **event/API** shape remains **TBD** (`WFM/Agent_WFM.md` — open issues). Does **not** block Phase 1 if the resolved boundary above is enough for your build. |
+| **WFM ↔ orchestrator (production)** | **Follow-up when needed** | Live **event/API** shape remains **TBD** (`asp/wfm/Agent_WFM.md` — open issues). Does **not** block Phase 1 if the resolved boundary above is enough for your build. |
 | **Playground vs production persistence** | **Resolved (nuanced)** | **Phase 1 / learning:** in-memory session and optional **dev exports** — not asserted as **production commit**. **Production:** **`registry.json`** / **`rules.json`** mutate per *Failure / commit contract* (typically after formalizer + checks in the full product). |
 | **Registry workflow (steps and behavior)** | **Resolved** | **`pipeline_spec.md` step 3**; no further architecture gate for “what happens before formalizer.” |
 | **Registry agent LLM prompts** | **To do when needed** | Author when you implement the LLM-backed registry step; not spelled out in `pipeline_spec.md`. |

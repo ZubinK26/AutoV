@@ -1,0 +1,97 @@
+% Bundle: symtex_batch_20260428_225539Z_cd28fa35
+
+% Rule: r_78507178a712  |  line_index: 0  |  NL: The relationship acorns holds for 'Heather', 'James', and 'Phillip'.
+acorns("Heather", "James", "Phillip").
+
+% Rule: r_a83a297dd45c  |  line_index: 1  |  NL: The property brushes holds for 'Phillip'.
+brushes("Phillip").
+
+% Rule: r_a6959d7293b5  |  line_index: 2  |  NL: The relationship chain_mail holds for 'Nicole', 'James', and 'Adam'.
+chain_mail("Nicole", "James", "Adam").
+
+% Rule: r_4b7349342bd1  |  line_index: 3  |  NL: The relationship check_mark holds for 'Heather', 'James', and 'Adam'.
+check_mark("Heather", "James", "Adam").
+
+% Rule: r_85a0604dd147  |  line_index: 4  |  NL: The property coulterneb holds for 'Phillip'.
+coulterneb("Phillip").
+
+% Rule: r_80bafe203c55  |  line_index: 5  |  NL: The property hobby holds for 'Phillip'.
+hobby("Phillip").
+
+% Rule: r_1fd66fb44307  |  line_index: 6  |  NL: The relationship jump_high holds for 'Nicole', 'James', and 'Adam'.
+jump_high("Nicole", "James", "Adam").
+
+% Rule: r_0978a73886bf  |  line_index: 7  |  NL: The relationship oven holds for 'Nicole', 'James', and 'Adam'.
+oven("Nicole", "James", "Adam").
+
+% Rule: r_4689b854ff58  |  line_index: 8  |  NL: The relationship overactivity holds for 'Nicole', 'Adam', and 'Phillip'.
+overactivity("Nicole", "Adam", "Phillip").
+
+% Rule: r_c79197a395c4  |  line_index: 9  |  NL: The relationship parcellation holds for 'Heather', 'James', and 'Adam'.
+parcellation("Heather", "James", "Adam").
+
+% Rule: r_b43e2b80f52f  |  line_index: 10  |  NL: The property plums holds for 'Phillip'.
+plums("Phillip").
+
+% Rule: r_6593f7774b76  |  line_index: 11  |  NL: The relationship pooch holds for 'Nicole', 'James', and 'Adam'.
+pooch("Nicole", "James", "Adam").
+
+% Rule: r_e196fd47819c  |  line_index: 12  |  NL: The relationship shrapnel holds for 'Nicole', 'James', and 'Phillip'.
+shrapnel("Nicole", "James", "Phillip").
+
+% Rule: r_a84511165ed6  |  line_index: 13  |  NL: The relationship tufted_puffin holds for 'Heather', 'James', and 'Phillip'.
+tufted_puffin("Heather", "James", "Phillip").
+
+% Rule: r_4010a67b3a89  |  line_index: 14  |  NL: The relationship uropygium holds for 'James' and 'Phillip'.
+uropygium("James", "Phillip").
+
+% Rule: r_19dd7736e8cb  |  line_index: 15  |  NL: The relationship vireo holds for 'Nicole', 'James', and 'Adam'.
+vireo("Nicole", "James", "Adam").
+
+% Rule: r_43bd8a1192c1  |  line_index: 16  |  NL: If shrapnel(V1, V2, V4) is true, then article(V4) is true.
+article(V4) :- shrapnel(V1, V2, V4).
+
+% Rule: r_cac78aeee3bb  |  line_index: 17  |  NL: If uropygium(V2, V4) is true, parcellation(V0, V2, V3) is true, and tufted_puffin(V0, V2, V4) is true, then bacon_strip(V0, V2, V3) is true.
+bacon_strip(V0, V2, V3) :- uropygium(V2, V4), parcellation(V0, V2, V3), tufted_puffin(V0, V2, V4).
+
+% Rule: r_0f2fc1ecc331  |  line_index: 18  |  NL: If saddle(V1, V2, V3) is true, distillery(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then dame(V1) is true.
+dame(V1) :- saddle(V1, V2, V3), distillery(V1, V2, V3), vireo(V1, V2, V3).
+
+% Rule: r_df70ff130f04  |  line_index: 19  |  NL: If oven(V1, V2, V3) is true, chain_mail(V1, V2, V3) is true, pooch(V1, V2, V3) is true, jump_high(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then distillery(V1, V2, V3) is true.
+distillery(V1, V2, V3) :- oven(V1, V2, V3), chain_mail(V1, V2, V3), pooch(V1, V2, V3), jump_high(V1, V2, V3), vireo(V1, V2, V3).
+
+% Rule: r_595a3636fc40  |  line_index: 20  |  NL: If dame(V1) is true, retractable_claws(V1, V2) is true, lens_cortex(V3, V4) is true, acorns(V0, V2, V4) is true, and overactivity(V1, V3, V4) is true, then fog(V4) is true.
+fog(V4) :- dame(V1), retractable_claws(V1, V2), lens_cortex(V3, V4), acorns(V0, V2, V4), overactivity(V1, V3, V4).
+
+% Rule: r_a809dc8fe313  |  line_index: 21  |  NL: If fog(V4) is true, coulterneb(V4) is true, plums(V4) is true, hobby(V4) is true, and brushes(V4) is true, then having_lunch(V4, V4) is true.
+having_lunch(V4, V4) :- fog(V4), coulterneb(V4), plums(V4), hobby(V4), brushes(V4).
+
+% Rule: r_07847400527a  |  line_index: 22  |  NL: If pine_grosbeak(V3) is true, toes(V3, V4) is true, bacon_strip(V0, V2, V3) is true, and ping_pong_ball(V2, V3, V4) is true, then lemon(V2, V3) is true.
+lemon(V2, V3) :- pine_grosbeak(V3), toes(V3, V4), bacon_strip(V0, V2, V3), ping_pong_ball(V2, V3, V4).
+
+% Rule: r_557f20a48b0f  |  line_index: 23  |  NL: If oven(V1, V2, V3) is true, chain_mail(V1, V2, V3) is true, pooch(V1, V2, V3) is true, jump_high(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then lens_cortex(V3, V3) is true.
+lens_cortex(V3, V3) :- oven(V1, V2, V3), chain_mail(V1, V2, V3), pooch(V1, V2, V3), jump_high(V1, V2, V3), vireo(V1, V2, V3).
+
+% Rule: r_9e68e85ab842  |  line_index: 24  |  NL: If rock_group(V1, V2, V3) is true, then pine_grosbeak(V3) is true.
+pine_grosbeak(V3) :- rock_group(V1, V2, V3).
+
+% Rule: r_f247b8b59eab  |  line_index: 25  |  NL: If sell_sandwiches(V2, V3) is true, quite(V0, V2, V3) is true, article(V4) is true, having_lunch(V0, V4) is true, and hobby(V4) is true, then ping_pong_ball(V2, V3, V4) is true.
+ping_pong_ball(V2, V3, V4) :- sell_sandwiches(V2, V3), quite(V0, V2, V3), article(V4), having_lunch(V0, V4), hobby(V4).
+
+% Rule: r_03837b9a8f38  |  line_index: 26  |  NL: If uropygium(V2, V4) is true, parcellation(V0, V2, V3) is true, and tufted_puffin(V0, V2, V4) is true, then quite(V0, V2, V3) is true.
+quite(V0, V2, V3) :- uropygium(V2, V4), parcellation(V0, V2, V3), tufted_puffin(V0, V2, V4).
+
+% Rule: r_baab93649fe1  |  line_index: 27  |  NL: If shrapnel(V1, V2, V4) is true, then retractable_claws(V1, V2) is true.
+retractable_claws(V1, V2) :- shrapnel(V1, V2, V4).
+
+% Rule: r_f703f7eb09fe  |  line_index: 28  |  NL: If quite(V0, V2, V3) is true and check_mark(V0, V2, V3) is true, then rock_group(V2, V2, V3) is true.
+rock_group(V2, V2, V3) :- quite(V0, V2, V3), check_mark(V0, V2, V3).
+
+% Rule: r_5fb8bf87e7f4  |  line_index: 29  |  NL: If rock_group(V1, V2, V3) is true, then saddle(V1, V2, V3) is true.
+saddle(V1, V2, V3) :- rock_group(V1, V2, V3).
+
+% Rule: r_139816953dc6  |  line_index: 30  |  NL: If dame(V1) is true, retractable_claws(V1, V2) is true, lens_cortex(V3, V4) is true, acorns(V0, V2, V4) is true, and overactivity(V1, V3, V4) is true, then sell_sandwiches(V2, V3) is true.
+sell_sandwiches(V2, V3) :- dame(V1), retractable_claws(V1, V2), lens_cortex(V3, V4), acorns(V0, V2, V4), overactivity(V1, V3, V4).
+
+% Rule: r_7e19d36bd93b  |  line_index: 31  |  NL: If saddle(V1, V2, V3) is true, distillery(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then toes(V3, V1) is true.
+toes(V3, V1) :- saddle(V1, V2, V3), distillery(V1, V2, V3), vireo(V1, V2, V3).

@@ -8,7 +8,7 @@ This file is the **closest in-repo stand-in for intended behavior** when evaluat
 
 ## Compound operator limit — read this first
 
-The manual run predates **raising** the WFM compound-operator budget (notebook text cites **more than four** operators on the failing disjuncts; the frozen test harness today injects **`compound_operator_limit: 8`** from `WFM/config/wfm.json`).
+The manual run predates **raising** the WFM compound-operator budget (notebook text cites **more than four** operators on the failing disjuncts; the frozen test harness today injects **`compound_operator_limit: 8`** from `asp/wfm/config/wfm.json`).
 
 **Implications for regression checks**
 

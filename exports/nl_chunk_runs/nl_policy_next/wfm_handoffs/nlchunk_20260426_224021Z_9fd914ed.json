@@ -1,0 +1,93 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260426_224021Z_9fd914ed",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_policy_next.md' (1-based global rule indices 61–70).\n\nRules in this chunk:\n61. The cell at row 4 and column 4 is adjacent to the cell at row 5 and column 4.\n62. The cell at row 4 and column 5 is adjacent to the cell at row 5 and column 4.\n63. The cell at row 4 and column 5 is adjacent to the cell at row 5 and column 5.\n64. The cell at row 5 and column 1 is adjacent to the cell at row 5 and column 2.\n65. The cell at row 5 and column 2 is adjacent to the cell at row 5 and column 3.\n66. The cell at row 5 and column 3 is adjacent to the cell at row 5 and column 4.\n67. The cell at row 5 and column 4 is adjacent to the cell at row 5 and column 5.\n68. If cell X is adjacent to cell Y, then cell Y is adjacent to cell X.\n69. The state of every cell is one of: empty, red, or blue.\n70. At the start of the game, every cell is empty.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "The cell at row 4 and column 4 is adjacent to the cell at row 5 and column 4.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"The cell at row 4 and column 4 is adjacent to the cell at row 5 and column 4.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The cell at row 4 and column 5 is adjacent to the cell at row 5 and column 4.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The cell at row 4 and column 5 is adjacent to the cell at row 5 and column 4.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "The cell at row 4 and column 5 is adjacent to the cell at row 5 and column 5.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"The cell at row 4 and column 5 is adjacent to the cell at row 5 and column 5.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "The cell at row 5 and column 1 is adjacent to the cell at row 5 and column 2.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The cell at row 5 and column 1 is adjacent to the cell at row 5 and column 2.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The cell at row 5 and column 2 is adjacent to the cell at row 5 and column 3.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The cell at row 5 and column 2 is adjacent to the cell at row 5 and column 3.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "The cell at row 5 and column 3 is adjacent to the cell at row 5 and column 4.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"The cell at row 5 and column 3 is adjacent to the cell at row 5 and column 4.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "The cell at row 5 and column 4 is adjacent to the cell at row 5 and column 5.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"The cell at row 5 and column 4 is adjacent to the cell at row 5 and column 5.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "If cell X is adjacent to cell Y, then cell Y is adjacent to cell X.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"If cell X is adjacent to cell Y, then cell Y is adjacent to cell X.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The state of every cell is exactly one of the following: empty, red, or blue.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"The state of every cell is exactly one of the following: empty, red, or blue.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "At the start of the game, the state of every cell is empty.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"At the start of the game, the state of every cell is empty.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260426_224021Z_9fd914ed_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-26T22:40:34Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

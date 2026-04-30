@@ -1,0 +1,69 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260428_225516Z_42eec13d",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nP7(\"Antonio\", \"Crystal\") is true.\nP8(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP9(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP10(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP11(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP12(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP13(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP14(\"Brandon\", \"Crystal\", \"Selena\") is true.\nP15(\"Antonio\", \"Brandon\", \"Selena\") is true.\n\nRules:\nIf P1(V0, V1, V2) is true and P3(V0, V1, V3) is true and P4(V0, V1, V3) is true, then P6(V2) is true.\nIf P7(V0, V3) is true and P13(V0, V2, V4) is true and P14(V2, V3, V4) is true, then P0(V0, V2, V4) is true.\nIf P0(V0, V2, V4) is true and P5(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P1(V0, V2, V2) is true.\nIf P8(V0, V2, V4) is true and P10(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P2(V2, V4) is true.\nIf P2(V1, V4) is true and P13(V0, V2, V4) is true and P15(V0, V2, V4) is true, then P3(V0, V1, V1) is true.\nIf P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P4(V0, V2, V4) is true.\nIf P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P5(V0, V2, V4) is true.",
+  "lines": [
+    {
+      "line_index": 9,
+      "statement_nl": "If P1(V0, V1, V2) is true and P3(V0, V1, V3) is true and P4(V0, V1, V3) is true, then P6(V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"If P1(V0, V1, V2) is true and P3(V0, V1, V3) is true and P4(V0, V1, V3) is true, then P6(V2) is true.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "If P7(V0, V3) is true and P13(V0, MAX_V2, V4) is true and P14(V2, V3, V4) is true, then P0(V0, V2, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"If P7(V0, V3) is true and P13(V0, V2, V4) is true and P14(V2, V3, V4) is true, then P0(V0, V2, V4) is true.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "If P0(V0, V2, V4) is true and P5(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P1(V0, V2, V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"If P0(V0, V2, V4) is true and P5(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P1(V0, V2, V2) is true.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "If P8(V0, V2, V4) is true and P10(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P2(V2, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"If P8(V0, V2, V4) is true and P10(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P2(V2, V4) is true.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "If P2(V1, V4) is true and P13(V0, V2, V4) is true and P15(V0, V2, V4) is true, then P3(V0, V1, V1) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"If P2(V1, V4) is true and P13(V0, V2, V4) is true and P15(V0, V2, V4) is true, then P3(V0, V1, V1) is true.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P4(V0, V2, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P4(V0, V2, V4) is true.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P5(V0, V2, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P5(V0, V2, V4) is true.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260428_225516Z_42eec13d_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-28T22:55:34Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

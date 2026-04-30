@@ -1,0 +1,269 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "symtex_batch_20260428_225539Z_cd28fa35",
+  "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nacorns(\"Heather\", \"James\", \"Phillip\") is true.\nbrushes(Phillip) is true.\nchain_mail(\"Nicole\", \"James\", \"Adam\") is true.\ncheck_mark(\"Heather\", \"James\", \"Adam\") is true.\ncoulterneb(Phillip) is true.\nhobby(Phillip) is true.\njump_high(\"Nicole\", \"James\", \"Adam\") is true.\noven(\"Nicole\", \"James\", \"Adam\") is true.\noveractivity(\"Nicole\", \"Adam\", \"Phillip\") is true.\nparcellation(\"Heather\", \"James\", \"Adam\") is true.\nplums(Phillip) is true.\npooch(\"Nicole\", \"James\", \"Adam\") is true.\nshrapnel(\"Nicole\", \"James\", \"Phillip\") is true.\ntufted_puffin(\"Heather\", \"James\", \"Phillip\") is true.\nuropygium(\"James\", \"Phillip\") is true.\nvireo(\"Nicole\", \"James\", \"Adam\") is true.\n\nRules:\nIf shrapnel(V1, V2, V4) is true, then article(V4) is true.\nIf uropygium(V2, V4) is true and parcellation(V0, V2, V3) is true and tufted_puffin(V0, V2, V4) is true, then bacon_strip(V0, V2, V3) is true.\nIf saddle(V1, V2, V3) is true and distillery(V1, V2, V3) is true and vireo(V1, V2, V3) is true, then dame(V1) is true.\nIf oven(V1, V2, V3) is true and chain_mail(V1, V2, V3) is true and pooch(V1, V2, V3) is true and jump_high(V1, V2, V3) is true and vireo(V1, V2, V3) is true, then distillery(V1, V2, V3) is true.\nIf dame(V1) is true and retractable_claws(V1, V2) is true and lens_cortex(V3, V4) is true and acorns(V0, V2, V4) is true and overactivity(V1, V3, V4) is true, then fog(V4) is true.\nIf fog(V4) is true and coulterneb(V4) is true and plums(V4) is true and hobby(V4) is true and brushes(V4) is true, then having_lunch(V4, V4) is true.\nIf pine_grosbeak(V3) is true and toes(V3, V4) is true and bacon_strip(V0, V2, V3) is true and ping_pong_ball(V2, V3, V4) is true, then lemon(V2, V3) is true.\nIf oven(V1, V2, V3) is true and chain_mail(V1, V2, V3) is true and pooch(V1, V2, V3) is true and jump_high(V1, V2, V3) is true and vireo(V1, V2, V3) is true, then lens_cortex(V3, V3) is true.\nIf rock_group(V1, V2, V3) is true, then pine_grosbeak(V3) is true.\nIf sell_sandwiches(V2, V3) is true and quite(V0, V2, V3) is true and article(V4) is true and having_lunch(V0, V4) is true and hobby(V4) is true, then ping_pong_ball(V2, V3, V4) is true.\nIf uropygium(V2, V4) is true and parcellation(V0, V2, V3) is true and tufted_puffin(V0, V2, V4) is true, then quite(V0, V2, V3) is true.\nIf shrapnel(V1, V2, V4) is true, then retractable_claws(V1, V2) is true.\nIf quite(V0, V2, V3) is true and check_mark(V0, V2, V3) is true, then rock_group(V2, V2, V3) is true.\nIf rock_group(V1, V2, V3) is true, then saddle(V1, V2, V3) is true.\nIf dame(V1) is true and retractable_claws(V1, V2) is true and lens_cortex(V3, V4) is true and acorns(V0, V2, V4) is true and overactivity(V1, V3, V4) is true, then sell_sandwiches(V2, V3) is true.\nIf saddle(V1, V2, V3) is true and distillery(V1, V2, V3) is true and vireo(V1, V2, V3) is true, then toes(V3, V1) is true.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "The relationship acorns holds for 'Heather', 'James', and 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"The relationship acorns holds for 'Heather', 'James', and 'Phillip'.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The property brushes holds for 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The property brushes holds for 'Phillip'.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "The relationship chain_mail holds for 'Nicole', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"The relationship chain_mail holds for 'Nicole', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "The relationship check_mark holds for 'Heather', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The relationship check_mark holds for 'Heather', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The property coulterneb holds for 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The property coulterneb holds for 'Phillip'.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "The property hobby holds for 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"The property hobby holds for 'Phillip'.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "The relationship jump_high holds for 'Nicole', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"The relationship jump_high holds for 'Nicole', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "The relationship oven holds for 'Nicole', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"The relationship oven holds for 'Nicole', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The relationship overactivity holds for 'Nicole', 'Adam', and 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"The relationship overactivity holds for 'Nicole', 'Adam', and 'Phillip'.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "The relationship parcellation holds for 'Heather', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"The relationship parcellation holds for 'Heather', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "The property plums holds for 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"The property plums holds for 'Phillip'.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "The relationship pooch holds for 'Nicole', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"The relationship pooch holds for 'Nicole', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "The relationship shrapnel holds for 'Nicole', 'James', and 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"The relationship shrapnel holds for 'Nicole', 'James', and 'Phillip'.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "The relationship tufted_puffin holds for 'Heather', 'James', and 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"The relationship tufted_puffin holds for 'Heather', 'James', and 'Phillip'.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "The relationship uropygium holds for 'James' and 'Phillip'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"The relationship uropygium holds for 'James' and 'Phillip'.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "The relationship vireo holds for 'Nicole', 'James', and 'Adam'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"The relationship vireo holds for 'Nicole', 'James', and 'Adam'.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "If shrapnel(V1, V2, V4) is true, then article(V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"If shrapnel(V1, V2, V4) is true, then article(V4) is true.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "If uropygium(V2, V4) is true, parcellation(V0, V2, V3) is true, and tufted_puffin(V0, V2, V4) is true, then bacon_strip(V0, V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"If uropygium(V2, V4) is true, parcellation(V0, V2, V3) is true, and tufted_puffin(V0, V2, V4) is true, then bacon_strip(V0, V2, V3) is true.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "If saddle(V1, V2, V3) is true, distillery(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then dame(V1) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"If saddle(V1, V2, V3) is true, distillery(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then dame(V1) is true.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "If oven(V1, V2, V3) is true, chain_mail(V1, V2, V3) is true, pooch(V1, V2, V3) is true, jump_high(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then distillery(V1, V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"If oven(V1, V2, V3) is true, chain_mail(V1, V2, V3) is true, pooch(V1, V2, V3) is true, jump_high(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then distillery(V1, V2, V3) is true.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "If dame(V1) is true, retractable_claws(V1, V2) is true, lens_cortex(V3, V4) is true, acorns(V0, V2, V4) is true, and overactivity(V1, V3, V4) is true, then fog(V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"If dame(V1) is true, retractable_claws(V1, V2) is true, lens_cortex(V3, V4) is true, acorns(V0, V2, V4) is true, and overactivity(V1, V3, V4) is true, then fog(V4) is true.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "If fog(V4) is true, coulterneb(V4) is true, plums(V4) is true, hobby(V4) is true, and brushes(V4) is true, then having_lunch(V4, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"If fog(V4) is true, coulterneb(V4) is true, plums(V4) is true, hobby(V4) is true, and brushes(V4) is true, then having_lunch(V4, V4) is true.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "If pine_grosbeak(V3) is true, toes(V3, V4) is true, bacon_strip(V0, V2, V3) is true, and ping_pong_ball(V2, V3, V4) is true, then lemon(V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"If pine_grosbeak(V3) is true, toes(V3, V4) is true, bacon_strip(V0, V2, V3) is true, and ping_pong_ball(V2, V3, V4) is true, then lemon(V2, V3) is true.\""
+    },
+    {
+      "line_index": 23,
+      "statement_nl": "If oven(V1, V2, V3) is true, chain_mail(V1, V2, V3) is true, pooch(V1, V2, V3) is true, jump_high(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then lens_cortex(V3, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "24. \"If oven(V1, V2, V3) is true, chain_mail(V1, V2, V3) is true, pooch(V1, V2, V3) is true, jump_high(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then lens_cortex(V3, V3) is true.\""
+    },
+    {
+      "line_index": 24,
+      "statement_nl": "If rock_group(V1, V2, V3) is true, then pine_grosbeak(V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "25. \"If rock_group(V1, V2, V3) is true, then pine_grosbeak(V3) is true.\""
+    },
+    {
+      "line_index": 25,
+      "statement_nl": "If sell_sandwiches(V2, V3) is true, quite(V0, V2, V3) is true, article(V4) is true, having_lunch(V0, V4) is true, and hobby(V4) is true, then ping_pong_ball(V2, V3, V4) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "26. \"If sell_sandwiches(V2, V3) is true, quite(V0, V2, V3) is true, article(V4) is true, having_lunch(V0, V4) is true, and hobby(V4) is true, then ping_pong_ball(V2, V3, V4) is true.\""
+    },
+    {
+      "line_index": 26,
+      "statement_nl": "If uropygium(V2, V4) is true, parcellation(V0, V2, V3) is true, and tufted_puffin(V0, V2, V4) is true, then quite(V0, V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "27. \"If uropygium(V2, V4) is true, parcellation(V0, V2, V3) is true, and tufted_puffin(V0, V2, V4) is true, then quite(V0, V2, V3) is true.\""
+    },
+    {
+      "line_index": 27,
+      "statement_nl": "If shrapnel(V1, V2, V4) is true, then retractable_claws(V1, V2) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "28. \"If shrapnel(V1, V2, V4) is true, then retractable_claws(V1, V2) is true.\""
+    },
+    {
+      "line_index": 28,
+      "statement_nl": "If quite(V0, V2, V3) is true and check_mark(V0, V2, V3) is true, then rock_group(V2, V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "29. \"If quite(V0, V2, V3) is true and check_mark(V0, V2, V3) is true, then rock_group(V2, V2, V3) is true.\""
+    },
+    {
+      "line_index": 29,
+      "statement_nl": "If rock_group(V1, V2, V3) is true, then saddle(V1, V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "30. \"If rock_group(V1, V2, V3) is true, then saddle(V1, V2, V3) is true.\""
+    },
+    {
+      "line_index": 30,
+      "statement_nl": "If dame(V1) is true, retractable_claws(V1, V2) is true, lens_cortex(V3, V4) is true, acorns(V0, V2, V4) is true, and overactivity(V1, V3, V4) is true, then sell_sandwiches(V2, V3) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "31. \"If dame(V1) is true, retractable_claws(V1, V2) is true, lens_cortex(V3, V4) is true, acorns(V0, V2, V4) is true, and overactivity(V1, V3, V4) is true, then sell_sandwiches(V2, V3) is true.\""
+    },
+    {
+      "line_index": 31,
+      "statement_nl": "If saddle(V1, V2, V3) is true, distillery(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then toes(V3, V1) is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "32. \"If saddle(V1, V2, V3) is true, distillery(V1, V2, V3) is true, and vireo(V1, V2, V3) is true, then toes(V3, V1) is true.\""
+    }
+  ],
+  "orchestration_run_id": "orr_symtex_batch_20260428_225539Z_cd28fa35_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-28T22:55:54Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

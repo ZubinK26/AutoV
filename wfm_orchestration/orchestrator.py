@@ -35,7 +35,7 @@ from registry_stage.wfm_acceptance_handoff import (
 from wfm_orchestration.agent4_call import call_agent4_gemini
 from wfm_orchestration.gemini_client import call_gemini, env_thinking_level
 from wfm_orchestration.handoff_artifacts import handoff_write_path, record_handoff_artifact
-from wfm_orchestration.prompts_wfm import load_wfm_prompts
+from wfm_orchestration.prompts_wfm import WfmProfile, load_wfm_prompts
 from wfm_orchestration.snapshot_from_agents import wfm_acceptance_snapshot_from_agent_outputs
 from wfm_orchestration.run_metadata import (
     new_bundle_id,
@@ -114,6 +114,7 @@ def run_wfm_registry_e2e(
     auto_accept: bool = False,
     skip_registry: bool = False,
     auto_artifacts: bool = True,
+    wfm_profile: WfmProfile = "asp",
     input_fn: Callable[[str], str] = input,
     print_fn: Callable[..., None] = print,
     stderr: TextIO = sys.stderr,
@@ -123,6 +124,9 @@ def run_wfm_registry_e2e(
 
     **Environment:** ``GEMINI_API_KEY`` required. Run from repo root so ``registry_stage`` imports work.
 
+    **WFM profile:** ``wfm_profile`` selects prompt trees: ``"asp"`` → ``asp/wfm/`` (ClinCon-safe scope),
+    ``"smt"`` → ``smt/wfm/`` (many-sorted FOL scope for ``smt_pipeline``). Defaults to ``"asp"``.
+
     **Handoff artifacts:** When ``persist_handoff`` is True and ``handoff_json`` is not set, the bundle is
     written to ``bundles/wfm_artifacts/<bundle_id>.json`` (or ``handoff_dir``). A line is appended to
     ``manifest.jsonl``. Set ``persist_handoff=False`` to disable. ``skip_registry=True`` skips M4/registry
@@ -131,7 +135,7 @@ def run_wfm_registry_e2e(
     root = repo_root or _REPO
     if auto_accept:
         input_fn = _auto_accept_input_fn
-    p1, p2, p3, p4, compound_limit = load_wfm_prompts()
+    p1, p2, p3, p4, compound_limit = load_wfm_prompts(wfm_profile)
     bid = bundle_id or new_bundle_id(prefix=bundle_id_prefix)
     user_original_input = initial_user_text
     user_nl = initial_user_text

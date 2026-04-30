@@ -10,7 +10,7 @@ Use this file like **`wfm_folio_expected_outcomes_manual_baseline.md`**: compare
 
 ## Compound operator limit
 
-Same as FOLIO baseline: **`compound_operator_limit: 8`** from `WFM/config/wfm.json` is injected into Agent 2. Manual notebook traces that assumed a **tighter** informal ceiling may show **LIMIT_EXCEEDED** where this harness shows **SUCCESS**; judge **decomposition validity** (no illegitimate splits of unified conditionals / either-or bundles) when limits differ.
+Same as FOLIO baseline: **`compound_operator_limit: 8`** from `asp/wfm/config/wfm.json` is injected into Agent 2. Manual notebook traces that assumed a **tighter** informal ceiling may show **LIMIT_EXCEEDED** where this harness shows **SUCCESS**; judge **decomposition validity** (no illegitimate splits of unified conditionals / either-or bundles) when limits differ.
 
 ---
 

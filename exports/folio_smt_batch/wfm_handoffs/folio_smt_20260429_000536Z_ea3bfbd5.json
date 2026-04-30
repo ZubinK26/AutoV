@@ -1,0 +1,77 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "folio_smt_20260429_000536Z_ea3bfbd5",
+  "user_original_input": "Premise 1: If people perform in school talent shows often, then they attend and are very engaged with school events.\nPremise 2: People either perform in school talent shows often or are inactive and disinterested members of their community.\nPremise 3: If people chaperone high school dances, then they are not students who attend the school.\nPremise 4: All people who are inactive and disinterested members of their community chaperone high school dances.\nPremise 5: All young children and teenagers who wish to further their academic careers and educational opportunities are students who attend the school.\nPremise 6: Bonnie either both attends and is very engaged with school events and is a student who attends the school, or she neither attends and is very engaged with school events nor is a student who attends the school.\nConclusion: Bonnie performs in school talent shows often.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every person who performs in school talent shows often attends school events.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: The word \"often\" is a vague quantifier. Without a precise definition (like a specific number of events or a percentage), the system cannot formalize how many events constitute \"often.\"",
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every person who performs in school talent shows often attends school events.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every person who performs in school talent shows often is very engaged with school events.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This statement contains two vague/subjective predicates: \"performs... often\" and \"is very engaged.\" The system cannot formalize these without precise, objective definitions.",
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every person who performs in school talent shows often is very engaged with school events.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every person either performs in school talent shows often or is an inactive and disinterested member of their community.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This statement uses vague and subjective terms (\"often\", \"inactive\", \"disinterested\") that do not have a formal, binary definition.",
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every person either performs in school talent shows often or is an inactive and disinterested member of their community.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every person who chaperones high school dances is not a student who attends the school.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every person who chaperones high school dances is not a student who attends the school.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every person who is an inactive and disinterested member of their community chaperones high school dances.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: The predicates \"inactive\" and \"disinterested\" are subjective and vague; the system cannot determine if someone meets these criteria without a formal definition.",
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every person who is an inactive and disinterested member of their community chaperones high school dances.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every person who is a young child or a teenager and who wishes to further their academic career and educational opportunities is a student who attends the school.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every person who is a young child or a teenager and who wishes to further their academic career and educational opportunities is a student who attends the school.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Bonnie attends school events and is very engaged with school events and is a student who attends the school, if and only if Bonnie attends school events and is very engaged with school events or is a student who attends the school.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Bonnie either both attends school events and is very engaged with school events and is a student who attends the school, or she neither attends school events and is very engaged with school events nor is a student who attends the school.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Bonnie performs in school talent shows often.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Bonnie performs in school talent shows often.\""
+    }
+  ],
+  "orchestration_run_id": "orr_folio_smt_20260429_000536Z_ea3bfbd5_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-29T00:05:53Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "nl_chunk_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/wfm_orchestration/templates/nl_rules_input.md",
+  "nl_sha256": "350feabf481491a33cccac39d463c740e78ab1c6f6f81d8fd2b8c2b6fd54860d",
+  "rules_per_chunk": 10,
+  "next_rule_index": 16,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 10,
+      "bundle_id": "nlchunk_20260428_203936Z_f10b5fb4",
+      "handoff_relposix": "exports\\nl_chunk_runs\\nl_rules_input\\wfm_handoffs\\nlchunk_20260428_203936Z_f10b5fb4.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_rules_input/policy_snapshots/policy_after_chunk_0000_20260428T204150Z_nlchunk_20260428_203936Z_f10b5fb4.lp",
+      "committed_at_utc": "2026-04-28T20:41:50Z"
+    },
+    {
+      "chunk_seq": 1,
+      "rule_index_start": 10,
+      "rule_index_end": 16,
+      "bundle_id": "nlchunk_20260428_204208Z_251ccd46",
+      "handoff_relposix": "exports\\nl_chunk_runs\\nl_rules_input\\wfm_handoffs\\nlchunk_20260428_204208Z_251ccd46.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_rules_input/policy_snapshots/policy_after_chunk_0001_20260428T204446Z_nlchunk_20260428_204208Z_251ccd46.lp",
+      "committed_at_utc": "2026-04-28T20:44:46Z"
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_rules_input",
+  "pending_asp": null
+}

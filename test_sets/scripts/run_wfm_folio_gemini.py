@@ -3,7 +3,7 @@
 Run FOLIO or P-FOLIO–section examples from wfm_folio_pffolio_examples_en.md through Agents 1→2→3
 via Google Gemini API (contract aligned with wfm_api_contract_gemini.md). Agent 4 is skipped.
 
-Usage (from repo root that contains WFM/ and test_sets/):
+Usage (from repo root that contains asp/wfm/ and test_sets/):
   pip install -r test_sets/requirements-wfm-test.txt
   copy .env.example .env   # then set GEMINI_API_KEY; never commit .env
   python test_sets/scripts/run_wfm_folio_gemini.py
@@ -33,7 +33,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 TEST_SETS = SCRIPT_DIR.parent
 REPO_ROOT = TEST_SETS.parent
-WFM_DIR = REPO_ROOT / "WFM"
+WFM_DIR = REPO_ROOT / "asp" / "wfm"
 PROMPTS_DIR = WFM_DIR / "prompts"
 EXAMPLES_FILE = TEST_SETS / "wfm_folio_pffolio_examples_en.md"
 STRESS_EXAMPLES_FILE = TEST_SETS / "wfm_stress_examples_en.md"

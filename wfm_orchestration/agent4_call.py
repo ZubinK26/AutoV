@@ -30,7 +30,7 @@ def call_agent4_gemini(user_payload: str, *, system: str | None = None) -> str:
         raise RuntimeError("pip install -r test_sets/requirements-wfm-test.txt") from e
 
     if system is None:
-        system = w4.extract_system_prompt(_REPO / "WFM" / "prompts" / "agent_4_user_interaction.md")
+        system = w4.extract_system_prompt(_REPO / "asp" / "wfm" / "prompts" / "agent_4_user_interaction.md")
     model = os.environ.get("GEMINI_MODEL", w4.DEFAULT_MODEL).strip()
     temperature = float(os.environ.get("GEMINI_TEMPERATURE", str(w4.DEFAULT_TEMPERATURE)))
     max_out = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", str(w4.DEFAULT_MAX_OUTPUT_TOKENS)))

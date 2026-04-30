@@ -1,0 +1,279 @@
+{
+  "bundle_id": "symtex_batch_20260428_225349Z_bd166bd8",
+  "accepted_at": "2026-04-28T22:56:38Z",
+  "committed_at": "2026-04-28T22:56:49Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_c8409f07a7a6",
+    "r_e7ab6c6c625e",
+    "r_c703b1d4b4d3",
+    "r_ae31ec27149d",
+    "r_84354e8b731a",
+    "r_d9ef7a941a57",
+    "r_d726eda715fe",
+    "r_ee6370cdc8cb",
+    "r_4c3c82051cda",
+    "r_20332ae337a2",
+    "r_165dee0df1b9",
+    "r_32aaf1c7350f",
+    "r_1e4620a64508",
+    "r_531caa31771d",
+    "r_5f3d1e731356",
+    "r_a5c4fb539b34",
+    "r_acb580e843f7",
+    "r_941e3deb8378",
+    "r_d9d53a1a2bc0",
+    "r_3067dc5f4ce0",
+    "r_1cd3b4036eb3",
+    "r_e5ab31c204cd",
+    "r_97eafba91caa",
+    "r_e6b08e5ea6a4",
+    "r_ff2ad5aeb185",
+    "r_996220639d4b",
+    "r_7df62e43de96",
+    "r_a7c216028928"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260428_225349Z_bd166bd8",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nbit is explicitly false.\nbones is explicitly false.\nbutter is explicitly false.\nchicken is explicitly false.\nearning_money is explicitly false.\nen is explicitly false.\nfairy_godmother is explicitly false.\nhomogenized_milk is explicitly false.\npoint is explicitly false.\nposition is explicitly false.\ntraining is explicitly false.\nbreakfast_lunch_and_dinner is true.\nfreezing is true.\nprodigy is true.\nrockets is true.\n\nRules:\nIf barn is true and there is no evidence that em is true and there is no evidence that byte is true, then area_unit is explicitly false.\nIf nybble is explicitly false and there is no evidence that bit is true and there is no evidence that bones is true, then byte is explicitly false.\nIf crest is explicitly false and there is no evidence that byte is true and there is no evidence that prodigy is explicitly false, then computer_memory_unit is explicitly false.\nIf en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then crest is explicitly false.\nIf en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then em is explicitly false.\nIf chicken is explicitly false and there is no evidence that freezing is explicitly false and there is no evidence that breakfast_lunch_and_dinner is explicitly false, then meals is explicitly false.\nIf position is explicitly false and there is no evidence that fairy_godmother is true and there is no evidence that rockets is explicitly false, then nybble is explicitly false.\nIf meals is explicitly false and there is no evidence that satisfying_needs is explicitly false and there is no evidence that computer_memory_unit is true, then scalded_milk is explicitly false.\nIf chicken is explicitly false and there is no evidence that freezing is explicitly false and there is no evidence that breakfast_lunch_and_dinner is explicitly false, then barn is true.\nIf milk is true and there is no evidence that prodigy is explicitly false and there is no evidence that butter is true, then dairy_product is true.\nIf unit_of_measurement is true and there is no evidence that scalded_milk is true and there is no evidence that homogenized_milk is true, then milk is true.\nIf en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then satisfying_needs is true.\nIf area_unit is explicitly false and there is no evidence that bit is true and there is no evidence that point is true, then unit_of_measurement is true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "bit is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"bit is explicitly false.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "bones is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"bones is explicitly false.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "butter is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"butter is explicitly false.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "chicken is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"chicken is explicitly false.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "earning_money is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"earning_money is explicitly false.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "en is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"en is explicitly false.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "fairy_godmother is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"fairy_godmother is explicitly false.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "homogenized_milk is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"homogenized_milk is explicitly false.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "point is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"point is explicitly false.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "position is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"position is explicitly false.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "training is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"training is explicitly false.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "breakfast_lunch_and_dinner is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"breakfast_lunch_and_dinner is true.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "freezing is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"freezing is true.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "prodigy is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"prodigy is true.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "rockets is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"rockets is true.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "If barn is true and there is no evidence that em is true and there is no evidence that byte is true, then area_unit is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"If barn is true and there is no evidence that em is true and there is no evidence that byte is true, then area_unit is explicitly false.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "If nybble is explicitly false and there is no evidence that bit is true and there is no evidence that bones is true, then byte is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"If nybble is explicitly false and there is no evidence that bit is true and there is no evidence that bones is true, then byte is explicitly false.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "If crest is explicitly false and there is no evidence that byte is true and there is no evidence that prodigy is explicitly false, then computer_memory_unit is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"If crest is explicitly false and there is no evidence that byte is true and there is no evidence that prodigy is explicitly false, then computer_memory_unit is explicitly false.\""
+      },
+      {
+        "line_index": 18,
+        "statement_nl": "If en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then crest is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "19. \"If en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then crest is explicitly false.\""
+      },
+      {
+        "line_index": 19,
+        "statement_nl": "If en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then em is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "20. \"If en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then em is explicitly false.\""
+      },
+      {
+        "line_index": 20,
+        "statement_nl": "If chicken is explicitly false and there is no evidence that freezing is explicitly false and there is no evidence that breakfast_lunch_and_dinner is explicitly false, then meals is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "21. \"If chicken is explicitly false and there is no evidence that freezing is explicitly false and there is no evidence that breakfast_lunch_and_dinner is explicitly false, then meals is explicitly false.\""
+      },
+      {
+        "line_index": 21,
+        "statement_nl": "If position is explicitly false and there is no evidence that fairy_godmother is true and there is no evidence that rockets is explicitly false, then nybble is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "22. \"If position is explicitly false and there is no evidence that fairy_godmother is true and there is no evidence that rockets is explicitly false, then nybble is explicitly false.\""
+      },
+      {
+        "line_index": 22,
+        "statement_nl": "If meals is explicitly false and there is no evidence that satisfying_needs is explicitly false and there is no evidence that computer_memory_unit is true, then scalded_milk is explicitly false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "23. \"If meals is explicitly false and there is no evidence that satisfying_needs is explicitly false and there is no evidence that computer_memory_unit is true, then scalded_milk is explicitly false.\""
+      },
+      {
+        "line_index": 23,
+        "statement_nl": "If chicken is explicitly false and there is no evidence that freezing is explicitly false and there is no evidence that breakfast_lunch_and_dinner is explicitly false, then barn is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "24. \"If chicken is explicitly false and there is no evidence that freezing is explicitly false and there is no evidence that breakfast_lunch_and_dinner is explicitly false, then barn is true.\""
+      },
+      {
+        "line_index": 24,
+        "statement_nl": "If milk is true and there is no evidence that prodigy is explicitly false and there is no evidence that butter is true, then dairy_product is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "25. \"If milk is true and there is no evidence that prodigy is explicitly false and there is no evidence that butter is true, then dairy_product is true.\""
+      },
+      {
+        "line_index": 25,
+        "statement_nl": "If unit_of_measurement is true and there is no evidence that scalded_milk is true and there is no evidence that homogenized_milk is true, then milk is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "26. \"If unit_of_measurement is true and there is no evidence that scalded_milk is true and there is no evidence that homogenized_milk is true, then milk is true.\""
+      },
+      {
+        "line_index": 26,
+        "statement_nl": "If en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then satisfying_needs is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "27. \"If en is explicitly false and there is no evidence that earning_money is true and there is no evidence that training is true, then satisfying_needs is true.\""
+      },
+      {
+        "line_index": 27,
+        "statement_nl": "If area_unit is explicitly false and there is no evidence that bit is true and there is no evidence that point is true, then unit_of_measurement is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "28. \"If area_unit is explicitly false and there is no evidence that bit is true and there is no evidence that point is true, then unit_of_measurement is true.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260428_225349Z_bd166bd8_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-28T22:53:58Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260428_225349Z_bd166bd8.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
+}

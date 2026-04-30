@@ -1,0 +1,114 @@
+{
+  "bundle_id": "folio_smt_20260429_000654Z_429a7260",
+  "accepted_at": "2026-04-29T00:07:10Z",
+  "committed_at": "2026-04-29T00:07:16Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_8996512c67da",
+    "r_557f16cdf347",
+    "r_ea8f298df9df",
+    "r_abebab46e9ae",
+    "r_8c5a56f2f569",
+    "r_44fd4e2a52a3",
+    "r_f561ed45deec",
+    "r_3986b3ec6a77",
+    "r_74945a96b06b",
+    "r_b081ab4801fb"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "folio_smt_20260429_000654Z_429a7260",
+    "user_original_input": "Premise 1: All employees who schedule a meeting with their customers will appear in the company today.\nPremise 2: Everyone who has lunch in the company schedules meetings with their customers.\nPremise 3: Employees will either have lunch in the company or have lunch at home.\nPremise 4: If an employee has lunch at home, then he/she is working remotely from home.\nPremise 5: All employees who are in other countries work remotely from home.\nPremise 6: No managers work remotely from home.\nPremise 7: James is either a manager and appears in the company today or neither a manager nor appears in the company today.\nConclusion: James has lunch in the company.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "For every employee: if that employee schedules a meeting with their customers, then that employee appears in the company today.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every employee who schedules a meeting with their customers appears in the company today.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "For every employee: if that employee has lunch in the company, then that employee schedules a meeting with their customers.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Every employee who has lunch in the company schedules a meeting with their customers.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "For every employee: that employee has lunch in the company or that employee has lunch at home.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Every employee has lunch in the company or has lunch at home.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "For every employee: it is not the case that (that employee has lunch in the company and that employee has lunch at home).",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"No employee has lunch in both the company and at home.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "If an employee has lunch at home, then that employee works remotely from home.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"If an employee has lunch at home, then that employee works remotely from home.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "For every employee: if that employee is in another country, then that employee works remotely from home.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Every employee who is in another country works remotely from home.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "For every manager: it is not the case that that manager works remotely from home.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"No manager works remotely from home.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "If James is a manager, then James appears in the company today.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"If James is a manager, then James appears in the company today.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "If James appears in the company today, then James is a manager.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"If James appears in the company today, then James is a manager.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "James has lunch in the company.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"James has lunch in the company.\""
+      }
+    ],
+    "orchestration_run_id": "orr_folio_smt_20260429_000654Z_429a7260_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-29T00:07:10Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\folio_smt_batch\\policies\\folio_smt_20260429_000654Z_429a7260.smt2"
+}

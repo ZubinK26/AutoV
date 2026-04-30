@@ -1,0 +1,165 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260426_223352Z_427e854a",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_policy_next.md' (1-based global rule indices 1–10).\n\nRules in this chunk:\n1. There is a board with twenty-five cells.\n2. The cells are identified by row and column, where rows are numbered 1 through 5 and columns are numbered 1 through 5.\n3. Each cell is identified by a pair (R, C) where R is the row and C is the column.\n4. There are four edges of the board: the top edge, the bottom edge, the left edge, and the right edge.\n5. The cells in row 1 are on the top edge.\n6. The cells in row 5 are on the bottom edge.\n7. The cells in column 1 are on the left edge.\n8. The cells in column 5 are on the right edge.\n9. There are two players: red and blue.\n10. The red player is assigned the top edge and the bottom edge.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "There is exactly one board.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"There is exactly one board.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The board contains exactly twenty-five cells.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The board contains exactly twenty-five cells.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every cell is identified by exactly one row.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every cell is identified by exactly one row.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every cell is identified by exactly one column.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every cell is identified by exactly one column.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Rows are numbered 1 through 5.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Rows are numbered 1 through 5.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Columns are numbered 1 through 5.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Columns are numbered 1 through 5.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every cell is identified by exactly one pair (R, C).",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every cell is identified by exactly one pair (R, C).\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "R is the row number.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"R is the row number.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "C is the column number.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"C is the column number.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "The board has exactly four edges.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"The board has exactly four edges.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "The edges are the top edge, the bottom edge, the left edge, and the right edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"The edges are the top edge, the bottom edge, the left edge, and the right edge.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every cell in row 1 is located on the top edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every cell in row 1 is located on the top edge.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Every cell in row 5 is located on the bottom edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Every cell in row 5 is located on the bottom edge.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "Every cell in column 1 is located on the left edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"Every cell in column 1 is located on the left edge.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "Every cell in column 5 is located on the right edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"Every cell in column 5 is located on the right edge.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "There are exactly two players.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"There are exactly two players.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "The players are the red player and the blue player.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"The players are the red player and the blue player.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "The red player is assigned the top edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"The red player is assigned the top edge.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "The red player is assigned the bottom edge.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"The red player is assigned the bottom edge.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260426_223352Z_427e854a_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-26T22:34:09Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

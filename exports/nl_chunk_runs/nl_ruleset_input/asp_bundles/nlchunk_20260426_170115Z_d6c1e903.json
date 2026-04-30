@@ -1,23 +1,23 @@
 {
   "bundle_id": "nlchunk_20260426_170115Z_d6c1e903",
-  "accepted_at": "2026-04-26T17:07:06Z",
-  "committed_at": null,
-  "pipeline_status": "failed",
+  "accepted_at": "2026-04-26T17:39:28Z",
+  "committed_at": "2026-04-26T17:39:56Z",
+  "pipeline_status": "committed",
   "rule_ids": [
-    "r_475d25cec1dc",
-    "r_2b0a8b5e7745",
-    "r_4d07e7b20c32",
-    "r_01b980dd4a87",
-    "r_dd005f9c2bcf",
-    "r_3ecacaf6a5d9",
-    "r_e83404f49c95",
-    "r_4eccaf2bafb2",
-    "r_abd3179a2f64",
-    "r_be7d94fd9b94",
-    "r_7fe0f8ed0905",
-    "r_0c0813fcf062",
-    "r_0a876da9cb66",
-    "r_04664c756aa6"
+    "r_f2b978efcef5",
+    "r_f7d50991c75f",
+    "r_ced610c0d74d",
+    "r_56e2875d78a5",
+    "r_ee06d65e3a8a",
+    "r_22acefd14205",
+    "r_728b707ee5d1",
+    "r_985aebe41bfe",
+    "r_8de94bb119d6",
+    "r_b38fa6d7f7d0",
+    "r_295a96a96139",
+    "r_6a7031fddeb6",
+    "r_cab82a91f31d",
+    "r_addef38bbe3e"
   ],
   "out_of_scope_line_indices": [],
   "wfm_payload": {
@@ -145,12 +145,9 @@
     "provider_model": "gemini-3-flash-preview",
     "wfm_compound_operator_limit": 8
   },
-  "failure_reason": {
-    "category": "PARSE_GROUND_FAIL",
-    "detail": "grounding: grounding stopped because of errors"
-  },
+  "failure_reason": null,
   "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_runs\\nl_ruleset_input\\policy_model.lp",
   "pipeline_kind": "asp_clincon",
   "formalizer_prompt": "formalizer_new.md",
-  "formalizer_prompt_sha256": "4f10abb085e2353a454fe7491358fc2b0655386db5e75231f6980ee8de9a1c36"
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
 }

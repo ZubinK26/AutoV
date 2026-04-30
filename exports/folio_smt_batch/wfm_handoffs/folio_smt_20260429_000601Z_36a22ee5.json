@@ -1,0 +1,77 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "folio_smt_20260429_000601Z_36a22ee5",
+  "user_original_input": "Premise 1: If people perform in school talent shows often, then they attend and are very engaged with school events.\nPremise 2: People either perform in school talent shows often or are inactive and disinterested members of their community.\nPremise 3: If people chaperone high school dances, then they are not students who attend the school.\nPremise 4: All people who are inactive and disinterested members of their community chaperone high school dances.\nPremise 5: All young children and teenagers who wish to further their academic careers and educational opportunities are students who attend the school.\nPremise 6: Bonnie either both attends and is very engaged with school events and is a student who attends the school, or she neither attends and is very engaged with school events nor is a student who attends the school.\nConclusion: If Bonnie is either both a young child or teenager who wishes to further her academic career and educational opportunities and chaperones high school dances or neither is a young child nor teenager who wishes to further her academic career and educational opportunities, then Bonnie is either a student who attends the school or is an inactive and disinterested member of the community.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every person who performs in school talent shows often attends school events.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: The word \"often\" is a vague quantifier. The system cannot formalize frequency without a specific numeric threshold or a defined set of events.",
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every person who performs in school talent shows often attends school events.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every person who performs in school talent shows often is very engaged with school events.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This statement contains two vague terms: \"often\" (a frequency) and \"very engaged\" (a subjective intensity). The system requires precise, binary, or numeric definitions.",
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every person who performs in school talent shows often is very engaged with school events.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every person either performs in school talent shows often or is an inactive and disinterested member of their community.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This statement uses vague/subjective predicates (\"often\", \"inactive\", \"disinterested\") that cannot be formally defined without specific criteria.",
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every person either performs in school talent shows often or is an inactive and disinterested member of their community.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every person who chaperones high school dances is not a student who attends the school.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every person who chaperones high school dances is not a student who attends the school.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every person who is an inactive and disinterested member of their community chaperones high school dances.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: The predicates \"inactive\" and \"disinterested\" are subjective and vague.",
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every person who is an inactive and disinterested member of their community chaperones high school dances.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every person who is a young child or teenager and who wishes to further their academic career and educational opportunities is a student who attends the school.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every person who is a young child or teenager and who wishes to further their academic career and educational opportunities is a student who attends the school.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Bonnie attends and is very engaged with school events and is a student who attends the school, if and only if Bonnie attends and is very engaged with school events or is a student who attends the school.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Bonnie both attends and is very engaged with school events and is a student who attends the school, or Bonnie neither attends and is very engaged with school events nor is a student who attends the school.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "If (Bonnie is a young child or teenager who wishes to further her academic career and educational opportunities and Bonnie chaperones high school dances) or (it is not the case that Bonnie is a young child or teenager who wishes to further her academic career and educational opportunities), then Bonnie is a student who attends the school or Bonnie is an inactive and disinterested member of the community.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"If Bonnie is both a young child or teenager who wishes to further her academic career and educational opportunities and a person who chaperones high school dances, or if Bonnie is not a young child or teenager who wishes to further her academic career and educational opportunities, then Bonnie is a student who attends the school or Bonnie is an inactive and disinterested member of the community.\""
+    }
+  ],
+  "orchestration_run_id": "orr_folio_smt_20260429_000601Z_36a22ee5_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-29T00:06:19Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

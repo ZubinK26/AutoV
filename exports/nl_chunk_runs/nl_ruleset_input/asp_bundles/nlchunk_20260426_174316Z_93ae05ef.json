@@ -1,0 +1,117 @@
+{
+  "bundle_id": "nlchunk_20260426_174316Z_93ae05ef",
+  "accepted_at": "2026-04-26T17:44:11Z",
+  "committed_at": "2026-04-26T17:45:12Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_e3ff7f332f66",
+    "r_caf238bdc764",
+    "r_d07954a3e57d",
+    "r_190db1d0c191",
+    "r_cc5ddeb749c8",
+    "r_93f38a58ff1c",
+    "r_b9cfcdbcdbf1",
+    "r_36d99670dd50",
+    "r_afbf9f529a3e",
+    "r_ddf85cec4b64"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunk_20260426_174316Z_93ae05ef",
+    "user_original_input": "Incremental policy ruleset chunk from file 'nl_ruleset_input.md' (1-based global rule indices 21–30).\n\nRules in this chunk:\n21. If the transaction manager transitions to the committed state at time T plus 1, then a commit message to every resource manager is sent at time T plus 1.\n22. If the transaction manager transitions to the aborted state at time T plus 1, then an abort message to every resource manager is sent at time T plus 1.\n23. A resource manager has received a commit message at time T if a commit message to that resource manager was sent at any time before or equal to T.\n24. A resource manager has received an abort message at time T if an abort message to that resource manager was sent at any time before or equal to T.\n25. If a resource manager is in the prepared state at time T, has received a commit message at time T, and has not crashed, then it transitions to the committed state at time T plus 1.\n26. If a resource manager is in the prepared state at time T, has received an abort message at time T, and has not crashed, then it transitions to the aborted state at time T plus 1.\n27. A resource manager that has crashed at time T remains crashed at all later times.\n28. The transaction manager that has crashed at time T remains crashed at all later times.\n29. A resource manager that has crashed does not change state.\n30. The transaction manager that has crashed does not change state.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "If the transaction manager transitions to the committed state at time T plus 1, then a commit message is sent to every resource manager at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"If the transaction manager transitions to the committed state at time T plus 1, then a commit message is sent to every resource manager at time T plus 1.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "If the transaction manager transitions to the aborted state at time T plus 1, then an abort message is sent to every resource manager at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"If the transaction manager transitions to the aborted state at time T plus 1, then an abort message is sent to every resource manager at time T plus 1.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "A resource manager has received a commit message at time T if it received a commit message at time T, or if it had received a commit message at time T minus 1.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"A resource manager has received a commit message at time T if a commit message was sent to that resource manager at any time before or equal to time T.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "A resource manager has received an abort message at time T if it received an abort message at time T, or if it had received an abort message at time T minus 1.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"A resource manager has received an abort message at time T if an abort message was sent to that resource manager at any time before or equal to time T.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "If a resource manager is in the prepared state at time T, has received a commit message at time T, and has not crashed at time T, then that resource manager transitions to the committed state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"If a resource manager is in the prepared state at time T, has received a commit message at time T, and has not crashed at time T, then that resource manager transitions to the committed state at time T plus 1.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "If a resource manager is in the prepared state at time T, has received an abort message at time T, and has not crashed at time T, then that resource manager transitions to the aborted state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"If a resource manager is in the prepared state at time T, has received an abort message at time T, and has not crashed at time T, then that resource manager transitions to the aborted state at time T plus 1.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "If a resource manager has crashed at time T, then that resource manager is crashed at time T plus 1.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"If a resource manager has crashed at time T, then that resource manager remains crashed at all times after time T.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "If the transaction manager has crashed at time T, then the transaction manager is crashed at time T plus 1.",
+        "agent3_verdict": "REWRITE",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"If the transaction manager has crashed at time T, then the transaction manager remains crashed at all times after time T.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "If a resource manager has crashed at or before time T, then the state of that resource manager at time T plus 1 is the same as its state at time T.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"If a resource manager has crashed at or before time T, then the state of that resource manager at time T plus 1 is the same as its state at time T.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "If the transaction manager has crashed at or before time T, then the state of the transaction manager at time T plus 1 is the same as its state at time T.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"If the transaction manager has crashed at or before time T, then the state of the transaction manager at time T plus 1 is the same as its state at time T.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunk_20260426_174316Z_93ae05ef_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-26T17:44:11Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_runs\\nl_ruleset_input\\policy_model.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
+}

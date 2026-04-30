@@ -41,6 +41,7 @@ def run_e2e(args: argparse.Namespace, initial_user_text: str) -> int:
         skip_registry=getattr(args, "skip_registry", False),
         provider_model=ctx.model,
         auto_artifacts=not args.no_artifacts,
+        wfm_profile=getattr(args, "wfm_profile", "asp"),
     )
     if out is not None and getattr(args, "persist_registry_after_run", False):
         p = getattr(args, "persist_registry_path", None)
@@ -95,6 +96,12 @@ def main(argv: list[str] | None = None) -> int:
         "--skip-registry",
         action="store_true",
         help="Stop after handoff JSON (no M4 / registry); for smt_pipeline-only evaluation.",
+    )
+    p.add_argument(
+        "--wfm-profile",
+        choices=("asp", "smt"),
+        default="asp",
+        help="WFM asset tree: asp=asp/wfm/ (ClinCon), smt=smt/wfm/ (many-sorted FOL for SMT-LIB path).",
     )
     p.add_argument(
         "--mock-resolve",

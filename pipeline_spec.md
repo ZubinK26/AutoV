@@ -4,11 +4,11 @@
 
 **ClinCon / ASP product line (`ClinCon-version`):** Downstream formalization is **`asp_pipeline`** → ClinCon (`.lp`). **Agent 3 scope** and NL ↔ logic boundaries for that line are defined by the **ClinCon-safe ASP fragment** in **`docs/pipeline_wfm_to_asp.md` §2**, not by the many-sorted FOL section below (which remains the reference for **SMT**).
 
-This document describes the end-to-end pipeline. **Well-formedness (WFM)** behavior is defined in **`WFM/Agent_WFM.md`**; where details differ, **`WFM/Agent_WFM.md` takes precedence.**
+This document describes the end-to-end pipeline. **Well-formedness (WFM)** control flow is specified in **`asp/wfm/Agent_WFM.md`** (ASP profile) and **`smt/wfm/Agent_WFM.md`** (SMT profile); for the profile in use, that file takes precedence over this document where they differ.
 
-**WFM config (defaults):** `WFM/config/wfm.json` — e.g. `max_input_code_points` (**4096** by default; see `WFM/Agent_WFM.md` for rationale).
+**WFM config (defaults):** `asp/wfm/config/wfm.json` — e.g. `max_input_code_points` (**4096** by default; see `asp/wfm/Agent_WFM.md` for rationale).
 
-**WFM LLM prompts:** `WFM/prompts/` (per-agent instruction files; see `WFM/prompts/README.md`).
+**WFM LLM prompts:** **`asp/wfm/prompts/`** for the **ASP / ClinCon** profile (default orchestration). The **SMT** profile uses **`smt/wfm/prompts/`** (`--wfm-profile smt`); see `asp/wfm/prompts/README.md` and `smt/pipeline_wfm_to_smt.md`.
 
 **ASCII diagram (flow + what is built in repo):** [`pipeline_diagram.md`](pipeline_diagram.md) — diagram steps after WFM include a **registry-first** sketch; the **current** formalization path is **`smt_pipeline`** (see link above).
 
@@ -92,24 +92,24 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 
 **Pipeline stages (4 top-level agents):**
 
-1. **Well-formedness module (WFM)** — internal **four** sub-agents (see `WFM/Agent_WFM.md` and `WFM/prompts/`).
+1. **Well-formedness module (WFM)** — internal **four** sub-agents (see `asp/wfm/Agent_WFM.md` and `asp/wfm/prompts/`).
 2. **Registry agent** (search → extract gaps → resolve → populate; **Phase 1:** automated resolve per **`development_plan_registry_stage_v1.md`** — *Automated LLM resolution*)
 3. **Formalizer**
 4. **Identifier critic**
 
-**LLM backends:** WFM and later pipeline stages are **model-agnostic**: you can use **Anthropic (Claude)**, **Google (Gemini)**, or **other** chat-completion APIs that your orchestration layer supports. **Gemini** is in active use for WFM smoke runs (e.g. `test_sets/scripts/run_wfm_folio_gemini.py`); Claude remains supported (e.g. `run_wfm_folio_claude.py`). The same prompt files under `WFM/prompts/` apply regardless of provider unless you introduce provider-specific variants.
+**LLM backends:** WFM and later pipeline stages are **model-agnostic**: you can use **Anthropic (Claude)**, **Google (Gemini)**, or **other** chat-completion APIs that your orchestration layer supports. **Gemini** is in active use for WFM smoke runs (e.g. `test_sets/scripts/run_wfm_folio_gemini.py`); Claude remains supported (e.g. `run_wfm_folio_claude.py`). The **per-profile** prompt files (`asp/wfm/prompts/`, `smt/wfm/prompts/`) apply regardless of provider unless you introduce profile-specific variants.
 
 ### Steps:
 
-1. **User input** — natural language rule, unrestricted phrasing. **Safety:** before WFM, enforce **`max_input_code_points`** from `WFM/config/wfm.json` (default **4096** Unicode code points). If over limit, return to input with counts vs. limit; no auto-chunking. See `WFM/Agent_WFM.md`.
+1. **User input** — natural language rule, unrestricted phrasing. **Safety:** before WFM, enforce **`max_input_code_points`** from `asp/wfm/config/wfm.json` (default **4096** Unicode code points). If over limit, return to input with counts vs. limit; no auto-chunking. See `asp/wfm/Agent_WFM.md`.
 
-2. **Well-formedness module (WFM)** — Runs **Agent 1 → Agent 2 → Agent 3**, then a **confirmation step** and **conditionally Agent 4 (LLM)**, as specified in `WFM/Agent_WFM.md` (prompts in `WFM/prompts/`):
+2. **Well-formedness module (WFM)** — Runs **Agent 1 → Agent 2 → Agent 3**, then a **confirmation step** and **conditionally Agent 4 (LLM)**, as specified in `asp/wfm/Agent_WFM.md` (prompts in `asp/wfm/prompts/`):
 
    - **Agent 1:** Single LLM call: **flag** completeness and ambiguity (coreference under ambiguity), then **joint resolve** (most likely interpretation and guesses). **Plain NL output only** through Agent 2 — **no required metadata** for those steps.
-   - **Agent 2:** Decomposition with a **compound-operator limit** (default **8**, `compound_operator_limit` in `WFM/config/wfm.json`); exceeding the limit **returns to user input** with an **Agent 2 error report** (structured trace per `WFM/prompts/agent_2_decomposition.md`) and message.
+   - **Agent 2:** Decomposition with a **compound-operator limit** (default **8**, `compound_operator_limit` in `asp/wfm/config/wfm.json`); exceeding the limit **returns to user input** with an **Agent 2 error report** (structured trace per `asp/wfm/prompts/agent_2_decomposition.md`) and message.
    - **Agent 3:** Scope check; **scope report** if no rewrite can be suggested (flow continues); **diff report** if a rewrite is proposed; if an **attempted rewrite fails** validation/policy, **return to user input** per WFM.
-   - **Confirmation (product UI / templates):** The application **always** shows the **confirmation package** after Agent 3: decomposed sub-statements plus scope/diff material. User **acceptance** proceeds to the registry stage; reaching agreement may be handled by **orchestration alone** without an LLM (**yes** path). Per-line disagreement, **OUT_OF_SCOPE** handling, **`WFM_PATCH`** merge, and re-entry to WFM are specified in **`WFM/Agent_WFM.md`** (confirmation package, Agent 4, patch merge sections).
-   - **Agent 4 (LLM):** **Not** used to render the initial static package. It is invoked **from the user’s response onward**, **typically when the user rejects** the package and supplies feedback—clarification, **`WFM_PATCH`** proposals (`replacements` only from the model; omissions from UI), and merge under `WFM/Agent_WFM.md`. **Inner** or **outer** exhaustion **returns to user input** with a **failure reason**. User-confirmed **merged natural language** (Style A join) **re-runs full WFM from Agent 1** per `WFM/Agent_WFM.md`. *(Repo test harness: Agent 4 drivers and **Style A** loop-back to Agents 1–3 live under **`test_sets/scripts/`** — see **`test_sets/README.md`**.)*
+   - **Confirmation (product UI / templates):** The application **always** shows the **confirmation package** after Agent 3: decomposed sub-statements plus scope/diff material. User **acceptance** proceeds to the registry stage; reaching agreement may be handled by **orchestration alone** without an LLM (**yes** path). Per-line disagreement, **OUT_OF_SCOPE** handling, **`WFM_PATCH`** merge, and re-entry to WFM are specified in **`asp/wfm/Agent_WFM.md`** (confirmation package, Agent 4, patch merge sections).
+   - **Agent 4 (LLM):** **Not** used to render the initial static package. It is invoked **from the user’s response onward**, **typically when the user rejects** the package and supplies feedback—clarification, **`WFM_PATCH`** proposals (`replacements` only from the model; omissions from UI), and merge under `asp/wfm/Agent_WFM.md`. **Inner** or **outer** exhaustion **returns to user input** with a **failure reason**. User-confirmed **merged natural language** (Style A join) **re-runs full WFM from Agent 1** per `asp/wfm/Agent_WFM.md`. *(Repo test harness: Agent 4 drivers and **Style A** loop-back to Agents 1–3 live under **`test_sets/scripts/`** — see **`test_sets/README.md`**.)*
 
    WFM **always** offers **user confirmation** of cleaned output before passing to the registry agent. Scope and rewrite information is **always** included in that confirmation package when applicable.
 
@@ -117,7 +117,7 @@ This document describes the end-to-end pipeline. **Well-formedness (WFM)** behav
 
 ### WFM → registry handoff (orchestration payload)
 
-After **user acceptance** of the confirmation package (per **`WFM/Agent_WFM.md`**: merged Style A text, PASS / REWRITE / OUT_OF_SCOPE as displayed), orchestration passes a **structured** payload to the registry stage—not NL alone—so the registry agent never has to re-infer line verdicts from prose.
+After **user acceptance** of the confirmation package (per **`asp/wfm/Agent_WFM.md`**: merged Style A text, PASS / REWRITE / OUT_OF_SCOPE as displayed), orchestration passes a **structured** payload to the registry stage—not NL alone—so the registry agent never has to re-infer line verdicts from prose.
 
 **Rule granularity (resolved):** Each **accepted sub-statement** (one numbered line in the authoritative confirmation list) becomes **one formal rule** with its **own immutable `rule_id`** when the rule is later persisted after formalization. All lines accepted in a **single user acceptance** share a **`bundle_id`** (also **`wfm_acceptance_id`**). Preserve **`line_index`** (order within the bundle; 0-based or 1-based—pick one convention in implementation and keep it stable).
 
@@ -131,7 +131,7 @@ After **user acceptance** of the confirmation package (per **`WFM/Agent_WFM.md`*
 | `orchestration_run_id` | Id tying this run to logs (implementation-defined). |
 | `wfm_pipeline_timestamps` | e.g. confirmation accepted at (UTC); **include for audit**. |
 | `provider_model` | Optional: WFM LLM provider + model id used (audit / regression). |
-| `wfm_compound_operator_limit` | Value from `WFM/config/wfm.json` at run time (optional parity with harness). |
+| `wfm_compound_operator_limit` | Value from `asp/wfm/config/wfm.json` at run time (optional parity with harness). |
 
 **Per-line fields (one object per line in the confirmation package):**
 
@@ -305,4 +305,4 @@ Post-pipeline component (may use **graph-style** traversal over rules + registry
 
 ## Canonical WFM reference
 
-All WFM control flow, retry budgets, failure handling, loop-back rules, and open WFM issues are maintained in **`WFM/Agent_WFM.md`**. Agent instruction text is in **`WFM/prompts/`**.
+All WFM control flow, retry budgets, failure handling, loop-back rules, and open WFM issues are maintained in **`asp/wfm/Agent_WFM.md`** (ASP) and **`smt/wfm/Agent_WFM.md`** (SMT). Agent instruction text: **`asp/wfm/prompts/`** / **`smt/wfm/prompts/`** respectively.

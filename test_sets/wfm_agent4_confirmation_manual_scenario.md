@@ -2,7 +2,7 @@
 
 **Purpose:** Human-driven (or future scripted) exercise that **starts after Agent 3**, at the **confirmation package**, including **structured disagreement**, **`WFM_PATCH`**, **programmatic merge**, **Style A** NL for Agent 1 re-entry, and awareness of **outer** WFM rerun budget.
 
-**Normative spec:** `WFM/Agent_WFM.md` (Confirmation package, Agent 4, Patch merge). **Agent 4 prompt:** `WFM/prompts/agent_4_user_interaction.md`.
+**Normative spec:** `asp/wfm/Agent_WFM.md` (Confirmation package, Agent 4, Patch merge). **Agent 4 prompt:** `asp/wfm/prompts/agent_4_user_interaction.md`.
 
 **Fixture source (realistic package):** Stress harness **R-1** from `test_sets/run_results/wfm_stress_gemini_20260404_151309Z.md` — mixed **PASS**, **OUT_OF_SCOPE**, and **REWRITE**. Optionally duplicate with **F-2** from `wfm_folio_gemini_20260404_133907Z.md` for an all–in-scope shorter path.
 

@@ -3,14 +3,45 @@
   "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/wfm_orchestration/templates/nl_ruleset_input.md",
   "nl_sha256": "1351c3fb071f720367883753fa8ff6301a62fc49c8b2ac5f5d9a6ac183a2a5b6",
   "rules_per_chunk": 10,
-  "next_rule_index": 0,
-  "chunk_records": [],
+  "next_rule_index": 33,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 10,
+      "bundle_id": "nlchunk_20260426_170115Z_d6c1e903",
+      "handoff_relposix": "exports\\nl_chunk_runs\\nl_ruleset_input\\wfm_handoffs\\nlchunk_20260426_170115Z_d6c1e903.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_ruleset_input/policy_snapshots/policy_after_chunk_0000_20260426T173956Z_nlchunk_20260426_170115Z_d6c1e903.lp",
+      "committed_at_utc": "2026-04-26T17:39:56Z"
+    },
+    {
+      "chunk_seq": 1,
+      "rule_index_start": 10,
+      "rule_index_end": 20,
+      "bundle_id": "nlchunk_20260426_174107Z_c4d7c26f",
+      "handoff_relposix": "exports\\nl_chunk_runs\\nl_ruleset_input\\wfm_handoffs\\nlchunk_20260426_174107Z_c4d7c26f.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_ruleset_input/policy_snapshots/policy_after_chunk_0001_20260426T174153Z_nlchunk_20260426_174107Z_c4d7c26f.lp",
+      "committed_at_utc": "2026-04-26T17:41:53Z"
+    },
+    {
+      "chunk_seq": 2,
+      "rule_index_start": 20,
+      "rule_index_end": 30,
+      "bundle_id": "nlchunk_20260426_174316Z_93ae05ef",
+      "handoff_relposix": "exports\\nl_chunk_runs\\nl_ruleset_input\\wfm_handoffs\\nlchunk_20260426_174316Z_93ae05ef.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_ruleset_input/policy_snapshots/policy_after_chunk_0002_20260426T174512Z_nlchunk_20260426_174316Z_93ae05ef.lp",
+      "committed_at_utc": "2026-04-26T17:45:12Z"
+    },
+    {
+      "chunk_seq": 3,
+      "rule_index_start": 30,
+      "rule_index_end": 33,
+      "bundle_id": "nlchunk_20260426_174534Z_a6201f21",
+      "handoff_relposix": "exports\\nl_chunk_runs\\nl_ruleset_input\\wfm_handoffs\\nlchunk_20260426_174534Z_a6201f21.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_ruleset_input/policy_snapshots/policy_after_chunk_0003_20260426T174626Z_nlchunk_20260426_174534Z_a6201f21.lp",
+      "committed_at_utc": "2026-04-26T17:46:26Z"
+    }
+  ],
   "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_runs/nl_ruleset_input",
-  "pending_asp": {
-    "rule_index_start": 0,
-    "rule_index_end": 10,
-    "chunk_seq": 0,
-    "bundle_id": "nlchunk_20260426_170115Z_d6c1e903",
-    "handoff_relposix": "exports\\nl_chunk_runs\\nl_ruleset_input\\wfm_handoffs\\nlchunk_20260426_170115Z_d6c1e903.json"
-  }
+  "pending_asp": null
 }

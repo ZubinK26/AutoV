@@ -48,8 +48,8 @@
 
 | Task | Detail | Done when |
 |------|--------|-----------|
-| A1 | Update **`WFM/prompts/agent_3_scope_rewrite.md`** (and any Agent 2 decomposition hints if needed) with fragment rules from spec §2: term functions, NAF stratification, linear arithmetic, finite domains, choice rules, aggregates, optimization, `holds/occurs` pattern | ✅ Done |
-| A2 | Update **`WFM/Agent_WFM.md`** (or companion) — scope table aligned with §2.1 / §2.2; `scope_report` must name violation class (e.g. `term-level function: …`) | ✅ Done (`pipeline_spec.md` ClinCon note) |
+| A1 | Update **`asp/wfm/prompts/agent_3_scope_rewrite.md`** (and any Agent 2 decomposition hints if needed) with fragment rules from spec §2: term functions, NAF stratification, linear arithmetic, finite domains, choice rules, aggregates, optimization, `holds/occurs` pattern | ✅ Done |
+| A2 | Update **`asp/wfm/Agent_WFM.md`** (or companion) — scope table aligned with §2.1 / §2.2; `scope_report` must name violation class (e.g. `term-level function: …`) | ✅ Done (`pipeline_spec.md` ClinCon note) |
 | A3 | Extend **stress / curated examples** in `test_sets/` where useful: at least one **in-scope** temporal snippet; at least one **OUT_OF_SCOPE** nonlinear / open-domain line with expected `scope_report` prefix | ✅ `wfm_clincon_fragment_examples_en.md` + `--clincon` runners |
 | A4 | Optional: `wfm_orchestration` demo pools unchanged structurally; **re-run** small batch to confirm new Agent 3 behavior does not regress PASS/OUT_OF_SCOPE rates catastrophically | Smoke report |
 

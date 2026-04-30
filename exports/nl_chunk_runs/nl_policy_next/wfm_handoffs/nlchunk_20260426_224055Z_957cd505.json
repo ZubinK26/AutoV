@@ -1,0 +1,101 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260426_224055Z_957cd505",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_policy_next.md' (1-based global rule indices 71–80).\n\nRules in this chunk:\n71. Time proceeds in turns numbered 0 through 25.\n72. Turn 0 is the start of the game.\n73. On each turn after turn 0, exactly one player makes a move.\n74. The red player moves on turns 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, and 25.\n75. The blue player moves on turns 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, and 24.\n76. A move by the red player consists of choosing one empty cell and changing its state to red.\n77. A move by the blue player consists of choosing one empty cell and changing its state to blue.\n78. Once a cell has been changed from empty to red, it remains red for the rest of the game.\n79. Once a cell has been changed from empty to blue, it remains blue for the rest of the game.\n80. A red chain is a set of cells such that every cell in the set is in the red state, and for every two cells in the set there is a sequence of cells in the set, starting with the first cell and ending with the second cell, in which each consecutive pair of cells in the sequence are adjacent to each other.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Time proceeds in turns numbered 0 through 25.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Time proceeds in turns numbered 0 through 25.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Turn 0 is the start of the game.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Turn 0 is the start of the game.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "On every turn from turn 1 through turn 25, exactly one player makes exactly one move.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"On every turn from turn 1 through turn 25, exactly one player makes exactly one move.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "The red player makes a move on turns 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, and 25.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The red player makes a move on turns 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, and 25.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The blue player makes a move on turns 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, and 24.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The blue player makes a move on turns 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, and 24.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "A move by the red player consists of the red player choosing exactly one empty cell and changing the state of that cell to red.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"A move by the red player consists of the red player choosing exactly one empty cell and changing the state of that cell to red.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "A move by the blue player consists of the blue player choosing exactly one empty cell and changing the state of that cell to blue.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"A move by the blue player consists of the blue player choosing exactly one empty cell and changing the state of that cell to blue.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Once a cell has been changed from the empty state to the red state, that cell remains in the red state for the rest of the game.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Once a cell has been changed from the empty state to the red state, that cell remains in the red state for the rest of the game.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Once a cell has been changed from the empty state to the blue state, that cell remains in the blue state for the rest of the game.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Once a cell has been changed from the empty state to the blue state, that cell remains in the blue state for the rest of the game.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "A red chain is a set of cells such that every cell in the set is in the red state.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"A red chain is a set of cells such that every cell in the set is in the red state.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "For every two cells in a red chain, there is a sequence of cells in the set, starting with the first cell and ending with the second cell, in which each consecutive pair of cells in the sequence are adjacent to each other.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"For every two cells in a red chain, there is a sequence of cells in the set, starting with the first cell and ending with the second cell, in which each consecutive pair of cells in the sequence are adjacent to each other.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260426_224055Z_957cd505_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-26T22:41:15Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

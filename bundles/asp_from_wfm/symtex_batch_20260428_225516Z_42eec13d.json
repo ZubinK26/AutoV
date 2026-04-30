@@ -1,0 +1,90 @@
+{
+  "bundle_id": "symtex_batch_20260428_225516Z_42eec13d",
+  "accepted_at": "2026-04-28T22:58:29Z",
+  "committed_at": "2026-04-28T22:58:45Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_640629637aab",
+    "r_af3bcb4668f2",
+    "r_cb58fd8ac42f",
+    "r_d24e30a4f4ae",
+    "r_c3d04993939c",
+    "r_50eb45a2a925",
+    "r_0e21ed219ea4"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "symtex_batch_20260428_225516Z_42eec13d",
+    "user_original_input": "The following facts and rules are quoted verbatim from the benchmark instance.\n\nFacts:\nP7(\"Antonio\", \"Crystal\") is true.\nP8(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP9(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP10(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP11(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP12(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP13(\"Antonio\", \"Brandon\", \"Selena\") is true.\nP14(\"Brandon\", \"Crystal\", \"Selena\") is true.\nP15(\"Antonio\", \"Brandon\", \"Selena\") is true.\n\nRules:\nIf P1(V0, V1, V2) is true and P3(V0, V1, V3) is true and P4(V0, V1, V3) is true, then P6(V2) is true.\nIf P7(V0, V3) is true and P13(V0, V2, V4) is true and P14(V2, V3, V4) is true, then P0(V0, V2, V4) is true.\nIf P0(V0, V2, V4) is true and P5(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P1(V0, V2, V2) is true.\nIf P8(V0, V2, V4) is true and P10(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P2(V2, V4) is true.\nIf P2(V1, V4) is true and P13(V0, V2, V4) is true and P15(V0, V2, V4) is true, then P3(V0, V1, V1) is true.\nIf P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P4(V0, V2, V4) is true.\nIf P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P5(V0, V2, V4) is true.",
+    "lines": [
+      {
+        "line_index": 9,
+        "statement_nl": "If P1(V0, V1, V2) is true and P3(V0, V1, V3) is true and P4(V0, V1, V3) is true, then P6(V2) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"If P1(V0, V1, V2) is true and P3(V0, V1, V3) is true and P4(V0, V1, V3) is true, then P6(V2) is true.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "If P7(V0, V3) is true and P13(V0, MAX_V2, V4) is true and P14(V2, V3, V4) is true, then P0(V0, V2, V4) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"If P7(V0, V3) is true and P13(V0, V2, V4) is true and P14(V2, V3, V4) is true, then P0(V0, V2, V4) is true.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "If P0(V0, V2, V4) is true and P5(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P1(V0, V2, V2) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"If P0(V0, V2, V4) is true and P5(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P1(V0, V2, V2) is true.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "If P8(V0, V2, V4) is true and P10(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P2(V2, V4) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"If P8(V0, V2, V4) is true and P10(V0, V2, V4) is true and P12(V0, V2, V4) is true, then P2(V2, V4) is true.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "If P2(V1, V4) is true and P13(V0, V2, V4) is true and P15(V0, V2, V4) is true, then P3(V0, V1, V1) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"If P2(V1, V4) is true and P13(V0, V2, V4) is true and P15(V0, V2, V4) is true, then P3(V0, V1, V1) is true.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P4(V0, V2, V4) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P4(V0, V2, V4) is true.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P5(V0, V2, V4) is true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"If P9(V0, V2, V4) is true and P10(V0, V2, V4) is true and P11(V0, V2, V4) is true, then P5(V0, V2, V4) is true.\""
+      }
+    ],
+    "orchestration_run_id": "orr_symtex_batch_20260428_225516Z_42eec13d_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-28T22:55:34Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\bundles\\asp_from_wfm\\policies\\symtex_batch_20260428_225516Z_42eec13d.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
+}

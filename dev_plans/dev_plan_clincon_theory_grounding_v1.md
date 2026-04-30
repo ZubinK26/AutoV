@@ -12,7 +12,7 @@
 | Layer | What we have today | What the docs / prompts say |
 |--------|---------------------|-----------------------------|
 | **Spec** | [`asp/pipeline_wfm_to_asp.md`](../asp/pipeline_wfm_to_asp.md) §2.1 | ✅ `&sum{...}` in scope; line 143 says ClinCon constraint syntax is used for numeric constraints. |
-| **WFM** | [`WFM/prompts/agent_3_scope_rewrite.md`](../WFM/prompts/agent_3_scope_rewrite.md) | “Linear integer constraints (ClinCon-style sums, …)”. |
+| **WFM** | [`asp/wfm/prompts/agent_3_scope_rewrite.md`](../asp/wfm/prompts/agent_3_scope_rewrite.md) | “Linear integer constraints (ClinCon-style sums, …)”. |
 | **Formalizer** | [`asp_pipeline/prompts/formalizer_new.md`](../asp_pipeline/prompts/formalizer_new.md) | Instructs `&sum{...}`-style for integers (line 17). |
 | **Oracle** | [`asp_pipeline/clingo_check.py`](../asp_pipeline/clingo_check.py) | `Control().add(...); .ground()` and/or **`clingo --ground`** on a temp file — **no** registered **constraint theory**. |
 

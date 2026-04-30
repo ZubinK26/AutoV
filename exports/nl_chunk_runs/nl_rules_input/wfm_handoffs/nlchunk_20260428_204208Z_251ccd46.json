@@ -1,0 +1,413 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunk_20260428_204208Z_251ccd46",
+  "user_original_input": "Incremental policy ruleset chunk from file 'nl_rules_input.md' (1-based global rule indices 11–16).\n\nRules in this chunk:\n11. A petrified creature is transformed into a solid inanimate substance. Any nonmagical object the petrified creature is wearing is also transformed into that substance. Any nonmagical object the petrified creature is carrying is also transformed into that substance. The petrified creature's weight becomes ten times its normal weight. The petrified creature ceases aging. A petrified creature cannot take actions or reactions. A petrified creature cannot move. A petrified creature cannot speak. A petrified creature is unaware of its surroundings. Attack rolls made against a petrified creature have advantage. A petrified creature fails any Strength saving throw. A petrified creature fails any Dexterity saving throw. A petrified creature has resistance to all damage types. A petrified creature is immune to the poisoned condition. A petrified creature is immune to disease. Any poison already present in the petrified creature's system at the time of petrification is suspended rather than neutralized; it does not progress and does not end.\n12. A poisoned creature has disadvantage on attack rolls. A poisoned creature has disadvantage on ability checks.\n13. A prone creature's only form of movement is crawling, unless it takes the action to stand up. When a prone creature stands up, the prone condition ends. A prone creature has disadvantage on attack rolls. An attack roll against a prone creature has advantage if the attacker's distance to the prone creature is 5 feet or less. An attack roll against a prone creature has disadvantage if the attacker's distance to the prone creature is greater than 5 feet.\n14. A restrained creature has a speed of 0. A restrained creature cannot gain any bonus to its speed. Attack rolls made against a restrained creature have advantage. Attack rolls made by a restrained creature have disadvantage. A restrained creature has disadvantage on Dexterity saving throws.\n15. A stunned creature cannot take actions or reactions. A stunned creature cannot move. A stunned creature can only speak falteringly; it cannot speak in a deliberate or coherent manner. A stunned creature fails any Strength saving throw. A stunned creature fails any Dexterity saving throw. Attack rolls made against a stunned creature have advantage.\n16. An unconscious creature cannot take actions or reactions. An unconscious creature cannot move. An unconscious creature cannot speak. An unconscious creature is unaware of its surroundings. An unconscious creature releases any object it is holding at the moment it becomes unconscious. An unconscious creature falls prone at the moment it becomes unconscious. An unconscious creature fails any Strength saving throw. An unconscious creature fails any Dexterity saving throw. Attack rolls made against an unconscious creature have advantage. Any attack roll that hits an unconscious creature is a critical hit if the attacker's distance to the unconscious creature is 5 feet or less.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every petrified creature is transformed into a solid inanimate substance.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every petrified creature is transformed into a solid inanimate substance.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every nonmagical object that the petrified creature is wearing is transformed into that same substance.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every nonmagical object that the petrified creature is wearing is transformed into that same substance.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every nonmagical object that the petrified creature is carrying is transformed into that same substance.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every nonmagical object that the petrified creature is carrying is transformed into that same substance.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "The petrified creature's weight is ten times its normal weight.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The petrified creature's weight is ten times its normal weight.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "The petrified creature does not age while petrified.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"The petrified creature does not age while petrified.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "A petrified creature is prohibited from taking any action.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"A petrified creature is prohibited from taking any action.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "A petrified creature is prohibited from taking any reaction.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"A petrified creature is prohibited from taking any reaction.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "A petrified creature is prohibited from moving.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"A petrified creature is prohibited from moving.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "A petrified creature is prohibited from speaking.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"A petrified creature is prohibited from speaking.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "A petrified creature is unaware of its surroundings.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"A petrified creature is unaware of its surroundings.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every attack roll made against a petrified creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every attack roll made against a petrified creature has advantage.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "A petrified creature automatically fails every Strength saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"A petrified creature automatically fails every Strength saving throw.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "A petrified creature automatically fails every Dexterity saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"A petrified creature automatically fails every Dexterity saving throw.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "A petrified creature has resistance to every damage type.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"A petrified creature has resistance to every damage type.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "A petrified creature is immune to the poisoned condition.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"A petrified creature is immune to the poisoned condition.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "A petrified creature is immune to every disease.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"A petrified creature is immune to every disease.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "Every poison present in the petrified creature's system at the moment of petrification is suspended.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"Every poison present in the petrified creature's system at the moment of petrification is suspended.\""
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "The poison does not progress while the creature is petrified.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "18. \"The poison does not progress while the creature is petrified.\""
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "The poison does not end while the creature is petrified.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "19. \"The poison does not end while the creature is petrified.\""
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "Every poisoned creature has disadvantage on every attack roll.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "20. \"Every poisoned creature has disadvantage on every attack roll.\""
+    },
+    {
+      "line_index": 20,
+      "statement_nl": "Every poisoned creature has disadvantage on every ability check.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "21. \"Every poisoned creature has disadvantage on every ability check.\""
+    },
+    {
+      "line_index": 21,
+      "statement_nl": "A prone creature's only available form of movement is crawling, unless the prone creature takes an action to stand up.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "22. \"A prone creature's only available form of movement is crawling, unless the prone creature takes an action to stand up.\""
+    },
+    {
+      "line_index": 22,
+      "statement_nl": "When a prone creature stands up, the prone condition ends for that creature.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "23. \"When a prone creature stands up, the prone condition ends for that creature.\""
+    },
+    {
+      "line_index": 23,
+      "statement_nl": "Every prone creature has disadvantage on every attack roll.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "24. \"Every prone creature has disadvantage on every attack roll.\""
+    },
+    {
+      "line_index": 24,
+      "statement_nl": "Every attack roll made against a prone creature has advantage if the distance from the attacker to the prone creature is 5 feet or less.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "25. \"Every attack roll made against a prone creature has advantage if the distance from the attacker to the prone creature is 5 feet or less.\""
+    },
+    {
+      "line_index": 25,
+      "statement_nl": "Every attack roll made against a prone creature has disadvantage if the distance from the attacker to the prone creature is greater than 5 feet.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "26. \"Every attack roll made against a prone creature has disadvantage if the distance from the attacker to the prone creature is greater than 5 feet.\""
+    },
+    {
+      "line_index": 26,
+      "statement_nl": "Every restrained creature has a speed of 0.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "27. \"Every restrained creature has a speed of 0.\""
+    },
+    {
+      "line_index": 27,
+      "statement_nl": "Every restrained creature cannot gain any bonus to its speed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "28. \"Every restrained creature cannot gain any bonus to its speed.\""
+    },
+    {
+      "line_index": 28,
+      "statement_nl": "Every attack roll made against a restrained creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "29. \"Every attack roll made against a restrained creature has advantage.\""
+    },
+    {
+      "line_index": 29,
+      "statement_nl": "Every attack roll made by a restrained creature has disadvantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "30. \"Every attack roll made by a restrained creature has disadvantage.\""
+    },
+    {
+      "line_index": 30,
+      "statement_nl": "Every restrained creature has disadvantage on every Dexterity saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "31. \"Every restrained creature has disadvantage on every Dexterity saving throw.\""
+    },
+    {
+      "line_index": 31,
+      "statement_nl": "Every stunned creature is prohibited from taking any action.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "32. \"Every stunned creature is prohibited from taking any action.\""
+    },
+    {
+      "line_index": 32,
+      "statement_nl": "Every stunned creature is prohibited from taking any reaction.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "33. \"Every stunned creature is prohibited from taking any reaction.\""
+    },
+    {
+      "line_index": 33,
+      "statement_nl": "Every stunned creature is prohibited from moving.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "34. \"Every stunned creature is prohibited from moving.\""
+    },
+    {
+      "line_index": 34,
+      "statement_nl": "Every stunned creature is prohibited from speaking in a manner that is not faltering.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "35. \"Every stunned creature can only speak falteringly.\""
+    },
+    {
+      "line_index": 35,
+      "statement_nl": "Every stunned creature is prohibited from speaking in a deliberate or coherent manner.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "36. \"Every stunned creature is prohibited from speaking in a deliberate or coherent manner.\""
+    },
+    {
+      "line_index": 36,
+      "statement_nl": "Every stunned creature automatically fails every Strength saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "37. \"Every stunned creature automatically fails every Strength saving throw.\""
+    },
+    {
+      "line_index": 37,
+      "statement_nl": "Every stunned creature automatically fails every Dexterity saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "38. \"Every stunned creature automatically fails every Dexterity saving throw.\""
+    },
+    {
+      "line_index": 38,
+      "statement_nl": "Every attack roll made against a stunned creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "39. \"Every attack roll made against a stunned creature has advantage.\""
+    },
+    {
+      "line_index": 39,
+      "statement_nl": "Every unconscious creature is prohibited from taking any action.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "40. \"Every unconscious creature is prohibited from taking any action.\""
+    },
+    {
+      "line_index": 40,
+      "statement_nl": "Every unconscious creature is prohibited from taking any reaction.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "41. \"Every unconscious creature is prohibited from taking any reaction.\""
+    },
+    {
+      "line_index": 41,
+      "statement_nl": "Every unconscious creature is prohibited from moving.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "42. \"Every unconscious creature is prohibited from moving.\""
+    },
+    {
+      "line_index": 42,
+      "statement_nl": "Every unconscious creature is prohibited from speaking.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "43. \"Every unconscious creature is prohibited from speaking.\""
+    },
+    {
+      "line_index": 43,
+      "statement_nl": "Every unconscious creature is unaware of its surroundings.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "44. \"Every unconscious creature is unaware of its surroundings.\""
+    },
+    {
+      "line_index": 44,
+      "statement_nl": "Every unconscious creature releases every object it is holding at the moment the creature becomes unconscious.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "45. \"Every unconscious creature releases every object it is holding at the moment the creature becomes unconscious.\""
+    },
+    {
+      "line_index": 45,
+      "statement_nl": "Every unconscious creature falls prone at the moment the creature becomes unconscious.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "46. \"Every unconscious creature falls prone at the moment the creature becomes unconscious.\""
+    },
+    {
+      "line_index": 46,
+      "statement_nl": "Every unconscious creature automatically fails every Strength saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "47. \"Every unconscious creature automatically fails every Strength saving throw.\""
+    },
+    {
+      "line_index": 47,
+      "statement_nl": "Every unconscious creature automatically fails every Dexterity saving throw.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "48. \"Every unconscious creature automatically fails every Dexterity saving throw.\""
+    },
+    {
+      "line_index": 48,
+      "statement_nl": "Every attack roll made against an unconscious creature has advantage.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "49. \"Every attack roll made against an unconscious creature has advantage.\""
+    },
+    {
+      "line_index": 49,
+      "statement_nl": "Every attack roll that hits an unconscious creature is a critical hit if the distance from the attacker to the unconscious creature is 5 feet or less.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "50. \"Every attack roll that hits an unconscious creature is a critical hit if the distance from the attacker to the unconscious creature is 5 feet or less.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunk_20260428_204208Z_251ccd46_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-28T20:42:26Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

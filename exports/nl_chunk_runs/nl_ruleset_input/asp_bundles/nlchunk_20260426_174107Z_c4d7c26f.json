@@ -1,0 +1,117 @@
+{
+  "bundle_id": "nlchunk_20260426_174107Z_c4d7c26f",
+  "accepted_at": "2026-04-26T17:41:31Z",
+  "committed_at": "2026-04-26T17:41:53Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_93b00032bd9e",
+    "r_a822b14806a3",
+    "r_a02de42412b2",
+    "r_6c2ee83d8b79",
+    "r_bd25c07f5dbd",
+    "r_08533c0f4487",
+    "r_67cc304e5946",
+    "r_54ca7b21295a",
+    "r_3c15924adb5f",
+    "r_4566c0994fba"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunk_20260426_174107Z_c4d7c26f",
+    "user_original_input": "Incremental policy ruleset chunk from file 'nl_ruleset_input.md' (1-based global rule indices 11–20).\n\nRules in this chunk:\n11. The possible states for the transaction manager are init, collecting, committed, and aborted.\n12. If a resource manager is in the working state at time T, then it may transition to the prepared state at time T plus 1.\n13. If a resource manager is in the working state at time T, then it may transition to the aborted state at time T plus 1.\n14. If a resource manager transitions to the prepared state at time T plus 1, then a prepared message from that resource manager is sent at time T plus 1.\n15. If a resource manager transitions to the aborted state at time T plus 1 from the working state, then an abort message from that resource manager is sent at time T plus 1.\n16. The transaction manager moves from the init state to the collecting state at time T plus 1 if it is in the init state at time T and has not crashed.\n17. The transaction manager has received a prepared vote from a resource manager at time T if a prepared message from that resource manager was sent at any time before or equal to T.\n18. The transaction manager has received an abort vote from a resource manager at time T if an abort message from that resource manager was sent at any time before or equal to T.\n19. If the transaction manager is in the collecting state at time T, has received a prepared vote from rm1, rm2, and rm3 at time T, and has not crashed, then it transitions to the committed state at time T plus 1.\n20. If the transaction manager is in the collecting state at time T, has received an abort vote from any resource manager at time T, and has not crashed, then it transitions to the aborted state at time T plus 1.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "The state of the transaction manager must be exactly one of the following: init, collecting, committed, or aborted.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"The state of the transaction manager must be exactly one of the following: init, collecting, committed, or aborted.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "If a resource manager is in the working state at time T, then that resource manager is permitted to transition to the prepared state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"If a resource manager is in the working state at time T, then that resource manager is permitted to transition to the prepared state at time T plus 1.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "If a resource manager is in the working state at time T, then that resource manager is permitted to transition to the aborted state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"If a resource manager is in the working state at time T, then that resource manager is permitted to transition to the aborted state at time T plus 1.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "If a resource manager transitions to the prepared state at time T plus 1, then at least one prepared message from that resource manager is sent at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"If a resource manager transitions to the prepared state at time T plus 1, then at least one prepared message from that resource manager is sent at time T plus 1.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "If a resource manager transitions to the aborted state at time T plus 1 from the working state, then at least one abort message from that resource manager is sent at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"If a resource manager transitions to the aborted state at time T plus 1 from the working state, then at least one abort message from that resource manager is sent at time T plus 1.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "If the transaction manager is in the init state at time T and the transaction manager has not crashed at time T, then the transaction manager transitions to the collecting state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"If the transaction manager is in the init state at time T and the transaction manager has not crashed at time T, then the transaction manager transitions to the collecting state at time T plus 1.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "The transaction manager is considered to have received a prepared vote from a specific resource manager at time T if at least one prepared message from that resource manager was sent at any time less than or equal to T.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"The transaction manager is considered to have received a prepared vote from a specific resource manager at time T if at least one prepared message from that resource manager was sent at any time less than or equal to T.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "The transaction manager is considered to have received an abort vote from a specific resource manager at time T if at least one abort message from that resource manager was sent at any time less than or equal to T.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"The transaction manager is considered to have received an abort vote from a specific resource manager at time T if at least one abort message from that resource manager was sent at any time less than or equal to T.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "If the transaction manager is in the collecting state at time T, the transaction manager has received a prepared vote from resource manager rm1 at time T, the transaction manager has received a prepared vote from resource manager rm2 at time T, the transaction manager has received a prepared vote from resource manager rm3 at time T, and the transaction manager has not crashed at time T, then the transaction manager transitions to the committed state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"If the transaction manager is in the collecting state at time T, the transaction manager has received a prepared vote from resource manager rm1 at time T, the transaction manager has received a prepared vote from resource manager rm2 at time T, the transaction manager has received a prepared vote from resource manager rm3 at time T, and the transaction manager has not crashed at time T, then the transaction manager transitions to the committed state at time T plus 1.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "If the transaction manager is in the collecting state at time T, the transaction manager has received an abort vote from at least one resource manager at time T, and the transaction manager has not crashed at time T, then the transaction manager transitions to the aborted state at time T plus 1.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"If the transaction manager is in the collecting state at time T, the transaction manager has received an abort vote from at least one resource manager at time T, and the transaction manager has not crashed at time T, then the transaction manager transitions to the aborted state at time T plus 1.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunk_20260426_174107Z_c4d7c26f_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-26T17:41:31Z"
+    },
+    "provider_model": "gemini-3-flash-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_runs\\nl_ruleset_input\\policy_model.lp",
+  "pipeline_kind": "asp_clincon",
+  "formalizer_prompt": "formalizer_new.md",
+  "formalizer_prompt_sha256": "8ec326f64869b7d8b23b43345b4bddeb05f84eef35e59c5ff2e671191bf3f1db"
+}

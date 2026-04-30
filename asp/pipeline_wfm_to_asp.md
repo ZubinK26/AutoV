@@ -8,6 +8,8 @@ This document is the canonical story of the **ASP/ClinCon pipeline**: how unstru
 
 **WFM behavior** is unchanged. Where WFM details are not re-specified here, the existing WFM spec is authoritative.
 
+**WFM prompts (this pipeline):** use **`asp/wfm/`** — orchestration default **`--wfm-profile asp`** (ClinCon-safe Agent 3 scope). Do not use **`smt/wfm/`** for ClinCon handoffs.
+
 ---
 
 ## 1. Why this pipeline exists

@@ -1,6 +1,6 @@
 # Gemini WFM runs — summary and verdict
 
-Reference machine work; all runs use **`gemini-3.1-pro-preview`**, **`temperature = 0`**, **`max_output_tokens = 16384`**, **`GEMINI_THINKING_LEVEL=low`** (default), and **`compound_operator_limit: 8`** from `WFM/config/wfm.json`. Agent 4 was not invoked.
+Reference machine work; all runs use **`gemini-3.1-pro-preview`**, **`temperature = 0`**, **`max_output_tokens = 16384`**, **`GEMINI_THINKING_LEVEL=low`** (default), and **`compound_operator_limit: 8`** from `asp/wfm/config/wfm.json`. Agent 4 was not invoked.
 
 Artifacts live under **`test_sets/run_results/`** (Markdown + JSONL per run).
 
@@ -24,7 +24,7 @@ Commands used (from repo root):
 
 ## Overall verdict
 
-**Fit for purpose:** Gemini **3.1 Pro** under this contract is a **solid** driver for the **Agents 1 → 2 → 3** WFM smoke path: stable multi-step calls, usable outputs for human/scorecard review, and **reasonable** alignment with `WFM/prompts/agent_{1,2,3}_*.md` and `Agent_WFM.md` control flow (including **`LIMIT_EXCEEDED`** gating when Agent 2 trips the compound-operator budget).
+**Fit for purpose:** Gemini **3.1 Pro** under this contract is a **solid** driver for the **Agents 1 → 2 → 3** WFM smoke path: stable multi-step calls, usable outputs for human/scorecard review, and **reasonable** alignment with `asp/wfm/prompts/agent_{1,2,3}_*.md` and `Agent_WFM.md` control flow (including **`LIMIT_EXCEEDED`** gating when Agent 2 trips the compound-operator budget).
 
 **Strengths**
 

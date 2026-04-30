@@ -2,9 +2,9 @@
 
 **Purpose:** Ship a **single stakeholder-facing story**: choose input (curated or manual) → run **WFM** (user makes in-flow choices: confirmation, disagree, Agent 4, etc.) → on **acceptance** (**yes** / **y**), **automatically** build the handoff and run the **registry agent** workflow (**`pipeline_spec.md`** step 3 through populate / dev export, **before** formalizer) → optionally **readable** reports at each stage. **No** separate “after the demo, fill a JSON file by hand” step for registry.
 
-**Authoritative specs:** **`pipeline_spec.md`**, **`registry_persistence_v1.md`**, **`development_plan_registry_stage_v1.md`** (M0–M6), **`WFM/Agent_WFM.md`**, **`test_sets/README.md`**.
+**Authoritative specs:** **`pipeline_spec.md`**, **`registry_persistence_v1.md`**, **`development_plan_registry_stage_v1.md`** (M0–M6), **`asp/wfm/Agent_WFM.md`**, **`test_sets/README.md`**.
 
-**G1 / G2 implementation detail (orchestration only):** **`development_plan_g1_g2_orchestration.md`** — maps demo intentions to locked WFM/registry behavior, **O1–O3** open points, and default recommendations.
+**G1 / G2 implementation detail (orchestration only):** **`development_plan_g1_g2_orchestration.md`** — maps demo intentions to locked asp/wfm/registry behavior, **O1–O3** open points, and default recommendations.
 
 ---
 
@@ -90,7 +90,7 @@ The registry dev plan’s **two-bundle warm-registry** exercise is **scripted** 
 
 **Gemini:** **`run_wfm_folio_gemini.py`** patterns, **`run_wfm_agent4_*.py`**, **`GEMINI_API_KEY`**, contract **`test_sets/wfm_api_contract_gemini.md`**.
 
-**Style-A loop (G2 — required):** Implement **automation** so that after Agent 4 produces / user confirms **merged** natural language, the system **invokes Agents 1 → 2 → 3** again on that merged text **inside the same program**, per **`WFM/Agent_WFM.md`** (full WFM re-entry), **without** requiring the operator to launch a **second** `run_wfm_folio_gemini.py` and paste text. Budgets and failure handling follow WFM spec.
+**Style-A loop (G2 — required):** Implement **automation** so that after Agent 4 produces / user confirms **merged** natural language, the system **invokes Agents 1 → 2 → 3** again on that merged text **inside the same program**, per **`asp/wfm/Agent_WFM.md`** (full WFM re-entry), **without** requiring the operator to launch a **second** `run_wfm_folio_gemini.py` and paste text. Budgets and failure handling follow WFM spec.
 
 **Deliverable:** Single orchestrated demo process (or clearly linked subprocesses with **structured IPC**) that ends at “accept” with **structured acceptance state** available to the handoff builder.
 

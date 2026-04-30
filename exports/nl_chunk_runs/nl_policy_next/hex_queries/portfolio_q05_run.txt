@@ -1,0 +1,6 @@
+Latest run (revised q5 + 4-way portfolio, ~300s kill window):
+
+- q05_center_opening_blue_wins.lp: red (3,3) turn 1; blue turn 2 restricted to R<=3, C<=3, not (3,3); witness wins(blue,T), T<=25.
+- run_portfolio_q05.py: 4 workers (jumpy×2, trendy×1, frumpy×1), TIMEOUT_SEC=300.
+
+Result: no SAT reported in window; workers did not print sat/unsat lines before parent terminated stragglers (~332s wall). Not a proof of UNSAT.

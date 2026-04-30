@@ -9,7 +9,7 @@
 | **This document — [Automated LLM resolution](#automated-llm-resolution-phase-1-normative-spec)** | **Phase 1** resolve: flow, retries, success predicate, resolver schema, adopted design choices — **authoritative** for **M4**. |
 | **`pipeline_spec.md`** | End-to-end pipeline; step 3 semantics (Phase 1 vs full product called out there). |
 | **`registry_persistence_v1.md`** | JSON shapes, enums, Phase 1 boundary, implementation-gap table (§10). |
-| **`WFM/Agent_WFM.md`**, **`WFM/prompts/`** | Upstream of handoff (fixtures can mimic Agent 3 output). |
+| **`asp/wfm/Agent_WFM.md`**, **`asp/wfm/prompts/`** | Upstream of handoff (fixtures can mimic Agent 3 output). |
 | **`Registry_Way_Forward.ipynb`** | Resolved design table #1–#7. |
 
 **Do not confuse numbers:**
