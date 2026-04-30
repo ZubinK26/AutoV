@@ -6,11 +6,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+from agentsim.runtime.policy_source import resolve_z3_policy_text
+
 from agentsim.runtime.clock import NowFn, utc_now
 from agentsim.runtime.db import load_builtin_seed, load_seed_path, open_memory_db
 from agentsim.runtime.models import Channel
 from agentsim.runtime.read_tools import ReadToolExecutor
-from agentsim.runtime.snapshot import full_snapshot_builder, policy_v0_text
+from agentsim.runtime.snapshot import full_snapshot_builder
 from agentsim.runtime.validator_stub import always_allow_validate
 from agentsim.runtime.write_tools import SnapshotFn, WriteToolExecutor, ValidateFn
 from agentsim.runtime.z3_legality import Z3LegalityChecker, make_z3_policy_validate
@@ -103,6 +105,8 @@ class ScenarioHarness:
         validate_call: ValidateFn | None = None,
         build_snapshot: SnapshotFn | None = None,
         use_builtin_z3_policy: bool = False,
+        policy_smt2_path: Path | str | None = None,
+        policy_smt2_text: str | None = None,
         repeated_block_limit: int | None = None,
     ) -> ScenarioContext:
         conn = self.fresh_connection(seed)
@@ -114,7 +118,11 @@ class ScenarioHarness:
             if v_fn is not None or b_fn is not None:
                 msg = "use_builtin_z3_policy is exclusive with validate_call / build_snapshot"
                 raise ValueError(msg)
-            checker = Z3LegalityChecker(policy_v0_text())
+            policy_text = resolve_z3_policy_text(
+                policy_smt2_path=policy_smt2_path,
+                policy_smt2_text=policy_smt2_text,
+            )
+            checker = Z3LegalityChecker(policy_text)
             v_fn = make_z3_policy_validate(checker)
             b_fn = full_snapshot_builder(conn, interaction_id=iid)
         writes = self.open_write_session(

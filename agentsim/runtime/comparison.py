@@ -10,24 +10,7 @@ from agentsim.runtime.scenario_runner import run_write_steps
 from agentsim.runtime.snapshot import full_snapshot_builder, policy_v0_text
 from agentsim.runtime.z3_legality import Z3LegalityChecker
 
-WRITE_TOOL_NAMES = frozenset(
-    {
-        "initiate_dispute",
-        "cancel_dispute",
-        "apply_refund",
-        "apply_goodwill_credit",
-        "apply_fee_reversal",
-        "freeze_card",
-        "unfreeze_card",
-        "apply_account_restriction",
-        "lift_account_restriction",
-        "report_fraud",
-        "escalate_to_human",
-        "request_documentation",
-        "send_customer_message",
-        "log_consumer_duty_assessment",
-    },
-)
+from agentsim.runtime.write_registry import WRITE_TOOL_NAMES
 
 
 class ScenarioContextProto(Protocol):
