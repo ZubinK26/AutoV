@@ -1,0 +1,109 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_222902Z_d422a4af",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 81–90).\n\nRules in this chunk:\n81. A call to report fraud of type ACCOUNT_TAKEOVER requires that the current interaction's has been escalated flag is set to true.\n82. A call to report fraud of type IDENTITY_THEFT requires that the current interaction's has been escalated flag is set to true.\n83. A call to apply a refund of type DISPUTE_REFUND is not permitted if a fraud report with status CONFIRMED references the same transaction.\n84. A call to initiate a dispute is not permitted if a fraud report with status CONFIRMED references the same transaction.\n85. A call to apply any refund or goodwill credit affecting a customer with a vulnerable flag set to true is not permitted unless a consumer duty assessment for the current interaction has its fair value check passed flag set to true.\n86. A call to send a customer message of category PROMOTIONAL is not permitted if the recipient customer has a vulnerable flag set to true.\n87. A call to send a customer message of category COLLECTIONS is not permitted if the recipient customer has a vulnerable flag set to true unless the current interaction's has been escalated flag is set to true.\n88. A call to escalate to a human is permitted in any state in which the customer exists.\n89. A call to log a consumer duty assessment requires that the customer exists and that the current interaction exists.\n90. A call to apply any refund of an amount exceeding twenty thousand pence to a customer with a vulnerable flag set to true requires that a consumer duty assessment exists for the current interaction with both checks passed.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A call to report fraud of type ACCOUNT_TAKEOVER requires that the current interaction's has-been-escalated flag is set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"A call to report fraud of type ACCOUNT_TAKEOVER requires that the current interaction's has-been-escalated flag is set to true.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "A call to report fraud of type IDENTITY_THEFT requires that the current interaction's has-been-escalated flag is set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"A call to report fraud of type IDENTITY_THEFT requires that the current interaction's has-been-escalated flag is set to true.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "A call to apply a refund of type DISPUTE_REFUND is not permitted if a fraud report with status CONFIRMED references the transaction associated with the refund.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"A call to apply a refund of type DISPUTE_REFUND is not permitted if a fraud report with status CONFIRMED references the transaction associated with the refund.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "A call to initiate a dispute is not permitted if a fraud report with status CONFIRMED references the transaction associated with the dispute.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"A call to initiate a dispute is not permitted if a fraud report with status CONFIRMED references the transaction associated with the dispute.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "A call to apply any refund affecting a customer with a vulnerable flag set to true is not permitted unless a consumer duty assessment for the current interaction has its fair-value-check-passed flag set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"A call to apply any refund affecting a customer with a vulnerable flag set to true is not permitted unless a consumer duty assessment for the current interaction has its fair-value-check-passed flag set to true.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "A call to apply any goodwill credit affecting a customer with a vulnerable flag set to true is not permitted unless a consumer duty assessment for the current interaction has its fair-value-check-passed flag set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"A call to apply any goodwill credit affecting a customer with a vulnerable flag set to true is not permitted unless a consumer duty assessment for the current interaction has its fair-value-check-passed flag set to true.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "A call to send a customer message of category PROMOTIONAL is not permitted if the recipient customer has a vulnerable flag set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"A call to send a customer message of category PROMOTIONAL is not permitted if the recipient customer has a vulnerable flag set to true.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "A call to send a customer message of category COLLECTIONS is not permitted if the recipient customer has a vulnerable flag set to true, unless the current interaction's has-been-escalated flag is set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"A call to send a customer message of category COLLECTIONS is not permitted if the recipient customer has a vulnerable flag set to true, unless the current interaction's has-been-escalated flag is set to true.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "If the customer exists, then a call to escalate to a human is permitted.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"A call to escalate to a human is permitted in any state in which the customer exists.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "A call to log a consumer duty assessment requires that the customer exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"A call to log a consumer duty assessment requires that the customer exists.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "A call to log a consumer duty assessment requires that the current interaction exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"A call to log a consumer duty assessment requires that the current interaction exists.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "A call to apply any refund of an amount exceeding 20,000 pence to a customer with a vulnerable flag set to true requires that a consumer duty assessment exists for the current interaction with both of its checks passed.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"A call to apply any refund of an amount exceeding 20,000 pence to a customer with a vulnerable flag set to true requires that a consumer duty assessment exists for the current interaction with both of its checks passed.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_222902Z_d422a4af_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T22:29:37Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

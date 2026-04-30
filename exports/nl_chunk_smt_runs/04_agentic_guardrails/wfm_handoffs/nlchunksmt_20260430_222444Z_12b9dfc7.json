@@ -1,0 +1,133 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_222444Z_12b9dfc7",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 51–60).\n\nRules in this chunk:\n51. A call to initiate a dispute of type SECTION_75 requires that the referenced transaction has its section seventy five eligibility flag set to true.\n52. A call to initiate a dispute of type SECTION_75 requires that the referenced transaction amount is at least ten thousand pence and at most thirty million pence.\n53. A call to initiate a dispute of type UNAUTHORIZED requires that the referenced transaction's days since posted is at most one hundred twenty.\n54. A call to initiate a dispute of type GOODS_NOT_RECEIVED requires that the referenced transaction's days since posted is at least fifteen.\n55. A call to initiate a dispute of type DUPLICATE_CHARGE requires that the referenced transaction's has duplicate candidate within window flag is set to true.\n56. A call to initiate a dispute is not permitted if the customer's recent dispute count exceeds ten unless the dispute type is UNAUTHORIZED.\n57. A call to initiate a dispute is not permitted if the customer's KYC status is FAILED.\n58. A call to cancel a dispute requires that the dispute exists and has status OPEN or UNDER_REVIEW.\n59. A call to cancel a dispute is not permitted if the dispute has status APPROVED, REJECTED, ESCALATED, or WITHDRAWN.\n60. A call to freeze a card requires that the card exists.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every call to initiate a dispute of type SECTION_75 requires that the referenced transaction has its section seventy five eligibility flag set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every call to initiate a dispute of type SECTION_75 requires that the referenced transaction has its section seventy five eligibility flag set to true.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every call to initiate a dispute of type SECTION_75 requires that the referenced transaction amount is at least ten thousand pence.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every call to initiate a dispute of type SECTION_75 requires that the referenced transaction amount is at least ten thousand pence.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every call to initiate a dispute of type SECTION_75 requires that the referenced transaction amount is at most thirty million pence.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every call to initiate a dispute of type SECTION_75 requires that the referenced transaction amount is at most thirty million pence.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every call to initiate a dispute of type UNAUTHORIZED requires that the referenced transaction's days since posted is at most one hundred twenty.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every call to initiate a dispute of type UNAUTHORIZED requires that the referenced transaction's days since posted is at most one hundred twenty.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every call to initiate a dispute of type GOODS_NOT_RECEIVED requires that the referenced transaction's days since posted is at least fifteen.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every call to initiate a dispute of type GOODS_NOT_RECEIVED requires that the referenced transaction's days since posted is at least fifteen.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every call to initiate a dispute of type DUPLICATE_CHARGE requires that the referenced transaction's has duplicate candidate within window flag is set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every call to initiate a dispute of type DUPLICATE_CHARGE requires that the referenced transaction's has duplicate candidate within window flag is set to true.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every call to initiate a dispute is not permitted if the customer's recent dispute count exceeds ten, unless the dispute type is UNAUTHORIZED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every call to initiate a dispute is not permitted if the customer's recent dispute count exceeds ten, unless the dispute type is UNAUTHORIZED.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Every call to initiate a dispute is not permitted if the customer's KYC status is FAILED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Every call to initiate a dispute is not permitted if the customer's KYC status is FAILED.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Every call to cancel a dispute requires that the dispute exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Every call to cancel a dispute requires that the dispute exists.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Every call to cancel a dispute requires that the dispute has a status of either OPEN or UNDER_REVIEW.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Every call to cancel a dispute requires that the dispute has a status of either OPEN or UNDER_REVIEW.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every call to cancel a dispute is not permitted if the dispute has a status of APPROVED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every call to cancel a dispute is not permitted if the dispute has a status of APPROVED.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every call to cancel a dispute is not permitted if the dispute has a status of REJECTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every call to cancel a dispute is not permitted if the dispute has a status of REJECTED.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Every call to cancel a dispute is not permitted if the dispute has a status of ESCALATED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Every call to cancel a dispute is not permitted if the dispute has a status of ESCALATED.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "Every call to cancel a dispute is not permitted if the dispute has a status of WITHDRAWN.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"Every call to cancel a dispute is not permitted if the dispute has a status of WITHDRAWN.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "Every call to freeze a card requires that the card exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"Every call to freeze a card requires that the card exists.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_222444Z_12b9dfc7_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T22:25:16Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

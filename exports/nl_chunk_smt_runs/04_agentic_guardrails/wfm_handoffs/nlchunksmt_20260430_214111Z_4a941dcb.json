@@ -1,0 +1,109 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_214111Z_4a941dcb",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 1–10).\n\nRules in this chunk:\n1. A customer is identified by a unique customer identifier and has a KYC status that is either VERIFIED, PENDING, or FAILED.\n2. A customer has an account tier that is one of STANDARD, PLUS, PREMIUM, or BUSINESS.\n3. A customer has a vulnerable flag that is either true or false.\n4. A customer has a politically exposed person flag that is either true or false.\n5. A customer has a sanctions flag that is either true or false.\n6. A customer has a field named recent dispute count which is a non-negative integer maintained by the runtime.\n7. A customer has a field named recent goodwill credit total which is a non-negative amount in pence maintained by the runtime.\n8. A customer has a field named has previously failed documentation request which is a boolean maintained by the runtime.\n9. An account is identified by a unique account identifier and belongs to exactly one customer.\n10. An account has a status that is one of ACTIVE, FROZEN, CLOSED, or RESTRICTED.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every customer is identified by exactly one unique customer identifier.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every customer is identified by exactly one unique customer identifier.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every customer has exactly one KYC status that is one of: VERIFIED, PENDING, or FAILED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every customer has exactly one KYC status that is one of: VERIFIED, PENDING, or FAILED.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every customer has exactly one account tier that is one of: STANDARD, PLUS, PREMIUM, or BUSINESS.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every customer has exactly one account tier that is one of: STANDARD, PLUS, PREMIUM, or BUSINESS.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every customer has exactly one vulnerable flag that is either true or false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every customer has exactly one vulnerable flag that is either true or false.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every customer has exactly one politically exposed person flag that is either true or false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every customer has exactly one politically exposed person flag that is either true or false.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every customer has exactly one sanctions flag that is either true or false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every customer has exactly one sanctions flag that is either true or false.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every customer has exactly one recent dispute count field, which is a non-negative integer maintained by the runtime.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every customer has exactly one recent dispute count field, which is a non-negative integer maintained by the runtime.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Every customer has exactly one recent goodwill credit total field, which is a non-negative amount in pence maintained by the runtime.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Every customer has exactly one recent goodwill credit total field, which is a non-negative amount in pence maintained by the runtime.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Every customer has exactly one has previously failed documentation request field, which is a boolean maintained by the runtime.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Every customer has exactly one has previously failed documentation request field, which is a boolean maintained by the runtime.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Every account is identified by exactly one unique account identifier.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Every account is identified by exactly one unique account identifier.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every account belongs to exactly one customer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every account belongs to exactly one customer.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every account has exactly one status that is one of: ACTIVE, FROZEN, CLOSED, or RESTRICTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every account has exactly one status that is one of: ACTIVE, FROZEN, CLOSED, or RESTRICTED.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_214111Z_4a941dcb_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T21:41:36Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

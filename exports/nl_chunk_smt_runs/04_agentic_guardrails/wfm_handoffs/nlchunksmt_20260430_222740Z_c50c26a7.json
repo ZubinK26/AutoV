@@ -1,0 +1,109 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_222740Z_c50c26a7",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 71–80).\n\nRules in this chunk:\n71. A call to apply an account restriction of type CUSTOMER_REQUESTED is permitted without further conditions if the account exists.\n72. A call to lift an account restriction requires that the restriction exists and is currently active.\n73. A call to lift an account restriction is not permitted if the restriction has its requires-human-to-lift flag set to true.\n74. A call to lift an account restriction of type AML_REVIEW requires human approval regardless of the requires-human-to-lift flag.\n75. A call to lift an account restriction of type SANCTIONS_BLOCK requires human approval regardless of the requires-human-to-lift flag.\n76. A call to lift an account restriction of type COURT_ORDER is not permitted under any circumstances.\n77. A call to report fraud requires that the customer exists.\n78. A call to report fraud requires that all referenced transactions exist and belong to the same customer.\n79. A call to report fraud of type APP_FRAUD requires that at least one referenced transaction has status POSTED.\n80. A call to report fraud of type CARD_FRAUD requires that at least one referenced transaction has a card identifier.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A call to apply an account restriction of type CUSTOMER_REQUESTED is permitted without further conditions if the target account exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"A call to apply an account restriction of type CUSTOMER_REQUESTED is permitted without further conditions if the target account exists.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "A call to lift an account restriction requires that the target restriction exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"A call to lift an account restriction requires that the target restriction exists.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "A call to lift an account restriction requires that the target restriction is currently active.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"A call to lift an account restriction requires that the target restriction is currently active.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "A call to lift an account restriction is not permitted if the target restriction has its requires-human-to-lift flag set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"A call to lift an account restriction is not permitted if the target restriction has its requires-human-to-lift flag set to true.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "A call to lift an account restriction of type AML_REVIEW requires human approval regardless of the target restriction's requires-human-to-lift flag.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"A call to lift an account restriction of type AML_REVIEW requires human approval regardless of the target restriction's requires-human-to-lift flag.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "A call to lift an account restriction of type SANCTIONS_BLOCK requires human approval regardless of the target restriction's requires-human-to-lift flag.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"A call to lift an account restriction of type SANCTIONS_BLOCK requires human approval regardless of the target restriction's requires-human-to-lift flag.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "A call to lift an account restriction of type COURT_ORDER is not permitted under any circumstances.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"A call to lift an account restriction of type COURT_ORDER is not permitted under any circumstances.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "A call to report fraud requires that the referenced customer exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"A call to report fraud requires that the referenced customer exists.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "A call to report fraud requires that every referenced transaction exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"A call to report fraud requires that every referenced transaction exists.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "A call to report fraud requires that every referenced transaction belongs to the referenced customer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"A call to report fraud requires that every referenced transaction belongs to the referenced customer.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "A call to report fraud of type APP_FRAUD requires that at least one referenced transaction has a status of POSTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"A call to report fraud of type APP_FRAUD requires that at least one referenced transaction has a status of POSTED.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "A call to report fraud of type CARD_FRAUD requires that at least one referenced transaction has a card identifier.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"A call to report fraud of type CARD_FRAUD requires that at least one referenced transaction has a card identifier.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_222740Z_c50c26a7_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T22:28:04Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

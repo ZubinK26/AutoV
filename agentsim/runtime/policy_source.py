@@ -11,6 +11,28 @@ def load_policy_smt2_file(path: Path | str) -> str:
     return Path(path).read_text(encoding="utf-8")
 
 
+def resolve_guardrails_refined_policy_path() -> Path:
+    """Path to ``policy_model_refined.smt2`` (repo export)."""
+
+    return (
+        Path(__file__).resolve().parents[2]
+        / "exports"
+        / "nl_chunk_smt_runs"
+        / "04_agentic_guardrails"
+        / "policy_model_refined.smt2"
+    )
+
+
+def resolve_guardrails_policy_text(
+    *,
+    policy_smt2_path: Path | str | None = None,
+) -> str:
+    """Load refined guardrails policy text (default: export path)."""
+
+    p = Path(policy_smt2_path) if policy_smt2_path is not None else resolve_guardrails_refined_policy_path()
+    return p.read_text(encoding="utf-8")
+
+
 def resolve_z3_policy_text(
     *,
     policy_smt2_path: Path | str | None,

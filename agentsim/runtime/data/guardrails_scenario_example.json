@@ -1,0 +1,7 @@
+{
+  "primary_tool": "apply_refund",
+  "refund_type": "GOODWILL_CREDIT",
+  "refund_amount_pence": 5000,
+  "customer_vulnerable": false,
+  "references_missing_entity": false
+}

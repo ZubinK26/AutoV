@@ -1,0 +1,42 @@
+{
+  "bundle_id": "nlchunksmt_20260430_223844Z_32cf349d",
+  "accepted_at": "2026-04-30T22:38:58Z",
+  "committed_at": "2026-04-30T22:39:14Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_457ca0a03af0",
+    "r_b5fb85596707"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260430_223844Z_32cf349d",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 101–102).\n\nRules in this chunk:\n101. A tool call carries a field named is duplicate of prior allowed call in interaction which is a boolean maintained by the runtime.\n102. A tool call is not permitted if its is duplicate of prior allowed call in interaction flag is set to true.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every tool call carries a field named 'is duplicate of prior allowed call in interaction', which is a boolean maintained by the runtime.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every tool call carries a field named 'is duplicate of prior allowed call in interaction', which is a boolean maintained by the runtime.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "A tool call is not permitted if its 'is duplicate of prior allowed call in interaction' field is set to true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"A tool call is not permitted if its 'is duplicate of prior allowed call in interaction' field is set to true.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260430_223844Z_32cf349d_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-30T22:38:58Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\04_agentic_guardrails\\policy_model.smt2"
+}

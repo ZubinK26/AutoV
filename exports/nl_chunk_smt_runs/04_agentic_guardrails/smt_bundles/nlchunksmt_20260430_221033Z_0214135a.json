@@ -1,0 +1,186 @@
+{
+  "bundle_id": "nlchunksmt_20260430_221033Z_0214135a",
+  "accepted_at": "2026-04-30T22:11:07Z",
+  "committed_at": "2026-04-30T22:11:45Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_59afbfc8df06",
+    "r_47f5c56afea2",
+    "r_a4b864c681aa",
+    "r_118b1f2ef439",
+    "r_eb17fdba6620",
+    "r_b22d606fed6c",
+    "r_90e497cfa88e",
+    "r_25453c863569",
+    "r_49b3fa265a71",
+    "r_0173c6f4e8ac",
+    "r_ddafadd74eec",
+    "r_d3e1db507b04",
+    "r_8445c68240e9",
+    "r_1e637176ab71",
+    "r_542c97b11a8b",
+    "r_8107a28b08d2",
+    "r_c17f65086713",
+    "r_a629e29703e0"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260430_221033Z_0214135a",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 21–30).\n\nRules in this chunk:\n21. A transaction has a field named fee already reversed which is a boolean maintained by the runtime.\n22. A dispute is identified by a unique dispute identifier and references exactly one transaction.\n23. A dispute has a type that is one of UNAUTHORIZED, MERCHANT_REFUSED, GOODS_NOT_RECEIVED, GOODS_NOT_AS_DESCRIBED, SECTION_75, or DUPLICATE_CHARGE.\n24. A dispute has a status that is one of OPEN, UNDER_REVIEW, APPROVED, REJECTED, ESCALATED, or WITHDRAWN.\n25. A refund is identified by a unique refund identifier and has an amount in pence which is a positive integer.\n26. A refund has a type that is one of MERCHANT_REFUND, DISPUTE_REFUND, SECTION_75_REFUND, GOODWILL_CREDIT, or FEE_REVERSAL.\n27. A restriction is identified by a unique restriction identifier and has a type that is one of AML_REVIEW, FRAUD_HOLD, SANCTIONS_BLOCK, COURT_ORDER, COMPLIANCE_REVIEW, or CUSTOMER_REQUESTED.\n28. A restriction has a flag indicating whether human action is required to lift it.\n29. A fraud report is identified by a unique fraud report identifier and has a status that is one of REPORTED, INVESTIGATING, CONFIRMED, or REJECTED.\n30. A consumer duty assessment is identified by a unique assessment identifier and records whether a fair value check passed and whether a clear communication check passed.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every transaction has exactly one field named fee already reversed.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every transaction has exactly one field named fee already reversed.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The field named fee already reversed of a transaction is a boolean maintained by the runtime.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The field named fee already reversed of a transaction is a boolean maintained by the runtime.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Every dispute is identified by a unique dispute identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Every dispute is identified by a unique dispute identifier.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Every dispute references exactly one transaction.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Every dispute references exactly one transaction.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Every dispute has exactly one type that is one of: UNAUTHORIZED, MERCHANT_REFUSED, GOODS_NOT_RECEIVED, GOODS_NOT_AS_DESCRIBED, SECTION_75, or DUPLICATE_CHARGE.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Every dispute has exactly one type that is one of: UNAUTHORIZED, MERCHANT_REFUSED, GOODS_NOT_RECEIVED, GOODS_NOT_AS_DESCRIBED, SECTION_75, or DUPLICATE_CHARGE.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Every dispute has exactly one status that is one of: OPEN, UNDER_REVIEW, APPROVED, REJECTED, ESCALATED, or WITHDRAWN.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Every dispute has exactly one status that is one of: OPEN, UNDER_REVIEW, APPROVED, REJECTED, ESCALATED, or WITHDRAWN.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Every refund is identified by a unique refund identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Every refund is identified by a unique refund identifier.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Every refund has exactly one amount in pence.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Every refund has exactly one amount in pence.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "The amount in pence of a refund is a positive integer.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"The amount in pence of a refund is a positive integer.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Every refund has exactly one type that is one of: MERCHANT_REFUND, DISPUTE_REFUND, SECTION_75_REFUND, GOODWILL_CREDIT, or FEE_REVERSAL.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Every refund has exactly one type that is one of: MERCHANT_REFUND, DISPUTE_REFUND, SECTION_75_REFUND, GOODWILL_CREDIT, or FEE_REVERSAL.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Every restriction is identified by a unique restriction identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Every restriction is identified by a unique restriction identifier.\""
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "Every restriction has exactly one type that is one of: AML_REVIEW, FRAUD_HOLD, SANCTIONS_BLOCK, COURT_ORDER, COMPLIANCE_REVIEW, or CUSTOMER_REQUESTED.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"Every restriction has exactly one type that is one of: AML_REVIEW, FRAUD_HOLD, SANCTIONS_BLOCK, COURT_ORDER, COMPLIANCE_REVIEW, or CUSTOMER_REQUESTED.\""
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "Every restriction has exactly one flag indicating whether human action is required to lift the restriction.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"Every restriction has exactly one flag indicating whether human action is required to lift the restriction.\""
+      },
+      {
+        "line_index": 13,
+        "statement_nl": "Every fraud report is identified by a unique fraud report identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "14. \"Every fraud report is identified by a unique fraud report identifier.\""
+      },
+      {
+        "line_index": 14,
+        "statement_nl": "Every fraud report has exactly one status that is one of: REPORTED, INVESTIGATING, CONFIRMED, or REJECTED.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "15. \"Every fraud report has exactly one status that is one of: REPORTED, INVESTIGATING, CONFIRMED, or REJECTED.\""
+      },
+      {
+        "line_index": 15,
+        "statement_nl": "Every consumer duty assessment is identified by a unique assessment identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "16. \"Every consumer duty assessment is identified by a unique assessment identifier.\""
+      },
+      {
+        "line_index": 16,
+        "statement_nl": "Every consumer duty assessment records whether a fair value check passed.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "17. \"Every consumer duty assessment records whether a fair value check passed.\""
+      },
+      {
+        "line_index": 17,
+        "statement_nl": "Every consumer duty assessment records whether a clear communication check passed.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "18. \"Every consumer duty assessment records whether a clear communication check passed.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260430_221033Z_0214135a_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-30T22:11:07Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\04_agentic_guardrails\\policy_model.smt2"
+}

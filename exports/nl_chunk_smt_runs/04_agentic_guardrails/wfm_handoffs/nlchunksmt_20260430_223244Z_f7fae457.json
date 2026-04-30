@@ -1,0 +1,21 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_223244Z_f7fae457",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 101–101).\n\nRules in this chunk:\n101. A tool call duplicating an action already taken in the current interaction with identical parameters is not permitted.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A tool call must not duplicate an action that was already taken in the current interaction with identical parameters.",
+      "agent3_verdict": "OUT_OF_SCOPE",
+      "scope_report": "REPORT: This rule requires checking the history of actions taken in the current interaction, which involves temporal or state-history reasoning that the system cannot formalize.",
+      "diff_report": null,
+      "agent2_line_text": "1. \"A tool call must not duplicate an action that was already taken in the current interaction with identical parameters.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_223244Z_f7fae457_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T22:32:57Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

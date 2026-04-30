@@ -8,15 +8,29 @@ version = "0.0.0"
 description = "AutoV workspace (ASP + SMT pipelines, WFM, registry)."
 readme = "README.md"
 requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6,<3",
+    "z3-solver>=4.12.0",
+]
+
+[project.scripts]
+validate-policy = "agentsim.runtime.validate_policy:main"
+verify-guardrails = "agentsim.runtime.guardrails_cli:main"
 
 [tool.setuptools]
-packages = ["registry_stage", "wfm_orchestration", "asp_pipeline", "smt_pipeline"]
+packages = ["registry_stage", "wfm_orchestration", "asp_pipeline", "smt_pipeline", "agentsim", "agentsim.runtime", "agentsim.runtime.data"]
+
+[tool.setuptools.package-data]
+"agentsim.runtime.data" = ["*.json", "*.smt2"]
 
 [tool.setuptools.package-dir]
 "registry_stage" = "registry_stage"
 "wfm_orchestration" = "wfm_orchestration"
 "asp_pipeline" = "asp/asp_pipeline"
 "smt_pipeline" = "smt/smt_pipeline"
+"agentsim" = "agentsim"
+"agentsim.runtime" = "agentsim/runtime"
+"agentsim.runtime.data" = "agentsim/runtime/data"
 
 [tool.pytest.ini_options]
 testpaths = [
@@ -24,4 +38,5 @@ testpaths = [
     "smt/smt_pipeline/tests",
     "registry_stage/tests",
     "wfm_orchestration/tests",
+    "agentsim/tests",
 ]

@@ -1,0 +1,149 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_214208Z_c5f5ede0",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 11–20).\n\nRules in this chunk:\n11. An account has zero or more active restrictions.\n12. A card is identified by a unique card identifier and belongs to exactly one account.\n13. A card has a status that is one of ACTIVE, FROZEN, BLOCKED, CANCELLED, or EXPIRED.\n14. A transaction is identified by a unique transaction identifier and belongs to exactly one account.\n15. A transaction has an amount in pence which is a positive integer for debits and a negative integer for credits.\n16. A transaction has a status that is one of PENDING, POSTED, REVERSED, or DISPUTED.\n17. A transaction has a field named days since posted which is a non-negative integer maintained by the runtime.\n18. A transaction has a field named has duplicate candidate within window which is a boolean maintained by the runtime.\n19. A transaction has a section seventy five eligibility flag that is either true or false.\n20. A transaction has a chargeback window in days which is a non-negative integer.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every account has zero or more active restrictions.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every account has zero or more active restrictions.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every card is identified by a unique card identifier.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every card is identified by a unique card identifier.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every card belongs to exactly one account.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every card belongs to exactly one account.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every card has exactly one status that is one of: ACTIVE, FROZEN, BLOCKED, CANCELLED, or EXPIRED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every card has exactly one status that is one of: ACTIVE, FROZEN, BLOCKED, CANCELLED, or EXPIRED.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every transaction is identified by a unique transaction identifier.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every transaction is identified by a unique transaction identifier.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every transaction belongs to exactly one account.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every transaction belongs to exactly one account.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every transaction has exactly one amount in pence.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every transaction has exactly one amount in pence.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "The amount in pence of every debit transaction is a positive integer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"The amount in pence of every debit transaction is a positive integer.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The amount in pence of every credit transaction is a negative integer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"The amount in pence of every credit transaction is a negative integer.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Every transaction has exactly one status that is one of: PENDING, POSTED, REVERSED, or DISPUTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Every transaction has exactly one status that is one of: PENDING, POSTED, REVERSED, or DISPUTED.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every transaction has exactly one field named days since posted.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every transaction has exactly one field named days since posted.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "The field named days since posted of every transaction is a non-negative integer maintained by the runtime.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"The field named days since posted of every transaction is a non-negative integer maintained by the runtime.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Every transaction has exactly one field named has duplicate candidate within window.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Every transaction has exactly one field named has duplicate candidate within window.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "The field named has duplicate candidate within window of every transaction is a boolean maintained by the runtime.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"The field named has duplicate candidate within window of every transaction is a boolean maintained by the runtime.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "Every transaction has exactly one section seventy five eligibility flag that is either true or false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"Every transaction has exactly one section seventy five eligibility flag that is either true or false.\""
+    },
+    {
+      "line_index": 15,
+      "statement_nl": "Every transaction has exactly one chargeback window in days.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "16. \"Every transaction has exactly one chargeback window in days.\""
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "The chargeback window in days of every transaction is a non-negative integer.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "17. \"The chargeback window in days of every transaction is a non-negative integer.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_214208Z_c5f5ede0_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T21:42:39Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

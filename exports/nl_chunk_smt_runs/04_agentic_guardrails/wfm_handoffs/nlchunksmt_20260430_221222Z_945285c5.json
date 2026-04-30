@@ -1,0 +1,133 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_221222Z_945285c5",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 31–40).\n\nRules in this chunk:\n31. The current interaction has a field named has been escalated which is a boolean maintained by the runtime.\n32. A tool call is one of the defined write tool calls and carries typed parameters.\n33. A call to apply a refund of any type requires that the affected customer exists in the database.\n34. A call to apply a refund of any type requires that the affected account exists in the database.\n35. A call to apply a refund where the refund type is MERCHANT_REFUND or DISPUTE_REFUND or SECTION_75_REFUND requires that the referenced transaction exists in the database.\n36. A call to apply a refund where the refund type is MERCHANT_REFUND or DISPUTE_REFUND or SECTION_75_REFUND requires that the referenced transaction has status POSTED or DISPUTED.\n37. A call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction has its section seventy five eligibility flag set to true.\n38. A call to apply a refund where the refund type is DISPUTE_REFUND requires that an open dispute referencing the same transaction exists with status APPROVED.\n39. A call to apply a refund of any type with an amount greater than fifty thousand pence requires human approval.\n40. A call to apply a refund of any type with an amount greater than the original transaction amount is not permitted.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "The current interaction has a field named 'has been escalated' which is a boolean value maintained by the runtime.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"The current interaction has a field named 'has been escalated' which is a boolean value maintained by the runtime.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every tool call is one of the defined write tool calls.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every tool call is one of the defined write tool calls.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every tool call carries typed parameters.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every tool call carries typed parameters.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every call to apply a refund of any type requires that the affected customer exists in the database.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every call to apply a refund of any type requires that the affected customer exists in the database.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every call to apply a refund of any type requires that the affected account exists in the database.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every call to apply a refund of any type requires that the affected account exists in the database.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every call to apply a refund where the refund type is MERCHANT_REFUND requires that the referenced transaction exists in the database.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every call to apply a refund where the refund type is MERCHANT_REFUND requires that the referenced transaction exists in the database.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every call to apply a refund where the refund type is DISPUTE_REFUND requires that the referenced transaction exists in the database.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every call to apply a refund where the refund type is DISPUTE_REFUND requires that the referenced transaction exists in the database.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Every call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction exists in the database.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Every call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction exists in the database.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Every call to apply a refund where the refund type is MERCHANT_REFUND requires that the referenced transaction has a status of either POSTED or DISPUTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Every call to apply a refund where the refund type is MERCHANT_REFUND requires that the referenced transaction has a status of either POSTED or DISPUTED.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Every call to apply a refund where the refund type is DISPUTE_REFUND requires that the referenced transaction has a status of either POSTED or DISPUTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Every call to apply a refund where the refund type is DISPUTE_REFUND requires that the referenced transaction has a status of either POSTED or DISPUTED.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction has a status of either POSTED or DISPUTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction has a status of either POSTED or DISPUTED.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction has its section seventy-five eligibility flag set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every call to apply a refund where the refund type is SECTION_75_REFUND requires that the referenced transaction has its section seventy-five eligibility flag set to true.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Every call to apply a refund where the refund type is DISPUTE_REFUND requires that an open dispute referencing the same transaction exists with a status of APPROVED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Every call to apply a refund where the refund type is DISPUTE_REFUND requires that an open dispute referencing the same transaction exists with a status of APPROVED.\""
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "Every call to apply a refund of any type with an amount greater than fifty thousand pence requires human approval.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "14. \"Every call to apply a refund of any type with an amount greater than fifty thousand pence requires human approval.\""
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "Every call to apply a refund of any type with an amount greater than the original transaction amount is not permitted.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "15. \"Every call to apply a refund of any type with an amount greater than the original transaction amount is not permitted.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_221222Z_945285c5_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T22:12:55Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

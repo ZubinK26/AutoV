@@ -1,0 +1,123 @@
+{
+  "bundle_id": "nlchunksmt_20260430_222620Z_f2d6e4c3",
+  "accepted_at": "2026-04-30T22:26:45Z",
+  "committed_at": "2026-04-30T22:27:14Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_267f4a2177f2",
+    "r_2bce91843ab9",
+    "r_b9fa1d18a240",
+    "r_62388353e025",
+    "r_0983f46e1e30",
+    "r_f35e1699c50e",
+    "r_bf3096098692",
+    "r_695263d36286",
+    "r_81411f137148",
+    "r_c5f1cf51b7a0",
+    "r_ddddabecd8dd"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260430_222620Z_f2d6e4c3",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 61–70).\n\nRules in this chunk:\n61. A call to freeze a card requires that the card has status ACTIVE.\n62. A call to unfreeze a card requires that the card exists and has status FROZEN.\n63. A call to unfreeze a card is not permitted if the affected account has any active restriction of type FRAUD_HOLD.\n64. A call to unfreeze a card is not permitted if the affected account has any active restriction of type AML_REVIEW.\n65. A call to unfreeze a card is not permitted if the affected account has any active restriction of type SANCTIONS_BLOCK.\n66. A call to unfreeze a card is not permitted if the affected account has any active restriction of type COURT_ORDER.\n67. A call to apply an account restriction requires that the account exists.\n68. A call to apply an account restriction of type AML_REVIEW requires human approval.\n69. A call to apply an account restriction of type SANCTIONS_BLOCK requires human approval.\n70. A call to apply an account restriction of type COURT_ORDER requires human approval.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every call to freeze a card requires that the target card has the status ACTIVE.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every call to freeze a card requires that the target card has the status ACTIVE.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "Every call to unfreeze a card requires that the target card exists.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Every call to unfreeze a card requires that the target card exists.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Every call to unfreeze a card requires that the target card has the status FROZEN.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Every call to unfreeze a card requires that the target card has the status FROZEN.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type FRAUD_HOLD.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type FRAUD_HOLD.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type AML_REVIEW.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type AML_REVIEW.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type SANCTIONS_BLOCK.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type SANCTIONS_BLOCK.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type COURT_ORDER.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Every call to unfreeze a card is not permitted if the affected account has at least one active restriction of type COURT_ORDER.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Every call to apply an account restriction requires that the target account exists.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Every call to apply an account restriction requires that the target account exists.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Every call to apply an account restriction of type AML_REVIEW requires at least one human approval.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Every call to apply an account restriction of type AML_REVIEW requires at least one human approval.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Every call to apply an account restriction of type SANCTIONS_BLOCK requires at least one human approval.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Every call to apply an account restriction of type SANCTIONS_BLOCK requires at least one human approval.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Every call to apply an account restriction of type COURT_ORDER requires at least one human approval.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Every call to apply an account restriction of type COURT_ORDER requires at least one human approval.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260430_222620Z_f2d6e4c3_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-04-30T22:26:45Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\04_agentic_guardrails\\policy_model.smt2"
+}

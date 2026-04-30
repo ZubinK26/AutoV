@@ -1,0 +1,117 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260430_222310Z_6dfadb65",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails.md' (1-based global rule indices 41–50).\n\nRules in this chunk:\n41. A call to apply a goodwill credit with an amount greater than ten thousand pence requires human approval.\n42. A call to apply a goodwill credit is not permitted if the customer's recent goodwill credit total exceeds fifty thousand pence.\n43. A call to apply any refund or goodwill credit is not permitted if the affected account has any active restriction of type SANCTIONS_BLOCK.\n44. A call to apply any refund or goodwill credit is not permitted if the affected account has any active restriction of type COURT_ORDER.\n45. A call to apply a refund of any type where the affected customer has a vulnerable flag set to true requires that a consumer duty assessment exists for the current interaction.\n46. A call to apply a fee reversal requires that the referenced transaction has a positive amount and is classified as a fee.\n47. A call to apply a fee reversal is not permitted if the referenced transaction's fee already reversed flag is set to true.\n48. A call to initiate a dispute requires that the referenced transaction exists.\n49. A call to initiate a dispute requires that the referenced transaction has status POSTED.\n50. A call to initiate a dispute requires that no other open dispute exists for the same transaction.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every call to apply a goodwill credit with an amount greater than ten thousand pence requires human approval.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every call to apply a goodwill credit with an amount greater than ten thousand pence requires human approval.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every call to apply a goodwill credit is not permitted if the affected customer's recent goodwill credit total exceeds fifty thousand pence.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every call to apply a goodwill credit is not permitted if the affected customer's recent goodwill credit total exceeds fifty thousand pence.\""
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "Every call to apply a refund is not permitted if the affected account has at least one active restriction of type SANCTIONS_BLOCK.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every call to apply a refund is not permitted if the affected account has at least one active restriction of type SANCTIONS_BLOCK.\""
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Every call to apply a goodwill credit is not permitted if the affected account has at least one active restriction of type SANCTIONS_BLOCK.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Every call to apply a goodwill credit is not permitted if the affected account has at least one active restriction of type SANCTIONS_BLOCK.\""
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every call to apply a refund is not permitted if the affected account has at least one active restriction of type COURT_ORDER.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every call to apply a refund is not permitted if the affected account has at least one active restriction of type COURT_ORDER.\""
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Every call to apply a goodwill credit is not permitted if the affected account has at least one active restriction of type COURT_ORDER.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Every call to apply a goodwill credit is not permitted if the affected account has at least one active restriction of type COURT_ORDER.\""
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "Every call to apply a refund of any type where the affected customer has a vulnerable flag set to true requires that at least one consumer duty assessment exists for the current interaction.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"Every call to apply a refund of any type where the affected customer has a vulnerable flag set to true requires that at least one consumer duty assessment exists for the current interaction.\""
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "Every call to apply a fee reversal requires that the referenced transaction has a positive amount.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"Every call to apply a fee reversal requires that the referenced transaction has a positive amount.\""
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "Every call to apply a fee reversal requires that the referenced transaction is classified as a fee.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"Every call to apply a fee reversal requires that the referenced transaction is classified as a fee.\""
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Every call to apply a fee reversal is not permitted if the referenced transaction's fee already reversed flag is set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Every call to apply a fee reversal is not permitted if the referenced transaction's fee already reversed flag is set to true.\""
+    },
+    {
+      "line_index": 10,
+      "statement_nl": "Every call to initiate a dispute requires that the referenced transaction exists.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "11. \"Every call to initiate a dispute requires that the referenced transaction exists.\""
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "Every call to initiate a dispute requires that the referenced transaction has a status of POSTED.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "12. \"Every call to initiate a dispute requires that the referenced transaction has a status of POSTED.\""
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "Every call to initiate a dispute requires that no other open dispute exists for the referenced transaction.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "13. \"Every call to initiate a dispute requires that no other open dispute exists for the referenced transaction.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260430_222310Z_6dfadb65_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-04-30T22:23:38Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}
