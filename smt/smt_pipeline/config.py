@@ -10,7 +10,7 @@ from dataclasses import dataclass
 class SmtPipelineConfig:
     syntax_repair_cap: int = 3
     semantic_repair_cap: int = 3
-    rule_cap: int = 50
+    rule_cap: int = 250
     parse_timeout_sec: float = 30.0
     # If total chars (policy + formalizer payload) exceed, fail CONTEXT_LIMIT_EXCEEDED
     context_char_limit: int = 900_000
@@ -30,7 +30,7 @@ def smt_config_from_env() -> SmtPipelineConfig:
     return SmtPipelineConfig(
         syntax_repair_cap=_i("SMT_PIPELINE_SYNTAX_REPAIR_CAP", 3),
         semantic_repair_cap=_i("SMT_PIPELINE_SEMANTIC_REPAIR_CAP", 3),
-        rule_cap=_i("SMT_PIPELINE_RULE_CAP", 50),
+        rule_cap=_i("SMT_PIPELINE_RULE_CAP", 250),
         parse_timeout_sec=_f("SMT_PIPELINE_PARSE_TIMEOUT_SEC", 30.0),
         context_char_limit=_i("SMT_PIPELINE_CONTEXT_CHAR_LIMIT", 900_000),
         formalizer_max_output_tokens=_i("SMT_PIPELINE_FORMALIZER_MAX_OUTPUT_TOKENS", 16384),
