@@ -1,6 +1,6 @@
 # Policy model refinement changelog
 
-**Canonical NL:** `agentsim/04_agentic_guardrails.md`  
+**NL source (historical):** this run was produced from `agentsim/04_agentic_guardrails.md` (that tree was removed from the repo). Paths and `nl_chunk_progress.json` in this directory record the committed run; for ongoing guardrail NL use `agentsim_simplified/04_agentic_guardrails_simpl.md`.  
 **Source SMT snapshot:** `policy_snapshots/policy_latest.smt2`  
 **Refined artifact:** `policy_model_refined.smt2` (this directory; does not overwrite `policy_latest.smt2`)
 

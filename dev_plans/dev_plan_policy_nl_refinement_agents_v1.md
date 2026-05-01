@@ -4,7 +4,7 @@
 
 Add a **post-formalization refinement stage** that uses **two LLM agents** (via API, same Gemini contract as WFM/SMT) to:
 
-1. **Assess** the committed `policy_model.smt2` against the **canonical NL** in `agentsim/04_agentic_guardrails.md` (or another chosen source file).
+1. **Assess** the committed `policy_model.smt2` against the **canonical NL** you choose (for example `agentsim_simplified/04_agentic_guardrails_simpl.md`, or the NL path recorded in a run's `exports/nl_chunk_smt_runs/<profile>/nl_chunk_progress.json`).
 2. **Return structured recommendations** identifying **where** in the SMT file to change and **why** (misalignment, vacuous axiom, wrong quantifier pattern, human-approval gap, sign/units, etc.).
 3. **Apply** only those edits in a second step, with **inline comments** tying each edit to recommendation IDs.
 4. **Verify and repair**: global **SAT check**, **Z3 parse** loop, and **semantic critic** loop until the refined file is syntactically valid, **SAT**, and critic-approved for the touched regions.
@@ -208,7 +208,7 @@ If budgets exhausted: write `policy_refined_failed.smt2`, `final_report.json` st
 ```text
 python -m smt.policy_refinement.cli assess-and-refine \
   --policy exports/.../policy_model.smt2 \
-  --nl agentsim/04_agentic_guardrails.md \
+  --nl agentsim_simplified/04_agentic_guardrails_simpl.md \
   --out-dir exports/policy_refinement_runs/<run_id> \
   --skip-assessor  # optional: load existing assessment.json
 ```

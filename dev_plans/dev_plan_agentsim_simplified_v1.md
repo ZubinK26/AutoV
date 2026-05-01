@@ -8,7 +8,7 @@
 
 ---
 
-## Phase 0 — Prerequisites (you run; needs Gemini / `.env` as for full agentsim)
+## Phase 0 — Prerequisites (you run; needs Gemini / `.env` as for WFM + SMT nl-chunk runs)
 
 Two artifacts gate “runtime testing with state data”:
 
@@ -50,7 +50,7 @@ then
 1. Document **symbol map** (short internal markdown or comments in `validator.py`): customer/account/transaction fields, refund call shape, legality predicate name.
 2. Implement **`policy_loader.py`**: parse policy, startup `check-sat`, raise on UNSAT.
 3. Implement **`validator.translate_state(bundle)`** and **`validator.translate_call(call)`** producing assertions consistent with the policy.
-4. Implement **legality query** per `03_validation_workflow_simpl.md` (or align with `GuardrailsPolicyChecker` entailment style if you prefer parity with `agentsim`).
+4. Implement **legality query** per `03_validation_workflow_simpl.md` (entailment on `is-permitted`, optional unsat-core labels via `SimplPolicyChecker`).
 5. **`rule_mapping.json`** — extract from pipeline comments / `; Rule:` tags, or maintain by hand for ~10 lines.
 
 **Milestone:** `test_validator.py`: ALLOW on clean T-001 path; BLOCK on FAILED KYC (T-004); BLOCK on sanctions (T-005).
@@ -70,7 +70,7 @@ Per `01` / `02` specs:
 ## Phase 3 — Optional hardening
 
 - Vulnerable + >20k goodwill path (seed row C-002 / T-002) if you extend the scripted scenario
-- Entailment vs UNSAT core UX (mirror lessons from `agentsim` NL query tests)
+- Entailment vs UNSAT core UX (`decide(..., unsat_core=True)`; see `agentsim_simplified/tests/test_simpl_unsat_core.py`)
 - Package under `agentsim_simplified/` as a Python package with `pyproject` entry if desired
 
 ---

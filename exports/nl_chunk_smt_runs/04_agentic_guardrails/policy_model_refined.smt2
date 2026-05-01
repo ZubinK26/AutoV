@@ -5,7 +5,7 @@
 ; ============================================================
 ; REFINED POLICY MODEL — do not overwrite chunk pipeline snapshots.
 ; Source: policy_snapshots/policy_latest.smt2
-; NL: agentsim/04_agentic_guardrails.md
+; NL: (historical) agentsim/04_agentic_guardrails.md — repo path removed; see policy_model_refined_CHANGELOG.md
 ; Changelog: policy_model_refined_CHANGELOG.md
 ; ============================================================
 ; --- New declarations for bundle nlchunksmt_20260430_214111Z_4a941dcb ---

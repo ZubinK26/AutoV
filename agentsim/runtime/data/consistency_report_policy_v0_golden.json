@@ -1,9 +1,0 @@
-{
-  "policy_version": "policy-v0",
-  "satisfiable": true,
-  "contradictions": [],
-  "unreachable_rules": [],
-  "tools_always_legal": [],
-  "tools_always_illegal": [],
-  "pairwise_conflicts": []
-}

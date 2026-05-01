@@ -1,6 +1,6 @@
 # agentsim_simplified
 
-Smaller sibling of `agentsim/`: one write tool (`apply_refund`), one read tool (`lookup_bundle`), ~10 NL guardrail lines, in-memory dict DB, scripted scenario.
+Minimal agentic demo: one write tool (`apply_refund`), one read tool (`lookup_bundle`), compact NL guardrails, in-memory dict DB, scripted scenario, Z3 policy check.
 
 ## Spec files (`_simpl` suffix)
 
