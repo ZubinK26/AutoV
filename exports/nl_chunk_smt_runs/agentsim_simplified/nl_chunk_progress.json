@@ -1,0 +1,38 @@
+{
+  "schema_version": "nl_chunk_smt_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/agentsim_simplified/04_agentic_guardrails_simpl.md",
+  "nl_sha256": "15d6d003c51000761e0da928a899d6cf0113e69b0fac65afe5d7ef96c391b098",
+  "rules_per_chunk": 10,
+  "next_rule_index": 21,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 10,
+      "bundle_id": "nlchunksmt_20260501_003654Z_ff3bbd29",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified\\wfm_handoffs\\nlchunksmt_20260501_003654Z_ff3bbd29.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified/policy_snapshots/policy_after_chunk_0000_20260501T003738Z_nlchunksmt_20260501_003654Z_ff3bbd29.smt2",
+      "committed_at_utc": "2026-05-01T00:37:38Z"
+    },
+    {
+      "chunk_seq": 1,
+      "rule_index_start": 10,
+      "rule_index_end": 20,
+      "bundle_id": "nlchunksmt_20260501_003911Z_89350534",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified\\wfm_handoffs\\nlchunksmt_20260501_003911Z_89350534.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified/policy_snapshots/policy_after_chunk_0001_20260501T004007Z_nlchunksmt_20260501_003911Z_89350534.smt2",
+      "committed_at_utc": "2026-05-01T00:40:07Z"
+    },
+    {
+      "chunk_seq": 2,
+      "rule_index_start": 20,
+      "rule_index_end": 21,
+      "bundle_id": "nlchunksmt_20260501_004015Z_46b66138",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified\\wfm_handoffs\\nlchunksmt_20260501_004015Z_46b66138.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified/policy_snapshots/policy_after_chunk_0002_20260501T004040Z_nlchunksmt_20260501_004015Z_46b66138.smt2",
+      "committed_at_utc": "2026-05-01T00:40:40Z"
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified",
+  "pending_smt": null
+}

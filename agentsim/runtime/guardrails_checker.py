@@ -134,6 +134,18 @@ class GuardrailsPolicyChecker:
             return GuardrailsDecision(GuardrailsVerdict.AMBIGUOUS, str(e))
         perm_app = perm_decl(sim_tc)
 
+        r0 = slv.check()
+        if r0 == unknown:
+            return GuardrailsDecision(
+                GuardrailsVerdict.AMBIGUOUS,
+                "Z3 returned unknown for policy+scenario satisfiability",
+            )
+        if r0 == unsat:
+            return GuardrailsDecision(
+                GuardrailsVerdict.AMBIGUOUS,
+                "Policy+scenario is UNSAT (inconsistent grounding; not a legal partial state)",
+            )
+
         slv.push()
         slv.add(Not(perm_app))
         r1 = slv.check()
@@ -147,7 +159,7 @@ class GuardrailsPolicyChecker:
         if r1 == unsat:
             return GuardrailsDecision(
                 GuardrailsVerdict.PERMITTED,
-                "Policy ∪ scenario entails is-permitted(sim_tc)",
+                "Policy+scenario entails is-permitted(sim_tc)",
             )
 
         slv.push()
@@ -163,11 +175,11 @@ class GuardrailsPolicyChecker:
         if r2 == unsat:
             return GuardrailsDecision(
                 GuardrailsVerdict.DENIED,
-                "Policy ∪ scenario entails ¬is-permitted(sim_tc)",
+                "Policy+scenario entails not is-permitted(sim_tc)",
             )
         return GuardrailsDecision(
             GuardrailsVerdict.AMBIGUOUS,
-            "Both is-permitted and ¬is-permitted are consistent with the scenario",
+            "Both is-permitted and not is-permitted are consistent with the scenario",
         )
 
 

@@ -16,12 +16,25 @@ dependencies = [
 [project.scripts]
 validate-policy = "agentsim.runtime.validate_policy:main"
 verify-guardrails = "agentsim.runtime.guardrails_cli:main"
+agentsim-simpl-demo = "agentsim_simplified.runner:main"
 
 [tool.setuptools]
-packages = ["registry_stage", "wfm_orchestration", "asp_pipeline", "smt_pipeline", "agentsim", "agentsim.runtime", "agentsim.runtime.data"]
+packages = [
+    "registry_stage",
+    "wfm_orchestration",
+    "asp_pipeline",
+    "smt_pipeline",
+    "agentsim",
+    "agentsim.runtime",
+    "agentsim.runtime.data",
+    "agentsim_simplified",
+    "agentsim_simplified.data",
+    "agentsim_simplified.tests",
+]
 
 [tool.setuptools.package-data]
 "agentsim.runtime.data" = ["*.json", "*.smt2"]
+"agentsim_simplified.data" = ["*.json"]
 
 [tool.setuptools.package-dir]
 "registry_stage" = "registry_stage"
@@ -31,6 +44,9 @@ packages = ["registry_stage", "wfm_orchestration", "asp_pipeline", "smt_pipeline
 "agentsim" = "agentsim"
 "agentsim.runtime" = "agentsim/runtime"
 "agentsim.runtime.data" = "agentsim/runtime/data"
+"agentsim_simplified" = "agentsim_simplified"
+"agentsim_simplified.data" = "agentsim_simplified/data"
+"agentsim_simplified.tests" = "agentsim_simplified/tests"
 
 [tool.pytest.ini_options]
 testpaths = [
@@ -38,5 +54,6 @@ testpaths = [
     "smt/smt_pipeline/tests",
     "registry_stage/tests",
     "wfm_orchestration/tests",
+    "agentsim_simplified/tests",
     "agentsim/tests",
 ]

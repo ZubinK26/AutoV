@@ -1,0 +1,33 @@
+{
+  "bundle_id": "nlchunksmt_20260501_004015Z_46b66138",
+  "accepted_at": "2026-05-01T00:40:30Z",
+  "committed_at": "2026-05-01T00:40:40Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_e19456715334"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_004015Z_46b66138",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 21–21).\n\nRules in this chunk:\n21. A call to apply a refund of any type is not permitted if the affected customer's vulnerable flag is set to true and the proposed amount exceeds twenty thousand pence.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "A call to apply a refund of any type is not permitted if the affected customer's vulnerable flag is set to true and the proposed refund amount exceeds 20,000 pence.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"A call to apply a refund of any type is not permitted if the affected customer's vulnerable flag is set to true and the proposed refund amount exceeds 20,000 pence.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_004015Z_46b66138_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T00:40:30Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\policy_model.smt2"
+}

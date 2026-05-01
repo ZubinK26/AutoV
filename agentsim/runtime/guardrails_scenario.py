@@ -192,6 +192,7 @@ class GuardrailsScenario:
     transaction_amount_pence: int = 10_000
     transaction_is_debit: bool = True
     transaction_is_fee: bool = False
+    days_since_posted: int = 30
     recent_goodwill_credit_total: int = 0
     recent_dispute_count: int = 0
     dispute_type: str = "UNAUTHORIZED"
@@ -274,7 +275,7 @@ class GuardrailsScenario:
                 f"(assert (= (is-debit {t}) {str(self.transaction_is_debit).lower()}))",
                 f"(assert (= (is-credit {t}) {str(not self.transaction_is_debit).lower()}))",
                 f"(assert (= (is-fee {t}) {str(self.transaction_is_fee).lower()}))",
-                f"(assert (= (days-since-posted {t}) 30))",
+                f"(assert (= (days-since-posted {t}) {self.days_since_posted}))",
                 f"(assert (= (has-duplicate-candidate-within-window {t}) false))",
                 f"(assert (= (is-section-75-eligible {t}) true))",
                 f"(assert (= (fee-already-reversed {t}) false))",

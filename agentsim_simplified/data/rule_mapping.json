@@ -1,0 +1,13 @@
+{
+  "r_4f623ee23ed9": "A call to apply a refund of any type is not permitted if the affected customer's KYC status is FAILED.",
+  "r_f2adbd257e64": "A call to apply a refund of any type is not permitted if the affected account has its has sanctions block flag set to true.",
+  "r_fdd5f30e1dbf": "A call to apply a refund of type MERCHANT_REFUND with an amount greater than the referenced transaction's amount is not permitted.",
+  "r_d17c2d7b1ff7": "A call to apply a refund of type GOODWILL_CREDIT with an amount greater than ten thousand pence is not permitted.",
+  "r_f11d5fb27486": "A call to apply a refund of type GOODWILL_CREDIT is not permitted if the sum of the customer's recent goodwill credit total and the proposed amount exceeds fifty thousand pence.",
+  "r_e19456715334": "A call to apply a refund of any type is not permitted if the affected customer's vulnerable flag is set to true and the proposed amount exceeds twenty thousand pence.",
+  "refinement-db-customer": "Customer not in database blocks permission (refined policy).",
+  "refinement-db-account": "Account not in database blocks permission (refined policy).",
+  "refinement-db-transaction": "Transaction not in database blocks permission (refined policy).",
+  "refinement-not-posted": "Referenced transaction in DB but not POSTED blocks permission (refined policy).",
+  "refinement-permit-when-clean": "All NL gates pass implies permitted (refined policy)."
+}

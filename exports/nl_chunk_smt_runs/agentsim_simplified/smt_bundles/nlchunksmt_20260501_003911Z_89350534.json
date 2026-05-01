@@ -1,0 +1,123 @@
+{
+  "bundle_id": "nlchunksmt_20260501_003911Z_89350534",
+  "accepted_at": "2026-05-01T00:39:39Z",
+  "committed_at": "2026-05-01T00:40:07Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_0b163770060a",
+    "r_37a0880ceefa",
+    "r_d2019a0b3f74",
+    "r_4950ba1a4905",
+    "r_a9e3045ec2fc",
+    "r_b6d8a9204126",
+    "r_4f623ee23ed9",
+    "r_f2adbd257e64",
+    "r_fdd5f30e1dbf",
+    "r_d17c2d7b1ff7",
+    "r_f11d5fb27486"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_003911Z_89350534",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 11–20).\n\nRules in this chunk:\n11. A tool call is one of the defined write tool calls and carries typed parameters.\n12. A call to apply a refund of any type requires that the affected customer exists in the database.\n13. A call to apply a refund of any type requires that the affected account exists in the database.\n14. A call to apply a refund of any type requires that the referenced transaction exists in the database.\n15. A call to apply a refund of any type requires that the referenced transaction has status POSTED.\n16. A call to apply a refund of any type is not permitted if the affected customer's KYC status is FAILED.\n17. A call to apply a refund of any type is not permitted if the affected account has its has sanctions block flag set to true.\n18. A call to apply a refund of type MERCHANT_REFUND with an amount greater than the referenced transaction's amount is not permitted.\n19. A call to apply a refund of type GOODWILL_CREDIT with an amount greater than ten thousand pence is not permitted.\n20. A call to apply a refund of type GOODWILL_CREDIT is not permitted if the sum of the customer's recent goodwill credit total and the proposed amount exceeds fifty thousand pence.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every tool call is one of the defined write tool calls.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every tool call is one of the defined write tool calls.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "Every tool call carries typed parameters.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Every tool call carries typed parameters.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Every call to apply a refund of any type requires that the affected customer exists in the database.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Every call to apply a refund of any type requires that the affected customer exists in the database.\""
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Every call to apply a refund of any type requires that the affected account exists in the database.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Every call to apply a refund of any type requires that the affected account exists in the database.\""
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Every call to apply a refund of any type requires that the referenced transaction exists in the database.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Every call to apply a refund of any type requires that the referenced transaction exists in the database.\""
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Every call to apply a refund of any type requires that the referenced transaction has the status POSTED.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Every call to apply a refund of any type requires that the referenced transaction has the status POSTED.\""
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Any call to apply a refund of any type is not permitted if the affected customer's KYC status is FAILED.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Any call to apply a refund of any type is not permitted if the affected customer's KYC status is FAILED.\""
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Any call to apply a refund of any type is not permitted if the affected account has its sanctions block flag set to true.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Any call to apply a refund of any type is not permitted if the affected account has its sanctions block flag set to true.\""
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Any call to apply a refund of type MERCHANT_REFUND with an amount greater than the referenced transaction's amount is not permitted.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Any call to apply a refund of type MERCHANT_REFUND with an amount greater than the referenced transaction's amount is not permitted.\""
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Any call to apply a refund of type GOODWILL_CREDIT with an amount greater than ten thousand pence is not permitted.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Any call to apply a refund of type GOODWILL_CREDIT with an amount greater than ten thousand pence is not permitted.\""
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Any call to apply a refund of type GOODWILL_CREDIT is not permitted if the sum of the affected customer's recent goodwill credit total and the proposed amount exceeds fifty thousand pence.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Any call to apply a refund of type GOODWILL_CREDIT is not permitted if the sum of the affected customer's recent goodwill credit total and the proposed amount exceeds fifty thousand pence.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_003911Z_89350534_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T00:39:39Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\policy_model.smt2"
+}
