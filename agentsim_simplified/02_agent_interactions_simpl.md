@@ -6,7 +6,7 @@ Spec tree: `01_simulation_environment_simpl.md`, `02_agent_interactions_simpl.md
 
 Define how the "agent" interacts with the simulation tonight. To keep the scope tight, the agent is **not** an LLM in v1. It is a scripted Python sequence of tool-call objects that exercises the runtime end-to-end. This is enough to prove the architecture works. LLM integration is a v2 add and is explicitly deferred.
 
-## Why scripted instead of LLM tonight
+## Why scripted instead of LLM 
 
 The point of the project is to prove that the runtime gates correctly. A scripted sequence proves that with zero LLM-flakiness, zero API debugging at midnight, and zero risk that the demo fails because of model drift. Once the runtime is proven, dropping in a real LLM is a small change later: replace the script with a chat loop that asks the LLM to produce one of the same tool-call objects.
 
@@ -82,7 +82,7 @@ def run_scenario(scenario):
 
 `execute_call` dispatches to the tool function, captures the decision and result, builds a TraceEntry. `print_trace` is a pretty-printer; `print_summary` counts ALLOW vs BLOCK and lists which rules fired.
 
-## What the runner does NOT do tonight
+## What the runner does NOT do at this time
 
 - Does not call any LLM.
 - Does not mutate the trace's order or skip steps based on prior outcomes.
@@ -91,9 +91,9 @@ def run_scenario(scenario):
 
 ## V2 LLM hook (do not implement tonight, but write the seam)
 
-The scripted scenario should live in a separate module from the runner, and the runner's `for` loop should accept *any* iterable of `(description, ToolCall)`. That means tomorrow's LLM integration is a generator that yields tool calls based on a running conversation, plugged into the same runner. Don't build it tonight; just don't make architectural choices that prevent it.
+The scripted scenario should live in a separate module from the runner, and the runner's `for` loop should accept *any* iterable of `(description, ToolCall)`. That means later LLM integration is a generator that yields tool calls based on a running conversation, plugged into the same runner. Plan is not to build it tonight; just to not make architectural choices that prevent it later
 
-## Deliverables for Cursor
+## Deliverables
 
 - `agent.py` — defines `ToolCall`, `SchemaError`, and `scenario_demo` as a list
 - `runner.py` — `run_scenario`, `execute_call`, `print_trace`, `print_summary`, plus a `if __name__ == "__main__": run_scenario(scenario_demo)` block

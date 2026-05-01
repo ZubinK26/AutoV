@@ -4,7 +4,7 @@ Spec tree: `01_simulation_environment_simpl.md`, `02_agent_interactions_simpl.md
 
 ## Purpose
 
-Define how a proposed `apply_refund` tool call becomes an ALLOW or BLOCK decision via SMT validation against the policy model. This is the spec your existing NL→SMT-LIB pipeline plugs into. It is deliberately a single-purpose validator tonight: per-call validation only. The pre-deployment consistency check is reduced to a startup-time SAT check on the loaded policy (if unsat, the runner refuses to start). No separate consistency CLI tonight.
+Define how a proposed `apply_refund` tool call becomes an ALLOW or BLOCK decision via SMT validation against the policy model. This is the spec your existing NL→SMT-LIB pipeline plugs into. It is deliberately a single-purpose validator tonight: per-call validation only. The pre-deployment consistency check is reduced to a startup-time SAT check on the loaded policy (if unsat, the runner refuses to start). No separate consistency CLI at this time.
 
 ## What you have already
 
@@ -65,9 +65,9 @@ That's all. No dates, no lists, no nested objects.
 
 ## Caching
 
-Tonight: cache the parsed policy. Don't cache decisions. The scenario is small enough that running everything fresh is fine.
+At this time: cache the parsed policy. Don't cache decisions. The scenario is small enough that running everything fresh is fine.
 
-## Pre-deployment consistency check (minimal version tonight)
+## Pre-deployment consistency check (minimal version at this time)
 
 At startup, after parsing the policy:
 1. Push only the policy assertions.
@@ -75,15 +75,15 @@ At startup, after parsing the policy:
 3. If `unsat`, raise `PolicyInconsistencyError` with the unsat core.
 4. If `sat`, proceed.
 
-That's the entirety of the consistency check tonight. No reachability check, no pairwise interaction check, no coverage check. Those are v2.
+That's the entirety of the consistency check at this time. No reachability check, no pairwise interaction check, no coverage check. Those are v2.
 
 ## Latency
 
-Not a concern tonight. The whole scenario runs ten steps; even a slow validator is fine.
+Not a concern at this time. The whole scenario runs ten steps; even a slow validator is fine.
 
 ## Audit log
 
-Tonight, the trace list is the audit log. Every Decision is captured in the TraceEntry that the runner builds. No file persistence.
+At the moment, the trace list is the audit log. Every Decision is captured in the TraceEntry that the runner builds. No file persistence.
 
 ## What this spec does NOT specify
 
