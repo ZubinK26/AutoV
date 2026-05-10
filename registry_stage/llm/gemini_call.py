@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 
 def repo_root_containing_registry_stage() -> Path:
@@ -27,27 +28,43 @@ def load_repo_dotenv() -> None:
         load_dotenv(env_file, override=False)
 
 
-def env_thinking_level():
+def _thinking_level_from_str(raw: str) -> Any:
+    """Map a level string to ``ThinkingLevel`` or ``None`` (API default). Warn on unknown."""
     from google.genai import types as genai_types
 
-    raw = os.environ.get("GEMINI_THINKING_LEVEL", "").strip().lower()
-    if raw in ("", "low"):
+    s = raw.strip().lower()
+    if s in ("", "low"):
         return genai_types.ThinkingLevel.LOW
-    if raw == "medium":
+    if s == "medium":
         return genai_types.ThinkingLevel.MEDIUM
-    if raw == "high":
+    if s == "high":
         return genai_types.ThinkingLevel.HIGH
-    if raw == "minimal":
+    if s == "minimal":
         return genai_types.ThinkingLevel.MINIMAL
-    if raw in ("unspecified", "api_default", "default"):
+    if s in ("unspecified", "api_default", "default"):
         return None
     print(f"WARNING: Unknown GEMINI_THINKING_LEVEL={raw!r}; using LOW.", file=sys.stderr)
     return genai_types.ThinkingLevel.LOW
 
 
-def gemini_complete(*, system_instruction: str, user_text: str) -> str:
+def env_thinking_level():
+    return _thinking_level_from_str(os.environ.get("GEMINI_THINKING_LEVEL", ""))
+
+
+def gemini_complete(
+    *,
+    system_instruction: str,
+    user_text: str,
+    model: str | None = None,
+    thinking_level: str | None = None,
+    max_output_tokens: int | None = None,
+    temperature: float | None = None,
+) -> str:
     """
     One Gemini ``generate_content`` turn. Raises if ``GEMINI_API_KEY`` is missing.
+
+    Optional ``model``, ``thinking_level``, ``max_output_tokens``, and ``temperature`` override
+    ``GEMINI_*`` environment defaults when provided (used by pivot / NagV / policy refinement).
     """
     load_repo_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -59,24 +76,32 @@ def gemini_complete(*, system_instruction: str, user_text: str) -> str:
     from google import genai
     from google.genai import types as genai_types
 
-    model = os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview").strip()
-    temperature = float(os.environ.get("GEMINI_TEMPERATURE", "0.0"))
-    max_out = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "16384"))
-    thinking_level = env_thinking_level()
+    model_eff = (model if model is not None else os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview")).strip()
+    temperature_eff = (
+        float(temperature) if temperature is not None else float(os.environ.get("GEMINI_TEMPERATURE", "0.0"))
+    )
+    max_out = (
+        int(max_output_tokens)
+        if max_output_tokens is not None
+        else int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "16384"))
+    )
+    thinking_level_eff = (
+        _thinking_level_from_str(thinking_level) if thinking_level is not None else env_thinking_level()
+    )
 
     cfg_kwargs: dict = {
         "system_instruction": system_instruction,
-        "temperature": temperature,
+        "temperature": temperature_eff,
         "max_output_tokens": max_out,
     }
-    if thinking_level is not None:
+    if thinking_level_eff is not None:
         cfg_kwargs["thinking_config"] = genai_types.ThinkingConfig(
-            thinking_level=thinking_level,
+            thinking_level=thinking_level_eff,
         )
 
     client = genai.Client(api_key=api_key)
     response = client.models.generate_content(
-        model=model,
+        model=model_eff,
         contents=user_text,
         config=genai_types.GenerateContentConfig(**cfg_kwargs),
     )
