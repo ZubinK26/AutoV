@@ -1,0 +1,58 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260507_022654Z_273113cd",
+  "user_original_input": "Incremental policy ruleset chunk from file 'Test_input2.md' (1-based global rule indices 16–20).\n\nRules in this chunk:\n16. If the global quarantine flag is true, the request is immediately denied regardless of other conditions.\n17. If an emergency override token is provided, the budget math limit (Rule 4) and token consumption limit (Rule 1) are bypassed.\n18. If the agent role is \"READ_ONLY\", the human_in_loop requirement for PII data (Rule 11) is waived.\n19. If the target environment is \"SANDBOX\", the outbound network port restrictions (Rule 9) are bypassed.\n20. If the request involves system configuration changes, it is denied unless the human_in_loop flag is true.\n\n[Pivot pipeline — Agent 2 output shape]\nThis chunk has exactly 5 policy rules (see numbered list above). Your SUCCESS output must contain **exactly 5** numbered lines (1. through 5.), **one line per input rule** in order. Do not add another numbered line by splitting one input rule into multiple statements. Do not merge two input rules into one numbered line.",
+  "lines": [
+    {
+      "line_index": 15,
+      "statement_nl": "If the global quarantine flag is true, then every request is denied regardless of any other conditions.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"If the global quarantine flag is true, then every request is denied regardless of any other conditions.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 16,
+      "statement_nl": "If a request provides an emergency override token, then the budget math limit (Rule 4) and the token consumption limit (Rule 1) do not apply to that request.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"If a request provides an emergency override token, then the budget math limit (Rule 4) and the token consumption limit (Rule 1) do not apply to that request.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 17,
+      "statement_nl": "If the agent role of a request is 'READ_ONLY', then the human_in_loop requirement for PII data (Rule 11) does not apply to that request.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"If the agent role of a request is 'READ_ONLY', then the human_in_loop requirement for PII data (Rule 11) does not apply to that request.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 18,
+      "statement_nl": "If the target environment of a request is 'SANDBOX', then the outbound network port restrictions (Rule 9) do not apply to that request.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"If the target environment of a request is 'SANDBOX', then the outbound network port restrictions (Rule 9) do not apply to that request.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 19,
+      "statement_nl": "If a request involves system configuration changes, then that request is denied unless the human_in_loop flag for that request is true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"If a request involves system configuration changes, then that request is denied unless the human_in_loop flag for that request is true.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260507_022654Z_273113cd_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-07T02:27:34Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

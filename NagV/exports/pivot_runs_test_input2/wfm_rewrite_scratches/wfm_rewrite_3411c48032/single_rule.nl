@@ -1,0 +1,1 @@
+If a request provides an emergency override token, then the limit of 500 on the product of proposed budget and task risk and the limit of 100,000 on requested token consumption do not apply to that request.

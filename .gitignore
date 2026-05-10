@@ -18,6 +18,7 @@ id_rsa
 *_rsa
 
 # --- Python / tooling artifacts ---
+*.egg-info/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -31,6 +32,10 @@ registry_stage/eval_runs/
 # --- E2e demo auto-exports (timestamped; keep local) ---
 exports/e2e_demo_runs/
 exports/wfm_demo_warm_registry.json
+
+# --- NagV pivot: local JVM crash logs & golden snapshots ---
+NagV/hs_err_pid*.log
+NagV/pivot_pipeline/golden_test_run/
 
 # --- VSC / IDE ---
 .vscode/

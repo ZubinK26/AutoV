@@ -1,0 +1,5 @@
+{
+  "verdict": "ok",
+  "findings": [],
+  "notes": "The synthetic IR accurately captures all 20 natural language rules. Rule 17, which specifies two bypass targets (Rule 1 and Rule 4), is correctly decomposed into two separate preemption rules (R0017 and R0021). All other conditional logic, relational constraints, and set inclusions match the source text. The exclusion of preemption rules from the 'must_satisfy_all' list is consistent with the provided pathway design note."
+}

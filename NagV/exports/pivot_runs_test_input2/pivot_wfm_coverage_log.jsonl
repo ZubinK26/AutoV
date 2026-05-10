@@ -1,0 +1,4 @@
+{"event": "chunk_coverage_ok", "bundle_id": "pivotwfm_20260507_025107Z_c3c13963", "rule_index_start": 0, "rule_index_end": 5, "wfm_attempt": 1}
+{"event": "chunk_coverage_ok", "bundle_id": "pivotwfm_20260507_025144Z_f003a8cc", "rule_index_start": 5, "rule_index_end": 10, "wfm_attempt": 1}
+{"event": "chunk_coverage_ok", "bundle_id": "pivotwfm_20260507_025247Z_97c4d5d3", "rule_index_start": 10, "rule_index_end": 15, "wfm_attempt": 1}
+{"event": "chunk_coverage_ok", "bundle_id": "pivotwfm_20260507_025437Z_67f85e03", "rule_index_start": 15, "rule_index_end": 20, "wfm_attempt": 1}

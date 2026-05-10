@@ -1,0 +1,157 @@
+```json
+{
+  "schema_version": "1",
+  "suite_id": "test_input2_suite",
+  "instances": [
+    {
+      "template_kind": "scenario",
+      "instance_id": "gen_001",
+      "world": {
+        "requested_token_consumption": 50000,
+        "agent_semantic_confidence_score": 1,
+        "concurrent_api_calls": 10,
+        "outbound_network_port": 80,
+        "global_quarantine_flag": false,
+        "involves_system_configuration_changes": false,
+        "target_dataset_contains_pii": false
+      },
+      "golden": {
+        "sat": true
+      }
+    },
+    {
+      "template_kind": "decision_query",
+      "instance_id": "gen_002",
+      "world": {
+        "requested_token_consumption": 50000
+      },
+      "query": {
+        "decision_metric": "rule",
+        "rule_id": "R0001"
+      },
+      "golden": {
+        "decision": "satisfied"
+      }
+    },
+    {
+      "template_kind": "rule_attribution",
+      "instance_id": "gen_003",
+      "world": {
+        "concurrent_api_calls": 10
+      },
+      "query": {
+        "decision_metric": "rule",
+        "rule_id": "R0006"
+      },
+      "golden": {
+        "decision": "satisfied",
+        "rule_ids": [
+          "R0006"
+        ]
+      }
+    },
+    {
+      "template_kind": "boundary",
+      "instance_id": "gen_004",
+      "world_base": {
+        "agent_semantic_confidence_score": 1
+      },
+      "axis_variable": "concurrent_api_calls",
+      "values": [
+        49,
+        50,
+        51
+      ],
+      "query": {
+        "decision_metric": "rule",
+        "rule_id": "R0006"
+      },
+      "golden": {
+        "decisions": [
+          "satisfied",
+          "unsatisfied",
+          "unsatisfied"
+        ]
+      }
+    },
+    {
+      "template_kind": "counterfactual_flip",
+      "instance_id": "gen_005",
+      "world_base": {
+        "requested_token_consumption": 150000,
+        "emergency_override_token_provided": false
+      },
+      "world_mutant": {
+        "requested_token_consumption": 150000,
+        "emergency_override_token_provided": true
+      },
+      "query": {
+        "decision_metric": "rule",
+        "rule_id": "R0001"
+      },
+      "golden": {
+        "base_decision": "unsatisfied",
+        "mutant_decision": "satisfied",
+        "expect_flip": true
+      }
+    },
+    {
+      "template_kind": "obligation_inventory",
+      "instance_id": "gen_006",
+      "world": {},
+      "golden": {
+        "obligations": [
+          { "key": "R0001", "args": [] },
+          { "key": "R0002", "args": [] },
+          { "key": "R0003", "args": [] },
+          { "key": "R0004", "args": [] },
+          { "key": "R0005", "args": [] },
+          { "key": "R0006", "args": [] },
+          { "key": "R0007", "args": [] },
+          { "key": "R0008", "args": [] },
+          { "key": "R0009", "args": [] },
+          { "key": "R0010", "args": [] },
+          { "key": "R0011", "args": [] },
+          { "key": "R0012", "args": [] },
+          { "key": "R0013", "args": [] },
+          { "key": "R0014", "args": [] },
+          { "key": "R0015", "args": [] },
+          { "key": "R0016", "args": [] },
+          { "key": "R0020", "args": [] }
+        ]
+      }
+    },
+    {
+      "template_kind": "sat_unsat",
+      "instance_id": "gen_007",
+      "world": {
+        "concurrent_api_calls": 60
+      },
+      "golden": {
+        "expect": "unsat"
+      }
+    },
+    {
+      "template_kind": "pairwise",
+      "instance_id": "gen_008",
+      "world": {
+        "agent_semantic_confidence_score": 1
+      },
+      "query_a": {
+        "requested_token_consumption": 50000
+      },
+      "query_b": {
+        "requested_token_consumption": 150000
+      },
+      "query": {
+        "decision_metric": "rule",
+        "rule_id": "R0001"
+      },
+      "golden": {
+        "decision_a": "satisfied",
+        "decision_b": "unsatisfied"
+      }
+    }
+  ]
+}
+```

@@ -1,0 +1,362 @@
+{
+  "schema_version": "1",
+  "suite_id": "test_input2_suite",
+  "policy_binding": {
+    "rules_sha256": "158e9eacd73957eb663963a9658cca171cc97857be9410ec2932a91cac471fb5",
+    "policy_id": "Test_input2",
+    "policy_semantics_version": "1.0"
+  },
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "errors": 0,
+    "inconclusive": 1
+  },
+  "results": [
+    {
+      "instance_id": "gen_001",
+      "template_kind": "scenario",
+      "verdict": "pass",
+      "actual": {
+        "z3_status": "sat",
+        "sat": true
+      },
+      "golden": {
+        "sat": true
+      },
+      "diff": {
+        "match": true,
+        "detail": []
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_002",
+      "template_kind": "decision_query",
+      "verdict": "pass",
+      "actual": {
+        "z3_status": "sat",
+        "decision": "satisfied"
+      },
+      "golden": {
+        "decision": "satisfied"
+      },
+      "diff": {
+        "match": true,
+        "detail": []
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_003",
+      "template_kind": "rule_attribution",
+      "verdict": "fail",
+      "actual": {
+        "z3_status": "sat",
+        "decision": "satisfied",
+        "rule_ids": [
+          "R0001",
+          "R0002",
+          "R0003",
+          "R0004",
+          "R0005",
+          "R0006",
+          "R0007",
+          "R0008",
+          "R0009",
+          "R0010",
+          "R0011",
+          "R0012",
+          "R0013",
+          "R0014",
+          "R0015",
+          "R0016",
+          "R0020"
+        ]
+      },
+      "golden": {
+        "decision": "satisfied",
+        "rule_ids": [
+          "R0006"
+        ]
+      },
+      "diff": {
+        "match": false,
+        "detail": [
+          {
+            "message": "rule_ids mismatch",
+            "golden": [
+              "R0006"
+            ],
+            "actual": [
+              "R0001",
+              "R0002",
+              "R0003",
+              "R0004",
+              "R0005",
+              "R0006",
+              "R0007",
+              "R0008",
+              "R0009",
+              "R0010",
+              "R0011",
+              "R0012",
+              "R0013",
+              "R0014",
+              "R0015",
+              "R0016",
+              "R0020"
+            ]
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_004",
+      "template_kind": "boundary",
+      "verdict": "pass",
+      "actual": {
+        "z3_status": "sat",
+        "decisions": [
+          "satisfied",
+          "unsatisfied",
+          "unsatisfied"
+        ]
+      },
+      "golden": {
+        "decisions": [
+          "satisfied",
+          "unsatisfied",
+          "unsatisfied"
+        ]
+      },
+      "diff": {
+        "match": true,
+        "detail": []
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_005",
+      "template_kind": "counterfactual_flip",
+      "verdict": "inconclusive",
+      "actual": {
+        "z3_status": null,
+        "z3_status_base": "unsat",
+        "z3_status_mutant": "sat",
+        "base_decision": null,
+        "mutant_decision": "unsatisfied"
+      },
+      "golden": {
+        "base_decision": "unsatisfied",
+        "mutant_decision": "satisfied",
+        "expect_flip": true
+      },
+      "diff": {
+        "match": false,
+        "detail": [
+          {
+            "message": "counterfactual decision unknown",
+            "base": null,
+            "mutant": "unsatisfied"
+          }
+        ]
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_006",
+      "template_kind": "obligation_inventory",
+      "verdict": "pass",
+      "actual": {
+        "z3_status": "sat",
+        "obligations": [
+          {
+            "key": "R0001",
+            "args": []
+          },
+          {
+            "key": "R0002",
+            "args": []
+          },
+          {
+            "key": "R0003",
+            "args": []
+          },
+          {
+            "key": "R0004",
+            "args": []
+          },
+          {
+            "key": "R0005",
+            "args": []
+          },
+          {
+            "key": "R0006",
+            "args": []
+          },
+          {
+            "key": "R0007",
+            "args": []
+          },
+          {
+            "key": "R0008",
+            "args": []
+          },
+          {
+            "key": "R0009",
+            "args": []
+          },
+          {
+            "key": "R0010",
+            "args": []
+          },
+          {
+            "key": "R0011",
+            "args": []
+          },
+          {
+            "key": "R0012",
+            "args": []
+          },
+          {
+            "key": "R0013",
+            "args": []
+          },
+          {
+            "key": "R0014",
+            "args": []
+          },
+          {
+            "key": "R0015",
+            "args": []
+          },
+          {
+            "key": "R0016",
+            "args": []
+          },
+          {
+            "key": "R0020",
+            "args": []
+          }
+        ]
+      },
+      "golden": {
+        "obligations": [
+          {
+            "key": "R0001",
+            "args": []
+          },
+          {
+            "key": "R0002",
+            "args": []
+          },
+          {
+            "key": "R0003",
+            "args": []
+          },
+          {
+            "key": "R0004",
+            "args": []
+          },
+          {
+            "key": "R0005",
+            "args": []
+          },
+          {
+            "key": "R0006",
+            "args": []
+          },
+          {
+            "key": "R0007",
+            "args": []
+          },
+          {
+            "key": "R0008",
+            "args": []
+          },
+          {
+            "key": "R0009",
+            "args": []
+          },
+          {
+            "key": "R0010",
+            "args": []
+          },
+          {
+            "key": "R0011",
+            "args": []
+          },
+          {
+            "key": "R0012",
+            "args": []
+          },
+          {
+            "key": "R0013",
+            "args": []
+          },
+          {
+            "key": "R0014",
+            "args": []
+          },
+          {
+            "key": "R0015",
+            "args": []
+          },
+          {
+            "key": "R0016",
+            "args": []
+          },
+          {
+            "key": "R0020",
+            "args": []
+          }
+        ]
+      },
+      "diff": {
+        "match": true,
+        "detail": []
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_007",
+      "template_kind": "sat_unsat",
+      "verdict": "pass",
+      "actual": {
+        "z3_status": "unsat",
+        "expect_resolved": "unsat"
+      },
+      "golden": {
+        "expect": "unsat"
+      },
+      "diff": {
+        "match": true,
+        "detail": []
+      },
+      "error": null
+    },
+    {
+      "instance_id": "gen_008",
+      "template_kind": "pairwise",
+      "verdict": "pass",
+      "actual": {
+        "z3_status": null,
+        "z3_status_a": "sat",
+        "z3_status_b": "sat",
+        "decision_a": "satisfied",
+        "decision_b": "unsatisfied"
+      },
+      "golden": {
+        "decision_a": "satisfied",
+        "decision_b": "unsatisfied"
+      },
+      "diff": {
+        "match": true,
+        "detail": []
+      },
+      "error": null
+    }
+  ]
+}

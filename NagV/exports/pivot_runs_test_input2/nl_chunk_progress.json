@@ -1,0 +1,43 @@
+{
+  "schema_version": "nl_chunk_smt_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/NagV/pivot_pipeline/golden_test_run/input/Test_input2.md",
+  "nl_sha256": "49f52dd86266be449dbde8f0139b3156029b69c212c79d0a65fe3e7c999b2614",
+  "rules_per_chunk": 5,
+  "next_rule_index": 20,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 5,
+      "bundle_id": "pivotwfm_20260507_025107Z_c3c13963",
+      "handoff_relposix": "NagV\\exports\\pivot_runs_test_input2\\wfm_handoffs\\pivotwfm_20260507_025107Z_c3c13963.json",
+      "pivot_wfm_only": true
+    },
+    {
+      "chunk_seq": 1,
+      "rule_index_start": 5,
+      "rule_index_end": 10,
+      "bundle_id": "pivotwfm_20260507_025144Z_f003a8cc",
+      "handoff_relposix": "NagV\\exports\\pivot_runs_test_input2\\wfm_handoffs\\pivotwfm_20260507_025144Z_f003a8cc.json",
+      "pivot_wfm_only": true
+    },
+    {
+      "chunk_seq": 2,
+      "rule_index_start": 10,
+      "rule_index_end": 15,
+      "bundle_id": "pivotwfm_20260507_025247Z_97c4d5d3",
+      "handoff_relposix": "NagV\\exports\\pivot_runs_test_input2\\wfm_handoffs\\pivotwfm_20260507_025247Z_97c4d5d3.json",
+      "pivot_wfm_only": true
+    },
+    {
+      "chunk_seq": 3,
+      "rule_index_start": 15,
+      "rule_index_end": 20,
+      "bundle_id": "pivotwfm_20260507_025437Z_67f85e03",
+      "handoff_relposix": "NagV\\exports\\pivot_runs_test_input2\\wfm_handoffs\\pivotwfm_20260507_025437Z_67f85e03.json",
+      "pivot_wfm_only": true
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/NagV/exports/pivot_runs_test_input2",
+  "pending_smt": null
+}

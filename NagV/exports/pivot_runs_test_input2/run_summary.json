@@ -1,0 +1,32 @@
+{
+  "nl_source": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\pivot_pipeline\\golden_test_run\\input\\Test_input2.md",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\exports\\pivot_runs_test_input2",
+  "phase0_normalized_nl": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\exports\\pivot_runs_test_input2\\phase0_normalized_nl.txt",
+  "rules_json": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\exports\\pivot_runs_test_input2\\rules_extracted.json",
+  "meta_scheme": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\exports\\pivot_runs_test_input2\\meta_scheme.json",
+  "z3": {
+    "status": "sat",
+    "elapsed_ms": 109.516,
+    "model_excerpt": "{'decision': '0', 'concurrent_api_calls': '49', 'outbound_network_port': '2', 'human_in_loop': '1', 'target_geographic_region': '1', 'requested_memory_allocation': '0', 'GPT-4': '0', 'target_system': '1', 'involves_system_configuration_changes': '2', 'requested_runtime_hours': '0', 'WRITE': '1', 'DEV': '0', 'emergency_override_token_provided': '1', 'agent_semantic_confidence_score': '1', 'allocated_compute_cores': '0', 'origin_subnet': '1', 'task_risk_multiplier': '0', 'proposed_financial_budget': '0', 'required_approval_level': '1', 'compliance_enforcement_flag': '2', 'cryptographic_secondary_token_count': '2', 'AUTONOMOUS_EDITOR': '1', 'global_quarantine_flag': '1', 'DESTRUCTIVE': '0', 'target_dataset_contains_pii': '1', 'GEMINI-3': '1', 'CLAUDE-3': '1', 'REJECT': '0', 'action_type': '0', 'DIRECTOR': '0', 'FINANCIAL_LEDGER': '0', 'EU': '0', 'EXTERNAL': '0', 'READ_ONLY': '1', 'agent_role': '0', 'SANDBOX': '1', 'target_deployment_environment': '0', 'STAGING': '1', 'model_engine_version': '0', 'pre_authorized_memory_limit': '0', 'requested_token_consumption': '100001'}",
+    "model_verified": true,
+    "statistics": "(:arith-lower             5\n :arith-make-feasible     1\n :arith-max-columns       13\n :arith-upper             4\n :binary-propagations     2\n :card2bv-rewrites        2\n :decisions               12\n :elim-unconstrained      40\n :final-checks            1\n :max-memory              42.68\n :memory                  29.50\n :mk-bool-var             33\n :mk-clause               3\n :mk-clause-binary        7\n :num-allocs              28456783\n :num-checks              1\n :propagations            4\n :rlimit-count            189246\n :sat-backjumps           501\n :sat-conflicts           501\n :sat-decisions           1844\n :sat-del-clause          12897\n :sat-elim-bool-vars-res  2548\n :sat-elim-clauses        526\n :sat-elim-literals       349\n :sat-minimized-lits      572\n :sat-mk-clause-2ary      9599\n :sat-mk-clause-3ary      3965\n :sat-mk-clause-nary      20726\n :sat-mk-var              5957\n :sat-probing-assigned    3\n :sat-propagations-2ary   43611\n :sat-propagations-nary   31453\n :sat-restarts            24\n :sat-scc-elim-binary     16\n :sat-scc-elim-vars       44\n :sat-subs-resolution     8\n :sat-subs-resolution-dyn 84\n :sat-subsumed            2763\n :sat-units               192\n :time                    0.10)"
+  },
+  "precheck_ok": false,
+  "precheck_issues": [
+    "constant '100000' in meta not found in source NL (heuristic)"
+  ],
+  "varprod_trigger_ok": true,
+  "varprod_trigger_issues": [],
+  "critic": "skipped",
+  "template_suite_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\exports\\pivot_runs_test_input2\\template_suite_generated.json",
+  "template_suite_source": "generated",
+  "template_suite_summary": {
+    "passed": 6,
+    "failed": 1,
+    "errors": 0,
+    "inconclusive": 1
+  },
+  "template_run_report": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\exports\\pivot_runs_test_input2\\template_run_report.json",
+  "template_suite_ok": true,
+  "outcome": "precheck_warnings"
+}

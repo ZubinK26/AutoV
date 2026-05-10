@@ -1,0 +1,60 @@
+{
+  "canonical_variables": [
+    {
+      "id": "proposed_financial_budget",
+      "aliases": [
+        "proposed_budget",
+        "proposed budget"
+      ],
+      "line_hints": [
+        4,
+        17
+      ]
+    },
+    {
+      "id": "task_risk_multiplier",
+      "aliases": [
+        "task_risk",
+        "task risk"
+      ],
+      "line_hints": [
+        4,
+        17
+      ]
+    },
+    {
+      "id": "target_deployment_environment",
+      "aliases": [
+        "target_environment",
+        "target environment"
+      ],
+      "line_hints": [
+        8,
+        19
+      ]
+    },
+    {
+      "id": "target_dataset_contains_pii",
+      "aliases": [
+        "PII data",
+        "Personally Identifiable Information"
+      ],
+      "line_hints": [
+        11,
+        18
+      ]
+    },
+    {
+      "id": "human_in_loop",
+      "aliases": [
+        "human_in_loop flag",
+        "human_in_loop requirement"
+      ],
+      "line_hints": [
+        11,
+        18,
+        20
+      ]
+    }
+  ]
+}

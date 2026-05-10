@@ -1,0 +1,15 @@
+{
+  "policy_id": "toy_refund",
+  "rules": [
+    {
+      "template_class": "CONSTANT_RELATIONAL",
+      "rule_id": "R1",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "variable": "days_since_purchase",
+      "relational_operator": "LTE",
+      "constant_value": 30,
+      "yields": "SATISFIED"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260507_022458Z_a181e0fd",
+  "user_original_input": "Incremental policy ruleset chunk from file 'Test_input2.md' (1-based global rule indices 11–15).\n\nRules in this chunk:\n11. If the target dataset contains PII, the human_in_loop flag must be true.\n12. If the request origin subnet is \"EXTERNAL\", a cryptographic secondary token must be provided.\n13. If the target geographic region is \"EU\", the compliance enforcement flag must be true.\n14. If the target system is \"FINANCIAL_LEDGER\", the required approval level must be \"DIRECTOR\".\n15. If the action type is \"DESTRUCTIVE\", the request is immediately denied regardless of other conditions.\n\n[Pivot pipeline — Agent 2 output shape]\nThis chunk has exactly 5 policy rules (see numbered list above). Your SUCCESS output must contain **exactly 5** numbered lines (1. through 5.), **one line per input rule** in order. Do not add another numbered line by splitting one input rule into multiple statements. Do not merge two input rules into one numbered line.",
+  "lines": [
+    {
+      "line_index": 10,
+      "statement_nl": "If the target dataset contains personally identifiable information (PII), then the human_in_loop flag for the request must be set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"If the target dataset contains personally identifiable information (PII), then the human_in_loop flag for the request must be set to true.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 11,
+      "statement_nl": "If the request origin subnet is 'EXTERNAL', then a cryptographic secondary token must be provided for the request.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"If the request origin subnet is 'EXTERNAL', then a cryptographic secondary token must be provided for the request.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 12,
+      "statement_nl": "If the target geographic region is 'EU', then the compliance enforcement flag for the request must be set to true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"If the target geographic region is 'EU', then the compliance enforcement flag for the request must be set to true.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 13,
+      "statement_nl": "If the target system is 'FINANCIAL_LEDGER', then the required approval level for the request must be 'DIRECTOR'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"If the target system is 'FINANCIAL_LEDGER', then the required approval level for the request must be 'DIRECTOR'.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 14,
+      "statement_nl": "If the action type of a request is 'DESTRUCTIVE', then the request is immediately denied regardless of any other conditions.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"If the action type of a request is 'DESTRUCTIVE', then the request is immediately denied regardless of any other conditions.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260507_022458Z_a181e0fd_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-07T02:26:54Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

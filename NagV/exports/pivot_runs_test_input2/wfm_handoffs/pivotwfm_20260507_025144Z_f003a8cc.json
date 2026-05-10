@@ -1,0 +1,58 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260507_025144Z_f003a8cc",
+  "user_original_input": "Incremental policy ruleset chunk from file 'Test_input2.md' (1-based global rule indices 6–10).\n\nRules in this chunk:\n6. The maximum concurrent API calls requested must be strictly less than 50.\n7. The model engine version must be one of the following: \"GPT-4\", \"CLAUDE-3\", \"GEMINI-3\".\n8. The target deployment environment must be one of the following: \"DEV\", \"STAGING\", \"SANDBOX\".\n9. The proposed outbound network port must not be one of the following: 22, 23, 3389.\n10. If the action type is \"WRITE\", the agent role must be \"AUTONOMOUS_EDITOR\".\n\n[Pivot pipeline — Agent 2 output shape]\nThis chunk has exactly 5 policy rules (see numbered list above). Your SUCCESS output must contain **exactly 5** numbered lines (1. through 5.), **one line per input rule** in order. Do not add another numbered line by splitting one input rule into multiple statements. Do not merge two input rules into one numbered line.",
+  "lines": [
+    {
+      "line_index": 5,
+      "statement_nl": "The maximum number of concurrent API calls requested must be strictly less than 50.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"The maximum number of concurrent API calls requested must be strictly less than 50.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "The model engine version of every request must be one of the following: 'GPT-4', 'CLAUDE-3', or 'GEMINI-3'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The model engine version of every request must be one of the following: 'GPT-4', 'CLAUDE-3', or 'GEMINI-3'.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "The target deployment environment of every deployment must be one of the following: 'DEV', 'STAGING', or 'SANDBOX'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"The target deployment environment of every deployment must be one of the following: 'DEV', 'STAGING', or 'SANDBOX'.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The proposed outbound network port of every request must not be one of the following: 22, 23, or 3389.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"The proposed outbound network port of every request must not be one of the following: 22, 23, or 3389.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "If the action type of a request is 'WRITE', then the agent role for that request must be 'AUTONOMOUS_EDITOR'.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"If the action type of a request is 'WRITE', then the agent role for that request must be 'AUTONOMOUS_EDITOR'.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260507_025144Z_f003a8cc_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-07T02:52:47Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

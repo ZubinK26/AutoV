@@ -1,0 +1,85 @@
+{
+  "schema_version": "1",
+  "suite_id": "toy_all_kinds",
+  "instances": [
+    {
+      "template_kind": "scenario",
+      "instance_id": "t01_scenario_sat",
+      "world": {},
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t02_scenario_unsat",
+      "world": { "amount": 200 },
+      "golden": { "sat": false }
+    },
+    {
+      "template_kind": "sat_unsat",
+      "instance_id": "t03_sat",
+      "world": { "amount": 50 },
+      "golden": { "expect": "sat" }
+    },
+    {
+      "template_kind": "sat_unsat",
+      "instance_id": "t04_unsat",
+      "world": { "amount": 200 },
+      "golden": { "expect": "unsat" }
+    },
+    {
+      "template_kind": "decision_query",
+      "instance_id": "t05_decision",
+      "world": { "amount": 50 },
+      "query": { "decision_metric": "rule", "rule_id": "R1" },
+      "golden": { "decision": "satisfied" }
+    },
+    {
+      "template_kind": "boundary",
+      "instance_id": "t06_boundary",
+      "world_base": {},
+      "axis_variable": "amount",
+      "values": [99, 100, 101],
+      "query": { "decision_metric": "rule", "rule_id": "R1" },
+      "golden": { "decisions": ["satisfied", "satisfied", "unsatisfied"] }
+    },
+    {
+      "template_kind": "counterfactual_flip",
+      "instance_id": "t07_counterfactual",
+      "world_base": { "amount": 50 },
+      "world_mutant": { "amount": 150 },
+      "query": { "decision_metric": "rule", "rule_id": "R1" },
+      "golden": {
+        "base_decision": "satisfied",
+        "mutant_unsat": true,
+        "expect_flip": true
+      }
+    },
+    {
+      "template_kind": "obligation_inventory",
+      "instance_id": "t08_obligations",
+      "world": { "amount": 50 },
+      "golden": {
+        "obligations": [
+          { "key": "R1", "args": [] },
+          { "key": "R2", "args": [] }
+        ]
+      }
+    },
+    {
+      "template_kind": "rule_attribution",
+      "instance_id": "t09_attribution",
+      "world": { "amount": 50 },
+      "query": { "decision_metric": "rule", "rule_id": "R1" },
+      "golden": { "decision": "satisfied", "rule_ids": ["R1", "R2"] }
+    },
+    {
+      "template_kind": "pairwise",
+      "instance_id": "t10_pairwise_equal",
+      "world": {},
+      "query_a": { "amount": 50 },
+      "query_b": { "amount": 60 },
+      "query": { "decision_metric": "rule", "rule_id": "R1" },
+      "golden": { "expect_equal": true }
+    }
+  ]
+}

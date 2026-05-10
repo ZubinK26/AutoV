@@ -1,0 +1,14 @@
+{
+  "verdict": "PASS",
+  "compared_against": "effective_nl",
+  "findings": [],
+  "audit_trail_bullets": [
+    "Verified all 20 natural language rules are represented across the 21 IR rules.",
+    "Confirmed that NL Rule 17, which requires bypassing two separate rules (Rule 1 and Rule 4), is correctly split into two PREEMPTION rules (R0017 and R0021) to adhere to the single-target IR constraint.",
+    "Validated that product-based constraints (Rule 3 and Rule 4) include both factors in the trigger logic as shown in the linearized model.",
+    "Confirmed that preemption rules (R0017, R0018, R0019, R0021) correctly target the intended base rules (R0001, R0011, R0009, R0004).",
+    "Verified that the 'must_satisfy_all' list correctly includes all non-preemption rules (R0001-R0016 and R0020).",
+    "Confirmed that 'deny regardless' rules (Rule 15 and Rule 16) are present in the main evaluation pathway and are not targeted by any preemption rules."
+  ],
+  "notes": "The IR correctly handles the multi-target preemption in NL Rule 17 by creating two distinct preemption entries, which is the required format for the pipeline."
+}

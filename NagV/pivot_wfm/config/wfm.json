@@ -1,0 +1,4 @@
+{
+  "max_input_code_points": 4096,
+  "compound_operator_limit": 8
+}

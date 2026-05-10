@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autov-workspace"
+version = "0.0.0"
+description = "AutoV pivot pipeline slice (NagV pivot + pivot WFM + minimal WFM/registry deps)."
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6,<3",
+    "z3-solver>=4.12.0",
+]
+
+[project.scripts]
+pivot-pipeline = "pivot_pipeline.cli:main"
+pivot-template-suite = "pivot_pipeline.template_suite.__main__:main"
+
+[tool.setuptools]
+packages = [
+    "registry_stage",
+    "registry_stage.llm",
+    "wfm_orchestration",
+    "pivot_pipeline",
+    "pivot_pipeline.template_suite",
+    "pivot_wfm",
+]
+
+[tool.setuptools.package-data]
+"pivot_wfm" = ["prompts/*.md", "config/*.json", "*.md"]
+"pivot_pipeline" = ["prompts/*.md"]
+
+[tool.setuptools.package-dir]
+"registry_stage" = "registry_stage"
+"wfm_orchestration" = "wfm_orchestration"
+"pivot_pipeline" = "NagV/pivot_pipeline"
+"pivot_wfm" = "NagV/pivot_wfm"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "registry_stage/tests",
+    "wfm_orchestration/tests",
+    "NagV/pivot_pipeline/tests",
+    "NagV/pivot_wfm/tests",
+]

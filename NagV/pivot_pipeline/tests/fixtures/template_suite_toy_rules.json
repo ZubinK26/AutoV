@@ -1,0 +1,25 @@
+{
+  "policy_id": "template_toy",
+  "rules": [
+    {
+      "template_class": "CONSTANT_RELATIONAL",
+      "rule_id": "R1",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "variable": "amount",
+      "relational_operator": "LTE",
+      "constant_value": 100,
+      "yields": "SATISFIED"
+    },
+    {
+      "template_class": "CONSTANT_RELATIONAL",
+      "rule_id": "R2",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "variable": "amount",
+      "relational_operator": "GTE",
+      "constant_value": 0,
+      "yields": "SATISFIED"
+    }
+  ]
+}
