@@ -1,0 +1,15 @@
+The region of the requestor for every request must be one of the following: 'NA', 'EU', or 'APAC'.
+
+If the requested resource type is 'DATABASE', the requestor must provide a valid business justification for that request.
+
+The requested storage volume for every request must be strictly less than 500 gigabytes.
+
+The total cost of every request must be less than or equal to 1000 dollars.
+
+The requested memory allocation for every request must not exceed the available memory quota of the requestor's team.
+
+If the target environment of a request is 'PRODUCTION', then the MFA status of the requestor of that request must be true.
+
+If the role of the requestor of a request is 'ML_ENGINEER', then the 500-gigabyte storage limit is bypassed for that request.
+
+If a request originates from an unverified IP address, then that entire request is immediately denied.

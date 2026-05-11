@@ -1,0 +1,72 @@
+<repair_strategy>
+The diagnostic indicates a `Type error: Encountered Any type. Type annotation missing?`. In Nagini, local variables initialized without explicit type annotations can sometimes be inferred as `Any`, which violates the strict typing requirements of the verifier. To resolve this, I will add explicit type annotations to the local variables `refund_amount` and `method` within the `process_refund` function.
+</repair_strategy>
+
+```python
+from dataclasses import dataclass
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+@dataclass
+class RefundRequest:
+    days_since_transaction: int
+    is_unopened: bool
+    is_defective: bool
+    has_proof_of_purchase: bool
+    is_digital: bool
+    is_personalized: bool
+    original_payment_accessible: bool
+    merchant_error: bool
+    manager_authorized: bool
+    item_price: int
+    shipping_charges: int
+
+@dataclass
+class RefundResult:
+    is_approved: bool
+    refund_amount: int
+    refund_method: int  # 0: None, 1: Original Payment Method, 2: Store Credit
+
+@Pure
+def is_valid_request(req: RefundRequest) -> bool:
+    return (
+        req.days_since_transaction <= 30 and
+        req.has_proof_of_purchase and
+        not req.is_digital and
+        not req.is_personalized
+    )
+
+def process_refund(req: RefundRequest) -> RefundResult:
+    Requires(req.item_price >= 0)
+    Requires(req.shipping_charges >= 0)
+    Ensures(Implies(not is_valid_request(req), not Result().is_approved))
+    Ensures(Implies(Result().is_approved and Result().refund_amount > 500, req.manager_authorized))
+    Ensures(Implies(Result().is_approved and req.original_payment_accessible, Result().refund_method == 1))
+    Ensures(Implies(Result().is_approved and not req.original_payment_accessible, Result().refund_method == 2))
+
+    if not is_valid_request(req):
+        return RefundResult(False, 0, 0)
+
+    refund_amount: int = req.item_price
+
+    # Opened, non-defective items are subject to a 15% restocking fee
+    if not req.is_unopened and not req.is_defective:
+        refund_amount = refund_amount - (refund_amount * 15) // 100
+
+    # Original shipping and handling charges are non-refundable unless merchant error or defect
+    if req.is_defective or req.merchant_error:
+        refund_amount += req.shipping_charges
+
+    # Any refund total exceeding $500 requires explicit authorization
+    if refund_amount > 500 and not req.manager_authorized:
+        return RefundResult(False, 0, 0)
+
+    method: int = 0
+    # Payment method logic
+    if req.original_payment_accessible:
+        method = 1
+    else:
+        method = 2
+
+    return RefundResult(True, refund_amount, method)
+```

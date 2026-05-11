@@ -3,11 +3,11 @@
   "compared_against": "processed_nl_and_linearized_model",
   "findings": [],
   "audit_trail_bullets": [
-    "Verified that all explicit rejection rules (NL 15, 16, 20) are unified under the 'decision EQ REJECT' outcome in the IR (R0015, R0016, R0020).",
-    "Confirmed that constraint-based rules (NL 1-9) consistently use relational templates with 'yields SATISFIED' outcomes, maintaining a clear semantic split from explicit rejections.",
-    "Validated that multi-factor product limits (R0003, R0004) use a consistent LOGICAL_IMPLICATION pattern with safety guards (GTE 0) for all operands mentioned in the NL.",
-    "Checked preemption rules (R0017, R0018, R0019, R0021) and confirmed they correctly target the intended IR rule IDs as specified in the NL text.",
-    "Ensured that domain-specific obligations (R0010-R0014) use consistent LOGICAL_IMPLICATION structures without conflating field assignments with rejection outcomes."
+    "Verified that all 'rejection-shaped' rules (NL 15, 16, 20) consistently utilize the 'decision EQ REJECT' outcome within LOGICAL_IMPLICATION templates.",
+    "Confirmed that validation constraints (NL 1-9) are consistently modeled using relational or set-inclusion templates that yield SATISFIED/UNSATISFIED states, maintaining a clean split from the veto channel.",
+    "Validated that product-based limits (R0003, R0004) follow a uniform LOGICAL_IMPLICATION pattern with consistent guard conditions (GTE 0) for all operands.",
+    "Confirmed that preemption rules (R0017, R0018, R0019, R0021) correctly target the specific rule IDs referenced in the NL text.",
+    "Ensured that domain-specific obligations (R0010-R0014) use a consistent 'IF trigger THEN field EQ value' shape, distinct from the rejection logic."
   ],
-  "notes": "The IR demonstrates high cross-rule coherence. Variable naming is unified across rules even where NL terminology fluctuates (e.g., 'target_deployment_environment' in R0008 and R0019). The separation between the 'Constraint' family and the 'Explicit Rejection' family is handled with structural consistency."
+  "notes": "The IR demonstrates high coherence by strictly separating validation constraints, domain obligations, and explicit rejection logic into distinct, internally consistent formal patterns."
 }

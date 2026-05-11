@@ -1,0 +1,87 @@
+```python
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Forall, Result
+
+class RefundRequest:
+    def __init__(self, 
+                 days_since_transaction: int,
+                 is_full_refund: bool,
+                 is_unopened: bool,
+                 is_defective: bool,
+                 has_proof_of_purchase: bool,
+                 is_digital_good: bool,
+                 is_personalized: bool,
+                 restocking_fee_applied: bool,
+                 is_approved: bool,
+                 original_payment_accessible: bool,
+                 credited_to_original_payment: bool,
+                 credited_to_store_credit: bool,
+                 merchant_error: bool,
+                 shipping_charges_refunded: bool,
+                 handling_charges_refunded: bool,
+                 is_executed: bool,
+                 refund_total: int,
+                 managerial_authorization: bool,
+                 is_valid: bool):
+        self.days_since_transaction = days_since_transaction
+        self.is_full_refund = is_full_refund
+        self.is_unopened = is_unopened
+        self.is_defective = is_defective
+        self.has_proof_of_purchase = has_proof_of_purchase
+        self.is_digital_good = is_digital_good
+        self.is_personalized = is_personalized
+        self.restocking_fee_applied = restocking_fee_applied
+        self.is_approved = is_approved
+        self.original_payment_accessible = original_payment_accessible
+        self.credited_to_original_payment = credited_to_original_payment
+        self.credited_to_store_credit = credited_to_store_credit
+        self.merchant_error = merchant_error
+        self.shipping_charges_refunded = shipping_charges_refunded
+        self.handling_charges_refunded = handling_charges_refunded
+        self.is_executed = is_executed
+        self.refund_total = refund_total
+        self.managerial_authorization = managerial_authorization
+        self.is_valid = is_valid
+
+@Pure
+@Ensures(Result() == (  # type: ignore
+    (req.is_valid == (req.days_since_transaction <= 30)) and  # type: ignore
+    Implies(req.is_full_refund, req.is_unopened or req.is_defective) and  # type: ignore
+    req.has_proof_of_purchase and  # type: ignore
+    Implies(req.is_digital_good, not req.is_approved and not req.is_executed) and  # type: ignore
+    Implies(req.is_personalized, not req.is_approved and not req.is_executed) and  # type: ignore
+    Implies(not req.is_unopened and not req.is_defective, req.restocking_fee_applied) and  # type: ignore
+    Implies(req.is_approved and req.original_payment_accessible, req.credited_to_original_payment and not req.credited_to_store_credit) and  # type: ignore
+    Implies(req.is_approved and not req.original_payment_accessible, req.credited_to_store_credit and not req.credited_to_original_payment) and  # type: ignore
+    Implies(not req.merchant_error and not req.is_defective, not req.shipping_charges_refunded) and  # type: ignore
+    Implies(not req.merchant_error and not req.is_defective, not req.handling_charges_refunded) and  # type: ignore
+    Implies(req.is_executed and req.refund_total > 500, req.managerial_authorization)  # type: ignore
+))
+def check_policy(req: RefundRequest) -> bool:
+    if req.is_valid != (req.days_since_transaction <= 30):
+        return False
+    if req.is_full_refund and not (req.is_unopened or req.is_defective):
+        return False
+    if not req.has_proof_of_purchase:
+        return False
+    if req.is_digital_good and (req.is_approved or req.is_executed):
+        return False
+    if req.is_personalized and (req.is_approved or req.is_executed):
+        return False
+    if not req.is_unopened and not req.is_defective and not req.restocking_fee_applied:
+        return False
+    if req.is_approved:
+        if req.original_payment_accessible:
+            if not req.credited_to_original_payment or req.credited_to_store_credit:
+                return False
+        else:
+            if not req.credited_to_store_credit or req.credited_to_original_payment:
+                return False
+    if not req.merchant_error and not req.is_defective and req.shipping_charges_refunded:
+        return False
+    if not req.merchant_error and not req.is_defective and req.handling_charges_refunded:
+        return False
+    if req.is_executed and req.refund_total > 500 and not req.managerial_authorization:
+        return False
+    return True
+```

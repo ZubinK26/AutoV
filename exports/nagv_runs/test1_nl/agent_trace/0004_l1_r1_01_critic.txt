@@ -1,0 +1,292 @@
+=== l1_r1_01_critic ===
+
+--- system_instruction ---
+You are a strict Semantic Equivalence Auditor. Your objective is to verify that the provided Nagini-compatible Python code is a mathematically perfect, 1-to-1 semantic reflection of the original Natural Language (NL) ruleset.
+
+You must act as a deterministic reviewer. Do not evaluate code elegance or style; evaluate only strict logical alignment.
+
+### THE AUDIT PROTOCOL
+
+You must analyze the inputs for the following specific failure modes:
+
+1. **Hallucination (Over-specification):**
+   - Did the code invent any default values, thresholds, or fail-states not explicitly stated in the NL?
+   - *Example:* If the NL says "Refunds require manager approval," and the code adds `if days > 14: require_approval`, the code has hallucinated a time boundary.
+
+2. **Omission (Under-specification):**
+   - Did the code drop any clauses, exceptions, or conditions mentioned in the NL?
+
+3. **Boundary Drift (Inequality Errors):**
+   - Are the mathematical operators strictly aligned with the text?
+   - *Example:* "Within 30 days" typically means `<= 30`, not `< 30`. "Exceeds $500" means `> 500`, not `>= 500`.
+
+4. **Contract/Implementation Mismatch:**
+   - Do the `@Requires` (pre-conditions) and `@Ensures` (post-conditions) mathematically guarantee the exact outcomes dictated by the NL, and does the underlying Python body actually fulfill those contracts?
+
+### INPUTS
+
+**[ORIGINAL NL RULESET]:**
+
+Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date.
+
+If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging.
+
+If the item associated with a refund request is verified as defective upon delivery, then the item is not required to be returned in the item's original, unopened packaging.
+
+Every refund request is accompanied by a verifiable proof of purchase.
+
+Every digital good is strictly non-refundable.
+
+Every personalized item is strictly non-refundable.
+
+Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total.
+
+Every approved refund is credited exclusively to the original payment method.
+
+If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original handling charges are non-refundable.
+
+If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier.
+
+**[GENERATED NAGINI CODE]:**
+
+from dataclasses import dataclass
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+
+@dataclass
+class RefundRequest:
+    days_since_transaction: int       # days elapsed since original transaction
+    is_full_refund: bool
+    item_returned_in_original_packaging: bool
+    item_verified_defective_on_delivery: bool
+    has_proof_of_purchase: bool
+    is_digital_good: bool
+    is_personalized_item: bool
+    is_item_opened: bool              # True if item has been opened
+    original_payment_method_accessible: bool
+    return_due_to_merchant_error_or_defect: bool
+    refund_total_cents: int           # refund total in cents (integer arithmetic)
+    has_managerial_authorization: bool
+
+
+@dataclass
+class RefundDecision:
+    is_valid: bool
+    is_approved: bool
+    packaging_requirement_satisfied: bool
+    restocking_fee_applies: bool
+    restocking_fee_cents: int
+    credited_to_original_payment: bool
+    defaults_to_store_credit: bool
+    shipping_charges_refundable: bool
+    handling_charges_refundable: bool
+    authorization_requirement_satisfied: bool
+
+
+@Pure
+def packaging_requirement_met(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    # Full refund requires original unopened packaging UNLESS item is defective on delivery
+    if req.is_full_refund:
+        if req.item_verified_defective_on_delivery:
+            return True
+        else:
+            return req.item_returned_in_original_packaging
+    else:
+        return True
+
+
+@Pure
+def is_eligible_item(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    # Digital goods and personalized items are strictly non-refundable
+    return (not req.is_digital_good) and (not req.is_personalized_item)
+
+
+@Pure
+def compute_restocking_fee_cents(req: RefundRequest) -> int:
+    Requires(req is not None)
+    Requires(req.refund_total_cents >= 0)
+    # 15% restocking fee applies to opened, non-defective items
+    if req.is_item_opened and (not req.item_verified_defective_on_delivery):
+        return (req.refund_total_cents * 15) // 100
+    else:
+        return 0
+
+
+@Pure
+def restocking_fee_applies(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    return req.is_item_opened and (not req.item_verified_defective_on_delivery)
+
+
+@Pure
+def authorization_satisfied(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Requires(req.refund_total_cents >= 0)
+    # If refund total exceeds $500 (50000 cents), managerial authorization is required
+    if req.refund_total_cents > 50000:
+        return req.has_managerial_authorization
+    else:
+        return True
+
+
+def evaluate_refund(req: RefundRequest) -> RefundDecision:
+    Requires(req is not None)
+    Requires(req.days_since_transaction >= 0)
+    Requires(req.refund_total_cents >= 0)
+
+    # Rule 1: Valid iff initiated within 30 days
+    Ensures(Implies(Result().is_valid, req.days_since_transaction <= 30))
+    Ensures(Implies(req.days_since_transaction > 30, not Result().is_valid))
+
+    # Rule: Digital goods are non-refundable
+    Ensures(Implies(req.is_digital_good, not Result().is_approved))
+
+    # Rule: Personalized items are non-refundable
+    Ensures(Implies(req.is_personalized_item, not Result().is_approved))
+
+    # Rule: Proof of purchase required for validity
+    Ensures(Implies(not req.has_proof_of_purchase, not Result().is_valid))
+
+    # Rule: Proof of purchase required for approval (Item 1 fix)
+    Ensures(Implies(not req.has_proof_of_purchase, not Result().is_approved))
+
+    # Rule: Packaging requirement satisfaction is formally contracted (Item 2 fix)
+    Ensures(Result().packaging_requirement_satisfied == packaging_requirement_met(req))
+
+    # Rule: Restocking fee applies to opened non-defective items
+    Ensures(Result().restocking_fee_applies == restocking_fee_applies(req))
+
+    # Rule: Shipping/handling non-refundable unless merchant error or defect
+    Ensures(Result().shipping_charges_refundable == req.return_due_to_merchant_error_or_defect)
+    Ensures(Result().handling_charges_refundable == req.return_due_to_merchant_error_or_defect)
+
+    # Rule: Authorization requirement for refunds > $500 (recorded as obligation, not approval gate)
+    Ensures(Result().authorization_requirement_satisfied == authorization_satisfied(req))
+
+    # Rule: Credit to original payment method or store credit
+    Ensures(Implies(Result().is_approved and req.original_payment_method_accessible,
+                    Result().credited_to_original_payment))
+    Ensures(Implies(Result().is_approved and not req.original_payment_method_accessible,
+                    Result().defaults_to_store_credit))
+
+    # Determine validity
+    within_30_days: bool = req.days_since_transaction <= 30
+    has_pop: bool = req.has_proof_of_purchase
+    item_eligible: bool = is_eligible_item(req)
+    pkg_ok: bool = packaging_requirement_met(req)
+    auth_ok: bool = authorization_satisfied(req)
+
+    is_valid: bool = within_30_days and has_pop
+
+    # Items 3 & 4 fix: pkg_ok and auth_ok are obligations/outputs, not approval gates
+    is_approved: bool = (
+        is_valid and
+        item_eligible
+    )
+
+    fee_applies: bool = restocking_fee_applies(req)
+    fee_cents: int = compute_restocking_fee_cents(req)
+
+    credited_to_original: bool = is_approved and req.original_payment_method_accessible
+    store_credit: bool = is_approved and (not req.original_payment_method_accessible)
+
+    shipping_refundable: bool = req.return_due_to_merchant_error_or_defect
+    handling_refundable: bool = req.return_due_to_merchant_error_or_defect
+
+    return RefundDecision(
+        is_valid=is_valid,
+        is_approved=is_approved,
+        packaging_requirement_satisfied=pkg_ok,
+        restocking_fee_applies=fee_applies,
+        restocking_fee_cents=fee_cents,
+        credited_to_original_payment=credited_to_original,
+        defaults_to_store_credit=store_credit,
+        shipping_charges_refundable=shipping_refundable,
+        handling_charges_refundable=handling_refundable,
+        authorization_requirement_satisfied=auth_ok,
+    )
+
+### OUTPUT FORMAT
+
+Perform your audit and output your exact findings using the structured format below. If the code perfectly matches the NL, you must output exactly `[VERDICT: PASS]` and nothing else.
+
+If you detect semantic drift, output your response in the following format:
+
+**[VERDICT: DRIFT DETECTED]**
+
+**1. [Type of Error] (e.g., Boundary Drift)**
+
+* **NL Intent:** "Any refund total exceeding $500 requires explicit authorization."
+* **Code Implementation:** `if refund_total >= 500:`
+* **Correction:** Change the conditional and corresponding `@Ensures` contract to strictly use `>` instead of `>=`.
+
+**2. [Type of Error]**
+
+* **NL Intent:** [Quote the exact NL]
+* **Code Implementation:** [Point out the exact code flaw]
+* **Correction:** [Provide the exact Nagini/Python fix]
+
+Do not rewrite the entire code block. Provide only the precise, targeted corrections required to achieve absolute semantic equivalence.
+
+The last line of your reply must contain the verdict: either only `[VERDICT: PASS]` or a line containing `[VERDICT: DRIFT DETECTED]` (bold optional). Do not add a second conflicting verdict after that.
+
+
+--- user_text ---
+Apply the audit protocol and respond in the required OUTPUT FORMAT only.
+
+--- model_output ---
+**[VERDICT: DRIFT DETECTED]**
+
+**1. Omission (Under-specification) — Packaging Requirement Not Enforced as Approval Gate**
+
+* **NL Intent:** "If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging." (with the defective-delivery exception). This is a binding condition on the refund, not merely a recorded output.
+* **Code Implementation:** `is_approved` is computed as `is_valid and item_eligible` only. `pkg_ok` is computed and stored in `packaging_requirement_satisfied`, but it is **not** included in the `is_approved` gate. A full refund where the item is not returned in original packaging (and is not defective) would still be `is_approved = True`.
+* **Correction:** Change the `is_approved` computation to include `pkg_ok`:
+  ```python
+  is_approved: bool = (
+      is_valid and
+      item_eligible and
+      pkg_ok
+  )
+  ```
+
+**2. Omission (Under-specification) — Managerial Authorization Not Enforced as Approval Gate**
+
+* **NL Intent:** "If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier." This is a binding requirement on any executed (approved) refund, not merely a recorded obligation.
+* **Code Implementation:** `auth_ok` is computed and stored in `authorization_requirement_satisfied`, but it is **not** included in the `is_approved` gate. A refund exceeding $500 without managerial authorization would still be `is_approved = True`.
+* **Correction:** Change the `is_approved` computation to include `auth_ok`:
+  ```python
+  is_approved: bool = (
+      is_valid and
+      item_eligible and
+      pkg_ok and
+      auth_ok
+  )
+  ```
+  Additionally, add a corresponding `@Ensures` contract:
+  ```python
+  Ensures(Implies(req.refund_total_cents > 50000 and not req.has_managerial_authorization, not Result().is_approved))
+  ```
+
+**3. Omission (Under-specification) — Proof of Purchase Required for Validity (Biconditional)**
+
+* **NL Intent:** "Every refund request is accompanied by a verifiable proof of purchase." This is a universal requirement for validity, meaning `is_valid` must be `False` when `has_proof_of_purchase` is `False`. The `@Ensures` contract captures only one direction (`not has_proof_of_purchase → not is_valid`), but the biconditional for validity is not fully contracted: there is no `@Ensures` stating that `is_valid` requires `has_proof_of_purchase`.
+* **Code Implementation:** The body correctly computes `is_valid = within_30_days and has_pop`, so the implementation is correct. However, the `@Ensures` contracts are asymmetric — they only state the negative implication and omit the positive direction. The missing contract is:
+  ```python
+  Ensures(Implies(Result().is_valid, req.has_proof_of_purchase))
+  ```
+* **Correction:** Add the above `@Ensures` line to make the contract fully reflect the NL requirement in both directions.
+
+**4. Boundary Drift — Validity Window Biconditional Incomplete**
+
+* **NL Intent:** "Every refund request is valid if and only if the refund request is initiated within 30 days." The `@Ensures` contracts capture `is_valid → days <= 30` and `days > 30 → not is_valid`, but do not capture the full biconditional (other conditions aside, `days <= 30` is necessary). The existing contracts are logically equivalent on this axis, so this is acceptable — however, the `@Ensures` for the forward direction (`Result().is_valid → req.days_since_transaction <= 30`) is present. No correction needed on boundary (`<=` is correct for "within 30 days").
+
+*(Item 4 is noted as conformant; no correction required.)*
+
+[VERDICT: DRIFT DETECTED]

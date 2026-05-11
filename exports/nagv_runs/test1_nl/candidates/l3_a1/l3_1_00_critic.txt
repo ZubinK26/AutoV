@@ -1,0 +1,31 @@
+<audit_trail>
+Line 0: "Every refund request is valid if and only if the refund request is initiated within 30 days." Code: `is_request_valid` returns `days_since_transaction <= 30`. Matches biconditional. ✓
+
+Line 1: "If full refund, then item returned in original, unopened packaging." Code: `packaging_requirement_satisfied` returns `(not is_full_refund) or verified_defective or returned_in_original_packaging`. The `verified_defective` clause is from Line 2, combined here. Strictly Line 1 alone says: full_refund → original_packaging. The combined function relaxes it. This is acceptable since Line 2 explicitly overrides Line 1. ✓
+
+Line 2: "If verified defective, then not required to be returned in original packaging." Combined into packaging function. ✓
+
+Line 3: "Every refund request is accompanied by a verifiable proof of purchase." This is enforced only as approval criterion in `is_refund_approved`. The NL says every request "is accompanied by" — this is a universal claim about all requests. It's used as approval criterion, which is a reasonable interpretation. ✓ (acceptable interpretation)
+
+Line 4: Digital goods non-refundable. Encoded in `is_categorically_non_refundable` and used in approval. ✓
+
+Line 5: Personalized items non-refundable. Encoded. ✓
+
+Line 6: "Every opened, non-defective item is subject to a 15% restocking fee deducted from refund total." Code: `restocking_fee_applies` checks `is_opened and not verified_defective`. `compute_refund_amount` deducts 15%. Computation: `refund_total - (refund_total * 15) // 100`. This is integer arithmetic; "15%" deducted means refund * 0.85. The integer division could differ slightly from exact 15% but acceptable for int domain. ✓
+
+Line 7: "Every approved refund is credited exclusively to the original payment method." Code: `credited_to_original_method` returns true iff approved AND original_payment_accessible. But Line 7 says exclusively to original method (no qualifier about accessibility in Line 7 — Line 8 adds the inaccessibility exception). The combined logic encodes 7+8 correctly. ✓
+
+Line 8: If inaccessible → store credit. Encoded. ✓
+
+Line 9: Shipping non-refundable unless merchant error or defect. `shipping_refundable` returns merchant_error or return_due_to_defect. ✓
+
+Line 10: Same for handling. ✓
+
+Line 11: "If refund executed and refund_total > $500, then has managerial authorization." Encoded as `managerial_authorization_satisfied`: `refund_total <= 500 or has_managerial_authorization`. ✓
+
+Banned constructs: No Forall, Exists, Old(), while, dynamic typing, I/O. ✓
+
+All checks pass.
+</audit_trail>
+
+[VERDICT: PASS]

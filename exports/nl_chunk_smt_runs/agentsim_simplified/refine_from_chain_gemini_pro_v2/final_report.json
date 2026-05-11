@@ -1,0 +1,17 @@
+{
+  "run_id": "refine_20260501T152511Z",
+  "status": "success",
+  "failure_reason": null,
+  "critic_final_approved": true,
+  "sat_result": "sat",
+  "repair_meta": {
+    "parse_repairs": 0,
+    "semantic_repairs": 0,
+    "unsat_repairs": 0
+  },
+  "paths": {
+    "policy_refined": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\refine_from_chain_gemini_pro_v2\\policy_refined.smt2",
+    "repair_log": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\refine_from_chain_gemini_pro_v2\\repair_log.jsonl",
+    "policy_before": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\refine_from_chain_gemini_pro_v2\\policy_before.smt2"
+  }
+}

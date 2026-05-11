@@ -1,0 +1,9 @@
+{
+  "tools": [
+    {
+      "name": "apply_refund",
+      "parameters": {},
+      "is_gated": true
+    }
+  ]
+}

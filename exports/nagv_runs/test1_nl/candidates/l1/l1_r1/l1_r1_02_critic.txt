@@ -1,0 +1,31 @@
+<audit_trail>
+Line 0: "Refund request is valid iff initiated within 30 days." Code uses `is_within_timeframe` with `<= 30`. Correctly biconditional in eligibility. PASS.
+
+Line 1: "If full refund, then returned in original unopened packaging." Code checks `is_full_refund` implies `returned_in_original_packaging`, with line 2 exception. Matches.
+
+Line 2: "If verified defective, then not required to return in original packaging." Code allows defective override. Matches.
+
+Line 3: "Every refund request is accompanied by verifiable proof of purchase." Required for eligibility. Matches.
+
+Line 4: "Every digital good is strictly non-refundable." Used in `is_categorically_non_refundable`. Matches.
+
+Line 5: "Every personalized item is strictly non-refundable." Same. Matches.
+
+Line 6: "Opened, non-defective items subject to 15% restocking fee deducted from refund total." Code applies `(base * 85) // 100`. The `//` is integer division which is fine for cents. Matches semantically.
+
+Line 7: "Every approved refund is credited exclusively to the original payment method." `credited_to_original_payment` ensures this when accessible. Combined with line 8 for fallback. Matches.
+
+Line 8: "If original payment method is inaccessible, defaults to non-transferable store credit." Code's `credited_as_store_credit` returns true when approved and inaccessible. Matches.
+
+Line 9: "If not (merchant error or defect), then original shipping non-refundable." Code `shipping_and_handling_refundable` returns merchant_error or verified_defective. Matches.
+
+Line 10: Same for handling. Matches.
+
+Line 11: "If refund executed and total > $500, then has managerial authorization." Code uses `> 50000` cents = $500.00. The NL says "exceeds $500" which means strictly greater than 500. Code: `compute_refund_total_cents(r) <= 50000` OR managerial_auth. So if total > 50000, must have auth. Matches.
+
+Banned syntax check: No Forall, Exists, Old, while, dynamic typing, or external I/O. PASS.
+
+All clauses appear correctly mapped without hallucination, omission, or boundary drift.
+</audit_trail>
+
+[VERDICT: PASS]

@@ -1,0 +1,269 @@
+=== l1_r1_00_formalizer ===
+
+--- system_instruction ---
+You are a rigorous Formal Verification Engineer and a Neuro-Symbolic Compiler. Your single objective is to translate a Natural Language (NL) policy ruleset into strictly typed, Nagini-compatible Python code that can be deterministically proven by the Z3 SMT solver.
+
+
+
+### THE DIRECTIVES
+
+1. **Semantic Equivalence:** Your generated Python code must perfectly reflect the mathematical and logical boundaries of the NL ruleset.
+
+2. **Formal Specification:** You must use Nagini's Design-by-Contract decorators (`@Requires`, `@Ensures`, `@Pure`) to embed the policy constraints directly into the function signatures.
+
+3. **No Hallucination:** Do not invent rules, thresholds, or default states that are not explicitly stated or logically necessitated by the NL input.
+
+
+
+### THE SCOPE BOUNDARY (CRITICAL)
+
+Nagini and Z3 require operations within Decidable First-Order Logic (specifically QF_LIA and unrolled finite states). 
+
+
+
+**IN-SCOPE (Allowed):**
+
+* PEP 484 Strict Static Typing (e.g., `int`, `bool`).
+
+* Bounded arithmetic and boolean logic operators.
+
+* Conditional matrices (`if/elif/else`).
+
+* Pure, deterministic functions with zero side effects.
+
+* Simple state-holding classes (Data Transfer Objects) using `@dataclass`.
+
+
+**OUT-OF-SCOPE (Banned):**
+
+* Dynamic typing, `Any`, or type-casting at runtime.
+
+* Unbounded loops (`while True`) or unbounded recursion.
+
+* Dynamic memory allocation, dynamically resizing lists/dicts, or arbitrary string manipulation.
+
+* I/O operations (file reading, network calls, `print()`, time/date libraries).
+
+* Uninterpreted functions with infinite domains.
+* `Forall`, `Exists`, and `Old()` are strictly banned for this toolchain (testing / translator compatibility).
+
+
+
+### THE ABORT PROTOCOL
+
+Before writing any code, evaluate the NL ruleset against the Scope Boundary. If the policy requires **any** OUT-OF-SCOPE feature to be accurately modeled (e.g., it requires querying a database, parsing unbounded strings, or unbounded historical searches), you are explicitly forbidden from generating code. 
+
+**If out of scope, you must output ONLY the following string and nothing else:**
+
+`ABORT: Ruleset exceeds decidable scope.`
+
+
+
+### NAGINI SYNTAX REQUIREMENTS
+
+If the ruleset is IN-SCOPE, output ONLY the Python code. Ensure the following syntax is adhered to:
+
+```python
+
+from dataclasses import dataclass
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+
+# 1. Use @dataclass for state-holding input objects.
+# 3. Use @Requires(condition) for preconditions (inputs)
+# 4. Use @Ensures(condition) for postconditions (policy guarantees). Use 'Result()' to refer to the return value.
+
+
+
+OUTPUT FORMAT
+
+If the ruleset is in-scope, output ONLY the valid, executable, Nagini-compatible Python code inside a single code block. Do not include any conversational filler, explanations, or markdown outside the code block. If out of scope, output the Abort string.
+
+INPUT RULESET
+[
+Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date.
+
+If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging.
+
+If the item associated with a refund request is verified as defective upon delivery, then the item is not required to be returned in the item's original, unopened packaging.
+
+Every refund request is accompanied by a verifiable proof of purchase.
+
+Every digital good is strictly non-refundable.
+
+Every personalized item is strictly non-refundable.
+
+Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total.
+
+Every approved refund is credited exclusively to the original payment method.
+
+If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original handling charges are non-refundable.
+
+If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier.
+]
+
+
+--- user_text ---
+Respond per OUTPUT FORMAT in the system instructions.
+
+--- model_output ---
+```python
+from dataclasses import dataclass
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+
+@dataclass
+class RefundRequest:
+    days_since_transaction: int       # days elapsed since original transaction
+    is_full_refund: bool
+    item_returned_in_original_packaging: bool
+    item_verified_defective_on_delivery: bool
+    has_proof_of_purchase: bool
+    is_digital_good: bool
+    is_personalized_item: bool
+    is_item_opened: bool              # True if item has been opened
+    original_payment_method_accessible: bool
+    return_due_to_merchant_error_or_defect: bool
+    refund_total_cents: int           # refund total in cents (integer arithmetic)
+    has_managerial_authorization: bool
+
+
+@dataclass
+class RefundDecision:
+    is_valid: bool
+    is_approved: bool
+    packaging_requirement_satisfied: bool
+    restocking_fee_applies: bool
+    restocking_fee_cents: int
+    credited_to_original_payment: bool
+    defaults_to_store_credit: bool
+    shipping_charges_refundable: bool
+    handling_charges_refundable: bool
+    authorization_requirement_satisfied: bool
+
+
+@Pure
+def packaging_requirement_met(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    # Full refund requires original unopened packaging UNLESS item is defective on delivery
+    if req.is_full_refund:
+        if req.item_verified_defective_on_delivery:
+            return True
+        else:
+            return req.item_returned_in_original_packaging
+    else:
+        return True
+
+
+@Pure
+def is_eligible_item(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    # Digital goods and personalized items are strictly non-refundable
+    return (not req.is_digital_good) and (not req.is_personalized_item)
+
+
+@Pure
+def compute_restocking_fee_cents(req: RefundRequest) -> int:
+    Requires(req is not None)
+    Requires(req.refund_total_cents >= 0)
+    # 15% restocking fee applies to opened, non-defective items
+    if req.is_item_opened and (not req.item_verified_defective_on_delivery):
+        return (req.refund_total_cents * 15) // 100
+    else:
+        return 0
+
+
+@Pure
+def restocking_fee_applies(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    return req.is_item_opened and (not req.item_verified_defective_on_delivery)
+
+
+@Pure
+def authorization_satisfied(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Requires(req.refund_total_cents >= 0)
+    # If refund total exceeds $500 (50000 cents), managerial authorization is required
+    if req.refund_total_cents > 50000:
+        return req.has_managerial_authorization
+    else:
+        return True
+
+
+def evaluate_refund(req: RefundRequest) -> RefundDecision:
+    Requires(req is not None)
+    Requires(req.days_since_transaction >= 0)
+    Requires(req.refund_total_cents >= 0)
+
+    # Rule 1: Valid iff initiated within 30 days
+    Ensures(Implies(Result().is_valid, req.days_since_transaction <= 30))
+    Ensures(Implies(req.days_since_transaction > 30, not Result().is_valid))
+
+    # Rule: Digital goods are non-refundable
+    Ensures(Implies(req.is_digital_good, not Result().is_approved))
+
+    # Rule: Personalized items are non-refundable
+    Ensures(Implies(req.is_personalized_item, not Result().is_approved))
+
+    # Rule: Proof of purchase required for validity
+    Ensures(Implies(not req.has_proof_of_purchase, not Result().is_valid))
+
+    # Rule: Restocking fee applies to opened non-defective items
+    Ensures(Result().restocking_fee_applies == restocking_fee_applies(req))
+
+    # Rule: Shipping/handling non-refundable unless merchant error or defect
+    Ensures(Result().shipping_charges_refundable == req.return_due_to_merchant_error_or_defect)
+    Ensures(Result().handling_charges_refundable == req.return_due_to_merchant_error_or_defect)
+
+    # Rule: Authorization requirement for refunds > $500
+    Ensures(Result().authorization_requirement_satisfied == authorization_satisfied(req))
+
+    # Rule: Credit to original payment method or store credit
+    Ensures(Implies(Result().is_approved and req.original_payment_method_accessible,
+                    Result().credited_to_original_payment))
+    Ensures(Implies(Result().is_approved and not req.original_payment_method_accessible,
+                    Result().defaults_to_store_credit))
+
+    # Determine validity
+    within_30_days: bool = req.days_since_transaction <= 30
+    has_pop: bool = req.has_proof_of_purchase
+    item_eligible: bool = is_eligible_item(req)
+    pkg_ok: bool = packaging_requirement_met(req)
+    auth_ok: bool = authorization_satisfied(req)
+
+    is_valid: bool = within_30_days and has_pop
+
+    is_approved: bool = (
+        is_valid and
+        item_eligible and
+        pkg_ok and
+        auth_ok
+    )
+
+    fee_applies: bool = restocking_fee_applies(req)
+    fee_cents: int = compute_restocking_fee_cents(req)
+
+    credited_to_original: bool = is_approved and req.original_payment_method_accessible
+    store_credit: bool = is_approved and (not req.original_payment_method_accessible)
+
+    shipping_refundable: bool = req.return_due_to_merchant_error_or_defect
+    handling_refundable: bool = req.return_due_to_merchant_error_or_defect
+
+    return RefundDecision(
+        is_valid=is_valid,
+        is_approved=is_approved,
+        packaging_requirement_satisfied=pkg_ok,
+        restocking_fee_applies=fee_applies,
+        restocking_fee_cents=fee_cents,
+        credited_to_original_payment=credited_to_original,
+        defaults_to_store_credit=store_credit,
+        shipping_charges_refundable=shipping_refundable,
+        handling_charges_refundable=handling_refundable,
+        authorization_requirement_satisfied=auth_ok,
+    )
+```

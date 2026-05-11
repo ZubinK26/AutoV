@@ -1,0 +1,31 @@
+<audit_trail>
+Line 0: "Every refund request is valid if and only if initiated within 30 days." Code: `is_request_valid` returns `days_since_transaction <= 30`. "Within 30 days" → `<= 30`. Match.
+
+Line 1: "If full refund, then returned in original unopened packaging." Code merges with Line 2 exception: `(not full) or verified_defective or returned_in_packaging`. The NL line 1 alone says full refund → original packaging. Line 2 carves out an exception for defective. Combined logic in `packaging_requirement_satisfied` is correct. Note: NL says "original, unopened packaging" — code uses `returned_in_original_packaging` field which presumably encompasses both. Acceptable abstraction.
+
+Line 2: Exception for defective items. Correctly modeled in packaging predicate.
+
+Line 3: "Every refund request is accompanied by a verifiable proof of purchase." This is a universal requirement on all refund requests. Code uses `has_proof_of_purchase` only as an approval gate in `is_refund_approved`. The NL states this as a property that every request HAS, not as an approval condition. This could be interpreted either way, but treating it as a requirement for approval is reasonable. Acceptable.
+
+Line 4: Digital goods non-refundable. Modeled in `is_categorically_non_refundable` and gated in approval. Match.
+
+Line 5: Personalized items non-refundable. Match.
+
+Line 6: "Opened, non-defective item subject to 15% restocking fee deducted from refund total." Code computes `refund_total - (refund_total * 15) // 100`. Uses integer division which could round differently than exact 15% deduction. NL says "15% restocking fee... deducted." For integer types, this is a reasonable model, but introduces rounding. Mild concern but `refund_total` is typed as `int`, so integer arithmetic is necessary. Acceptable.
+
+Line 7: "Every approved refund credited exclusively to original payment method." Code: `credited_to_original_method` returns true iff approved AND original_payment_accessible. But Line 7 is unconditional ("exclusively to original payment method") — Line 8 provides the exception. Code combines them: original method when accessible, store credit otherwise. Match.
+
+Line 8: Inaccessible → store credit. Match.
+
+Line 9: Not (merchant error or defect) → shipping non-refundable. Code: `shipping_refundable` true iff merchant_error or return_due_to_defect. Logically equivalent (contrapositive). Match.
+
+Line 10: Same for handling charges. Match.
+
+Line 11: "If refund executed and total > $500, then has managerial authorization." Code: `managerial_authorization_satisfied` = `(refund_total <= 500) or has_managerial_authorization`. Boundary: ">$500" means `> 500`, contrapositive `<= 500`. Match.
+
+Banned constructs: No Forall/Exists/Old/while/dynamic typing/IO. Clean.
+
+No hallucinated thresholds beyond what NL states. All gates trace to NL clauses.
+</audit_trail>
+
+[VERDICT: PASS]

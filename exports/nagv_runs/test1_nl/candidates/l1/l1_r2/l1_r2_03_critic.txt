@@ -1,0 +1,29 @@
+<audit_trail>
+Line 0: "Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date." Code uses `is_within_window` with `days_since_transaction <= 30 and >= 0`. The `>= 0` is a precondition assumption but adding it to the iff condition could be considered a slight over-specification, however since days can't realistically be negative and there's a Requires precondition, it's neutral. The iff is: valid <=> within 30 days. Code: `is_request_valid == is_within_window`. Match.
+
+Line 1: "If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging." Combined with Line 2 in `packaging_requirement_satisfied`: `(not full_refund) or verified_defective or returned_in_original_packaging`. This correctly captures Line 1 (full → packaging) modified by Line 2 exception. Match.
+
+Line 2: "If verified as defective, item not required in original packaging." Correctly handled as exception in packaging_requirement. Match.
+
+Line 3: "Every refund request is accompanied by a verifiable proof of purchase." This is a universal requirement for refund requests. The code only checks `has_proof_of_purchase` as part of `is_refund_approved`. The NL states this as an unconditional property of every refund request, not just approved ones. However, treating it as a requirement for approval is a reasonable interpretation. There is no standalone predicate enforcing this universally, but it is enforced via approval gate. Acceptable interpretation.
+
+Line 4: "Every digital good is strictly non-refundable." Encoded in `is_categorically_non_refundable` and gates approval. Match.
+
+Line 5: "Every personalized item is strictly non-refundable." Encoded similarly. Match.
+
+Line 6: "Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total." `restocking_fee_applies` and `compute_refund_amount` deducts 15%. Math: `refund_total - (refund_total * 15) // 100`. This is integer arithmetic - 15% of refund_total computed via integer division. Slight rounding concern but reasonable. Match.
+
+Line 7: "Every approved refund is credited exclusively to the original payment method." Code: `credited_to_original_method == is_refund_approved AND original_payment_accessible`. But Line 7 says approved refunds go to original method exclusively, and Line 8 provides exception. So when approved AND accessible → original method. Match.
+
+Line 8: "If original payment method is inaccessible, the approved refund defaults to non-transferable store credit." Code: `credited_to_store_credit == is_refund_approved AND not original_payment_accessible`. Match.
+
+Line 9: "If not (merchant error or defect), all original shipping charges are non-refundable." Code: `shipping_refundable == merchant_error OR return_due_to_defect`. Contrapositive: not(merchant_error or defect) → not refundable. Match.
+
+Line 10: Same pattern for handling. Match.
+
+Line 11: "If a refund is executed and refund total exceeds $500, then has explicit managerial authorization." Code: `managerial_authorization_satisfied == (refund_total <= 500) OR has_managerial_authorization`. "Exceeds $500" means > 500, so requirement triggers when > 500. Code says: not requiring auth when <= 500, requiring it when > 500. Match.
+
+No banned syntax (no Forall, Exists, Old, while, dynamic typing, I/O). All functions are @Pure with proper contracts.
+</audit_trail>
+
+[VERDICT: PASS]

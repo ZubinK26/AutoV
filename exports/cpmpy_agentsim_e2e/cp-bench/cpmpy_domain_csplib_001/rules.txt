@@ -1,0 +1,8 @@
+A set of cars is to be produced.
+The cars are not identical because different options are available as variants on the basic model.
+The assembly line has multiple stations.
+Each station installs a specific option.
+The cars must be arranged in a sequence such that the capacity of each station is never exceeded.
+For instance, if a specific station can handle at most half of the cars passing along the line, the sequence must be built such that at most 1 car in any consecutive sequence of 2 cars requires that option.
+The output must be the sequence of car types in the assembly line.
+Each car type is represented by a number starting from 0.

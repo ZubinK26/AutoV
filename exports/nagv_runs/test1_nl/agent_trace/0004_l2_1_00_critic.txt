@@ -1,0 +1,316 @@
+=== l2_1_00_critic ===
+
+--- system_instruction ---
+You are a **Semantic Equivalence Auditor** for Nagini-style Python. You check whether the code **faithfully encodes** the injected Natural Language (NL) ruleset: no cherry-picking code style—only alignment between NL and implementation.
+
+### WHEN TO PASS
+Output `[VERDICT: PASS]` only if, for **each distinct NL rule or clause** you audit:
+* There is **no clear hallucination** (invented policy), **no clear omission** of an NL obligation or exception, **no wrong boundary** (e.g. `<=` vs `<`), **no contract/body mismatch** for what the NL demands, and **no scope violation** (banned constructs).
+* **Reasonable abstraction is allowed:** You **must not** fail solely because the NL mentions a nuance that would need OUT-OF-SCOPE machinery to model literally (e.g. unbounded structures, full string theories). If the code’s abstraction is **proportionate** and does not contradict the NL on what **can** be encoded decidable, treat that as OK.
+FAIL when there is a **material** mismatch the code could reasonably fix inside Nagini’s scope.
+
+### THE AUDIT PROTOCOL (failure modes)
+Reference these by **number** in your audit prose to keep the trail clear:
+
+1. **Hallucination (over-specification):** Values, thresholds, or outcomes not grounded in the NL.
+2. **Omission (under-specification):** NL clause not reflected in the model.
+3. **Boundary / inequality error:** Operators or bounds misaligned with the text.
+4. **Contract / implementation mismatch:** `@Requires` / `@Ensures` or body does not match the NL’s logic.
+5. **Scope violation:** `Forall`, `Exists`, `Old()`, `while`, `Any`/dynamic tricks, I/O, or other banned patterns.
+
+In `<audit_trail>`, refer to **“Failure mode 1” … “Failure mode 5”** where relevant. Avoid informal phrases like “no drift” or “semantic drift” in the audit—use the numbered failure modes so the audit stays precise.
+
+### INPUTS
+<original_nl_ruleset>
+Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date.
+
+If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging.
+
+If the item associated with a refund request is verified as defective upon delivery, then the item is not required to be returned in the item's original, unopened packaging.
+
+Every refund request is accompanied by a verifiable proof of purchase.
+
+Every digital good is strictly non-refundable.
+
+Every personalized item is strictly non-refundable.
+
+Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total.
+
+Every approved refund is credited exclusively to the original payment method.
+
+If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original handling charges are non-refundable.
+
+If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier.
+</original_nl_ruleset>
+
+<generated_nagini_code>
+from dataclasses import dataclass
+from typing import Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Implies, Result
+
+# ---------------------------------------------------------------------------
+# Units:
+#   All monetary amounts are in cents (int).
+#   days_since_transaction: int (number of days since original transaction).
+# ---------------------------------------------------------------------------
+
+@dataclass
+class RefundRequest:
+    # Timing
+    days_since_transaction: int          # days since original transaction date
+
+    # Item characteristics
+    is_digital_good: bool
+    is_personalized_item: bool
+    is_defective_on_delivery: bool
+    is_opened: bool                      # True if packaging was opened
+    is_full_refund: bool                 # True if requesting full refund
+
+    # Return reason
+    is_merchant_error: bool              # True if return due to merchant error
+
+    # Proof of purchase
+    has_proof_of_purchase: bool
+
+    # Payment method
+    original_payment_method_accessible: bool
+
+    # Amounts (in cents)
+    item_price_cents: int                # base item price
+    original_shipping_cents: int         # original shipping charge
+    original_handling_cents: int         # original handling charge
+
+    # Authorization
+    has_managerial_authorization: bool
+
+
+@dataclass
+class RefundDecision:
+    is_valid_request: bool               # request passes validity gate
+    is_refundable: bool                  # item is eligible for refund
+    requires_original_packaging: bool    # must item be in original packaging?
+    restocking_fee_cents: int            # restocking fee deducted (in cents)
+    refund_total_cents: int              # final refund amount (in cents)
+    credited_to_original_method: bool    # True => original method; False => store credit
+    store_credit: bool                   # True if defaulting to store credit
+    shipping_refunded: bool              # True if shipping is refunded
+    handling_refunded: bool              # True if handling is refunded
+    authorization_required: bool         # True if managerial auth required
+    authorization_satisfied: bool        # True if auth requirement is met
+
+
+# ---------------------------------------------------------------------------
+# Pure helpers (called inside contracts)
+# ---------------------------------------------------------------------------
+
+@Pure
+def request_is_valid(r: RefundRequest) -> bool:
+    return (r.days_since_transaction >= 0 and
+            r.days_since_transaction <= 30 and
+            r.has_proof_of_purchase)
+
+
+@Pure
+def item_is_refundable(r: RefundRequest) -> bool:
+    return not r.is_digital_good and not r.is_personalized_item
+
+
+@Pure
+def packaging_required(r: RefundRequest) -> bool:
+    if r.is_full_refund and not r.is_defective_on_delivery:
+        return True
+    return False
+
+
+@Pure
+def restocking_fee(r: RefundRequest) -> int:
+    if r.is_opened and not r.is_defective_on_delivery:
+        return (r.item_price_cents * 15) // 100
+    return 0
+
+
+@Pure
+def return_due_to_merchant_or_defect(r: RefundRequest) -> bool:
+    return r.is_merchant_error or r.is_defective_on_delivery
+
+
+@Pure
+def compute_refund_total(r: RefundRequest) -> int:
+    base = r.item_price_cents - restocking_fee(r)
+    shipping = r.original_shipping_cents if return_due_to_merchant_or_defect(r) else 0
+    handling = r.original_handling_cents if return_due_to_merchant_or_defect(r) else 0
+    return base + shipping + handling
+
+
+@Pure
+def authorization_required(refund_total_cents: int) -> bool:
+    return refund_total_cents > 50000
+
+
+@Pure
+def decision_valid_and_refundable(d: RefundDecision) -> bool:
+    return d.is_valid_request and d.is_refundable
+
+
+@Pure
+def decision_auth_required(d: RefundDecision) -> bool:
+    return d.authorization_required
+
+
+# ---------------------------------------------------------------------------
+# Main policy function
+# ---------------------------------------------------------------------------
+
+@Requires(r.item_price_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.original_shipping_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.original_handling_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.days_since_transaction >= 0)  # type: ignore[name-defined]
+@Ensures(Implies(not request_is_valid(r), not Result().is_valid_request))  # type: ignore[name-defined]
+@Ensures(Implies(not item_is_refundable(r), not Result().is_refundable))  # type: ignore[name-defined]
+@Ensures(Implies(request_is_valid(r) and item_is_refundable(r),
+                 Result().is_valid_request and Result().is_refundable))  # type: ignore[name-defined]
+@Ensures(Result().requires_original_packaging == packaging_required(r))  # type: ignore[name-defined]
+@Ensures(Result().restocking_fee_cents == restocking_fee(r))  # type: ignore[name-defined]
+@Ensures(Implies(decision_valid_and_refundable(Result()),
+                 Result().refund_total_cents == compute_refund_total(r)))  # type: ignore[name-defined]
+@Ensures(Implies(not decision_valid_and_refundable(Result()),
+                 Result().refund_total_cents == 0))  # type: ignore[name-defined]
+@Ensures(Result().shipping_refunded == return_due_to_merchant_or_defect(r))  # type: ignore[name-defined]
+@Ensures(Result().handling_refunded == return_due_to_merchant_or_defect(r))  # type: ignore[name-defined]
+@Ensures(Result().authorization_required ==
+         (authorization_required(compute_refund_total(r)) and  # type: ignore[name-defined]
+          decision_valid_and_refundable(Result())))
+@Ensures(Implies(decision_auth_required(Result()),
+                 Result().authorization_satisfied == r.has_managerial_authorization))  # type: ignore[name-defined]
+@Ensures(Implies(not decision_auth_required(Result()),
+                 Result().authorization_satisfied))
+@Ensures(Implies(decision_valid_and_refundable(Result()) and
+                 r.original_payment_method_accessible,  # type: ignore[name-defined]
+                 Result().credited_to_original_method and not Result().store_credit))
+@Ensures(Implies(decision_valid_and_refundable(Result()) and
+                 not r.original_payment_method_accessible,  # type: ignore[name-defined]
+                 not Result().credited_to_original_method and Result().store_credit))
+def evaluate_refund(r: RefundRequest) -> RefundDecision:
+    valid = request_is_valid(r)
+    refundable = item_is_refundable(r)
+
+    pkg_required = packaging_required(r)
+    fee = restocking_fee(r)
+
+    if valid and refundable:
+        total = compute_refund_total(r)
+    else:
+        total = 0
+
+    ship_refunded = return_due_to_merchant_or_defect(r)
+    hand_refunded = return_due_to_merchant_or_defect(r)
+
+    auth_req = authorization_required(compute_refund_total(r)) and valid and refundable
+    auth_satisfied = (not auth_req) or r.has_managerial_authorization
+
+    if valid and refundable:
+        if r.original_payment_method_accessible:
+            credited = True
+            store_cred = False
+        else:
+            credited = False
+            store_cred = True
+    else:
+        credited = False
+        store_cred = False
+
+    return RefundDecision(
+        is_valid_request=valid,
+        is_refundable=refundable,
+        requires_original_packaging=pkg_required,
+        restocking_fee_cents=fee,
+        refund_total_cents=total,
+        credited_to_original_method=credited,
+        store_credit=store_cred,
+        shipping_refunded=ship_refunded,
+        handling_refunded=hand_refunded,
+        authorization_required=auth_req,
+        authorization_satisfied=auth_satisfied,
+    )
+</generated_nagini_code>
+
+### OUTPUT FORMAT
+**Step 1 — Audit trail**  
+Open an `<audit_trail>` block. For **each distinct NL rule or bullet/clause** (not necessarily each English sentence), state whether the code matches or cite the **failure mode number** and a short justification. Close with `</audit_trail>`.
+
+**Step 2 — Verdict (machine-readable)**  
+After `</audit_trail>`, you may add structured corrections only if failing.
+
+* If the code meets the **WHEN TO PASS** criteria above, the **very last non-empty line** of your entire response must be **exactly**:
+`[VERDICT: PASS]`
+
+* If there is a **material** violation, the **very last non-empty line** must be **exactly**:
+`[VERDICT: DRIFT DETECTED]`
+
+Do **not** emit a second `[VERDICT: …]` line anywhere. Do not append anything after the verdict line.
+
+If the verdict is `DRIFT DETECTED`, **before** that final line, list corrections in **priority order**: blocking issues first (syntax-level or clear NL contradiction), then the highest-impact semantic fix, then others. Use this shape:
+
+**1. [Failure mode N — short label]**  
+* **NL intent:** …  
+* **Code issue:** …  
+* **Correction:** …  
+
+Keep corrections **targeted**—do not paste a full rewritten program in the critic reply.
+
+
+--- user_text ---
+Apply the audit protocol and respond in the required OUTPUT FORMAT only.
+
+--- model_output ---
+<audit_trail>
+
+**Rule 1: Validity iff initiated within 30 days of original transaction date**
+The helper `request_is_valid` checks `r.days_since_transaction <= 30`. The NL says "within 30 days," which is inclusive of day 30. The code uses `<=` — correct boundary. The `@Ensures` contracts propagate this correctly. No failure mode detected.
+
+**Rule 2: Proof of purchase accompanies every refund request**
+`request_is_valid` requires `r.has_proof_of_purchase`. This is correctly folded into the validity gate. No failure mode detected.
+
+**Rule 3: Full refund → item returned in original, unopened packaging**
+`packaging_required` returns `True` when `r.is_full_refund and not r.is_defective_on_delivery`. The NL says "if a refund is a full refund, then the item is returned in original, unopened packaging." The code correctly models this, and the defective-delivery exception (Rule 4) is also applied here. No failure mode detected.
+
+**Rule 4: Defective on delivery → not required to be in original packaging**
+`packaging_required` returns `False` when `r.is_defective_on_delivery` is `True` (regardless of `is_full_refund`). This correctly overrides Rule 3. No failure mode detected.
+
+**Rule 5: Every digital good is strictly non-refundable**
+`item_is_refundable` returns `False` when `r.is_digital_good`. Correctly modeled. No failure mode detected.
+
+**Rule 6: Every personalized item is strictly non-refundable**
+`item_is_refundable` returns `False` when `r.is_personalized_item`. Correctly modeled. No failure mode detected.
+
+**Rule 7: Every opened, non-defective item is subject to a 15% restocking fee**
+`restocking_fee` computes `(r.item_price_cents * 15) // 100` when `r.is_opened and not r.is_defective_on_delivery`. This correctly captures the 15% fee on opened, non-defective items. No failure mode detected.
+
+**Rule 8: Every approved refund is credited exclusively to the original payment method**
+The code handles this in the `if valid and refundable` branch: when `r.original_payment_method_accessible`, `credited = True` and `store_cred = False`. The `@Ensures` contracts enforce this. No failure mode detected.
+
+**Rule 9: If original payment method is inaccessible → defaults to non-transferable store credit**
+When `not r.original_payment_method_accessible` and the refund is valid/refundable, `credited = False` and `store_cred = True`. The NL says "non-transferable" — the code uses a boolean flag `store_credit` without a "non-transferable" attribute, but this is a reasonable abstraction within Nagini's scope (a boolean flag adequately models the default). No failure mode detected.
+
+**Rule 10: If return not due to merchant error or defect → original shipping charges non-refundable**
+`return_due_to_merchant_or_defect` checks `r.is_merchant_error or r.is_defective_on_delivery`. `compute_refund_total` adds shipping only when this is `True`. The `@Ensures` for `shipping_refunded` correctly reflects this. No failure mode detected.
+
+**Rule 11: If return not due to merchant error or defect → original handling charges non-refundable**
+Same logic as Rule 10 applied to handling. `compute_refund_total` adds handling only when `return_due_to_merchant_or_defect` is `True`. The `@Ensures` for `handling_refunded` correctly reflects this. No failure mode detected.
+
+**Rule 12: If refund executed and refund total exceeds $500 → explicit managerial authorization required**
+The NL says "exceeds $500," which means strictly greater than $500. $500 = 50000 cents. `authorization_required` checks `refund_total_cents > 50000`. This correctly encodes "exceeds $500" (strict inequality). The `@Ensures` ties `authorization_required` to `decision_valid_and_refundable(Result())` (i.e., only when the refund is actually executed). The `authorization_satisfied` field correctly requires `r.has_managerial_authorization` when auth is required. No failure mode detected.
+
+**Cross-cutting: `authorization_required` uses `compute_refund_total(r)` not `Result().refund_total_cents` in the `@Ensures`**
+The `@Ensures` for `authorization_required` uses `authorization_required(compute_refund_total(r)) and decision_valid_and_refundable(Result())`. When `decision_valid_and_refundable` is `True`, `Result().refund_total_cents == compute_refund_total(r)` (from another `@Ensures`), so these are consistent. No failure mode detected.
+
+**Scope check**
+No `Forall`, `Exists`, `Old()`, unbounded loops, or banned constructs are used. All helpers are `@Pure`. No failure mode 5 detected.
+
+</audit_trail>
+
+[VERDICT: PASS]

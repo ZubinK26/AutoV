@@ -1,0 +1,31 @@
+**[VERDICT: DRIFT DETECTED]**
+
+**1. Boundary Drift (Inequality Error) — Managerial Authorization Threshold**
+
+* **NL Intent:** "If a refund is executed and the refund total **exceeds $500**, then the refund has explicit authorization from a managerial tier."
+* **Code Implementation:** `managerial_auth_required` uses `req.refund_total_cents > 50000`, which correctly maps "exceeds $500" to `> 50000` cents. However, the `@Ensures` postcondition and the body logic are internally consistent on this point. *(No drift here — this sub-point is confirmed correct.)*
+
+**2. Hallucination (Over-specification) — Managerial Authorization as Approval Gate**
+
+* **NL Intent:** "If a refund is **executed** and the refund total exceeds $500, then the refund **has** explicit authorization from a managerial tier." The NL states this as a property of an executed refund — it does not state that the absence of managerial authorization causes the refund to be **denied**.
+* **Code Implementation:** `approved = valid and (not auth_required or req.has_managerial_authorization)` — This causes a refund to be **rejected** (`is_approved = False`) when `has_managerial_authorization` is `False` and the total exceeds $500. The NL only mandates that any executed refund over $500 *carries* managerial authorization; it does not define what happens when authorization is absent (i.e., it does not prescribe denial as the outcome).
+* **Correction:** Remove the authorization gate from the approval logic. The approval decision should be:
+  ```python
+  approved = valid
+  ```
+  The `requires_managerial_authorization` field already captures the obligation. The `@Ensures` postcondition gating `requires_managerial_authorization` on `Result().is_approved and req.refund_total_cents > 50000` correctly reflects the NL without making denial a consequence of missing authorization.
+
+**3. Omission (Under-specification) — `request_is_valid` Conflates Validity with Packaging**
+
+* **NL Intent:** "Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date." Validity is defined **solely** by the 30-day window. Proof of purchase, item refundability, and packaging are separate, independent obligations — not components of the validity definition.
+* **Code Implementation:** `request_is_valid` returns `False` if `has_proof_of_purchase` is `False`, if the item is non-refundable, or if packaging requirements are not met. These conditions are folded into `is_valid`, misrepresenting the NL's biconditional definition of validity.
+* **Correction:** Restrict `request_is_valid` to only the 30-day condition:
+  ```python
+  @Pure
+  def request_is_valid(req: RefundRequest) -> bool:
+      Requires(req is not None)
+      return req.days_since_transaction <= 30
+  ```
+  The proof-of-purchase, refundability, and packaging checks should be enforced as separate preconditions for approval, not as components of validity. The `@Ensures` contracts on `evaluate_refund` should be updated accordingly to reflect that `is_valid` implies only `days_since_transaction <= 30`, while the other obligations gate `is_approved` independently.
+
+[VERDICT: DRIFT DETECTED]

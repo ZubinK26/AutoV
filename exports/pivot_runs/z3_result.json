@@ -1,0 +1,7 @@
+{
+  "status": "sat",
+  "elapsed_ms": 7.495,
+  "model_excerpt": "{'requested_memory_allocation': '0', 'total_cost': '1000', 'team_available_memory_quota': '0', 'requestor_region': '0', 'EU': '0', 'NA': '0', 'ML_ENGINEER': '0', 'requestor_role': '0', 'has_valid_business_justification': '1', 'APAC': '0', 'mfa_status': '1'}",
+  "model_verified": true,
+  "statistics": "(:elim-unconstrained  2\n :max-memory          17.74\n :memory              17.74\n :num-allocs          30633\n :rlimit-count        513\n :solve-eqs-elim-vars 8\n :solve-eqs-steps     8\n :time                0.00)"
+}

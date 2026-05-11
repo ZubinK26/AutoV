@@ -1,0 +1,98 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nagv_rawnl_no_wfm_rewrite",
+  "user_original_input": "Direct handoff: statement_nl lines are verbatim from NagV/Test1-NL.md (same text as user-supplied NL).",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A refund request is valid if and only if it is initiated within 30 days of the original transaction date.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. 'A refund request is valid if and only if it is initiated within 30 days of the original tr'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "​A full refund requires the item to be returned in its original, unopened packaging.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. 'A full refund requires the item to be returned in its original, unopened packaging.'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "​If an item is verified as defective upon delivery, the original packaging requirement is waived.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. 'If an item is verified as defective upon delivery, the original packaging requirement is w'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "​All refund requests must be accompanied by a verifiable proof of purchase.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. 'All refund requests must be accompanied by a verifiable proof of purchase.'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "​Digital goods and personalized items are strictly non-refundable.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. 'Digital goods and personalized items are strictly non-refundable.'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "​Opened, non-defective items are subject to a 15% restocking fee deducted from the refund total.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. 'Opened, non-defective items are subject to a 15% restocking fee deducted from the refund t'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "​Approved refunds shall be credited exclusively to the original payment method.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. 'Approved refunds shall be credited exclusively to the original payment method.'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "​If the original payment method is inaccessible, the refund will default to non-transferable store credit.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. 'If the original payment method is inaccessible, the refund will default to non-transferabl'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "​Original shipping and handling charges are non-refundable unless the return is necessitated by a merchant error or defect.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. 'Original shipping and handling charges are non-refundable unless the return is necessitate'",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "​Any refund total exceeding $500 requires explicit authorization from a managerial tier before execution.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. 'Any refund total exceeding $500 requires explicit authorization from a managerial tier bef'",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "nagv_manual_raw_nl_v1"
+}

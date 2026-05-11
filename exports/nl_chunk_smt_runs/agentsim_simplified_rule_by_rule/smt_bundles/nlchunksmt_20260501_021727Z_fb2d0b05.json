@@ -1,0 +1,52 @@
+{
+  "bundle_id": "nlchunksmt_20260501_021727Z_fb2d0b05",
+  "accepted_at": "2026-05-01T02:17:45Z",
+  "committed_at": "2026-05-01T02:17:57Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_e9430c5ec915",
+    "r_6fd2dc0aa489"
+  ],
+  "out_of_scope_line_indices": [
+    2
+  ],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_021727Z_fb2d0b05",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 3–3).\n\nRules in this chunk:\n3. A customer has a field named recent goodwill credit total which is a non-negative amount in pence maintained by the runtime.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every customer has exactly one field named recent goodwill credit total.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every customer has exactly one field named recent goodwill credit total.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The recent goodwill credit total field is a non-negative amount in pence.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The recent goodwill credit total field is a non-negative amount in pence.\""
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "The recent goodwill credit total field is maintained by the runtime.",
+        "agent3_verdict": "OUT_OF_SCOPE",
+        "scope_report": "REPORT: This rule describes a dynamic system process or state-history maintenance (\"maintained by the runtime\"), which cannot be formalized in static logic.",
+        "diff_report": null,
+        "agent2_line_text": "3. \"The recent goodwill credit total field is maintained by the runtime.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_021727Z_fb2d0b05_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T02:17:45Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\policy_model.smt2"
+}

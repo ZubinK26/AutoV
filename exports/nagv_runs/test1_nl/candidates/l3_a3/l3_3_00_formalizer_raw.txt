@@ -1,0 +1,58 @@
+```python
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Forall, Result
+
+class RefundRequest:
+    def __init__(self) -> None:
+        self.days_since_transaction: int = 0
+        self.is_valid: bool = False
+        self.is_full_refund: bool = False
+        self.is_unopened: bool = False
+        self.is_defective: bool = False
+        self.has_proof_of_purchase: bool = False
+        self.is_digital_good: bool = False
+        self.is_personalized: bool = False
+        self.is_refundable: bool = False
+        self.restocking_fee_applied: bool = False
+        self.is_approved: bool = False
+        self.original_payment_accessible: bool = False
+        self.credited_to_original_payment: bool = False
+        self.credited_to_store_credit: bool = False
+        self.merchant_error: bool = False
+        self.shipping_charges_refunded: bool = False
+        self.handling_charges_refunded: bool = False
+        self.is_executed: bool = False
+        self.refund_total: int = 0
+        self.managerial_authorization: bool = False
+
+@Pure
+def check_policy(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == (
+        (req.is_valid == (req.days_since_transaction <= 30)) and
+        (not (req.is_full_refund and not req.is_defective) or req.is_unopened) and
+        (req.has_proof_of_purchase) and
+        (not req.is_digital_good or not req.is_refundable) and
+        (not req.is_personalized or not req.is_refundable) and
+        (not (not req.is_unopened and not req.is_defective) or req.restocking_fee_applied) and
+        (not (req.is_approved and req.original_payment_accessible) or (req.credited_to_original_payment and not req.credited_to_store_credit)) and
+        (not (req.is_approved and not req.original_payment_accessible) or (req.credited_to_store_credit and not req.credited_to_original_payment)) and
+        (not (not req.merchant_error and not req.is_defective) or not req.shipping_charges_refunded) and
+        (not (not req.merchant_error and not req.is_defective) or not req.handling_charges_refunded) and
+        (not (req.is_executed and req.refund_total > 500) or req.managerial_authorization)
+    ))
+    
+    c0 = (req.is_valid == (req.days_since_transaction <= 30))
+    c1 = (not (req.is_full_refund and not req.is_defective) or req.is_unopened)
+    c2 = req.has_proof_of_purchase
+    c3 = (not req.is_digital_good or not req.is_refundable)
+    c4 = (not req.is_personalized or not req.is_refundable)
+    c5 = (not (not req.is_unopened and not req.is_defective) or req.restocking_fee_applied)
+    c6 = (not (req.is_approved and req.original_payment_accessible) or (req.credited_to_original_payment and not req.credited_to_store_credit))
+    c7 = (not (req.is_approved and not req.original_payment_accessible) or (req.credited_to_store_credit and not req.credited_to_original_payment))
+    c8 = (not (not req.merchant_error and not req.is_defective) or not req.shipping_charges_refunded)
+    c9 = (not (not req.merchant_error and not req.is_defective) or not req.handling_charges_refunded)
+    c10 = (not (req.is_executed and req.refund_total > 500) or req.managerial_authorization)
+    
+    return c0 and c1 and c2 and c3 and c4 and c5 and c6 and c7 and c8 and c9 and c10
+```

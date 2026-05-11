@@ -1,0 +1,19 @@
+{
+  "nl_source": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\pivot_pipeline\\inputs\\Test_input.md",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\test_input_full",
+  "phase0_exit_code": 0,
+  "wfm_forward_lines": 4,
+  "phase0_normalized_nl": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\test_input_full\\phase0_normalized_nl.txt",
+  "interactive_extract_abort": true,
+  "rules_extracted": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\test_input_full\\rules_extracted.json",
+  "meta_scheme": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\test_input_full\\meta_scheme.json",
+  "z3": {
+    "status": "sat",
+    "model_excerpt": "{'ip_verification_status': '1', 'requested_storage_volume': '499', 'requested_memory_allocation': '0', 'total_request_cost': '1000', 'unverified': '0', 'available_memory_quota': '0'}"
+  },
+  "precheck_ok": true,
+  "precheck_issues": [],
+  "critic_result": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\test_input_full\\critic_result.txt",
+  "critic_passed": true,
+  "outcome": "ok"
+}

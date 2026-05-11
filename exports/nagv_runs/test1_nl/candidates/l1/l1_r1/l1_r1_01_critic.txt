@@ -1,0 +1,49 @@
+**[VERDICT: DRIFT DETECTED]**
+
+**1. Omission (Under-specification) — Packaging Requirement Not Enforced as Approval Gate**
+
+* **NL Intent:** "If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging." (with the defective-delivery exception). This is a binding condition on the refund, not merely a recorded output.
+* **Code Implementation:** `is_approved` is computed as `is_valid and item_eligible` only. `pkg_ok` is computed and stored in `packaging_requirement_satisfied`, but it is **not** included in the `is_approved` gate. A full refund where the item is not returned in original packaging (and is not defective) would still be `is_approved = True`.
+* **Correction:** Change the `is_approved` computation to include `pkg_ok`:
+  ```python
+  is_approved: bool = (
+      is_valid and
+      item_eligible and
+      pkg_ok
+  )
+  ```
+
+**2. Omission (Under-specification) — Managerial Authorization Not Enforced as Approval Gate**
+
+* **NL Intent:** "If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier." This is a binding requirement on any executed (approved) refund, not merely a recorded obligation.
+* **Code Implementation:** `auth_ok` is computed and stored in `authorization_requirement_satisfied`, but it is **not** included in the `is_approved` gate. A refund exceeding $500 without managerial authorization would still be `is_approved = True`.
+* **Correction:** Change the `is_approved` computation to include `auth_ok`:
+  ```python
+  is_approved: bool = (
+      is_valid and
+      item_eligible and
+      pkg_ok and
+      auth_ok
+  )
+  ```
+  Additionally, add a corresponding `@Ensures` contract:
+  ```python
+  Ensures(Implies(req.refund_total_cents > 50000 and not req.has_managerial_authorization, not Result().is_approved))
+  ```
+
+**3. Omission (Under-specification) — Proof of Purchase Required for Validity (Biconditional)**
+
+* **NL Intent:** "Every refund request is accompanied by a verifiable proof of purchase." This is a universal requirement for validity, meaning `is_valid` must be `False` when `has_proof_of_purchase` is `False`. The `@Ensures` contract captures only one direction (`not has_proof_of_purchase → not is_valid`), but the biconditional for validity is not fully contracted: there is no `@Ensures` stating that `is_valid` requires `has_proof_of_purchase`.
+* **Code Implementation:** The body correctly computes `is_valid = within_30_days and has_pop`, so the implementation is correct. However, the `@Ensures` contracts are asymmetric — they only state the negative implication and omit the positive direction. The missing contract is:
+  ```python
+  Ensures(Implies(Result().is_valid, req.has_proof_of_purchase))
+  ```
+* **Correction:** Add the above `@Ensures` line to make the contract fully reflect the NL requirement in both directions.
+
+**4. Boundary Drift — Validity Window Biconditional Incomplete**
+
+* **NL Intent:** "Every refund request is valid if and only if the refund request is initiated within 30 days." The `@Ensures` contracts capture `is_valid → days <= 30` and `days > 30 → not is_valid`, but do not capture the full biconditional (other conditions aside, `days <= 30` is necessary). The existing contracts are logically equivalent on this axis, so this is acceptable — however, the `@Ensures` for the forward direction (`Result().is_valid → req.days_since_transaction <= 30`) is present. No correction needed on boundary (`<=` is correct for "within 30 days").
+
+*(Item 4 is noted as conformant; no correction required.)*
+
+[VERDICT: DRIFT DETECTED]

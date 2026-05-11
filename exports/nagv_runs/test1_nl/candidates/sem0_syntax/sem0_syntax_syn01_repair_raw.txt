@@ -1,0 +1,139 @@
+<repair_strategy>
+The diagnostic indicates a `SyntaxError` due to an unterminated string literal at the end of the provided snippet. I will complete the Z3 Python encoding by:
+1.  Fixing the syntax error by properly closing all strings and completing the `run_z3_check` function.
+2.  Encoding all 12 natural language rules into Z3 constraints using `assert_and_track` for traceability.
+3.  Adding logical links between concepts (e.g., an `approved_refund` must be a `valid_request` and the item must be `is_refundable`).
+4.  Ensuring the return format matches the required `dict` with `status`, `unsat_core`, and `model_excerpt`.
+5.  Handling the "if and only if" in Rule 1 as a biconditional for refund requests.
+6.  Combining Rules 2 and 3 to reflect that the original packaging requirement for full refunds is waived if the item is defective.
+7.  Combining Rules 8 and 9 to handle the payment method logic (original method vs. store credit).
+</repair_strategy>
+
+```python
+from z3 import *
+
+def run_z3_check():
+    solver = Solver()
+
+    # Variables
+    is_refund_request = Bool('is_refund_request')
+    valid_request = Bool('valid_request')
+    days_since_transaction = Int('days_since_transaction')
+    is_full_refund = Bool('is_full_refund')
+    item_in_original_packaging = Bool('item_in_original_packaging')
+    verified_defective = Bool('verified_defective')
+    proof_of_purchase = Bool('proof_of_purchase')
+    is_digital_good = Bool('is_digital_good')
+    is_refundable = Bool('is_refundable')
+    is_personalized_item = Bool('is_personalized_item')
+    is_opened = Bool('is_opened')
+    restocking_fee_applied = Bool('restocking_fee_applied')
+    approved_refund = Bool('approved_refund')
+    credited_to_original_method = Bool('credited_to_original_method')
+    store_credit = Bool('store_credit')
+    original_method_inaccessible = Bool('original_method_inaccessible')
+    merchant_error = Bool('merchant_error')
+    shipping_charges_refundable = Bool('shipping_charges_refundable')
+    handling_charges_refundable = Bool('handling_charges_refundable')
+    refund_executed = Bool('refund_executed')
+    refund_total = Int('refund_total')
+    managerial_authorization = Bool('managerial_authorization')
+
+    # Domain constraints
+    solver.add(days_since_transaction >= 0)
+    solver.add(refund_total >= 0)
+
+    # nl#1: Every refund request is valid if and only if initiated within 30 days.
+    # We interpret this as: for any request, validity is defined by the 30-day window.
+    solver.assert_and_track(
+        Implies(is_refund_request, valid_request == (days_since_transaction <= 30)),
+        "nl#1_validity_period"
+    )
+
+    # nl#2 & nl#3: Full refund requires original packaging unless item is defective.
+    # Rule 3 qualifies the obligation in Rule 2.
+    solver.assert_and_track(
+        Implies(And(is_full_refund, Not(verified_defective)), item_in_original_packaging),
+        "nl#2_3_packaging_requirement"
+    )
+
+    # nl#4: Every refund request is accompanied by a verifiable proof of purchase.
+    solver.assert_and_track(
+        Implies(is_refund_request, proof_of_purchase),
+        "nl#4_proof_of_purchase"
+    )
+
+    # nl#5: Every digital good is strictly non-refundable.
+    solver.assert_and_track(
+        Implies(is_digital_good, Not(is_refundable)),
+        "nl#5_digital_non_refundable"
+    )
+
+    # nl#6: Every personalized item is strictly non-refundable.
+    solver.assert_and_track(
+        Implies(is_personalized_item, Not(is_refundable)),
+        "nl#6_personalized_non_refundable"
+    )
+
+    # nl#7: Every opened, non-defective item is subject to a 15% restocking fee.
+    solver.assert_and_track(
+        Implies(And(is_opened, Not(verified_defective)), restocking_fee_applied),
+        "nl#7_restocking_fee"
+    )
+
+    # nl#8 & nl#9: Approved refund payment methods.
+    # Rule 8: Credited to original method. Rule 9: Default to store credit if inaccessible.
+    solver.assert_and_track(
+        Implies(approved_refund, 
+            If(original_method_inaccessible, 
+               And(store_credit, Not(credited_to_original_method)), 
+               And(credited_to_original_method, Not(store_credit)))
+        ),
+        "nl#8_9_payment_method"
+    )
+
+    # nl#10: Shipping charges non-refundable unless merchant error or defect.
+    solver.assert_and_track(
+        Implies(Not(Or(merchant_error, verified_defective)), Not(shipping_charges_refundable)),
+        "nl#10_shipping_non_refundable"
+    )
+
+    # nl#11: Handling charges non-refundable unless merchant error or defect.
+    solver.assert_and_track(
+        Implies(Not(Or(merchant_error, verified_defective)), Not(handling_charges_refundable)),
+        "nl#11_handling_non_refundable"
+    )
+
+    # nl#12: Refund > $500 requires managerial authorization.
+    solver.assert_and_track(
+        Implies(And(refund_executed, refund_total > 500), managerial_authorization),
+        "nl#12_managerial_auth"
+    )
+
+    # Logical consistency links
+    # An approved refund must be a valid request and the item must be refundable.
+    solver.assert_and_track(Implies(approved_refund, And(valid_request, is_refundable)), "logic_approved_requirements")
+    # An executed refund must have been approved.
+    solver.assert_and_track(Implies(refund_executed, approved_refund), "logic_executed_approved")
+    # A valid request implies a request exists.
+    solver.assert_and_track(Implies(valid_request, is_refund_request), "logic_valid_is_request")
+
+    # Check satisfiability
+    result = solver.check()
+    status = str(result).lower()
+    
+    output = {"status": status}
+    
+    if status == "unsat":
+        core = solver.unsat_core()
+        output["unsat_core"] = [str(c) for c in core]
+    elif status == "sat":
+        model = solver.model()
+        # Provide a snippet of the model for verification
+        output["model_excerpt"] = str(model)[:500]
+        
+    return output
+
+if __name__ == "__main__":
+    print(run_z3_check())
+```

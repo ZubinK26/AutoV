@@ -1,0 +1,33 @@
+{
+  "bundle_id": "nlchunksmt_20260501_022121Z_6101f429",
+  "accepted_at": "2026-05-01T02:21:32Z",
+  "committed_at": "2026-05-01T02:21:41Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_21457572b4ae"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_022121Z_6101f429",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 12–12).\n\nRules in this chunk:\n12. A call to apply a refund of any type requires that the affected customer exists in the database.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every call to apply a refund of any type requires that the affected customer exists in the database.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every call to apply a refund of any type requires that the affected customer exists in the database.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_022121Z_6101f429_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T02:21:32Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\policy_model.smt2"
+}

@@ -1,0 +1,42 @@
+{
+  "bundle_id": "nlchunksmt_20260501_021943Z_efc9f902",
+  "accepted_at": "2026-05-01T02:19:56Z",
+  "committed_at": "2026-05-01T02:20:07Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_f0f0f7172c25",
+    "r_e20041dafacb"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_021943Z_efc9f902",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 8–8).\n\nRules in this chunk:\n8. A transaction has a status that is either POSTED or PENDING.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every transaction has exactly one status.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every transaction has exactly one status.\""
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "The status of every transaction is either POSTED or PENDING.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"The status of every transaction is either POSTED or PENDING.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_021943Z_efc9f902_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T02:19:56Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\policy_model.smt2"
+}

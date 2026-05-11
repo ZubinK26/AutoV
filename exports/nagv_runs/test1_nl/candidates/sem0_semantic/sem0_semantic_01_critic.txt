@@ -1,0 +1,7 @@
+**[VERDICT: DRIFT DETECTED]**
+
+1. **"If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier."** → **Omission**: This rule is entirely missing from the solver constraints despite variables being defined. → Add `solver.assert_and_track(Implies(And(is_executed, refund_total > 500), has_managerial_authorization), "nl#12")`.
+2. **"Every refund request is accompanied by a verifiable proof of purchase."** → **Scope drift**: The constraint is applied only to `is_approved` (within `nl#4_progression`) rather than being a mandatory property of all refund requests. → Add `solver.assert_and_track(has_verifiable_proof_of_purchase, "nl#4")`.
+3. **"If the item associated with a refund request is verified as defective upon delivery, then the item is not required to be returned in the item's original, unopened packaging."** → **Encoding mismatch**: The code uses a consolidated `is_defective` variable, failing to distinguish between the specific "defective upon delivery" condition (which waives packaging requirements) and general "defects" (which apply to shipping/handling logic in NL#10/11). → Create a specific `is_defective_upon_delivery` variable for NL#3.
+
+**[VERDICT: DRIFT DETECTED]**

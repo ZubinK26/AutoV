@@ -1,0 +1,19 @@
+{
+  "schema_version": "nl_chunk_smt_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/NagV/Test1-NL.md",
+  "nl_sha256": "22c24f9f6e77871989f45a54ea99ac14f6c949f5894dedbc3c08d2210b9d93ed",
+  "rules_per_chunk": 10,
+  "next_rule_index": 10,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 10,
+      "bundle_id": "nagvwfm_20260504_215905Z_c60c1fc3",
+      "handoff_relposix": "exports\\nagv_runs\\test1_nl\\wfm_handoffs\\nagvwfm_20260504_215905Z_c60c1fc3.json",
+      "nagv_wfm_only": true
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nagv_runs/test1_nl",
+  "pending_smt": null
+}

@@ -1,0 +1,104 @@
+<repair_strategy>
+The diagnostic indicates a type mismatch in the Nagini contract decorators (`@Requires` and `@Ensures`). Specifically, the toolchain expects boolean expressions instead of strings (e.g., `@Requires(request.transaction_amount >= 0)` instead of `@Requires("request.transaction_amount >= 0")`). 
+
+The error `"bool" not callable` likely stems from the static analyzer's interpretation of the string-based contracts or a conflict in how the decorators are being processed. 
+
+I will:
+1. Remove the quotes from all `@Requires` and `@Ensures` decorators to provide direct boolean expressions as expected by the toolchain.
+2. Ensure all references to `Result()` and function parameters within the contracts remain consistent with Nagini's expected syntax for post-conditions and pre-conditions.
+3. Maintain the logic for Rule 10 and 11 (shipping/handling) and Rule 7 (restocking fee) within the `@Pure` helper function to keep the main function's contracts decidable and clean.
+</repair_strategy>
+
+```python
+from dataclasses import dataclass
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+@dataclass
+class RefundRequest:
+    days_since_purchase: int
+    is_full_refund: bool
+    is_unopened: bool
+    is_defective: bool
+    has_proof_of_purchase: bool
+    is_digital: bool
+    is_personalized: bool
+    original_payment_accessible: bool
+    is_merchant_error: bool
+    transaction_amount: int  # Amount in cents
+    shipping_charges: int     # Amount in cents
+    handling_charges: int     # Amount in cents
+    has_manager_auth: bool
+
+@dataclass
+class RefundResponse:
+    is_valid: bool
+    is_approved: bool
+    refund_amount: int
+    is_store_credit: bool
+
+@Pure
+def calculate_potential_amount(request: RefundRequest) -> int:
+    """Calculates the refund total based on shipping, handling, and restocking fees."""
+    # Rule 10 & 11: Shipping and handling are non-refundable if not merchant error or defect
+    base_amount = request.transaction_amount
+    if not (request.is_merchant_error or request.is_defective):
+        base_amount = base_amount - request.shipping_charges - request.handling_charges
+    
+    # Rule 7: 15% restocking fee for opened, non-defective items
+    if not request.is_unopened and not request.is_defective:
+        # Apply 15% restocking fee (keep 85%)
+        return (base_amount * 85) // 100
+    
+    return base_amount
+
+@Requires(request.transaction_amount >= 0)
+@Requires(request.shipping_charges >= 0)
+@Requires(request.handling_charges >= 0)
+@Requires(request.days_since_purchase >= 0)
+@Ensures(Result().is_valid == (request.days_since_purchase <= 30))
+@Ensures(Implies(Result().is_approved, Result().is_valid))
+@Ensures(Implies(Result().is_approved, request.has_proof_of_purchase))
+@Ensures(Implies(request.is_digital, not Result().is_approved))
+@Ensures(Implies(request.is_personalized, not Result().is_approved))
+@Ensures(Implies(Result().is_approved and (Result().refund_amount == request.transaction_amount) and not request.is_defective, request.is_unopened))
+@Ensures(Implies(Result().is_approved and Result().refund_amount > 50000, request.has_manager_auth))
+@Ensures(Implies(Result().is_approved, Result().is_store_credit == (not request.original_payment_accessible)))
+@Ensures(Implies(Result().is_approved, Result().refund_amount == calculate_potential_amount(request)))
+def process_refund_request(request: RefundRequest) -> RefundResponse:
+    # Rule 1: Validity check (if and only if within 30 days)
+    is_valid = request.days_since_purchase <= 30
+    
+    # Rule 4, 5, 6: Basic eligibility
+    # Every refund request is accompanied by proof of purchase.
+    # Digital and personalized items are strictly non-refundable.
+    if not is_valid or not request.has_proof_of_purchase or request.is_digital or request.is_personalized:
+        return RefundResponse(is_valid, False, 0, False)
+    
+    # Calculate the refund total based on Rules 7, 10, and 11
+    refund_total = calculate_potential_amount(request)
+    
+    # Rule 2 & 3: Packaging requirements for full refunds
+    # A full refund is defined as the original transaction amount.
+    # Defective items are exempt from the unopened packaging requirement.
+    is_full_refund_result = (refund_total == request.transaction_amount)
+    if is_full_refund_result and not request.is_defective:
+        if not request.is_unopened:
+            return RefundResponse(is_valid, False, 0, False)
+            
+    # Rule 12: Managerial authorization for refunds exceeding $500 (50,000 cents)
+    if refund_total > 50000:
+        if not request.has_manager_auth:
+            return RefundResponse(is_valid, False, 0, False)
+            
+    # Rule 8 & 9: Payment method determination
+    # Credited to original payment method unless inaccessible, then store credit.
+    is_store_credit = not request.original_payment_accessible
+    
+    return RefundResponse(
+        is_valid=is_valid,
+        is_approved=True,
+        refund_amount=refund_total,
+        is_store_credit=is_store_credit
+    )
+```

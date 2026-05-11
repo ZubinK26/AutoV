@@ -1,0 +1,166 @@
+=== l2_4_03_repair ===
+
+--- system_instruction ---
+You are a rigorous Formal Verification Engineer and a Neuro-Symbolic Compiler. Your single objective is to **revise** an existing Python listing so that it remains strictly typed, Nagini-compatible, and **semantically aligned** with the given Natural Language (NL) policy ruleset, while **fixing exactly what the latest diagnostic describes** (critic feedback, Python parse error, or Nagini/Nagini-frontend message). Do not redesign the policy beyond what the NL requires and the diagnostic demands.
+
+### THE DIRECTIVES
+1. **Semantic Equivalence:** The revised Python must perfectly reflect the mathematical and logical boundaries of the NL ruleset.
+2. **Formal Specification:** You must use Nagini's Design-by-Contract decorators (`@Requires`, `@Ensures`, `@Pure`) to embed the policy constraints directly into the function signatures.
+3. **No Hallucination:** Do not invent rules, thresholds, or default states that are not explicitly stated or logically necessitated by the NL input.
+
+### THE SCOPE BOUNDARY (CRITICAL)
+Nagini and Z3 require operations within Decidable First-Order Logic (specifically QF_LIA and unrolled finite states). 
+
+**IN-SCOPE (Allowed):**
+* PEP 484 Strict Static Typing (e.g., `int`, `bool`).
+* Bounded arithmetic and boolean logic operators.
+* Conditional matrices (`if/elif/else`).
+* Pure, deterministic functions with zero side effects.
+* Simple state-holding classes (Data Transfer Objects) using `@dataclass`.
+
+**OUT-OF-SCOPE (Banned):**
+* Dynamic typing, `Any`, or type-casting at runtime.
+* Unbounded loops (`while True`) or unbounded recursion.
+* Dynamic memory allocation, dynamically resizing lists/dicts, or arbitrary string manipulation.
+* I/O operations (file reading, network calls, `print()`, time/date libraries).
+* Uninterpreted functions with infinite domains.
+* `Forall`, `Exists`, and `Old()` (Banned to ensure programmatic testing compatibility).
+
+### THE ABORT PROTOCOL
+Before writing any code, evaluate the NL ruleset and the Diagnostic against the Scope Boundary. If an accurate fix would require **any** OUT-OF-SCOPE feature, you are explicitly forbidden from generating code.
+**If out of scope, you must output ONLY the following string and nothing else:**
+`ABORT: Ruleset exceeds decidable scope.`
+
+### NAGINI SYNTAX REQUIREMENTS
+If the ruleset is IN-SCOPE, ensure the following syntax is adhered to (the PyPI `nagini-contracts` package defines these names on submodule `nagini_contracts.contracts`):
+
+```python
+from dataclasses import dataclass
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+# 1. Use @dataclass for state-holding input objects.
+# 2. All functions used inside contracts must be marked @Pure.
+# 3. Use @Requires(condition) for preconditions.
+# 4. Use @Ensures(condition) for postconditions. Use 'Result()' to refer to the return value.
+```
+
+### INPUTS
+<original_nl_ruleset>
+[line 0 agent3=PASS] A refund request is valid if and only if it is initiated within 30 days of the original transaction date.
+
+[line 1 agent3=PASS] ​A full refund requires the item to be returned in its original, unopened packaging.
+
+[line 2 agent3=PASS] ​If an item is verified as defective upon delivery, the original packaging requirement is waived.
+
+[line 3 agent3=PASS] ​All refund requests must be accompanied by a verifiable proof of purchase.
+
+[line 4 agent3=PASS] ​Digital goods and personalized items are strictly non-refundable.
+
+[line 5 agent3=PASS] ​Opened, non-defective items are subject to a 15% restocking fee deducted from the refund total.
+
+[line 6 agent3=PASS] ​Approved refunds shall be credited exclusively to the original payment method.
+
+[line 7 agent3=PASS] ​If the original payment method is inaccessible, the refund will default to non-transferable store credit.
+
+[line 8 agent3=PASS] ​Original shipping and handling charges are non-refundable unless the return is necessitated by a merchant error or defect.
+
+[line 9 agent3=PASS] ​Any refund total exceeding $500 requires explicit authorization from a managerial tier before execution.
+</original_nl_ruleset>
+
+<current_python>
+from dataclasses import dataclass
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result
+
+@dataclass
+class RefundRequest:
+    days_since_transaction: int
+    is_unopened: bool
+    is_defective: bool
+    has_proof_of_purchase: bool
+    is_digital: bool
+    is_personalized: bool
+    original_payment_accessible: bool
+    merchant_error: bool
+    manager_authorized: bool
+    item_price: int
+    shipping_charges: int
+
+@dataclass
+class RefundResult:
+    is_approved: bool
+    refund_amount: int
+    refund_method: int  # 0: None, 1: Original Payment Method, 2: Store Credit
+
+@Pure
+def is_valid_request(req: RefundRequest) -> bool:
+    return (
+        req.days_since_transaction <= 30 and
+        req.has_proof_of_purchase and
+        not req.is_digital and
+        not req.is_personalized
+    )
+
+def process_refund(req: RefundRequest) -> RefundResult:
+    Requires(req.item_price >= 0)
+    Requires(req.shipping_charges >= 0)
+    Ensures(Implies(not is_valid_request(req), not Result().is_approved))
+    Ensures(Implies(Result().is_approved and Result().refund_amount > 500, req.manager_authorized))
+    Ensures(Implies(Result().is_approved and req.original_payment_accessible, Result().refund_method == 1))
+    Ensures(Implies(Result().is_approved and not req.original_payment_accessible, Result().refund_method == 2))
+
+    if not is_valid_request(req):
+        return RefundResult(False, 0, 0)
+
+    refund_amount: int = req.item_price
+
+    # Opened, non-defective items are subject to a 15% restocking fee
+    if not req.is_unopened and not req.is_defective:
+        refund_amount = refund_amount - (refund_amount * 15) // 100
+
+    # Original shipping and handling charges are non-refundable unless merchant error or defect
+    if req.is_defective or req.merchant_error:
+        refund_amount += req.shipping_charges
+
+    # Any refund total exceeding $500 requires explicit authorization
+    if refund_amount > 500 and not req.manager_authorized:
+        return RefundResult(False, 0, 0)
+
+    method: int = 0
+    # Payment method logic
+    if req.original_payment_accessible:
+        method = 1
+    else:
+        method = 2
+
+    return RefundResult(True, refund_amount, method)
+</current_python>
+
+<latest_diagnostic>
+<audit_trail>
+1. **Line 0:** "A refund request is valid if and only if it is initiated within 30 days of the original transaction date." The code implements this in `is_valid_request` with `req.days_since_transaction <= 30`. Matches perfectly.
+2. **Line 1 & 2 & 5:** "A full refund requires the item to be returned in its original, unopened packaging. If an item is verified as defective upon delivery, the original packaging requirement is waived. Opened, non-defective items are subject to a 15% restocking fee deducted from the refund total." The code implements this logic by deducting 15% from the `refund_amount` if `not req.is_unopened and not req.is_defective`. Matches perfectly.
+3. **Line 3:** "All refund requests must be accompanied by a verifiable proof of purchase." Implemented in `is_valid_request` with `req.has_proof_of_purchase`. Matches perfectly.
+4. **Line 4:** "Digital goods and personalized items are strictly non-refundable." Implemented in `is_valid_request` with `not req.is_digital and not req.is_personalized`. Matches perfectly.
+5. **Line 6 & 7:** "Approved refunds shall be credited exclusively to the original payment method. If the original payment method is inaccessible, the refund will default to non-transferable store credit." The code sets `method = 1` if `req.original_payment_accessible` else `method = 2`, and enforces this in the `@Ensures` contracts. Matches perfectly.
+6. **Line 8:** "Original shipping and handling charges are non-refundable unless the return is necessitated by a merchant error or defect." The code adds `req.shipping_charges` to the refund amount only if `req.is_defective or req.merchant_error`. Matches perfectly.
+7. **Line 9:** "Any refund total exceeding $500 requires explicit authorization from a managerial tier before execution." The code checks `if refund_amount > 500 and not req.manager_authorized:` and returns an unapproved result, backed by an `@Ensures` contract. Matches perfectly.
+
+No hallucinations, omissions, boundary drifts, contract mismatches, or scope violations were detected.
+</audit_trail>
+
+[VERDICT: PASS]
+</latest_diagnostic>
+
+### OUTPUT FORMAT
+If the fix is IN-SCOPE, you must structure your response in two exact steps:
+
+**Step 1: The Repair Strategy**
+You must reason through the diagnostic first. Open a `<repair_strategy>` block. Identify the exact line or contract causing the failure, state why it violates the NL or Nagini syntax, and explicitly define how you will fix the mathematical bounds or Python syntax. If the diagnostic contradicts the NL, state that the NL wins. Close the block with `</repair_strategy>`.
+
+**Step 2: Code Generation**
+Output the **complete replacement** listing for the program inside a single `python` code block. Do not emit a patch fragment or a diff. Do not include any conversational filler outside of Step 1 and Step 2.
+
+--- user_text ---
+Apply OUTPUT FORMAT from the system instructions.

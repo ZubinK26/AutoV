@@ -1,0 +1,94 @@
+```python
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Forall, Result
+
+class RefundRequest:
+    def __init__(self, 
+                 days_since_transaction: int,
+                 is_full_refund: bool,
+                 returned_in_original_packaging: bool,
+                 is_defective: bool,
+                 has_proof_of_purchase: bool,
+                 is_digital_good: bool,
+                 is_personalized: bool,
+                 is_opened: bool,
+                 is_merchant_error: bool,
+                 refund_total: int,
+                 original_payment_accessible: bool,
+                 managerial_authorization: bool):
+        self.days_since_transaction = days_since_transaction
+        self.is_full_refund = is_full_refund
+        self.returned_in_original_packaging = returned_in_original_packaging
+        self.is_defective = is_defective
+        self.has_proof_of_purchase = has_proof_of_purchase
+        self.is_digital_good = is_digital_good
+        self.is_personalized = is_personalized
+        self.is_opened = is_opened
+        self.is_merchant_error = is_merchant_error
+        self.refund_total = refund_total
+        self.original_payment_accessible = original_payment_accessible
+        self.managerial_authorization = managerial_authorization
+
+class RefundResult:
+    def __init__(self,
+                 is_valid: bool,
+                 is_approved: bool,
+                 restocking_fee_applies: bool,
+                 credit_to_original_payment: bool,
+                 credit_to_store_credit: bool,
+                 shipping_refundable: bool,
+                 handling_refundable: bool):
+        self.is_valid = is_valid
+        self.is_approved = is_approved
+        self.restocking_fee_applies = restocking_fee_applies
+        self.credit_to_original_payment = credit_to_original_payment
+        self.credit_to_store_credit = credit_to_store_credit
+        self.shipping_refundable = shipping_refundable
+        self.handling_refundable = handling_refundable
+
+@Pure
+def evaluate_refund(req: RefundRequest) -> RefundResult:
+    Requires(req is not None)
+    Ensures(Result() is not None)
+    Ensures(Result().is_valid == (req.days_since_transaction <= 30))
+    Ensures(Implies(Result().is_approved, req.has_proof_of_purchase))
+    Ensures(Implies(req.is_digital_good, not Result().is_approved))
+    Ensures(Implies(req.is_personalized, not Result().is_approved))
+    Ensures(Implies(Result().is_approved and req.is_full_refund and not req.is_defective, req.returned_in_original_packaging))
+    Ensures(Implies(Result().is_approved and req.is_opened and not req.is_defective, Result().restocking_fee_applies))
+    Ensures(Implies(Result().is_approved and req.original_payment_accessible, Result().credit_to_original_payment))
+    Ensures(Implies(Result().is_approved and not req.original_payment_accessible, Result().credit_to_store_credit))
+    Ensures(Implies(not req.is_merchant_error and not req.is_defective, not Result().shipping_refundable))
+    Ensures(Implies(not req.is_merchant_error and not req.is_defective, not Result().handling_refundable))
+    Ensures(Implies(Result().is_approved and req.refund_total > 500, req.managerial_authorization))
+    
+    is_valid = req.days_since_transaction <= 30
+    
+    packaging_ok = req.returned_in_original_packaging or req.is_defective
+    
+    is_approved = (is_valid and 
+                   req.has_proof_of_purchase and 
+                   not req.is_digital_good and 
+                   not req.is_personalized and 
+                   (not req.is_full_refund or packaging_ok) and
+                   (req.refund_total <= 500 or req.managerial_authorization))
+                   
+    restocking_fee_applies = req.is_opened and not req.is_defective
+    
+    credit_to_original_payment = is_approved and req.original_payment_accessible
+    credit_to_store_credit = is_approved and not req.original_payment_accessible
+    
+    merchant_or_defect = req.is_merchant_error or req.is_defective
+    shipping_refundable = merchant_or_defect
+    handling_refundable = merchant_or_defect
+    
+    return RefundResult(
+        is_valid=is_valid,
+        is_approved=is_approved,
+        restocking_fee_applies=restocking_fee_applies,
+        credit_to_original_payment=credit_to_original_payment,
+        credit_to_store_credit=credit_to_store_credit,
+        shipping_refundable=shipping_refundable,
+        handling_refundable=handling_refundable
+    )
+```

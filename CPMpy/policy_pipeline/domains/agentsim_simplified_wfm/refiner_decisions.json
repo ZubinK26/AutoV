@@ -1,0 +1,34 @@
+{
+  "decisions": [],
+  "spontaneous_corrections": [],
+  "refiner_notes": "No changes were required as the critic found no issues.",
+  "rationale_updates": {
+    "TRANSACTION_STATUS": "Motivated by the rule stating 'transaction_status is zero (posted); value one means pending'.",
+    "KYC_STATUS": "Motivated by the rule checking if 'the affected customer's KYC status is FAILED'.",
+    "REFUND_TYPE": "Motivated by the rules distinguishing between 'A merchant refund call' and 'A goodwill credit call'.",
+    "customer_exists": "Motivated by the rule 'A refund call requires that the affected customer exists in the database.'",
+    "account_exists": "Motivated by the rule 'A refund call requires that the affected account exists in the database.'",
+    "transaction_exists": "Motivated by the rule 'A refund call requires that the referenced transaction exists in the database.'",
+    "transaction_status": "Motivated by the rule 'A refund call requires that transaction_status is zero (posted)'.",
+    "customer_kyc_status": "Motivated by the rule 'A refund call is not permitted if the affected customer's KYC status is FAILED.'",
+    "account_sanctions_block_flag": "Motivated by the rule 'A refund call is not permitted if the affected account has its sanctions block flag set to true.'",
+    "transaction_amount_pence": "Motivated by the rule 'A merchant refund call with an amount greater than the referenced transaction's amount is not permitted.'",
+    "customer_recent_goodwill_credit_total": "Motivated by the rule checking 'the sum of the affected customer's recent goodwill credit total and the proposed amount'.",
+    "customer_vulnerable_flag": "Motivated by the rule 'A refund call is not permitted if the affected customer's vulnerable flag is set to true'.",
+    "apply_refund_call_amount_pence": "Motivated by rules checking the 'proposed amount' or 'amount greater than ten thousand pence' for the refund tool.",
+    "apply_refund_call_refund_type": "Motivated by rules distinguishing between merchant refund and goodwill credit calls."
+  },
+  "bound_confidence_updates": {
+    "transaction_status": "high",
+    "customer_kyc_status": "high",
+    "transaction_amount_pence": "medium",
+    "customer_recent_goodwill_credit_total": "medium",
+    "apply_refund_call_amount_pence": "medium",
+    "apply_refund_call_refund_type": "high"
+  },
+  "enum_completeness_updates": {
+    "TRANSACTION_STATUS": "partial",
+    "KYC_STATUS": "partial",
+    "REFUND_TYPE": "comprehensive"
+  }
+}

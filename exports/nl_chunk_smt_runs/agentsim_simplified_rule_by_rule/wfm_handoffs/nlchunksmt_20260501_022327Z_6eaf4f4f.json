@@ -1,0 +1,21 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260501_022327Z_6eaf4f4f",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 18–18).\n\nRules in this chunk:\n18. A call to apply a refund of type MERCHANT_REFUND with an amount greater than the referenced transaction's amount is not permitted.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A call to apply a refund of type MERCHANT_REFUND is not permitted if the refund's amount is greater than the referenced transaction's amount.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"A call to apply a refund of type MERCHANT_REFUND is not permitted if the refund's amount is greater than the referenced transaction's amount.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260501_022327Z_6eaf4f4f_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-01T02:23:41Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

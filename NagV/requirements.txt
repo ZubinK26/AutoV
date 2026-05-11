@@ -1,0 +1,7 @@
+# NagV CLI: use this venv when working from the NagV/ directory (python -m nagv).
+# Transitive imports pull in registry_stage → numpy.
+numpy>=1.22,<3
+google-genai>=1.0.0
+python-dotenv>=1.0.0
+anthropic>=0.34
+z3-solver>=4.12

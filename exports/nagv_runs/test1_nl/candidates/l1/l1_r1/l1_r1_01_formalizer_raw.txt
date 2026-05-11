@@ -1,0 +1,74 @@
+```python
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Forall, Result
+
+class RefundRequest:
+    def __init__(self, days_since_transaction: int, is_full_refund: bool, 
+                 item_returned_original_packaging: bool, item_defective: bool,
+                 has_proof_of_purchase: bool, is_digital_good: bool,
+                 is_personalized_item: bool, is_opened: bool,
+                 restocking_fee_applied: bool, is_approved: bool,
+                 credited_to_original_payment: bool, original_payment_accessible: bool,
+                 credited_to_store_credit: bool, merchant_error: bool,
+                 shipping_charges_refunded: bool, handling_charges_refunded: bool,
+                 refund_executed: bool, refund_total: int,
+                 managerial_authorization: bool, is_valid: bool):
+        self.days_since_transaction = days_since_transaction
+        self.is_full_refund = is_full_refund
+        self.item_returned_original_packaging = item_returned_original_packaging
+        self.item_defective = item_defective
+        self.has_proof_of_purchase = has_proof_of_purchase
+        self.is_digital_good = is_digital_good
+        self.is_personalized_item = is_personalized_item
+        self.is_opened = is_opened
+        self.restocking_fee_applied = restocking_fee_applied
+        self.is_approved = is_approved
+        self.credited_to_original_payment = credited_to_original_payment
+        self.original_payment_accessible = original_payment_accessible
+        self.credited_to_store_credit = credited_to_store_credit
+        self.merchant_error = merchant_error
+        self.shipping_charges_refunded = shipping_charges_refunded
+        self.handling_charges_refunded = handling_charges_refunded
+        self.refund_executed = refund_executed
+        self.refund_total = refund_total
+        self.managerial_authorization = managerial_authorization
+        self.is_valid = is_valid
+
+@Pure
+def evaluate_refund_policy(req: RefundRequest) -> bool:
+    # [line 0] Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date.
+    rule_0 = (req.is_valid == (req.days_since_transaction <= 30))
+    
+    # [line 1 & 2] If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging.
+    # If the item associated with a refund request is verified as defective upon delivery, then the item is not required to be returned in the item's original, unopened packaging.
+    rule_1_2 = Implies(req.is_full_refund and not req.item_defective, req.item_returned_original_packaging)
+    
+    # [line 3] Every refund request is accompanied by a verifiable proof of purchase.
+    rule_3 = req.has_proof_of_purchase
+    
+    # [line 4] Every digital good is strictly non-refundable.
+    rule_4 = Implies(req.is_digital_good, not req.is_approved and not req.refund_executed)
+    
+    # [line 5] Every personalized item is strictly non-refundable.
+    rule_5 = Implies(req.is_personalized_item, not req.is_approved and not req.refund_executed)
+    
+    # [line 6] Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total.
+    rule_6 = Implies(req.is_opened and not req.item_defective, req.restocking_fee_applied)
+    
+    # [line 7 & 8] Every approved refund is credited exclusively to the original payment method.
+    # If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit.
+    rule_7_8 = Implies(req.is_approved, 
+                       Implies(req.original_payment_accessible, req.credited_to_original_payment) and 
+                       Implies(not req.original_payment_accessible, req.credited_to_store_credit))
+    
+    # [line 9] If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable.
+    rule_9 = Implies(not req.merchant_error and not req.item_defective, not req.shipping_charges_refunded)
+    
+    # [line 10] If it is not the case that the return is necessitated by a merchant error or a defect, then all original handling charges are non-refundable.
+    rule_10 = Implies(not req.merchant_error and not req.item_defective, not req.handling_charges_refunded)
+    
+    # [line 11] If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier.
+    rule_11 = Implies(req.refund_executed and req.refund_total > 500, req.managerial_authorization)
+    
+    return (rule_0 and rule_1_2 and rule_3 and rule_4 and rule_5 and rule_6 and rule_7_8 and rule_9 and rule_10 and rule_11)
+```

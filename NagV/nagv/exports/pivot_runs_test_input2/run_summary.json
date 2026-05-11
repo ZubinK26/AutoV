@@ -1,0 +1,7 @@
+{
+  "nl_source": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\pivot_pipeline\\golden_test_run\\input\\Test_input2.md",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\nagv\\exports\\pivot_runs_test_input2",
+  "outcome": "blocked_extraction_abort",
+  "line_index": 17,
+  "message": "line 17: extraction ABORT — 'If an emergency override token is provided, the budget math limit (Rule 4) and token consumption limit (Rule 1) are bypassed.'"
+}

@@ -1,0 +1,16 @@
+kind=feasibility_pass ok=False z3_status=sat exit=0
+feasibility_ok=True unsat_core=None
+--- stdout ---
+{"ok_feasibility": true, "status": "sat", "unsat_core": null, "model_excerpt": "[nl#5_digital_non_refundable = True,\n logic_approved_requirements = True,\n nl#4_proof_of_purchase = True,\n nl#10_shipping_non_refundable = True,\n nl#11_handling_non_refundable = True,\n refund_total = 0,\n handling_charges_refundable = False,\n logic_executed_approved = True,\n is_full_refund = False,\n nl#6_personalized_non_refundable = True,\n is_personalized_item = False,\n is_digital_good = False,\n days_since_transaction = 0,\n is_refund_request = True,\n is_refundable = True,\n nl#1_validity_period =", "diagnostics": null, "phase": "feasibility"}
+
+--- stderr ---
+
+--- payload ---
+{
+  "ok_feasibility": true,
+  "status": "sat",
+  "unsat_core": null,
+  "model_excerpt": "[nl#5_digital_non_refundable = True,\n logic_approved_requirements = True,\n nl#4_proof_of_purchase = True,\n nl#10_shipping_non_refundable = True,\n nl#11_handling_non_refundable = True,\n refund_total = 0,\n handling_charges_refundable = False,\n logic_executed_approved = True,\n is_full_refund = False,\n nl#6_personalized_non_refundable = True,\n is_personalized_item = False,\n is_digital_good = False,\n days_since_transaction = 0,\n is_refund_request = True,\n is_refundable = True,\n nl#1_validity_period =",
+  "diagnostics": null,
+  "phase": "feasibility"
+}

@@ -1,0 +1,21 @@
+{
+  "tools": [
+    {
+      "name": "apply_refund",
+      "parameters": {
+        "transaction_id": "str",
+        "amount_pence": "int",
+        "refund_type": "enum:MERCHANT_REFUND|GOODWILL_CREDIT",
+        "reason": "str"
+      },
+      "is_gated": true
+    },
+    {
+      "name": "lookup_bundle",
+      "parameters": {
+        "transaction_id": "str"
+      },
+      "is_gated": false
+    }
+  ]
+}

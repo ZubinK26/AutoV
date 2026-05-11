@@ -1,0 +1,4 @@
+{
+  "status": "sat",
+  "model_excerpt": "{'ip_verification_status': '1', 'requested_storage_volume': '499', 'requested_memory_allocation': '0', 'total_request_cost': '1000', 'unverified': '0', 'available_memory_quota': '0'}"
+}

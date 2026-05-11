@@ -1,0 +1,13 @@
+<audit_trail>
+1. **Line 0:** "A refund request is valid if and only if it is initiated within 30 days of the original transaction date." The code implements this in `is_valid_request` with `req.days_since_transaction <= 30`. Matches perfectly.
+2. **Line 1 & 2 & 5:** "A full refund requires the item to be returned in its original, unopened packaging. If an item is verified as defective upon delivery, the original packaging requirement is waived. Opened, non-defective items are subject to a 15% restocking fee deducted from the refund total." The code implements this logic by deducting 15% from the `refund_amount` if `not req.is_unopened and not req.is_defective`. Matches perfectly.
+3. **Line 3:** "All refund requests must be accompanied by a verifiable proof of purchase." Implemented in `is_valid_request` with `req.has_proof_of_purchase`. Matches perfectly.
+4. **Line 4:** "Digital goods and personalized items are strictly non-refundable." Implemented in `is_valid_request` with `not req.is_digital and not req.is_personalized`. Matches perfectly.
+5. **Line 6 & 7:** "Approved refunds shall be credited exclusively to the original payment method. If the original payment method is inaccessible, the refund will default to non-transferable store credit." The code sets `method = 1` if `req.original_payment_accessible` else `method = 2`, and enforces this in the `@Ensures` contracts. Matches perfectly.
+6. **Line 8:** "Original shipping and handling charges are non-refundable unless the return is necessitated by a merchant error or defect." The code adds `req.shipping_charges` to the refund amount only if `req.is_defective or req.merchant_error`. Matches perfectly.
+7. **Line 9:** "Any refund total exceeding $500 requires explicit authorization from a managerial tier before execution." The code checks `if refund_amount > 500 and not req.manager_authorized:` and returns an unapproved result, backed by an `@Ensures` contract. Matches perfectly.
+
+No hallucinations, omissions, boundary drifts, contract mismatches, or scope violations were detected.
+</audit_trail>
+
+[VERDICT: PASS]

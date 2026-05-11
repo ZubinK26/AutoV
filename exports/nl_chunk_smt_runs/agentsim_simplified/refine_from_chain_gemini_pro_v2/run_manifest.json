@@ -1,0 +1,9 @@
+{
+  "schema_version": "policy_refinement_run_manifest_v1",
+  "run_id": "refine_20260501T152511Z",
+  "policy_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\policy_model_preformalized_chain.smt2",
+  "nl_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\agentsim_simplified\\04_agentic_guardrails_simpl.md",
+  "policy_sha256_before": "6e4a568addb02b811e27e2dc4a9f2248c35f564fc32cdabdefafc8dc8af1e419",
+  "nl_sha256": "204277f2ac571ad6b7a3f7efdf9f020a4097752fca4a2abceb01fff4a5933ba9",
+  "started_at_utc": "2026-05-01T15:25:11Z"
+}

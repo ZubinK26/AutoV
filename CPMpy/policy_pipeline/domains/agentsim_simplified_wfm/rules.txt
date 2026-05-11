@@ -1,0 +1,10 @@
+A refund call requires that the affected customer exists in the database.
+A refund call requires that the affected account exists in the database.
+A refund call requires that the referenced transaction exists in the database.
+A refund call requires that transaction_status is zero (posted); value one means pending and is not sufficient for a refund.
+A refund call is not permitted if the affected customer's KYC status is FAILED.
+A refund call is not permitted if the affected account has its sanctions block flag set to true.
+A merchant refund call with an amount greater than the referenced transaction's amount is not permitted.
+A goodwill credit call with an amount greater than ten thousand pence is not permitted.
+A goodwill credit call is not permitted if the sum of the affected customer's recent goodwill credit total and the proposed amount exceeds fifty thousand pence.
+A refund call is not permitted if the affected customer's vulnerable flag is set to true and the proposed refund amount exceeds twenty thousand pence.

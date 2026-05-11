@@ -1,0 +1,8 @@
+**[VERDICT: DRIFT DETECTED]**
+
+1. **NL#3, NL#7, NL#10, NL#11** ("defective upon delivery", "non-defective", "defect") → **Variable fragmentation** → The terms "defective upon delivery", "non-defective", and "defect" refer to the same underlying condition but are encoded as three independent variables (`is_defective_upon_delivery`, `is_defective`, `is_defect`). They should be consolidated into a single variable.
+2. **NL#1, NL#4, NL#5, NL#6, NL#8, NL#12** ("valid", "proof of purchase", "non-refundable", "approved", "executed") → **Omission** → The code fails to link the logical progression of a refund. Specifically, `is_approved` is not constrained by `is_valid`, `is_refundable`, or `has_verifiable_proof_of_purchase`, and `is_executed` is not linked to `is_approved`. This allows a refund to be "executed" even if it violates the 30-day window, lacks proof, or involves a non-refundable digital good.
+3. **NL#7 & NL#12** ("15% restocking fee... deducted from the refund total") → **Omission** → The 15% restocking fee is captured as a boolean flag (`restocking_fee_applied`) but is not mathematically deducted from the `refund_total` variable. This prevents the solver from correctly evaluating the $500 threshold for managerial authorization in NL#12 when a fee is applicable.
+4. **NL#4** ("Every refund request is accompanied by a verifiable proof of purchase") → **Encoding mismatch** → The code uses a global assertion `has_verifiable_proof_of_purchase == True`. This forces every model to have proof rather than treating it as a requirement for a request to be `is_valid` or `is_approved`.
+
+**[VERDICT: DRIFT DETECTED]**

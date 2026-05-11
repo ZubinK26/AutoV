@@ -1,0 +1,182 @@
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Result, Acc
+
+
+class RefundRequest:
+    def __init__(
+        self,
+        days_since_transaction: int,
+        is_full_refund: bool,
+        returned_in_original_packaging: bool,
+        verified_defective: bool,
+        has_proof_of_purchase: bool,
+        is_digital_good: bool,
+        is_personalized: bool,
+        is_opened: bool,
+        original_payment_accessible: bool,
+        merchant_error: bool,
+        return_due_to_defect: bool,
+        refund_total: int,
+        has_managerial_authorization: bool,
+    ) -> None:
+        self.days_since_transaction = days_since_transaction  # type: int
+        self.is_full_refund = is_full_refund  # type: bool
+        self.returned_in_original_packaging = returned_in_original_packaging  # type: bool
+        self.verified_defective = verified_defective  # type: bool
+        self.has_proof_of_purchase = has_proof_of_purchase  # type: bool
+        self.is_digital_good = is_digital_good  # type: bool
+        self.is_personalized = is_personalized  # type: bool
+        self.is_opened = is_opened  # type: bool
+        self.original_payment_accessible = original_payment_accessible  # type: bool
+        self.merchant_error = merchant_error  # type: bool
+        self.return_due_to_defect = return_due_to_defect  # type: bool
+        self.refund_total = refund_total  # type: int
+        self.has_managerial_authorization = has_managerial_authorization  # type: bool
+
+
+@Pure
+def is_within_window(req: RefundRequest) -> bool:
+    Requires(Acc(req.days_since_transaction))
+    Ensures(Result() == (req.days_since_transaction <= 30))
+    return req.days_since_transaction <= 30
+
+
+@Pure
+def is_request_valid(req: RefundRequest) -> bool:
+    # Line 0: validity iff within 30 days.
+    Requires(Acc(req.days_since_transaction))
+    Ensures(Result() == is_within_window(req))
+    return is_within_window(req)
+
+
+@Pure
+def packaging_requirement_satisfied(req: RefundRequest) -> bool:
+    # Line 1 + Line 2: full refund requires original packaging unless verified defective.
+    Requires(Acc(req.is_full_refund))
+    Requires(Acc(req.verified_defective))
+    Requires(Acc(req.returned_in_original_packaging))
+    Ensures(Result() == ((not req.is_full_refund) or req.verified_defective or req.returned_in_original_packaging))
+    return (not req.is_full_refund) or req.verified_defective or req.returned_in_original_packaging
+
+
+@Pure
+def is_categorically_non_refundable(req: RefundRequest) -> bool:
+    # Lines 4, 5
+    Requires(Acc(req.is_digital_good))
+    Requires(Acc(req.is_personalized))
+    Ensures(Result() == (req.is_digital_good or req.is_personalized))
+    return req.is_digital_good or req.is_personalized
+
+
+@Pure
+def restocking_fee_applies(req: RefundRequest) -> bool:
+    # Line 6: opened, non-defective items get 15% restocking fee.
+    Requires(Acc(req.is_opened))
+    Requires(Acc(req.verified_defective))
+    Ensures(Result() == (req.is_opened and (not req.verified_defective)))
+    return req.is_opened and (not req.verified_defective)
+
+
+@Pure
+def shipping_refundable(req: RefundRequest) -> bool:
+    # Line 9: only refundable if merchant error or defect.
+    Requires(Acc(req.merchant_error))
+    Requires(Acc(req.return_due_to_defect))
+    Ensures(Result() == (req.merchant_error or req.return_due_to_defect))
+    return req.merchant_error or req.return_due_to_defect
+
+
+@Pure
+def handling_refundable(req: RefundRequest) -> bool:
+    # Line 10: only refundable if merchant error or defect.
+    Requires(Acc(req.merchant_error))
+    Requires(Acc(req.return_due_to_defect))
+    Ensures(Result() == (req.merchant_error or req.return_due_to_defect))
+    return req.merchant_error or req.return_due_to_defect
+
+
+@Pure
+def managerial_authorization_satisfied(req: RefundRequest) -> bool:
+    # Line 11: if refund_total > 500, must have managerial authorization.
+    Requires(Acc(req.refund_total))
+    Requires(Acc(req.has_managerial_authorization))
+    Ensures(Result() == ((req.refund_total <= 500) or req.has_managerial_authorization))
+    return (req.refund_total <= 500) or req.has_managerial_authorization
+
+
+@Pure
+def is_refund_approved(req: RefundRequest) -> bool:
+    # Approval requires: valid window, proof of purchase, not categorically non-refundable,
+    # packaging requirement satisfied, and managerial authorization for >$500.
+    Requires(Acc(req.days_since_transaction))
+    Requires(Acc(req.has_proof_of_purchase))
+    Requires(Acc(req.is_digital_good))
+    Requires(Acc(req.is_personalized))
+    Requires(Acc(req.is_full_refund))
+    Requires(Acc(req.verified_defective))
+    Requires(Acc(req.returned_in_original_packaging))
+    Requires(Acc(req.refund_total))
+    Requires(Acc(req.has_managerial_authorization))
+    Ensures(Implies(Result(), is_request_valid(req)))
+    Ensures(Implies(Result(), req.has_proof_of_purchase))
+    Ensures(Implies(Result(), not is_categorically_non_refundable(req)))
+    Ensures(Implies(Result(), packaging_requirement_satisfied(req)))
+    Ensures(Implies(Result(), managerial_authorization_satisfied(req)))
+    Ensures(Implies(Result() and req.refund_total > 500, req.has_managerial_authorization))
+    Ensures(Implies(Result() and req.is_digital_good, False))
+    Ensures(Implies(Result() and req.is_personalized, False))
+    return (
+        is_request_valid(req)
+        and req.has_proof_of_purchase
+        and (not is_categorically_non_refundable(req))
+        and packaging_requirement_satisfied(req)
+        and managerial_authorization_satisfied(req)
+    )
+
+
+@Pure
+def credited_to_original_method(req: RefundRequest) -> bool:
+    # Line 7: approved refunds go to original payment method (when accessible).
+    Requires(Acc(req.days_since_transaction))
+    Requires(Acc(req.has_proof_of_purchase))
+    Requires(Acc(req.is_digital_good))
+    Requires(Acc(req.is_personalized))
+    Requires(Acc(req.is_full_refund))
+    Requires(Acc(req.verified_defective))
+    Requires(Acc(req.returned_in_original_packaging))
+    Requires(Acc(req.refund_total))
+    Requires(Acc(req.has_managerial_authorization))
+    Requires(Acc(req.original_payment_accessible))
+    Ensures(Result() == (is_refund_approved(req) and req.original_payment_accessible))
+    return is_refund_approved(req) and req.original_payment_accessible
+
+
+@Pure
+def credited_to_store_credit(req: RefundRequest) -> bool:
+    # Line 8: if original payment inaccessible, default to non-transferable store credit.
+    Requires(Acc(req.days_since_transaction))
+    Requires(Acc(req.has_proof_of_purchase))
+    Requires(Acc(req.is_digital_good))
+    Requires(Acc(req.is_personalized))
+    Requires(Acc(req.is_full_refund))
+    Requires(Acc(req.verified_defective))
+    Requires(Acc(req.returned_in_original_packaging))
+    Requires(Acc(req.refund_total))
+    Requires(Acc(req.has_managerial_authorization))
+    Requires(Acc(req.original_payment_accessible))
+    Ensures(Result() == (is_refund_approved(req) and (not req.original_payment_accessible)))
+    return is_refund_approved(req) and (not req.original_payment_accessible)
+
+
+@Pure
+def compute_refund_amount(req: RefundRequest) -> int:
+    # Refund total after restocking fee (15% deduction if applicable).
+    Requires(Acc(req.is_opened))
+    Requires(Acc(req.verified_defective))
+    Requires(Acc(req.refund_total))
+    Ensures(Implies(restocking_fee_applies(req), Result() == req.refund_total - (req.refund_total * 15) // 100))
+    Ensures(Implies(not restocking_fee_applies(req), Result() == req.refund_total))
+    if restocking_fee_applies(req):
+        return req.refund_total - (req.refund_total * 15) // 100
+    else:
+        return req.refund_total

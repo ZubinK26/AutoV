@@ -1,0 +1,81 @@
+(req.days_since_transaction <= 30)`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 4 again.
+        "Every refund request is accompanied by a verifiable proof of purchase."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks `has_proof_of_purchase`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 5 & 6 again.
+        "Every digital good is strictly non-refundable."
+        "Every personalized item is strictly non-refundable."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks `is_digital_good` and `is_personalized`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 2 & 3 again.
+        "If a refund is a full refund, then the item ... is returned in ... original, unopened packaging."
+        "If the item ... is verified as defective ... then the item is not required to be returned in ... original, unopened packaging."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks the packaging rule.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 7 again.
+        "Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total."
+        My code: `potential_amount = calculate_potential_refund_total(req)`.
+        And `calculate_potential_refund_total` applies the restocking fee.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 10 & 11 again.
+        "If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable."
+        My code: `potential_amount = calculate_potential_refund_total(req)`.
+        And `calculate_potential_refund_total` subtracts shipping and handling.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 8 & 9 again.
+        "Every approved refund is credited exclusively to the original payment method. If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit."
+        My code: `store_credit = approved and not req.original_payment_accessible`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 12 again.
+        "If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks the manager authorization.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 1 again.
+        "Every refund request is valid if and only if ... 30 days."
+        My code: `valid = (req.days_since_transaction <= 30)`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 4 again.
+        "Every refund request is accompanied by a verifiable proof of purchase."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks `has_proof_of_purchase`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 5 & 6 again.
+        "Every digital good is strictly non-refundable."
+        "Every personalized item is strictly non-refundable."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks `is_digital_good` and `is_personalized`.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 2 & 3 again.
+        "If a refund is a full refund, then the item ... is returned in ... original, unopened packaging."
+        "If the item ... is verified as defective ... then the item is not required to be returned in ... original, unopened packaging."
+        My code: `approved = valid and check_approval_conditions(req, potential_amount)`.
+        And `check_approval_conditions` checks the packaging rule.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 7 again.
+        "Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total."
+        My code: `potential_amount = calculate_potential_refund_total(req)`.
+        And `calculate_potential_refund_total` applies the restocking fee.
+        Correct.
+
+    *   Wait, I should check the `process_refund_request` function's logic for Rule 10 & 11 again.
+        "If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable."
+        My code: `potential_amount = calculate_potential_refund_total(req)`.
+        And `calculate_

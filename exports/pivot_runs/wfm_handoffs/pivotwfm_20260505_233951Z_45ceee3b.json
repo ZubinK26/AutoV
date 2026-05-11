@@ -1,0 +1,40 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260505_233951Z_45ceee3b",
+  "user_original_input": "Incremental policy ruleset chunk from file 'Test_input.md' (1-based global rule indices 1–5).\n\nRules in this chunk:\n1. The requestor's region must be one of the following: \"NA\", \"EU\", or \"APAC\".\n2. If the requested resource type is \"DATABASE\", a valid business justification must be provided.\n3. The requested storage volume must be strictly less than 500 gigabytes.\n4. The requested instance count multiplied by the instance unit cost must be less than or equal to 1000 dollars.\n5. The requested memory allocation must not exceed the team's available memory quota.",
+  "lines": [
+    {
+      "line_index": 2,
+      "statement_nl": "Every requested storage volume must be strictly less than 500 gigabytes.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"Every requested storage volume must be strictly less than 500 gigabytes.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "For every request, the requested instance count multiplied by the instance unit cost must be less than or equal to 1000 dollars.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"For every request, the requested instance count multiplied by the instance unit cost must be less than or equal to 1000 dollars.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Every requested memory allocation must not exceed the available memory quota of the requestor's team.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Every requested memory allocation must not exceed the available memory quota of the requestor's team.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260505_233951Z_45ceee3b_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-05T23:41:29Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

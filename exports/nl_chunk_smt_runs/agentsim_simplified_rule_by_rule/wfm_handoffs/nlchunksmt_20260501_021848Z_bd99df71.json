@@ -1,0 +1,29 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260501_021848Z_bd99df71",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 6–6).\n\nRules in this chunk:\n6. A transaction is identified by a unique transaction identifier and belongs to exactly one account.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every transaction is identified by exactly one unique transaction identifier.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every transaction is identified by exactly one unique transaction identifier.\""
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "Every transaction belongs to exactly one account.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"Every transaction belongs to exactly one account.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260501_021848Z_bd99df71_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-01T02:18:58Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

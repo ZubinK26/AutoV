@@ -1,0 +1,13 @@
+<audit_trail>
+1. **Line 0:** "A refund request is valid if and only if it is initiated within 30 days of the original transaction date." -> The code implements `req.days_since_transaction <= 30` in `is_eligible`. This is a perfect match.
+2. **Line 1 & 2 & 5:** "A full refund requires the item to be returned in its original, unopened packaging.", "If an item is verified as defective upon delivery, the original packaging requirement is waived.", "Opened, non-defective items are subject to a 15% restocking fee deducted from the refund total." -> The code implements `restocking_fee_applied = True` when `not req.original_packaging and not req.is_defective`. This perfectly captures the logic.
+3. **Line 3:** "All refund requests must be accompanied by a verifiable proof of purchase." -> The code implements `req.has_proof_of_purchase` in `is_eligible`. Perfect match.
+4. **Line 4:** "Digital goods and personalized items are strictly non-refundable." -> The code implements `not req.is_digital_good and not req.is_personalized` in `is_eligible`. Perfect match.
+5. **Line 6 & 7:** "Approved refunds shall be credited exclusively to the original payment method.", "If the original payment method is inaccessible, the refund will default to non-transferable store credit." -> The code implements `credit_to_store = True` when `not req.original_payment_accessible`. Perfect match.
+6. **Line 8:** "Original shipping and handling charges are non-refundable unless the return is necessitated by a merchant error or defect." -> The code implements `refund_shipping = True` when `req.merchant_error or req.is_defective`. Perfect match.
+7. **Line 9:** "Any refund total exceeding $500 requires explicit authorization from a managerial tier before execution." -> The code implements `req.refund_amount <= 500 or req.manager_authorized` in `is_fully_approved`. Perfect match.
+
+The contracts perfectly align with the implementation, and no banned syntax is used.
+</audit_trail>
+
+[VERDICT: PASS]

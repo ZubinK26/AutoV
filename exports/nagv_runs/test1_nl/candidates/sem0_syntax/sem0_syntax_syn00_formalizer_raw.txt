@@ -1,0 +1,58 @@
+## NL_TRACE
+
+1. nl#1 | Q: "Every refund request is valid if and only if the refund request is initiated within 30 days" | P: valid_request, days_since_transaction | E: iff(valid_request, days_since_transaction <= 30)
+2. nl#2 | Q: "If a refund is a full refund, then the item associated with the refund is returned" | P: is_full_refund, item_in_original_packaging, verified_defective | E: implies(and(is_full_refund, not(verified_defective)), item_in_original_packaging), joint with nl#3
+3. nl#3 | Q: "If the item associated with a refund request is verified as defective upon delivery" | P: verified_defective, is_full_refund, item_in_original_packaging | E: implies(and(is_full_refund, not(verified_defective)), item_in_original_packaging), joint with nl#2
+4. nl#4 | Q: "Every refund request is accompanied by a verifiable proof of purchase." | P: refund_request_exists, proof_of_purchase | E: implies(refund_request_exists, proof_of_purchase)
+5. nl#5 | Q: "Every digital good is strictly non-refundable." | P: is_digital_good, is_refundable | E: implies(is_digital_good, not(is_refundable))
+6. nl#6 | Q: "Every personalized item is strictly non-refundable." | P: is_personalized_item, is_refundable | E: implies(is_personalized_item, not(is_refundable))
+7. nl#7 | Q: "Every opened, non-defective item is subject to a 15% restocking fee" | P: is_opened, verified_defective, restocking_fee_applied | E: implies(and(is_opened, not(verified_defective)), restocking_fee_applied)
+8. nl#8 | Q: "Every approved refund is credited exclusively to the original payment method." | P: approved_refund, credited_to_original_method, store_credit | E: implies(approved_refund, and(credited_to_original_method, not(store_credit)))
+9. nl#9 | Q: "If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit." | P: original_method_inaccessible, store_credit, approved_refund | E: implies(and(approved_refund, original_method_inaccessible), store_credit)
+10. nl#10 | Q: "If it is not the case that the return is necessitated by a merchant error or a defect" | P: merchant_error, verified_defective, shipping_charges_refundable | E: implies(not(or(merchant_error, verified_defective)), not(shipping_charges_refundable))
+11. nl#11 | Q: "If it is not the case that the return is necessitated by a merchant error or a defect" | P: merchant_error, verified_defective, handling_charges_refundable | E: implies(not(or(merchant_error, verified_defective)), not(handling_charges_refundable))
+12. nl#12 | Q: "If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization" | P: refund_executed, refund_total, managerial_authorization | E: implies(and(refund_executed, refund_total > 500), managerial_authorization)
+
+```python
+from z3 import *
+
+def run_z3_check():
+    solver = Solver()
+
+    # Variables
+    valid_request = Bool('valid_request')
+    days_since_transaction = Int('days_since_transaction')
+    is_full_refund = Bool('is_full_refund')
+    item_in_original_packaging = Bool('item_in_original_packaging')
+    verified_defective = Bool('verified_defective')
+    refund_request_exists = Bool('refund_request_exists')
+    proof_of_purchase = Bool('proof_of_purchase')
+    is_digital_good = Bool('is_digital_good')
+    is_refundable = Bool('is_refundable')
+    is_personalized_item = Bool('is_personalized_item')
+    is_opened = Bool('is_opened')
+    restocking_fee_applied = Bool('restocking_fee_applied')
+    approved_refund = Bool('approved_refund')
+    credited_to_original_method = Bool('credited_to_original_method')
+    store_credit = Bool('store_credit')
+    original_method_inaccessible = Bool('original_method_inaccessible')
+    merchant_error = Bool('merchant_error')
+    shipping_charges_refundable = Bool('shipping_charges_refundable')
+    handling_charges_refundable = Bool('handling_charges_refundable')
+    refund_executed = Bool('refund_executed')
+    refund_total = Int('refund_total')
+    managerial_authorization = Bool('managerial_authorization')
+
+    # Constraints
+
+    # nl#1: Every refund request is valid if and only if initiated within 30 days.
+    solver.assert_and_track(
+        valid_request == (days_since_transaction <= 30),
+        "nl#1_validity_period"
+    )
+
+    # nl#2 & nl#3: Full refund requires original packaging unless item is defective.
+    # "Not required" in nl#3 qualifies the obligation in nl#2.
+    solver.assert_and_track(
+        Implies(And(is_full_refund, Not(verified_defective)), item_in_original_packaging),
+        "nl#2_nl

@@ -1,0 +1,12 @@
+<audit_trail>
+* R0001 (SET_INCLUSION) correctly represents the region constraint ('NA', 'EU', 'APAC').
+* R0002 (LOGICAL_IMPLICATION) represents the conditional requirement for business justification if the resource is 'DATABASE'.
+* R0003 (CONSTANT_RELATIONAL) represents the < 500GB storage limit.
+* R0004 (CONSTANT_RELATIONAL) represents the <= 1000 dollar cost limit.
+* R0005 (VARIABLE_RELATIONAL) represents the memory allocation vs. available quota check.
+* R0006 (LOGICAL_IMPLICATION) represents the MFA requirement for 'PRODUCTION' environments.
+* R0007 (PREEMPTION) correctly targets R0003 for bypass when the role is 'ML_ENGINEER'.
+* R0008 (PREEMPTION) correctly uses `FORCE_UNSATISFIED` to represent the immediate denial for unverified IP addresses.
+* The pathway `must_satisfy_all` correctly includes all non-preemption rules (R0001-R0006) as per the Normative v1 layout.
+
+[VERDICT: PASS]

@@ -1,0 +1,21 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "nlchunksmt_20260501_021705Z_397418b3",
+  "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 2–2).\n\nRules in this chunk:\n2. A customer has a vulnerable flag that is either true or false.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every customer has exactly one vulnerable flag that is either true or false.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every customer has exactly one vulnerable flag that is either true or false.\""
+    }
+  ],
+  "orchestration_run_id": "orr_nlchunksmt_20260501_021705Z_397418b3_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-01T02:17:16Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

@@ -1,0 +1,41 @@
+{
+  "canonical_variables": [
+    {
+      "id": "requested_storage_volume",
+      "aliases": [
+        "requested storage volume"
+      ],
+      "line_hints": [
+        1
+      ]
+    },
+    {
+      "id": "requested_memory_allocation",
+      "aliases": [
+        "requested memory allocation"
+      ],
+      "line_hints": [
+        3
+      ]
+    },
+    {
+      "id": "available_memory_quota",
+      "aliases": [
+        "available memory quota",
+        "available memory quota of the requestor's team"
+      ],
+      "line_hints": [
+        3
+      ]
+    },
+    {
+      "id": "ip_verification_status",
+      "aliases": [
+        "unverified IP address"
+      ],
+      "line_hints": [
+        4
+      ]
+    }
+  ]
+}

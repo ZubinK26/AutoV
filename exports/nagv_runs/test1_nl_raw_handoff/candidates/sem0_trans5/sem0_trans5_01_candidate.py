@@ -1,0 +1,92 @@
+from dataclasses import dataclass
+from nagini_contracts.contracts import Requires, Ensures, Pure, Implies, Result
+
+@dataclass
+class RefundRequest:
+    item_price_cents: int
+    shipping_fee_cents: int
+    days_since_purchase: int
+    is_original_packaging: bool
+    is_unopened: bool
+    is_defective: bool
+    has_proof_of_purchase: bool
+    is_digital_good: bool
+    is_personalized: bool
+    is_merchant_error: bool
+    original_payment_method_accessible: bool
+    manager_authorized: bool
+
+@dataclass
+class RefundResult:
+    is_approved: bool
+    refund_amount_cents: int
+    payment_method: int  # 0: None, 1: Original Method, 2: Store Credit
+
+@Pure
+def get_potential_amount(req: RefundRequest) -> int:
+    """
+    Calculates the base refund amount before restocking fees.
+    Rule 9: Shipping is non-refundable unless merchant error or defect.
+    """
+    shipping_refund = req.shipping_fee_cents if (req.is_defective or req.is_merchant_error) else 0
+    return req.item_price_cents + shipping_refund
+
+@Pure
+def get_final_amount(req: RefundRequest) -> int:
+    """
+    Calculates the final refund amount after applying restocking fees.
+    Rule 2 & 3: Full refund if defective OR (original AND unopened).
+    Rule 6: Opened, non-defective items subject to 15% restocking fee.
+    """
+    potential = get_potential_amount(req)
+    # Rule 3: Defective waives packaging. Rule 2: Full refund if original and unopened.
+    if req.is_defective or (req.is_original_packaging and req.is_unopened):
+        return potential
+    # Rule 6: Apply 15% restocking fee (85% remains) for items not qualifying for full refund.
+    return (potential * 85) // 100
+
+@Pure
+def is_eligible(req: RefundRequest) -> bool:
+    """
+    Checks basic validity of the refund request.
+    Rule 1: Initiated within 30 days.
+    Rule 4: Accompanied by proof of purchase.
+    Rule 5: Digital goods and personalized items are non-refundable.
+    """
+    return (req.days_since_purchase <= 30 and 
+            req.has_proof_of_purchase and 
+            not req.is_digital_good and 
+            not req.is_personalized)
+
+@Pure
+def is_authorized(req: RefundRequest, amount: int) -> bool:
+    """
+    Checks if the refund amount requires managerial authorization.
+    Rule 10: Total exceeding $500 (50000 cents) requires manager tier.
+    """
+    if amount > 50000:
+        return req.manager_authorized
+    return True
+
+@Requires(req.item_price_cents >= 0)
+@Requires(req.shipping_fee_cents >= 0)
+@Requires(req.days_since_purchase >= 0)
+@Ensures(Result().is_approved == (is_eligible(req) and is_authorized(req, get_final_amount(req))))
+@Ensures(Implies(Result().is_approved, Result().refund_amount_cents == get_final_amount(req)))
+@Ensures(Implies(not Result().is_approved, Result().refund_amount_cents == 0))
+@Ensures(Implies(Result().is_approved, 
+                 Result().payment_method == (1 if req.original_payment_method_accessible else 2)))
+@Ensures(Implies(not Result().is_approved, Result().payment_method == 0))
+def process_refund(req: RefundRequest) -> RefundResult:
+    amount = get_final_amount(req)
+    eligible = is_eligible(req)
+    authorized = is_authorized(req, amount)
+    
+    approved = eligible and authorized
+    
+    if approved:
+        # Rule 7 & 8: Original payment method or store credit
+        method = 1 if req.original_payment_method_accessible else 2
+        return RefundResult(True, amount, method)
+    else:
+        return RefundResult(False, 0, 0)

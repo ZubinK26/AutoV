@@ -1,0 +1,60 @@
+<audit_trail>
+Line 0: "valid iff initiated within 30 days." Code: `is_within_window` returns `days <= 30 and days >= 0`. The NL says "within 30 days" which means `<= 30`. Adding `>= 0` is technically a sanity bound but not stated. However, since `days_since_transaction` is an int, negative values are nonsensical but not explicitly excluded by NL. This adds an implicit constraint not in the NL — minor over-specification, but it's used as a precondition guard. Also `is_request_valid` is defined as iff `is_within_window`. The "biconditional" is preserved.
+
+Line 1: "If full refund, then returned in original unopened packaging." Code: `packaging_requirement_satisfied` = `(not full_refund) or verified_defective or returned_in_original_packaging`. The `verified_defective` exception comes from line 2. This combines lines 1 and 2 correctly.
+
+Line 2: "If verified defective upon delivery, not required to be in original packaging." — handled via exception in packaging_requirement_satisfied. OK.
+
+Line 3: "Every refund request is accompanied by a verifiable proof of purchase." Code: enforced via `is_refund_approved` requiring `req.has_proof_of_purchase`. The NL phrasing is universal: every refund request HAS proof. This is treated as an approval condition rather than a universal invariant. Acceptable interpretation.
+
+Line 4: digital goods non-refundable. Captured in `is_categorically_non_refundable` and enforced in approval. OK.
+
+Line 5: personalized items non-refundable. Captured. OK.
+
+Line 6: "Every opened, non-defective item subject to 15% restocking fee deducted from refund total." Code: `restocking_fee_applies` is correct. `compute_refund_amount` deducts 15%. OK semantically. Computation uses integer division which loses precision but acceptable for int domain.
+
+Line 7: "approved refund credited exclusively to original payment method." Code: `credited_to_original_method` returns true iff approved AND original_payment_accessible. But NL says "credited exclusively to original payment method" — line 8 provides exception only when inaccessible. The code's "exclusively" interpretation (only when accessible) plus line 8 fallback is correct.
+
+Line 8: "If original payment method inaccessible, defaults to non-transferable store credit." Code: `credited_to_store_credit` = approved AND not accessible. OK. Note "non-transferable" qualifier isn't modeled but is just a property of store credit, not a logical constraint on the boolean output. Minor omission.
+
+Line 9: "If not (merchant error or defect), then shipping charges non-refundable." Code: `shipping_refundable` = merchant_error or defect. Equivalent contrapositive. OK.
+
+Line 10: same for handling. OK.
+
+Line 11: "If refund executed AND total > $500, then has managerial authorization." Code: `managerial_authorization_satisfied` = total <= 500 or has_authorization. Boundary: ">500" means strictly greater, code uses `> 500` (via `<= 500` as the safe branch). Correct boundary.
+
+Additional checks:
+- No `Forall`, `Exists`, `Old`, `while`, dynamic typing, I/O. Clean.
+- The `>= 0` constraints on days/refund_total are added preconditions not in NL. This is over-specification but pragmatic. I'll flag.
+
+The `is_within_window` adds `days_since_transaction >= 0` which is not mentioned in the NL. This is a hallucinated constraint. A request with a negative days value (illogical but not banned by NL) would be considered invalid by the code, while the NL only requires "within 30 days" (i.e., <= 30).
+</audit_trail>
+
+[VERDICT: DRIFT DETECTED]
+
+**1. Hallucination (Over-specification)**
+* **NL Intent:** "Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date."
+* **Code Implementation:** `is_within_window` returns `req.days_since_transaction <= 30 and req.days_since_transaction >= 0`. The `>= 0` lower bound is not specified in the NL.
+* **Correction:**
+```python
+@Pure
+def is_within_window(req: RefundRequest) -> bool:
+    Ensures(Result() == (req.days_since_transaction <= 30))
+    return req.days_since_transaction <= 30
+```
+Also remove `Requires(req.days_since_transaction >= 0)` from `is_refund_approved`, `credited_to_original_method`, `credited_to_store_credit`, and `compute_refund_amount`.
+
+**2. Hallucination (Over-specification)**
+* **NL Intent:** Line 6 ("15% restocking fee deducted") and Line 11 ("refund total exceeds $500") use refund_total but the NL never imposes a non-negativity constraint on it.
+* **Code Implementation:** `Requires(req.refund_total >= 0)` is added to multiple functions, and `Ensures(Result() >= 0)` in `compute_refund_amount`.
+* **Correction:** Remove `Requires(req.refund_total >= 0)` preconditions and the `Ensures(Result() >= 0)` postcondition unless you also adjust the integer arithmetic semantics. Specifically in `compute_refund_amount`:
+```python
+@Pure
+def compute_refund_amount(req: RefundRequest) -> int:
+    Ensures(Implies(restocking_fee_applies(req), Result() == req.refund_total - (req.refund_total * 15) // 100))
+    Ensures(Implies(not restocking_fee_applies(req), Result() == req.refund_total))
+    if restocking_fee_applies(req):
+        return req.refund_total - (req.refund_total * 15) // 100
+    else:
+        return req.refund_total
+```

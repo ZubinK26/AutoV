@@ -1,0 +1,40 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260506_032538Z_49b507cc",
+  "user_original_input": "Incremental policy ruleset chunk from file 'Test_input.md' (1-based global rule indices 6–8).\n\nRules in this chunk:\n6. If the target environment is \"PRODUCTION\", the requestor's MFA status must be true.\n7. If the requestor's role is \"ML_ENGINEER\", the 500-gigabyte storage limit is bypassed.\n8. If the request originates from an unverified IP address, the entire request is immediately denied.\n\n[Pivot pipeline — Agent 2 output shape]\nThis chunk has exactly 3 policy rules (see numbered list above). Your SUCCESS output must contain **exactly 3** numbered lines (1. through 3.), **one line per input rule** in order. Do not add another numbered line by splitting one input rule into multiple statements.",
+  "lines": [
+    {
+      "line_index": 5,
+      "statement_nl": "If the target environment of a request is 'PRODUCTION', then the requestor's multi-factor authentication status must be true.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"If the target environment of a request is 'PRODUCTION', then the requestor's multi-factor authentication status must be true.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "If the role of a requestor is 'ML_ENGINEER', then the 500-gigabyte storage limit is bypassed for that requestor.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"If the role of a requestor is 'ML_ENGINEER', then the 500-gigabyte storage limit is bypassed for that requestor.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "If a request originates from an unverified IP address, then the entire request is immediately denied.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"If a request originates from an unverified IP address, then the entire request is immediately denied.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260506_032538Z_49b507cc_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-06T03:27:47Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

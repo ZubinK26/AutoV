@@ -1,0 +1,4 @@
+Each nurse may be assigned at most one shift per day in the roster window.
+A nurse who is marked unavailable on a given day must not receive a shift assignment on that day.
+No two nurses may be assigned to the same shift slot when that slot requires exclusivity.
+If a nurse has already worked the maximum allowed hours in the week, no additional shifts may be assigned to that nurse for that week.

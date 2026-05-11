@@ -1,0 +1,22 @@
+A customer is identified by a unique customer identifier and has a KYC status that is either VERIFIED or FAILED.
+A customer has a vulnerable flag that is either true or false.
+A customer has a field named recent goodwill credit total which is a non-negative amount in pence maintained by the runtime.
+An account is identified by a unique account identifier and belongs to exactly one customer.
+An account has a flag named has sanctions block which is either true or false.
+A transaction is identified by a unique transaction identifier and belongs to exactly one account.
+A transaction has an amount in pence which is a positive integer.
+A transaction has a status that is either POSTED or PENDING.
+A refund call has a refund type that is one of MERCHANT_REFUND or GOODWILL_CREDIT.
+A refund call has an amount in pence which is a positive integer.
+A tool call is one of the defined write tool calls and carries typed parameters.
+
+A refund call requires that the affected customer exists in the database.
+A refund call requires that the affected account exists in the database.
+A refund call requires that the referenced transaction exists in the database.
+A refund call requires that transaction_status is zero (posted); value one means pending and is not sufficient for a refund.
+A refund call is not permitted if the affected customer's KYC status is FAILED.
+A refund call is not permitted if the affected account has its sanctions block flag set to true.
+A merchant refund call with an amount greater than the referenced transaction's amount is not permitted.
+A goodwill credit call with an amount greater than ten thousand pence is not permitted.
+A goodwill credit call is not permitted if the sum of the customer's recent goodwill credit total and the proposed amount exceeds fifty thousand pence.
+A refund call is not permitted if the affected customer's vulnerable flag is set to true and the proposed amount exceeds twenty thousand pence.

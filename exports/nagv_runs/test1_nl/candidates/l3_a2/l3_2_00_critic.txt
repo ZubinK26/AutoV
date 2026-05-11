@@ -1,0 +1,35 @@
+<audit_trail>
+Line 0: "Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date." Code: `is_request_valid` returns `days_since_transaction <= 30`. Matches biconditional. PASS.
+
+Line 1: "If a refund is a full refund, then the item is returned in original, unopened packaging." Combined with Line 2 exception. Code: `packaging_requirement_satisfied` = (not full_refund) OR verified_defective OR returned_in_original_packaging. This correctly captures Line 1 (full → packaging) with Line 2 exception. PASS.
+
+Line 2: "If verified defective upon delivery, then not required to return in original packaging." Captured via the `verified_defective` disjunct. PASS.
+
+Line 3: "Every refund request is accompanied by a verifiable proof of purchase." Code uses `req.has_proof_of_purchase` as part of approval criteria. NL says every request has proof — it's a universal statement about requests. The code treats it as an approval requirement rather than a validity check. Note: Line 0 says validity iff within 30 days — this means proof of purchase is NOT a validity criterion. The code correctly keeps it as approval requirement, separate from validity. Acceptable.
+
+Line 4: Digital good non-refundable. PASS.
+
+Line 5: Personalized non-refundable. PASS.
+
+Line 6: 15% restocking fee on opened, non-defective items. `compute_refund_amount` deducts 15% when opened and not defective. PASS.
+
+Line 7: "Every approved refund is credited exclusively to the original payment method." Combined with Line 8: if inaccessible, store credit. Code splits into `credited_to_original_method` (approved AND accessible) and `credited_to_store_credit` (approved AND not accessible). This matches the conjunction of Lines 7 and 8. PASS.
+
+Line 8: Store credit if inaccessible. PASS.
+
+Line 9: Shipping non-refundable unless merchant error or defect. `shipping_refundable` = merchant_error OR defect. PASS.
+
+Line 10: Handling non-refundable unless merchant error or defect. Same logic. PASS.
+
+Line 11: "If a refund is executed and refund total exceeds $500, then explicit managerial authorization." Code: `managerial_authorization_satisfied` = (refund_total <= 500) OR has_managerial_authorization. Boundary: "exceeds $500" means > 500, so <= 500 is the negation. Correct. PASS.
+
+Banned constructs check: No Forall, Exists, Old, while, dynamic typing, or I/O. PASS.
+
+Hallucination check: `is_refund_approved` aggregates conditions. NL doesn't explicitly define "approved" composition, but the components (validity from L0, proof from L3, non-refundable categories from L4/L5, packaging from L1/L2, managerial auth from L11) are all NL-derived. Acceptable composition.
+
+`compute_refund_amount` uses integer division `(req.refund_total * 15) // 100`. NL says "15% restocking fee deducted from the refund total" — integer arithmetic could lose precision but refund_total is typed as int, so this is reasonable.
+
+All checks pass.
+</audit_trail>
+
+[VERDICT: PASS]

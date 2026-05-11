@@ -1,0 +1,111 @@
+```python
+from typing import cast, List, Dict, Set, Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Assert, Implies, Forall, Result
+
+class RefundRequest:
+    def __init__(self) -> None:
+        self.days_since_transaction: int = 0
+        self.is_valid: bool = False
+        self.is_full_refund: bool = False
+        self.is_unopened: bool = False
+        self.is_defective: bool = False
+        self.has_proof_of_purchase: bool = False
+        self.is_digital_good: bool = False
+        self.is_personalized: bool = False
+        self.is_refundable: bool = False
+        self.restocking_fee_applied: bool = False
+        self.is_approved: bool = False
+        self.original_payment_accessible: bool = False
+        self.credited_to_original_payment: bool = False
+        self.credited_to_store_credit: bool = False
+        self.merchant_error: bool = False
+        self.shipping_charges_refunded: bool = False
+        self.handling_charges_refunded: bool = False
+        self.is_executed: bool = False
+        self.refund_total: int = 0
+        self.managerial_authorization: bool = False
+
+@Pure
+def check_validity(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == (req.is_valid == (req.days_since_transaction <= 30)))
+    return req.is_valid == (req.days_since_transaction <= 30)
+
+@Pure
+def check_packaging(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == Implies(req.is_full_refund and not req.is_defective, req.is_unopened))
+    return not (req.is_full_refund and not req.is_defective) or req.is_unopened
+
+@Pure
+def check_proof_of_purchase(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == req.has_proof_of_purchase)
+    return req.has_proof_of_purchase
+
+@Pure
+def check_item_type(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == (Implies(req.is_digital_good, not req.is_refundable) and Implies(req.is_personalized, not req.is_refundable)))
+    return (not req.is_digital_good or not req.is_refundable) and (not req.is_personalized or not req.is_refundable)
+
+@Pure
+def check_restocking_fee(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == Implies(not req.is_unopened and not req.is_defective, req.restocking_fee_applied))
+    return not (not req.is_unopened and not req.is_defective) or req.restocking_fee_applied
+
+@Pure
+def check_payment_method(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == (
+        Implies(req.is_approved and req.original_payment_accessible, req.credited_to_original_payment) and
+        Implies(req.is_approved and not req.original_payment_accessible, req.credited_to_store_credit)
+    ))
+    return (
+        (not (req.is_approved and req.original_payment_accessible) or req.credited_to_original_payment) and
+        (not (req.is_approved and not req.original_payment_accessible) or req.credited_to_store_credit)
+    )
+
+@Pure
+def check_shipping_handling(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == (
+        Implies(not req.merchant_error and not req.is_defective, not req.shipping_charges_refunded) and
+        Implies(not req.merchant_error and not req.is_defective, not req.handling_charges_refunded)
+    ))
+    return (
+        (not (not req.merchant_error and not req.is_defective) or not req.shipping_charges_refunded) and
+        (not (not req.merchant_error and not req.is_defective) or not req.handling_charges_refunded)
+    )
+
+@Pure
+def check_authorization(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == Implies(req.is_executed and req.refund_total > 500, req.managerial_authorization))
+    return not (req.is_executed and req.refund_total > 500) or req.managerial_authorization
+
+@Pure
+def check_all_policies(req: RefundRequest) -> bool:
+    Requires(req is not None)
+    Ensures(Result() == (
+        check_validity(req) and
+        check_packaging(req) and
+        check_proof_of_purchase(req) and
+        check_item_type(req) and
+        check_restocking_fee(req) and
+        check_payment_method(req) and
+        check_shipping_handling(req) and
+        check_authorization(req)
+    ))
+    return (
+        check_validity(req) and
+        check_packaging(req) and
+        check_proof_of_purchase(req) and
+        check_item_type(req) and
+        check_restocking_fee(req) and
+        check_payment_method(req) and
+        check_shipping_handling(req) and
+        check_authorization(req)
+    )
+```

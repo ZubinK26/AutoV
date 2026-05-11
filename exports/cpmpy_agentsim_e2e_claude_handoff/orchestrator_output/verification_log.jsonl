@@ -1,0 +1,72 @@
+{"ts": "2026-05-03T05:00:53Z", "event": "state_enter", "state": "LOAD_INPUTS"}
+{"ts": "2026-05-03T05:00:53Z", "event": "state_enter", "state": "FORMALIZE"}
+{"ts": "2026-05-03T05:00:53Z", "event": "formalize_attempt", "rule_index": 1, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:00:58Z", "event": "llm_call", "role": "formalizer", "rule_index": 1, "attempt": 0, "latency_ms": 4507.96}
+{"ts": "2026-05-03T05:00:58Z", "event": "formalize_ok", "rule_index": 1, "rule_name": "rule_1"}
+{"ts": "2026-05-03T05:00:58Z", "event": "formalize_attempt", "rule_index": 2, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:01Z", "event": "llm_call", "role": "formalizer", "rule_index": 2, "attempt": 0, "latency_ms": 3453.68}
+{"ts": "2026-05-03T05:01:01Z", "event": "formalize_ok", "rule_index": 2, "rule_name": "rule_2"}
+{"ts": "2026-05-03T05:01:01Z", "event": "formalize_attempt", "rule_index": 3, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:05Z", "event": "llm_call", "role": "formalizer", "rule_index": 3, "attempt": 0, "latency_ms": 3501.67}
+{"ts": "2026-05-03T05:01:05Z", "event": "formalize_ok", "rule_index": 3, "rule_name": "rule_3"}
+{"ts": "2026-05-03T05:01:05Z", "event": "formalize_attempt", "rule_index": 4, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:09Z", "event": "llm_call", "role": "formalizer", "rule_index": 4, "attempt": 0, "latency_ms": 4256.88}
+{"ts": "2026-05-03T05:01:09Z", "event": "formalize_ok", "rule_index": 4, "rule_name": "rule_4"}
+{"ts": "2026-05-03T05:01:09Z", "event": "formalize_attempt", "rule_index": 5, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:13Z", "event": "llm_call", "role": "formalizer", "rule_index": 5, "attempt": 0, "latency_ms": 4095.56}
+{"ts": "2026-05-03T05:01:13Z", "event": "formalize_ok", "rule_index": 5, "rule_name": "rule_5"}
+{"ts": "2026-05-03T05:01:13Z", "event": "formalize_attempt", "rule_index": 6, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:17Z", "event": "llm_call", "role": "formalizer", "rule_index": 6, "attempt": 0, "latency_ms": 3570.31}
+{"ts": "2026-05-03T05:01:17Z", "event": "formalize_ok", "rule_index": 6, "rule_name": "rule_6"}
+{"ts": "2026-05-03T05:01:17Z", "event": "formalize_attempt", "rule_index": 7, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:23Z", "event": "llm_call", "role": "formalizer", "rule_index": 7, "attempt": 0, "latency_ms": 6080.04}
+{"ts": "2026-05-03T05:01:23Z", "event": "formalize_ok", "rule_index": 7, "rule_name": "rule_7"}
+{"ts": "2026-05-03T05:01:23Z", "event": "formalize_attempt", "rule_index": 8, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:27Z", "event": "llm_call", "role": "formalizer", "rule_index": 8, "attempt": 0, "latency_ms": 4819.41}
+{"ts": "2026-05-03T05:01:27Z", "event": "formalize_ok", "rule_index": 8, "rule_name": "rule_8"}
+{"ts": "2026-05-03T05:01:27Z", "event": "formalize_attempt", "rule_index": 9, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:33Z", "event": "llm_call", "role": "formalizer", "rule_index": 9, "attempt": 0, "latency_ms": 5696.25}
+{"ts": "2026-05-03T05:01:33Z", "event": "formalize_ok", "rule_index": 9, "rule_name": "rule_9"}
+{"ts": "2026-05-03T05:01:33Z", "event": "formalize_attempt", "rule_index": 10, "attempt": 0, "has_repair_hint": false}
+{"ts": "2026-05-03T05:01:39Z", "event": "llm_call", "role": "formalizer", "rule_index": 10, "attempt": 0, "latency_ms": 6254.29}
+{"ts": "2026-05-03T05:01:39Z", "event": "formalize_ok", "rule_index": 10, "rule_name": "rule_10"}
+{"ts": "2026-05-03T05:01:39Z", "event": "state_enter", "state": "BATCH_VERIFY"}
+{"ts": "2026-05-03T05:01:39Z", "event": "cheap_check_ok", "rule": "rule_1", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_2", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_3", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_4", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_5", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "medium_cumulative_sat_ok", "phase": "batch", "n_rules": 5}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_6", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_7", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_8", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_9", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "cheap_check_ok", "rule": "rule_10", "pattern": "A"}
+{"ts": "2026-05-03T05:01:40Z", "event": "medium_cumulative_sat_ok", "phase": "batch", "n_rules": 10}
+{"ts": "2026-05-03T05:01:41Z", "event": "medium_hypothesis_smoke_ok", "n_examples": 10, "n_rules": 10}
+{"ts": "2026-05-03T05:01:41Z", "event": "state_enter", "state": "FULL_VERIFY"}
+{"ts": "2026-05-03T05:01:45Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3274.3}
+{"ts": "2026-05-03T05:01:48Z", "event": "roundtrip", "rule": "rule_1", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:01:51Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3288.58}
+{"ts": "2026-05-03T05:01:54Z", "event": "roundtrip", "rule": "rule_2", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:01:58Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3388.68}
+{"ts": "2026-05-03T05:02:01Z", "event": "roundtrip", "rule": "rule_3", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:04Z", "event": "llm_call", "role": "back_translator", "latency_ms": 2725.11}
+{"ts": "2026-05-03T05:02:08Z", "event": "roundtrip", "rule": "rule_4", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:11Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3114.55}
+{"ts": "2026-05-03T05:02:15Z", "event": "roundtrip", "rule": "rule_5", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:18Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3419.92}
+{"ts": "2026-05-03T05:02:22Z", "event": "roundtrip", "rule": "rule_6", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:26Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3808.67}
+{"ts": "2026-05-03T05:02:31Z", "event": "roundtrip", "rule": "rule_7", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:35Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3831.03}
+{"ts": "2026-05-03T05:02:39Z", "event": "roundtrip", "rule": "rule_8", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:44Z", "event": "llm_call", "role": "back_translator", "latency_ms": 4634.76}
+{"ts": "2026-05-03T05:02:49Z", "event": "roundtrip", "rule": "rule_9", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:53Z", "event": "llm_call", "role": "back_translator", "latency_ms": 3869.0}
+{"ts": "2026-05-03T05:02:58Z", "event": "roundtrip", "rule": "rule_10", "ok": true, "detail": "ok"}
+{"ts": "2026-05-03T05:02:58Z", "event": "state_enter", "state": "CONSISTENCY_CHECK"}
+{"ts": "2026-05-03T05:02:58Z", "event": "consistency_ok", "joint_sat": true, "has_coverage": true}
+{"ts": "2026-05-03T05:02:58Z", "event": "state_enter", "state": "EMIT_POLICY"}
+{"ts": "2026-05-03T05:02:59Z", "event": "emit", "policy_py": "policy.py", "manifest": "manifest.json", "consistency_report": "consistency_report.json"}
+{"ts": "2026-05-03T05:02:59Z", "event": "state_enter", "state": "RUNTIME_READY"}

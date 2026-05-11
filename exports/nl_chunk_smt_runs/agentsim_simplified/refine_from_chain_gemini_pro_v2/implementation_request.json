@@ -1,0 +1,115 @@
+{
+  "recommendations": [
+    {
+      "rec_id": "REC-001",
+      "severity": "high",
+      "issue_type": "vacuous_axiom",
+      "nl_evidence": {
+        "line_numbers": [
+          4
+        ],
+        "quoted_snippet": "An account is identified by a unique account identifier and belongs to exactly one customer."
+      },
+      "policy_evidence": {
+        "rule_id": "r_ad57449e5e81",
+        "line_range_1based": [
+          56,
+          58
+        ]
+      },
+      "description": "The assertion `(= (account-owner a) (account-owner a))` is a tautology and fails to enforce any cardinality or uniqueness constraint.",
+      "suggested_remediation": "Remove the vacuous equality. The existence of the uninterpreted function `account-owner` already guarantees 'exactly one' customer per account in standard SMT."
+    },
+    {
+      "rec_id": "REC-002",
+      "severity": "high",
+      "issue_type": "vacuous_axiom",
+      "nl_evidence": {
+        "line_numbers": [
+          6
+        ],
+        "quoted_snippet": "A transaction is identified by a unique transaction identifier and belongs to exactly one account."
+      },
+      "policy_evidence": {
+        "rule_id": "r_adc3aa4896fa",
+        "line_range_1based": [
+          71,
+          73
+        ]
+      },
+      "description": "The assertion `(= (transaction-account t) (transaction-account t))` is a tautology.",
+      "suggested_remediation": "Remove the vacuous equality. The function `transaction-account` inherently maps each transaction to exactly one account."
+    },
+    {
+      "rec_id": "REC-003",
+      "severity": "high",
+      "issue_type": "permission_asymmetry",
+      "nl_evidence": {
+        "line_numbers": [
+          12,
+          13,
+          14,
+          15
+        ],
+        "quoted_snippet": "A call to apply a refund of any type requires that..."
+      },
+      "policy_evidence": {
+        "rule_id": "r_bce7487ae4b3",
+        "line_range_1based": [
+          115,
+          132
+        ]
+      },
+      "description": "Preconditions are encoded as `(=> (is-permitted r) (condition))`. This means if the condition fails, `is-permitted` must be false, which is correct for blocking. However, it is often clearer and more robust for downstream tools to encode these as explicit blocks: `(=> (not (condition)) (not (is-permitted r)))`.",
+      "suggested_remediation": "Rewrite the 'requires' rules as explicit denials when the requirement is not met, e.g., `(=> (not (customer-exists ...)) (not (is-permitted r)))`."
+    },
+    {
+      "rec_id": "REC-004",
+      "severity": "high",
+      "issue_type": "theory_gap",
+      "nl_evidence": {
+        "line_numbers": [
+          12,
+          13,
+          14
+        ],
+        "quoted_snippet": "affected customer... affected account... referenced transaction"
+      },
+      "policy_evidence": {
+        "line_range_1based": [
+          98,
+          105
+        ]
+      },
+      "description": "The model declares separate functions for `refund-customer`, `refund-account`, and `refund-transaction` but does not enforce that they are structurally related (e.g., that the transaction belongs to the account, and the account belongs to the customer).",
+      "suggested_remediation": "Add axioms linking the entities in the context of a refund call, such as `(= (transaction-account (refund-transaction r)) (refund-account r))` and `(= (account-owner (refund-account r)) (refund-customer r))`."
+    },
+    {
+      "rec_id": "REC-005",
+      "severity": "medium",
+      "issue_type": "theory_gap",
+      "nl_evidence": {
+        "line_numbers": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "quoted_snippet": "A call to apply a refund... is not permitted if..."
+      },
+      "policy_evidence": {
+        "symbol": "is-permitted"
+      },
+      "description": "The model specifies many conditions under which a refund is NOT permitted, but never specifies when it IS permitted. This leaves the `is-permitted` predicate underconstrained (positive completion gap).",
+      "suggested_remediation": "If a decidable allow path is expected, add a completion axiom stating that if all preconditions are met and no prohibitions apply, `is-permitted` is true."
+    }
+  ],
+  "summary": "The model contains vacuous axioms for cardinality constraints and exhibits permission asymmetry by only encoding forward implications for preconditions. Additionally, it lacks structural linking between the entities referenced in a refund call and leaves the permission predicate underconstrained.",
+  "assessor_run_id": "refine_20260501T152511Z"
+}

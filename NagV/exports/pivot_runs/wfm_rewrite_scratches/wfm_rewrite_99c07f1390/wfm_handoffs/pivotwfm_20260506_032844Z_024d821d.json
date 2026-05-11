@@ -1,0 +1,22 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260506_032844Z_024d821d",
+  "user_original_input": "Incremental policy ruleset chunk from file 'single_rule.nl' (1-based global rule indices 1–1).\n\nRules in this chunk:\n1. The total estimated cost of the requested instances must be less than or equal to 1000 dollars.\n\n[Pivot pipeline — Agent 2 output shape]\nThis chunk has exactly 1 policy rules (see numbered list above). Your SUCCESS output must contain **exactly 1** numbered lines (1. through 1.), **one line per input rule** in order. Do not add another numbered line by splitting one input rule into multiple statements.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "The total estimated cost of all requested instances must be less than or equal to 1000 dollars.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"The total estimated cost of all requested instances must be less than or equal to 1000 dollars.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260506_032844Z_024d821d_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-06T03:29:48Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

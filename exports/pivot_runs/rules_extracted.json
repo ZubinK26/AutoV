@@ -1,0 +1,113 @@
+{
+  "policy_id": "Test_input",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "SET_INCLUSION",
+      "variable": "requestor_region",
+      "inclusion_operator": "IN",
+      "constant_array": [
+        "NA",
+        "EU",
+        "APAC"
+      ],
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0002",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "resource_type",
+        "operator": "EQ",
+        "value": "DATABASE"
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "has_valid_business_justification",
+        "operator": "EQ",
+        "value": true
+      }
+    },
+    {
+      "rule_id": "R0003",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "CONSTANT_RELATIONAL",
+      "variable": "requested_storage_volume",
+      "relational_operator": "LT",
+      "constant_value": 500,
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0004",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "CONSTANT_RELATIONAL",
+      "variable": "total_cost",
+      "relational_operator": "LTE",
+      "constant_value": 1000,
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0005",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "VARIABLE_RELATIONAL",
+      "left_variable": "requested_memory_allocation",
+      "relational_operator": "LTE",
+      "right_variable": "team_available_memory_quota",
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0006",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "target_environment",
+        "operator": "EQ",
+        "value": "PRODUCTION"
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "mfa_status",
+        "operator": "EQ",
+        "value": true
+      }
+    },
+    {
+      "rule_id": "R0007",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "PREEMPTION",
+      "preempting_condition": {
+        "kind": "atom",
+        "variable": "requestor_role",
+        "operator": "EQ",
+        "value": "ML_ENGINEER"
+      },
+      "action": "BYPASS_RULE",
+      "target_rule_id": "storage_limit_500gb"
+    },
+    {
+      "rule_id": "R0008",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "PREEMPTION",
+      "preempting_condition": {
+        "kind": "atom",
+        "variable": "ip_address_verified",
+        "operator": "EQ",
+        "value": false
+      },
+      "action": "FORCE_UNSATISFIED",
+      "target_rule_id": null
+    }
+  ]
+}

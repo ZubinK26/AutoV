@@ -1,0 +1,105 @@
+<repair_strategy>
+The diagnostic indicates two primary issues:
+1. **Name "req" is not defined**: In Python, decorators are evaluated at function definition time. Since `req` is a parameter of the function, it is not in the scope of the decorator's arguments when they are evaluated.
+2. **"bool" not callable**: The current code uses `@Requires(bool_expr)`. When Python evaluates `Requires(req.item_price_cents >= 0)`, it passes a boolean value to the `Requires` function. If `Requires` is intended to be a decorator factory, it must return a callable (the decorator). Passing a boolean results in the decorator itself being a boolean, which is not callable.
+
+To fix these while adhering to the Nagini toolchain and the provided NL rules:
+- I will move the `Requires` and `Ensures` contracts from decorators to **statements** at the beginning of the function body. This is the standard Nagini/Viper syntax for Python contracts and it resolves the scope issue (as `req` is defined inside the function) and the "not callable" issue (as they are no longer used as decorators).
+- This satisfies the "unless your Nagini version documents that form" clause, as the diagnostic proves the decorator form is not supported/functional in this environment.
+- I will maintain the `bool_expr` style (no lambdas) as requested.
+- I will ensure all logic (restocking fees, shipping rules, manager authorization, and payment methods) remains strictly aligned with the NL.
+</repair_strategy>
+
+```python
+from dataclasses import dataclass
+from nagini_contracts.contracts import Requires, Ensures, Pure, Implies, Result
+
+@dataclass
+class RefundRequest:
+    item_price_cents: int
+    shipping_fee_cents: int
+    days_since_purchase: int
+    is_original_packaging: bool
+    is_unopened: bool
+    is_defective: bool
+    has_proof_of_purchase: bool
+    is_digital_good: bool
+    is_personalized: bool
+    is_merchant_error: bool
+    original_payment_method_accessible: bool
+    manager_authorized: bool
+
+@dataclass
+class RefundResult:
+    is_approved: bool
+    refund_amount_cents: int
+    payment_method: int  # 0: None, 1: Original Method, 2: Store Credit
+
+@Pure
+def get_potential_amount(req: RefundRequest) -> int:
+    """
+    Calculates the base refund amount before restocking fees.
+    Rule 9: Shipping is non-refundable unless merchant error or defect.
+    """
+    shipping_refund = req.shipping_fee_cents if (req.is_defective or req.is_merchant_error) else 0
+    return req.item_price_cents + shipping_refund
+
+@Pure
+def get_final_amount(req: RefundRequest) -> int:
+    """
+    Calculates the final refund amount after applying restocking fees.
+    Rule 2 & 3: Full refund if defective OR (original AND unopened).
+    Rule 6: Opened, non-defective items subject to 15% restocking fee.
+    """
+    potential = get_potential_amount(req)
+    if req.is_defective or (req.is_original_packaging and req.is_unopened):
+        return potential
+    # Apply 15% restocking fee (85% remains)
+    return (potential * 85) // 100
+
+@Pure
+def is_eligible(req: RefundRequest) -> bool:
+    """
+    Checks basic validity of the refund request.
+    Rule 1: Initiated within 30 days.
+    Rule 4: Accompanied by proof of purchase.
+    Rule 5: Digital goods and personalized items are non-refundable.
+    """
+    return (req.days_since_purchase <= 30 and 
+            req.has_proof_of_purchase and 
+            not req.is_digital_good and 
+            not req.is_personalized)
+
+@Pure
+def is_authorized(req: RefundRequest, amount: int) -> bool:
+    """
+    Checks if the refund amount requires managerial authorization.
+    Rule 10: Total exceeding $500 (50000 cents) requires manager tier.
+    """
+    if amount > 50000:
+        return req.manager_authorized
+    return True
+
+def process_refund(req: RefundRequest) -> RefundResult:
+    Requires(req.item_price_cents >= 0)
+    Requires(req.shipping_fee_cents >= 0)
+    Requires(req.days_since_purchase >= 0)
+    Ensures(Result().is_approved == (is_eligible(req) and is_authorized(req, get_final_amount(req))))
+    Ensures(Implies(Result().is_approved, Result().refund_amount_cents == get_final_amount(req)))
+    Ensures(Implies(not Result().is_approved, Result().refund_amount_cents == 0))
+    Ensures(Implies(Result().is_approved, 
+                     Result().payment_method == (1 if req.original_payment_method_accessible else 2)))
+    Ensures(Implies(not Result().is_approved, Result().payment_method == 0))
+
+    final_amount = get_final_amount(req)
+    
+    approved = is_eligible(req) and is_authorized(req, final_amount)
+    
+    if not approved:
+        return RefundResult(False, 0, 0)
+    
+    # Rule 7 & 8: Payment method selection
+    method = 1 if req.original_payment_method_accessible else 2
+    
+    return RefundResult(True, final_amount, method)
+```

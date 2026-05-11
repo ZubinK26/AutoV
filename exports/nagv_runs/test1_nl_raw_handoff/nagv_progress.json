@@ -1,0 +1,11 @@
+{
+  "schema_version": "nagv_progress_v2",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nagv_runs\\test1_nl_raw_handoff",
+  "nagini_repair_cap": 10,
+  "nagini_repair_final_floor": 2,
+  "nagini_repair_used": 8,
+  "semantic_rounds_cap": 5,
+  "semantic_inner_cap": 5,
+  "last_outcome": "rejected_nagini_translation_budget",
+  "last_message": "Nagini translation gate: repair budget exhausted (used 8/10, floor 2)"
+}

@@ -1,0 +1,2 @@
+{"ts": "2026-05-01T15:26:13Z", "event": "sat_check", "sat_result": "sat", "unsat_core": null, "core_rule_hints": null}
+{"ts": "2026-05-01T15:26:16Z", "event": "critic_verdict", "approved": true, "objections": []}

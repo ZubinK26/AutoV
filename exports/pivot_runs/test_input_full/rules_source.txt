@@ -1,0 +1,7 @@
+Every requested storage volume must be strictly less than 500 gigabytes.
+
+Every request must have a total_request_cost that is less than or equal to 1000 dollars.
+
+Every requested memory allocation must not exceed the available memory quota of the requestor's team.
+
+If a request originates from an unverified IP address, then that request is denied.

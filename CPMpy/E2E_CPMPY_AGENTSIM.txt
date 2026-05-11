@@ -1,0 +1,52 @@
+CPMpy end-to-end (Phase 0 + formalizer orchestrator) — agentsim_simplified WFM bundle
+====================================================================================
+
+Prerequisites
+-------------
+- Repo root .env with GEMINI_API_KEY (see .env.example).
+- pip install -e ".[cpmpy-pipeline]" from repo root.
+
+Gemini model
+------------
+registry_stage.llm.gemini_call defaults to gemini-3.1-pro-preview when GEMINI_MODEL is unset.
+To force the same model for CPMpy-only calls, you may set:
+  CPMPY_GEMINI_MODEL=gemini-3.1-pro-preview
+
+Files added for this run
+------------------------
+- CPMpy/agentsim_simplified_guardrails_nl.txt
+    Canonical NL from agentsim_simplified/04_agentic_guardrails_simpl.md (one line per rule).
+- CPMpy/policy_pipeline/domains/agentsim_simplified_wfm/
+    rules.txt     — Ten refund gating lines only (same intent as refund_example/rules.txt). Ontology
+                    sentences from WFM are out of scope for the CPMpy formalizer and live only in
+                    agentsim_simplified_guardrails_nl.txt as reference.
+    tools.json    — apply_refund + lookup_bundle (same shape as refund_example).
+    wfm_handoffs/ — copies of the three accepted registry handoff JSON files.
+
+Phase 0 starts with rules.txt + tools.json only; it writes signature.py, glossary.md, rationale, etc.
+validate-domain expects signature + glossary; run phase0-run before validate-domain or run.
+
+Commands (repo root, PowerShell)
+--------------------------------
+$env:PYTHONPATH = "CPMpy/policy_pipeline"
+# Optional explicit model:
+# $env:GEMINI_MODEL = "gemini-3.1-pro-preview"
+# $env:CPMPY_GEMINI_MODEL = "gemini-3.1-pro-preview"
+
+# Wipe Phase 0 outputs and optional orchestrator out dir (recommended after editing rules.txt):
+cpmpy-policy-pipeline reset-domain --domain CPMpy/policy_pipeline/domains/agentsim_simplified_wfm --out-dir exports/cpmpy_agentsim_e2e
+
+cpmpy-policy-pipeline phase0-run --domain CPMpy/policy_pipeline/domains/agentsim_simplified_wfm --skip-human
+
+cpmpy-policy-pipeline validate-domain --domain CPMpy/policy_pipeline/domains/agentsim_simplified_wfm
+
+New-Item -ItemType Directory -Force -Path exports/cpmpy_agentsim_e2e | Out-Null
+cpmpy-policy-pipeline run --domain CPMpy/policy_pipeline/domains/agentsim_simplified_wfm --out-dir exports/cpmpy_agentsim_e2e
+
+cpmpy-policy-pipeline runtime-check --bundle-dir exports/cpmpy_agentsim_e2e
+
+Notes
+-----
+- Prefer `reset-domain` (above) instead of hand-deleting files when iterating.
+- agentsim_simplified_guardrails_nl.txt holds the full guardrails doc (ontology + policy) for humans;
+  do not point the formalizer at the ontology lines without extending the workflow.

@@ -1,14 +1,22 @@
 {
-  "verdict": "PASS",
+  "verdict": "DRIFT",
   "compared_against": "effective_nl",
-  "findings": [],
-  "audit_trail_bullets": [
-    "Verified all 20 natural language rules are represented across the 21 IR rules.",
-    "Confirmed that NL Rule 17, which requires bypassing two separate rules (Rule 1 and Rule 4), is correctly split into two PREEMPTION rules (R0017 and R0021) to adhere to the single-target IR constraint.",
-    "Validated that product-based constraints (Rule 3 and Rule 4) include both factors in the trigger logic as shown in the linearized model.",
-    "Confirmed that preemption rules (R0017, R0018, R0019, R0021) correctly target the intended base rules (R0001, R0011, R0009, R0004).",
-    "Verified that the 'must_satisfy_all' list correctly includes all non-preemption rules (R0001-R0016 and R0020).",
-    "Confirmed that 'deny regardless' rules (Rule 15 and Rule 16) are present in the main evaluation pathway and are not targeted by any preemption rules."
+  "findings": [
+    {
+      "id": "C001",
+      "severity": "critical",
+      "category": "pathway",
+      "nl_pointer": "If the action type of a request is 'DESTRUCTIVE', then the request must be immediately denied, regardless of any other conditions.",
+      "synthetic_pointer": "compiled_default",
+      "explanation": "Rule R0015, which corresponds to the denial of destructive actions, is defined in the rules section but is omitted from the 'must_satisfy_all' list in the compiled_default pathway, meaning it will not be enforced."
+    }
   ],
-  "notes": "The IR correctly handles the multi-target preemption in NL Rule 17 by creating two distinct preemption entries, which is the required format for the pipeline."
+  "audit_trail_bullets": [
+    "The IR defines 21 rules, including 17 non-preemption rules (R0001-R0016, R0020).",
+    "The 'compiled_default' pathway's 'must_satisfy_all' list contains only 16 rule IDs.",
+    "Rule R0015 (representing NL Rule 15) is the specific non-preemption rule missing from the pathway.",
+    "Other similar conditional denial rules, such as R0016 (Quarantine), are correctly included in the pathway.",
+    "The omission of R0015 constitutes a critical drift as it fails to enforce a mandatory prohibition."
+  ],
+  "notes": "The preemption logic for NL Rule 17 was correctly split into two IR rules (R0017 and R0021) to satisfy the single-target constraint."
 }

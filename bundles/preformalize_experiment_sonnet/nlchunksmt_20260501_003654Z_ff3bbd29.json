@@ -1,0 +1,154 @@
+{
+  "bundle_id": "nlchunksmt_20260501_003654Z_ff3bbd29",
+  "accepted_at": "2026-05-01T14:25:22Z",
+  "committed_at": "2026-05-01T14:25:36Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_8aea31875a9d",
+    "r_9da377b531ba",
+    "r_3f2229585844",
+    "r_3126cef7bfef",
+    "r_96a057261dd5",
+    "r_a6a1176e796b",
+    "r_f1ebddd9a87c",
+    "r_907abe9dd4d7",
+    "r_2973c7a99c9f",
+    "r_43a147a3dc54",
+    "r_eebe81cfd635",
+    "r_caaa14b44893",
+    "r_8b8279dbebab"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_003654Z_ff3bbd29",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 1–10).\n\nRules in this chunk:\n1. A customer is identified by a unique customer identifier and has a KYC status that is either VERIFIED or FAILED.\n2. A customer has a vulnerable flag that is either true or false.\n3. A customer has a field named recent goodwill credit total which is a non-negative amount in pence maintained by the runtime.\n4. An account is identified by a unique account identifier and belongs to exactly one customer.\n5. An account has a flag named has sanctions block which is either true or false.\n6. A transaction is identified by a unique transaction identifier and belongs to exactly one account.\n7. A transaction has an amount in pence which is a positive integer.\n8. A transaction has a status that is either POSTED or PENDING.\n9. A refund call has a refund type that is one of MERCHANT_REFUND or GOODWILL_CREDIT.\n10. A refund call has an amount in pence which is a positive integer.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every customer is identified by a unique customer identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every customer is identified by a unique customer identifier.\"",
+        "preformalized_logic": "For every entity x of sort customer, there exists exactly one value y of sort identifier associated with x, and for any two entities x1 and x2 of sort customer, if the identifier associated with x1 equals the identifier associated with x2, then x1 = x2."
+      },
+      {
+        "line_index": 1,
+        "statement_nl": "Every customer has a KYC status that is either VERIFIED or FAILED.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "2. \"Every customer has a KYC status that is either VERIFIED or FAILED.\"",
+        "preformalized_logic": "For every entity x of a given sort, there exists exactly one status attribute associated with x, and the value of this attribute must be equal to either a first constant or a second distinct constant."
+      },
+      {
+        "line_index": 2,
+        "statement_nl": "Every customer has a vulnerable flag that is either true or false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "3. \"Every customer has a vulnerable flag that is either true or false.\"",
+        "preformalized_logic": "For every entity x of a specific sort, there is an associated attribute P such that the value of P for x is exactly one boolean value, being either true or false."
+      },
+      {
+        "line_index": 3,
+        "statement_nl": "Every customer has a field named recent goodwill credit total, which is a non-negative amount in pence maintained by the runtime.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "4. \"Every customer has a field named recent goodwill credit total, which is a non-negative amount in pence maintained by the runtime.\"",
+        "preformalized_logic": "For every entity c of a specific sort, c has an associated numeric property v representing a specific total, such that v is a non-negative value (v ≥ 0)."
+      },
+      {
+        "line_index": 4,
+        "statement_nl": "Every account is identified by a unique account identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "5. \"Every account is identified by a unique account identifier.\"",
+        "preformalized_logic": "For every entity x of a given sort, there exists exactly one value y of an identifier sort such that y is associated with x, and this association is injective: for any entities x1 and x2 of the given sort, if they are associated with the same identifier y, then x1 = x2."
+      },
+      {
+        "line_index": 5,
+        "statement_nl": "Every account belongs to exactly one customer.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "6. \"Every account belongs to exactly one customer.\"",
+        "preformalized_logic": "For every entity x classified as an account, there exists exactly one entity y classified as a customer such that x is associated with y."
+      },
+      {
+        "line_index": 6,
+        "statement_nl": "Every account has a flag named has sanctions block, which is either true or false.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "7. \"Every account has a flag named has sanctions block, which is either true or false.\"",
+        "preformalized_logic": "For every entity x of a given sort, there is a specific property P associated with x such that the value of P for x is a boolean, meaning it evaluates to exactly one of true or false."
+      },
+      {
+        "line_index": 7,
+        "statement_nl": "Every transaction is identified by a unique transaction identifier.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "8. \"Every transaction is identified by a unique transaction identifier.\"",
+        "preformalized_logic": "For every entity x of sort transaction, there exists exactly one value y of sort identifier such that y identifies x, and for any two distinct entities x1 and x2 of sort transaction, their corresponding identifiers are distinct."
+      },
+      {
+        "line_index": 8,
+        "statement_nl": "Every transaction belongs to exactly one account.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "9. \"Every transaction belongs to exactly one account.\"",
+        "preformalized_logic": "For every entity x classified as a transaction, there exists exactly one entity y classified as an account such that x is associated with y."
+      },
+      {
+        "line_index": 9,
+        "statement_nl": "Every transaction has an amount in pence, which is a positive integer.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "10. \"Every transaction has an amount in pence, which is a positive integer.\"",
+        "preformalized_logic": "For every entity x classified as a transaction, there exists an associated value v representing its amount, such that v is an integer and v > 0."
+      },
+      {
+        "line_index": 10,
+        "statement_nl": "Every transaction has a status that is either POSTED or PENDING.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "11. \"Every transaction has a status that is either POSTED or PENDING.\"",
+        "preformalized_logic": "For every entity x of sort transaction, there exists a status property y associated with x such that y is equal to exactly one of two discrete enumerated values."
+      },
+      {
+        "line_index": 11,
+        "statement_nl": "Every refund call has a refund type that is either MERCHANT_REFUND or GOODWILL_CREDIT.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "12. \"Every refund call has a refund type that is either MERCHANT_REFUND or GOODWILL_CREDIT.\"",
+        "preformalized_logic": "For every entity x classified as a refund call, there exists an associated refund type y such that y is equal to either the first specific constant or the second specific constant."
+      },
+      {
+        "line_index": 12,
+        "statement_nl": "Every refund call has an amount in pence, which is a positive integer.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "13. \"Every refund call has an amount in pence, which is a positive integer.\"",
+        "preformalized_logic": "For every entity x of a specific sort, x has an associated numeric value v such that v is an integer and v > 0."
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_003654Z_ff3bbd29_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T00:37:16Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified\\policy_model_preformalized_chain_sonnet.smt2"
+}

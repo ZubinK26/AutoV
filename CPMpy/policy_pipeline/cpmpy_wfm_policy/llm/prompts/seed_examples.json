@@ -1,0 +1,28 @@
+{
+  "examples": [
+    {
+      "nl": "The referenced transaction must be POSTED.",
+      "expression": "transaction_is_posted",
+      "used_symbols": ["transaction_is_posted"],
+      "uses_global_constraints": false,
+      "uses_vector_variables": false,
+      "claimed_dependencies": ["transaction_status", "transaction_is_posted"]
+    },
+    {
+      "nl": "Every element of the line_flags vector must be true.",
+      "expression": "cp.all(line_flags[i] for i in range(LINE_LEN))",
+      "used_symbols": ["line_flags", "LINE_LEN"],
+      "uses_global_constraints": false,
+      "uses_vector_variables": true,
+      "claimed_dependencies": ["line_flags"]
+    },
+    {
+      "nl": "The three slot assignment codes must all be different.",
+      "expression": "cp.AllDifferent([slot_a, slot_b, slot_c])",
+      "used_symbols": ["slot_a", "slot_b", "slot_c"],
+      "uses_global_constraints": true,
+      "uses_vector_variables": false,
+      "claimed_dependencies": ["slot_a", "slot_b", "slot_c"]
+    }
+  ]
+}

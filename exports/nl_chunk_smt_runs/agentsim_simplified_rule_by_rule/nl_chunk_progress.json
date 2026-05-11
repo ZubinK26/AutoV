@@ -1,0 +1,200 @@
+{
+  "schema_version": "nl_chunk_smt_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/agentsim_simplified/04_agentic_guardrails_simpl.md",
+  "nl_sha256": "15d6d003c51000761e0da928a899d6cf0113e69b0fac65afe5d7ef96c391b098",
+  "rules_per_chunk": 1,
+  "next_rule_index": 21,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 1,
+      "bundle_id": "nlchunksmt_20260501_021637Z_79a1e147",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021637Z_79a1e147.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0000_20260501T021705Z_nlchunksmt_20260501_021637Z_79a1e147.smt2",
+      "committed_at_utc": "2026-05-01T02:17:05Z"
+    },
+    {
+      "chunk_seq": 1,
+      "rule_index_start": 1,
+      "rule_index_end": 2,
+      "bundle_id": "nlchunksmt_20260501_021705Z_397418b3",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021705Z_397418b3.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0001_20260501T021727Z_nlchunksmt_20260501_021705Z_397418b3.smt2",
+      "committed_at_utc": "2026-05-01T02:17:27Z"
+    },
+    {
+      "chunk_seq": 2,
+      "rule_index_start": 2,
+      "rule_index_end": 3,
+      "bundle_id": "nlchunksmt_20260501_021727Z_fb2d0b05",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021727Z_fb2d0b05.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0002_20260501T021757Z_nlchunksmt_20260501_021727Z_fb2d0b05.smt2",
+      "committed_at_utc": "2026-05-01T02:17:57Z"
+    },
+    {
+      "chunk_seq": 3,
+      "rule_index_start": 3,
+      "rule_index_end": 4,
+      "bundle_id": "nlchunksmt_20260501_021757Z_f68e62f3",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021757Z_f68e62f3.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0003_20260501T021821Z_nlchunksmt_20260501_021757Z_f68e62f3.smt2",
+      "committed_at_utc": "2026-05-01T02:18:21Z"
+    },
+    {
+      "chunk_seq": 4,
+      "rule_index_start": 4,
+      "rule_index_end": 5,
+      "bundle_id": "nlchunksmt_20260501_021822Z_aaf5dbf1",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021822Z_aaf5dbf1.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0004_20260501T021847Z_nlchunksmt_20260501_021822Z_aaf5dbf1.smt2",
+      "committed_at_utc": "2026-05-01T02:18:47Z"
+    },
+    {
+      "chunk_seq": 5,
+      "rule_index_start": 5,
+      "rule_index_end": 6,
+      "bundle_id": "nlchunksmt_20260501_021848Z_bd99df71",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021848Z_bd99df71.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0005_20260501T021920Z_nlchunksmt_20260501_021848Z_bd99df71.smt2",
+      "committed_at_utc": "2026-05-01T02:19:20Z"
+    },
+    {
+      "chunk_seq": 6,
+      "rule_index_start": 6,
+      "rule_index_end": 7,
+      "bundle_id": "nlchunksmt_20260501_021921Z_148c8fac",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021921Z_148c8fac.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0006_20260501T021943Z_nlchunksmt_20260501_021921Z_148c8fac.smt2",
+      "committed_at_utc": "2026-05-01T02:19:43Z"
+    },
+    {
+      "chunk_seq": 7,
+      "rule_index_start": 7,
+      "rule_index_end": 8,
+      "bundle_id": "nlchunksmt_20260501_021943Z_efc9f902",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_021943Z_efc9f902.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0007_20260501T022007Z_nlchunksmt_20260501_021943Z_efc9f902.smt2",
+      "committed_at_utc": "2026-05-01T02:20:07Z"
+    },
+    {
+      "chunk_seq": 8,
+      "rule_index_start": 8,
+      "rule_index_end": 9,
+      "bundle_id": "nlchunksmt_20260501_022008Z_61c3182a",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022008Z_61c3182a.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0008_20260501T022029Z_nlchunksmt_20260501_022008Z_61c3182a.smt2",
+      "committed_at_utc": "2026-05-01T02:20:29Z"
+    },
+    {
+      "chunk_seq": 9,
+      "rule_index_start": 9,
+      "rule_index_end": 10,
+      "bundle_id": "nlchunksmt_20260501_022030Z_c0f3f15d",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022030Z_c0f3f15d.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0009_20260501T022056Z_nlchunksmt_20260501_022030Z_c0f3f15d.smt2",
+      "committed_at_utc": "2026-05-01T02:20:56Z"
+    },
+    {
+      "chunk_seq": 10,
+      "rule_index_start": 10,
+      "rule_index_end": 11,
+      "bundle_id": "nlchunksmt_20260501_022056Z_0bfbc8ec",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022056Z_0bfbc8ec.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0010_20260501T022121Z_nlchunksmt_20260501_022056Z_0bfbc8ec.smt2",
+      "committed_at_utc": "2026-05-01T02:21:21Z"
+    },
+    {
+      "chunk_seq": 11,
+      "rule_index_start": 11,
+      "rule_index_end": 12,
+      "bundle_id": "nlchunksmt_20260501_022121Z_6101f429",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022121Z_6101f429.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0011_20260501T022141Z_nlchunksmt_20260501_022121Z_6101f429.smt2",
+      "committed_at_utc": "2026-05-01T02:21:41Z"
+    },
+    {
+      "chunk_seq": 12,
+      "rule_index_start": 12,
+      "rule_index_end": 13,
+      "bundle_id": "nlchunksmt_20260501_022142Z_d8a8684e",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022142Z_d8a8684e.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0012_20260501T022204Z_nlchunksmt_20260501_022142Z_d8a8684e.smt2",
+      "committed_at_utc": "2026-05-01T02:22:04Z"
+    },
+    {
+      "chunk_seq": 13,
+      "rule_index_start": 13,
+      "rule_index_end": 14,
+      "bundle_id": "nlchunksmt_20260501_022204Z_4f44dbb3",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022204Z_4f44dbb3.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0013_20260501T022223Z_nlchunksmt_20260501_022204Z_4f44dbb3.smt2",
+      "committed_at_utc": "2026-05-01T02:22:23Z"
+    },
+    {
+      "chunk_seq": 14,
+      "rule_index_start": 14,
+      "rule_index_end": 15,
+      "bundle_id": "nlchunksmt_20260501_022223Z_77885540",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022223Z_77885540.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0014_20260501T022243Z_nlchunksmt_20260501_022223Z_77885540.smt2",
+      "committed_at_utc": "2026-05-01T02:22:43Z"
+    },
+    {
+      "chunk_seq": 15,
+      "rule_index_start": 15,
+      "rule_index_end": 16,
+      "bundle_id": "nlchunksmt_20260501_022244Z_80e1ef02",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022244Z_80e1ef02.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0015_20260501T022305Z_nlchunksmt_20260501_022244Z_80e1ef02.smt2",
+      "committed_at_utc": "2026-05-01T02:23:05Z"
+    },
+    {
+      "chunk_seq": 16,
+      "rule_index_start": 16,
+      "rule_index_end": 17,
+      "bundle_id": "nlchunksmt_20260501_022306Z_cb2a86b3",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022306Z_cb2a86b3.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0016_20260501T022326Z_nlchunksmt_20260501_022306Z_cb2a86b3.smt2",
+      "committed_at_utc": "2026-05-01T02:23:26Z"
+    },
+    {
+      "chunk_seq": 17,
+      "rule_index_start": 17,
+      "rule_index_end": 18,
+      "bundle_id": "nlchunksmt_20260501_022327Z_6eaf4f4f",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022327Z_6eaf4f4f.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0017_20260501T022351Z_nlchunksmt_20260501_022327Z_6eaf4f4f.smt2",
+      "committed_at_utc": "2026-05-01T02:23:51Z"
+    },
+    {
+      "chunk_seq": 18,
+      "rule_index_start": 18,
+      "rule_index_end": 19,
+      "bundle_id": "nlchunksmt_20260501_022351Z_5ba3fc15",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022351Z_5ba3fc15.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0018_20260501T022413Z_nlchunksmt_20260501_022351Z_5ba3fc15.smt2",
+      "committed_at_utc": "2026-05-01T02:24:13Z"
+    },
+    {
+      "chunk_seq": 19,
+      "rule_index_start": 19,
+      "rule_index_end": 20,
+      "bundle_id": "nlchunksmt_20260501_022414Z_421af6f7",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022414Z_421af6f7.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0019_20260501T022439Z_nlchunksmt_20260501_022414Z_421af6f7.smt2",
+      "committed_at_utc": "2026-05-01T02:24:39Z"
+    },
+    {
+      "chunk_seq": 20,
+      "rule_index_start": 20,
+      "rule_index_end": 21,
+      "bundle_id": "nlchunksmt_20260501_022440Z_883cee09",
+      "handoff_relposix": "exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\wfm_handoffs\\nlchunksmt_20260501_022440Z_883cee09.json",
+      "policy_snapshot": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule/policy_snapshots/policy_after_chunk_0020_20260501T022504Z_nlchunksmt_20260501_022440Z_883cee09.smt2",
+      "committed_at_utc": "2026-05-01T02:25:04Z"
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/nl_chunk_smt_runs/agentsim_simplified_rule_by_rule",
+  "pending_smt": null
+}

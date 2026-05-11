@@ -1,0 +1,31 @@
+<audit_trail>
+Line 0: "Valid iff initiated within 30 days." Code: `is_request_valid` returns `days_since_transaction <= 30`. Boundary correct (≤30). Match.
+
+Line 1: "If full refund, then returned in original unopened packaging." Code: `packaging_requirement_satisfied` returns `(not full_refund) or verified_defective or returned_in_original_packaging`. This combines line 1 and line 2. Line 1 alone says full refund → original packaging. Line 2 is the exception. The combination is correct.
+
+Line 2: "If verified defective, not required to be in original packaging." Code includes `verified_defective` as an exception. Match.
+
+Line 3: "Every refund request is accompanied by verifiable proof of purchase." This is a universal requirement. Code uses `req.has_proof_of_purchase` as a condition for approval. The NL says every refund request must have proof — interpretation as approval criterion is reasonable. Match.
+
+Line 4: "Every digital good is strictly non-refundable." Code: `is_categorically_non_refundable` includes `is_digital_good`, and approval requires not categorically non-refundable. Match.
+
+Line 5: "Every personalized item is strictly non-refundable." Same treatment. Match.
+
+Line 6: "Every opened, non-defective item subject to 15% restocking fee deducted from refund total." Code: `restocking_fee_applies` correct. `compute_refund_amount` deducts 15%. Match. Note: integer division `(req.refund_total * 15) // 100` is a minor implementation choice but not a semantic drift since refund_total is typed int.
+
+Line 7: "Every approved refund credited exclusively to original payment method." Code: `credited_to_original_method` returns `approved AND original_payment_accessible`. But Line 7 says exclusively — Line 8 provides exception when inaccessible. Combined treatment is correct.
+
+Line 8: "If original payment method inaccessible, defaults to non-transferable store credit." Code: `credited_to_store_credit` returns `approved AND not accessible`. Match.
+
+Line 9: "If not (merchant error or defect), shipping non-refundable." Code: `shipping_refundable` returns `merchant_error OR return_due_to_defect`. Contrapositive correct. Match.
+
+Line 10: Same for handling. Match.
+
+Line 11: "If refund executed and total exceeds $500, then has managerial authorization." Code: `managerial_authorization_satisfied` returns `(refund_total <= 500) OR has_managerial_authorization`. Boundary: "exceeds $500" means `> 500`, so requirement triggers when `> 500`, satisfied when `<= 500 OR authorized`. Correct.
+
+Banned syntax check: No Forall, Exists, Old, while, dynamic typing, or I/O. Pass.
+
+All clauses match.
+</audit_trail>
+
+[VERDICT: PASS]

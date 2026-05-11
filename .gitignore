@@ -44,3 +44,6 @@ NagV/pivot_pipeline/golden_test_run/
 # --- OS ---
 .DS_Store
 Thumbs.db
+
+# Nested clone (track as submodule or vendor elsewhere)
+test_sets/datasets/aspbench/repo/

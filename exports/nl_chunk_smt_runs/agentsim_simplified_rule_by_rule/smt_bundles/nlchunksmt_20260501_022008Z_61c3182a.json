@@ -1,0 +1,33 @@
+{
+  "bundle_id": "nlchunksmt_20260501_022008Z_61c3182a",
+  "accepted_at": "2026-05-01T02:20:19Z",
+  "committed_at": "2026-05-01T02:20:29Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_16a609902fa3"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_022008Z_61c3182a",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 9–9).\n\nRules in this chunk:\n9. A refund call has a refund type that is one of MERCHANT_REFUND or GOODWILL_CREDIT.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "Every refund call has exactly one refund type that is one of MERCHANT_REFUND or GOODWILL_CREDIT.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"Every refund call has exactly one refund type that is one of MERCHANT_REFUND or GOODWILL_CREDIT.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_022008Z_61c3182a_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T02:20:19Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\policy_model.smt2"
+}

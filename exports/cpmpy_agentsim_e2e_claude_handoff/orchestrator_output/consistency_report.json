@@ -1,0 +1,45 @@
+{
+  "schema_version": "cpmpy_consistency_report_v1",
+  "policy_version": "8c7597331275af3d",
+  "joint_sat": true,
+  "per_rule_reachability": {
+    "rule_1": {
+      "reachable": true
+    },
+    "rule_2": {
+      "reachable": true
+    },
+    "rule_3": {
+      "reachable": true
+    },
+    "rule_4": {
+      "reachable": true
+    },
+    "rule_5": {
+      "reachable": true
+    },
+    "rule_6": {
+      "reachable": true
+    },
+    "rule_7": {
+      "reachable": true
+    },
+    "rule_8": {
+      "reachable": true
+    },
+    "rule_9": {
+      "reachable": true
+    },
+    "rule_10": {
+      "reachable": true
+    }
+  },
+  "warnings": [],
+  "coverage": {
+    "apply_refund": {
+      "legal_exists": true,
+      "illegal_exists": true
+    }
+  },
+  "pairwise": null
+}

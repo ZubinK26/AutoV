@@ -1,0 +1,28 @@
+{
+  "policy_id": "toy_refund",
+  "policy_semantics_version": "1.0",
+  "baseline_evaluation": "DEFAULT_UNSATISFIED",
+  "evaluation_pathways": [
+    {
+      "pathway_id": "compiled_default",
+      "description": "v1: single pathway AND of active rules (non-PREEMPTION) after overrides",
+      "must_satisfy_all": [
+        "R1"
+      ],
+      "must_not_trigger": []
+    }
+  ],
+  "rules": [
+    {
+      "rule_id": "R1",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "CONSTANT_RELATIONAL",
+      "variable": "days_since_purchase",
+      "relational_operator": "LTE",
+      "constant_value": 30,
+      "yields": "SATISFIED"
+    }
+  ],
+  "variable_sorts": {}
+}

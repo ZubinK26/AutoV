@@ -1,0 +1,33 @@
+{
+  "bundle_id": "nlchunksmt_20260501_022244Z_80e1ef02",
+  "accepted_at": "2026-05-01T02:22:56Z",
+  "committed_at": "2026-05-01T02:23:05Z",
+  "pipeline_status": "committed",
+  "rule_ids": [
+    "r_43510f8010f5"
+  ],
+  "out_of_scope_line_indices": [],
+  "wfm_payload": {
+    "schema_version": "registry_persistence_v1",
+    "bundle_id": "nlchunksmt_20260501_022244Z_80e1ef02",
+    "user_original_input": "Incremental policy ruleset chunk from file '04_agentic_guardrails_simpl.md' (1-based global rule indices 16–16).\n\nRules in this chunk:\n16. A call to apply a refund of any type is not permitted if the affected customer's KYC status is FAILED.",
+    "lines": [
+      {
+        "line_index": 0,
+        "statement_nl": "If a customer's KYC status is FAILED, a call to apply a refund of any type for that customer is not permitted.",
+        "agent3_verdict": "PASS",
+        "scope_report": null,
+        "diff_report": null,
+        "agent2_line_text": "1. \"If a customer's KYC status is FAILED, a call to apply a refund of any type for that customer is not permitted.\""
+      }
+    ],
+    "orchestration_run_id": "orr_nlchunksmt_20260501_022244Z_80e1ef02_p0_accept",
+    "wfm_pipeline_timestamps": {
+      "confirmation_accepted_utc": "2026-05-01T02:22:56Z"
+    },
+    "provider_model": "gemini-3.1-pro-preview",
+    "wfm_compound_operator_limit": 8
+  },
+  "failure_reason": null,
+  "policy_model_path": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nl_chunk_smt_runs\\agentsim_simplified_rule_by_rule\\policy_model.smt2"
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260505_231640Z_58ab3ed1",
+  "user_original_input": "Incremental policy ruleset chunk from file 'single_rule.nl' (1-based global rule indices 1–1).\n\nRules in this chunk:\n1. The total_request_cost of the request must be less than or equal to 1000 dollars.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every request must have a total_request_cost that is less than or equal to 1000 dollars.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every request must have a total_request_cost that is less than or equal to 1000 dollars.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260505_231640Z_58ab3ed1_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-05T23:16:51Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

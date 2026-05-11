@@ -1,0 +1,13 @@
+{
+  "nl_source": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\Test1-NL.md",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_smoke",
+  "meta_scheme": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_smoke\\meta_scheme.json",
+  "z3": {
+    "status": "sat",
+    "model_excerpt": "{'days_since_purchase': '30'}"
+  },
+  "precheck_ok": true,
+  "precheck_issues": [],
+  "critic": "skipped_default",
+  "outcome": "ok"
+}

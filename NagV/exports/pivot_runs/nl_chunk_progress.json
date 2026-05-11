@@ -1,0 +1,27 @@
+{
+  "schema_version": "nl_chunk_smt_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/NagV/pivot_pipeline/inputs/Test_input.md",
+  "nl_sha256": "6bcc2ce7bb262704fd7210ca1cfcf7304b48cb1f250f5b179bf24c867bb4574c",
+  "rules_per_chunk": 5,
+  "next_rule_index": 8,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 5,
+      "bundle_id": "pivotwfm_20260506_164107Z_e6c2c4bc",
+      "handoff_relposix": "NagV\\exports\\pivot_runs\\wfm_handoffs\\pivotwfm_20260506_164107Z_e6c2c4bc.json",
+      "pivot_wfm_only": true
+    },
+    {
+      "chunk_seq": 1,
+      "rule_index_start": 5,
+      "rule_index_end": 8,
+      "bundle_id": "pivotwfm_20260506_164348Z_e1cefade",
+      "handoff_relposix": "NagV\\exports\\pivot_runs\\wfm_handoffs\\pivotwfm_20260506_164348Z_e1cefade.json",
+      "pivot_wfm_only": true
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/NagV/exports/pivot_runs",
+  "pending_smt": null
+}

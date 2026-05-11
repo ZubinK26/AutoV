@@ -1,0 +1,20 @@
+**[VERDICT: DRIFT DETECTED]**
+
+**1. Boundary Drift (Inequality Error) — `managerial_auth_required` threshold**
+
+* **NL Intent:** "If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier."
+* **Code Implementation:** `return req.refund_total_cents > 50000` — The threshold is 50,000 cents, but $500.00 = 50,000 cents exactly. The operator `>` is correct for "exceeds $500," however the cent conversion is wrong: $500 = 50,000 cents, so `> 50000` means "exceeds $500.00" which is mathematically correct **only if** 1 dollar = 100 cents. $500 × 100 = 50,000 cents. This is actually correct. *(No error here — retracting this sub-point.)*
+
+**1. Hallucination (Over-specification) — Negative `days_since_transaction` guard**
+
+* **NL Intent:** "Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date." The NL states no rule about negative day values; it only specifies the 30-day boundary.
+* **Code Implementation:** In `request_is_valid`, the code adds `if req.days_since_transaction < 0: return False`, which invents an additional invalidity condition not present in the NL. This is reinforced by the `@Requires(req.days_since_transaction >= 0)` precondition in `evaluate_refund`, which silently excludes negative values from the domain rather than treating them as part of the validity logic.
+* **Correction:** Remove the `if req.days_since_transaction < 0: return False` guard from `request_is_valid`. The `@Requires(req.days_since_transaction >= 0)` precondition in `evaluate_refund` may also be removed, or if retained for practical reasons, it must be acknowledged as an assumption not grounded in the NL. The sole time-based validity condition should be `req.days_since_transaction <= 30`.
+
+**2. Omission (Under-specification) — `requires_managerial_authorization` field not constrained when `is_approved` is False**
+
+* **NL Intent:** "If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier." The NL ties the authorization requirement to the act of execution/approval; the `requires_managerial_authorization` output field should reflect whether authorization *was required and present* as part of the approved decision.
+* **Code Implementation:** `requires_managerial_authorization=auth_required` is set unconditionally based solely on `refund_total_cents > 50000`, regardless of whether the refund is approved or even valid. The `@Ensures` contract only checks `Result().requires_managerial_authorization` when `is_approved and refund_total_cents > 50000`, but does not ensure the field is `False` when the refund is not approved and no execution occurs. The NL rule is conditioned on a refund being *executed*, not merely requested.
+* **Correction:** Set `requires_managerial_authorization` only in the context of an approved/executed refund. Change the assignment to: `requires_managerial_authorization = approved and auth_required`, and update the corresponding `@Ensures` to: `Ensures(Result().requires_managerial_authorization == (Result().is_approved and req.refund_total_cents > 50000))`.
+
+[VERDICT: DRIFT DETECTED]

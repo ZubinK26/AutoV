@@ -1,0 +1,8 @@
+exit=1
+--- stdout ---
+Translation failed
+Type error: Encountered Any type. Type annotation missing? (dataclasses@14.0)
+
+--- stderr ---
+Picked up JAVA_TOOL_OPTIONS: -Xmx4g -Djava.awt.headless=true
+

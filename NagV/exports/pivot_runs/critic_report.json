@@ -1,0 +1,17 @@
+{
+  "verdict": "PASS",
+  "compared_against": "effective_nl",
+  "findings": [],
+  "audit_trail_bullets": [
+    "Requirement for region (NA, EU, APAC) is mapped to R0001.",
+    "Database justification requirement is mapped to R0002.",
+    "Storage volume limit (< 500GB) is mapped to R0003.",
+    "Total cost limit (<= 1000) is mapped to R0004.",
+    "Memory quota constraint is mapped to R0005.",
+    "Production MFA requirement is mapped to R0006.",
+    "ML_ENGINEER bypass for storage limit is correctly mapped as a PREEMPTION rule (R0007) targeting R0003.",
+    "Unverified IP denial is mapped to R0008.",
+    "The pathway correctly includes all non-preemption rules in must_satisfy_all."
+  ],
+  "notes": "The synthetic IR is a complete and accurate representation of the provided natural language policy."
+}

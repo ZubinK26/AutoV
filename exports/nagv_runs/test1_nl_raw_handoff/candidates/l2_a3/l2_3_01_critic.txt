@@ -1,0 +1,13 @@
+<audit_trail>
+1. **Line 0:** "A refund request is valid if and only if it is initiated within 30 days of the original transaction date." The code implements this as `req.days_since_transaction <= 30` in `is_valid_request`. This is a perfect match.
+2. **Line 1 & 2:** "A full refund requires the item to be returned in its original, unopened packaging. If an item is verified as defective upon delivery, the original packaging requirement is waived." The code implements this by checking `if not req.is_unopened and not req.is_defective:` before applying the restocking fee. This perfectly matches the logic.
+3. **Line 3:** "All refund requests must be accompanied by a verifiable proof of purchase." The code includes `req.has_proof_of_purchase` in `is_valid_request`. Perfect match.
+4. **Line 4:** "Digital goods and personalized items are strictly non-refundable." The code includes `not req.is_digital and not req.is_personalized` in `is_valid_request`. Perfect match.
+5. **Line 5:** "Opened, non-defective items are subject to a 15% restocking fee deducted from the refund total." The code deducts 15% using integer math `refund_amount - (refund_amount * 15) // 100`. Perfect match.
+6. **Line 6 & 7:** "Approved refunds shall be credited exclusively to the original payment method. If the original payment method is inaccessible, the refund will default to non-transferable store credit." The code sets `method = 1` if `req.original_payment_accessible` is true, else `method = 2`. Perfect match.
+7. **Line 8:** "Original shipping and handling charges are non-refundable unless the return is necessitated by a merchant error or defect." The code adds `req.shipping_charges` to the refund amount only if `req.is_defective or req.merchant_error`. Perfect match.
+8. **Line 9:** "Any refund total exceeding $500 requires explicit authorization from a managerial tier before execution." The code checks `if refund_amount > 500 and not req.manager_authorized:` and returns an unapproved result. Perfect match.
+9. **Contracts:** The `@Requires` and `@Ensures` clauses accurately reflect the constraints and guarantees of the NL rules without introducing banned syntax or scope violations.
+</audit_trail>
+
+[VERDICT: PASS]

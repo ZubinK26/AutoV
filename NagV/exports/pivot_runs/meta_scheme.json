@@ -1,0 +1,136 @@
+{
+  "policy_id": "Test_input",
+  "policy_semantics_version": "1.0",
+  "baseline_evaluation": "DEFAULT_UNSATISFIED",
+  "evaluation_pathways": [
+    {
+      "pathway_id": "compiled_default",
+      "description": "v1: single pathway AND of active rules (non-PREEMPTION) after overrides",
+      "must_satisfy_all": [
+        "R0001",
+        "R0002",
+        "R0003",
+        "R0004",
+        "R0005",
+        "R0006",
+        "R0008"
+      ],
+      "must_not_trigger": []
+    }
+  ],
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "SET_INCLUSION",
+      "variable": "requestor_region",
+      "inclusion_operator": "IN",
+      "constant_array": [
+        "NA",
+        "EU",
+        "APAC"
+      ],
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0002",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "resource_type",
+        "operator": "EQ",
+        "value": "DATABASE"
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "is_business_justification_valid",
+        "operator": "EQ",
+        "value": true
+      }
+    },
+    {
+      "rule_id": "R0003",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "CONSTANT_RELATIONAL",
+      "variable": "requested_storage_volume",
+      "relational_operator": "LT",
+      "constant_value": 500,
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0004",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "CONSTANT_RELATIONAL",
+      "variable": "total_request_cost",
+      "relational_operator": "LTE",
+      "constant_value": 1000,
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0005",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "VARIABLE_RELATIONAL",
+      "left_variable": "requested_memory_allocation",
+      "relational_operator": "LTE",
+      "right_variable": "team_available_memory_quota",
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0006",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "target_environment",
+        "operator": "EQ",
+        "value": "PRODUCTION"
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "mfa_status",
+        "operator": "EQ",
+        "value": true
+      }
+    },
+    {
+      "rule_id": "R0007",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "PREEMPTION",
+      "preempting_condition": {
+        "kind": "atom",
+        "variable": "requestor_role",
+        "operator": "EQ",
+        "value": "ML_ENGINEER"
+      },
+      "action": "BYPASS_RULE",
+      "target_rule_id": "R0003"
+    },
+    {
+      "rule_id": "R0008",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "ip_address_verification_status",
+        "operator": "EQ",
+        "value": "unverified"
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "request_status",
+        "operator": "EQ",
+        "value": "denied"
+      }
+    }
+  ],
+  "variable_sorts": {}
+}

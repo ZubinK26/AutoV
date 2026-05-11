@@ -1,0 +1,23 @@
+{
+  "nl_source": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\NagV\\pivot_pipeline\\inputs\\Test_input.md",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs",
+  "interactive_policy": true,
+  "phase0_exit_code": 0,
+  "wfm_forward_lines": 8,
+  "phase0_chunks_this_invocation": 2,
+  "phase0_normalized_nl": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\phase0_normalized_nl.txt",
+  "rules_extracted": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\rules_extracted.json",
+  "meta_scheme": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\meta_scheme.json",
+  "z3": {
+    "status": "sat",
+    "elapsed_ms": 7.495,
+    "model_excerpt": "{'requested_memory_allocation': '0', 'total_cost': '1000', 'team_available_memory_quota': '0', 'requestor_region': '0', 'EU': '0', 'NA': '0', 'ML_ENGINEER': '0', 'requestor_role': '0', 'has_valid_business_justification': '1', 'APAC': '0', 'mfa_status': '1'}",
+    "model_verified": true,
+    "statistics": "(:elim-unconstrained  2\n :max-memory          17.74\n :memory              17.74\n :num-allocs          30633\n :rlimit-count        513\n :solve-eqs-elim-vars 8\n :solve-eqs-steps     8\n :time                0.00)"
+  },
+  "precheck_ok": true,
+  "precheck_issues": [],
+  "critic_result": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\pivot_runs\\critic_result.txt",
+  "critic_passed": true,
+  "outcome": "ok"
+}

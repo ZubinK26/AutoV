@@ -1,0 +1,6 @@
+{
+  "outcome": "rejected_nagini_translation_budget",
+  "message": "Nagini translation gate: repair budget exhausted (used 8/10, floor 2)",
+  "last_nagini_stdout": "Translation failed\nType error: Encountered Any type. Type annotation missing? (dataclasses@14.0)\n",
+  "last_nagini_stderr": "Picked up JAVA_TOOL_OPTIONS: -Xmx4g -Djava.awt.headless=true\n"
+}

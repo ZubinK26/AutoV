@@ -1,0 +1,103 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "csplib_001_car_seq",
+  "user_original_input": "001: Car Sequencing  A number of cars are to be produced; they are not identical, because different options are available as variants on the basic model. The assembly line has different stations which install the various options (air-conditioning, sunroof, etc.). These stations have been designed to handle at most a certain percentage of  the cars passing along the assembly line. Furthermore, the cars requiring a certain option must not be bunched together, otherwise the station will not be able to cope. Consequently, the cars must be arranged in a sequence so that the capacity of each station is never exceeded. For instance, if a particular station can only cope with at most half of the cars passing along the line, the sequence must be built so that at most 1 car in any 2 requires that option.  Print the sequence of car types in the assembly line (sequence); each car type is represented by a number starting from 0.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "A set of cars is to be produced.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"A set of cars is to be produced.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 1,
+      "statement_nl": "The cars are not identical because different options are available as variants on the basic model.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "2. \"The cars are not identical because different options are available as variants on the basic model.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 2,
+      "statement_nl": "The assembly line has multiple stations.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"The assembly line has multiple stations.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 3,
+      "statement_nl": "Each station installs a specific option.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "4. \"Each station installs a specific option.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 4,
+      "statement_nl": "Each station has a capacity defined by a maximum number of cars within a given consecutive sequence length.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "5. \"Each station handles at most a specific percentage of the cars passing along the assembly line.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 5,
+      "statement_nl": "Cars requiring a specific option must not exceed the station's capacity within any consecutive sequence.",
+      "agent3_verdict": "REWRITE",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "6. \"Cars requiring a specific option must not be bunched together.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 6,
+      "statement_nl": "The cars must be arranged in a sequence such that the capacity of each station is never exceeded.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "7. \"The cars must be arranged in a sequence such that the capacity of each station is never exceeded.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 7,
+      "statement_nl": "For instance, if a specific station can handle at most half of the cars passing along the line, the sequence must be built such that at most 1 car in any consecutive sequence of 2 cars requires that option.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "8. \"For instance, if a specific station can handle at most half of the cars passing along the line, the sequence must be built such that at most 1 car in any consecutive sequence of 2 cars requires that option.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 8,
+      "statement_nl": "The output must be the sequence of car types in the assembly line.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "9. \"The output must be the sequence of car types in the assembly line.\"",
+      "preformalized_logic": null
+    },
+    {
+      "line_index": 9,
+      "statement_nl": "Each car type is represented by a number starting from 0.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "10. \"Each car type is represented by a number starting from 0.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_csplib_001_car_seq_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-03T06:51:28Z"
+  },
+  "provider_model": "gemini-3.1-pro-preview",
+  "wfm_compound_operator_limit": 8
+}

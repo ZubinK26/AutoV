@@ -1,0 +1,22 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260505_231452Z_9c11ff03",
+  "user_original_input": "Incremental policy ruleset chunk from file 'Test_input.md' (1-based global rule indices 6–8).\n\nRules in this chunk:\n6. If the target environment is \"PRODUCTION\", the requestor's MFA status must be true.\n7. If the requestor's role is \"ML_ENGINEER\", the 500-gigabyte storage limit is bypassed.\n8. If the request originates from an unverified IP address, the entire request is immediately denied.",
+  "lines": [
+    {
+      "line_index": 2,
+      "statement_nl": "If a request originates from an unverified IP address, then that request is denied.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "3. \"If a request originates from an unverified IP address, then that request is denied.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260505_231452Z_9c11ff03_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-05T23:15:20Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

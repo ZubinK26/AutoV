@@ -1,0 +1,16 @@
+{
+  "schema_version": "cpmpy_policy_manifest_slice1",
+  "description": "Hand-written rules for slice-1 demo only (pre-orchestrator).",
+  "rules": {
+    "rule_1": {
+      "nl_summary": "Refund requires referenced transaction POSTED",
+      "uses_global_constraints": false,
+      "uses_vector_variables": false
+    },
+    "rule_2": {
+      "nl_summary": "Refund not permitted when KYC FAILED",
+      "uses_global_constraints": false,
+      "uses_vector_variables": false
+    }
+  }
+}

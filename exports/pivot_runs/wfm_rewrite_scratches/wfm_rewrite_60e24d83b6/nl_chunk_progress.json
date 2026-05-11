@@ -1,0 +1,19 @@
+{
+  "schema_version": "nl_chunk_smt_progress_v1",
+  "nl_path_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/pivot_runs/wfm_rewrite_scratches/wfm_rewrite_60e24d83b6/single_rule.nl",
+  "nl_sha256": "0983596cb941d40952183dee02e1aa90aa097866b2e20db9749d1e0739d0178a",
+  "rules_per_chunk": 1,
+  "next_rule_index": 1,
+  "chunk_records": [
+    {
+      "chunk_seq": 0,
+      "rule_index_start": 0,
+      "rule_index_end": 1,
+      "bundle_id": "pivotwfm_20260506_010444Z_f23827e6",
+      "handoff_relposix": "exports\\pivot_runs\\wfm_rewrite_scratches\\wfm_rewrite_60e24d83b6\\wfm_handoffs\\pivotwfm_20260506_010444Z_f23827e6.json",
+      "pivot_wfm_only": true
+    }
+  ],
+  "work_dir_posix": "C:/Users/PC/Documents/Project_Cursor/AutoV/exports/pivot_runs/wfm_rewrite_scratches/wfm_rewrite_60e24d83b6",
+  "pending_smt": null
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "nagv_progress_v3_z3",
+  "work_dir": "C:\\Users\\PC\\Documents\\Project_Cursor\\AutoV\\exports\\nagv_runs\\test1_nl",
+  "z3_repair_cap": 10,
+  "z3_repair_final_floor": 2,
+  "z3_repair_used": 0,
+  "semantic_rounds_cap": 5,
+  "semantic_inner_cap": 5,
+  "last_outcome": "error_api",
+  "last_message": "error_api: name 'NAGV_CRITIC_THINKING_LEVEL' is not defined"
+}

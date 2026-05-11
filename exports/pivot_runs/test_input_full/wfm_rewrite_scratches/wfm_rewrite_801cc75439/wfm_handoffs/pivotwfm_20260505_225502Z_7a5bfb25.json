@@ -1,0 +1,22 @@
+{
+  "schema_version": "registry_persistence_v1",
+  "bundle_id": "pivotwfm_20260505_225502Z_7a5bfb25",
+  "user_original_input": "Incremental policy ruleset chunk from file 'single_rule.nl' (1-based global rule indices 1–1).\n\nRules in this chunk:\n1. The requestor's region_count must be equal to 1.",
+  "lines": [
+    {
+      "line_index": 0,
+      "statement_nl": "Every requestor's region_count must be equal to 1.",
+      "agent3_verdict": "PASS",
+      "scope_report": null,
+      "diff_report": null,
+      "agent2_line_text": "1. \"Every requestor's region_count must be equal to 1.\"",
+      "preformalized_logic": null
+    }
+  ],
+  "orchestration_run_id": "orr_pivotwfm_20260505_225502Z_7a5bfb25_p0_accept",
+  "wfm_pipeline_timestamps": {
+    "confirmation_accepted_utc": "2026-05-05T22:55:13Z"
+  },
+  "provider_model": "gemini-3-flash-preview",
+  "wfm_compound_operator_limit": 8
+}

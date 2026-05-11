@@ -1,0 +1,114 @@
+{
+  "canonical_variables": [
+    {
+      "id": "requestor_region",
+      "aliases": [
+        "requestor's region"
+      ],
+      "line_hints": [
+        1
+      ]
+    },
+    {
+      "id": "resource_type",
+      "aliases": [
+        "requested resource type"
+      ],
+      "line_hints": [
+        2
+      ]
+    },
+    {
+      "id": "is_business_justification_valid",
+      "aliases": [
+        "business justification"
+      ],
+      "line_hints": [
+        2
+      ]
+    },
+    {
+      "id": "requested_storage_volume",
+      "aliases": [
+        "requested storage volume",
+        "storage limit"
+      ],
+      "line_hints": [
+        3,
+        7
+      ]
+    },
+    {
+      "id": "total_request_cost",
+      "aliases": [
+        "total request cost"
+      ],
+      "line_hints": [
+        4
+      ]
+    },
+    {
+      "id": "requested_memory_allocation",
+      "aliases": [
+        "requested memory allocation"
+      ],
+      "line_hints": [
+        5
+      ]
+    },
+    {
+      "id": "team_available_memory_quota",
+      "aliases": [
+        "available memory quota"
+      ],
+      "line_hints": [
+        5
+      ]
+    },
+    {
+      "id": "target_environment",
+      "aliases": [
+        "target environment"
+      ],
+      "line_hints": [
+        6
+      ]
+    },
+    {
+      "id": "mfa_status",
+      "aliases": [
+        "MFA status"
+      ],
+      "line_hints": [
+        6
+      ]
+    },
+    {
+      "id": "requestor_role",
+      "aliases": [
+        "role of a requestor"
+      ],
+      "line_hints": [
+        7
+      ]
+    },
+    {
+      "id": "ip_address_verification_status",
+      "aliases": [
+        "unverified IP address"
+      ],
+      "line_hints": [
+        8
+      ]
+    },
+    {
+      "id": "request_status",
+      "aliases": [
+        "request is denied"
+      ],
+      "line_hints": [
+        8
+      ]
+    }
+  ]
+}

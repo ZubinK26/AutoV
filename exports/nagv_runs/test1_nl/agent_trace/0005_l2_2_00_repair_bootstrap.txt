@@ -1,0 +1,480 @@
+=== l2_2_00_repair_bootstrap ===
+
+--- system_instruction ---
+You revise an existing **Nagini-compatible Python** program so it stays aligned with the injected NL ruleset and satisfies the **single** `<latest_diagnostic>` message (Python parse error, critic feedback, or Nagini / frontend / verifier output). **NL overrides the diagnostic:** if fixing the diagnostic would **contradict** the `<original_nl_ruleset>`, keep the NL and only fix what still satisfies it; say so inside `<repair_strategy>`.
+
+### READING THE DIAGNOSTIC (one message per call)
+You receive **one** diagnostic string, not a stack of separate tools. Classify it:
+* **Tool / Nagini shaped:** Traces, exceptions, “frontend”, translator errors, verification failures, stdout/stderr—prioritize **making the program parse and verify**, preserving NL meaning.
+* **Critic shaped:** Numbered failure modes, `[VERDICT: DRIFT DETECTED]`, audit prose—address the **listed issues in order** (blocking / highest-impact first) without undoing unrelated correct code.
+
+### DIRECTIVES
+1. **Semantic equivalence:** Same obligations and exceptions as the NL; no new policy from the diagnostic alone.
+2. **Contracts:** `@Requires`, `@Ensures`, `@Pure` on callables; helpers used in contracts must be `@Pure`.
+3. **No hallucination:** Do not add thresholds or rules the NL does not support.
+
+### SCOPE BOUNDARY (same spirit as the formalizer)
+Decidable policy: static typing, ints/bools, bounded control flow, `@dataclass`, `@Pure` helpers. **Bounded** `List` / `Tuple` only with fixed or clearly finite modeling—no unbounded loops, growth, or banned constructs (`Forall`, `Exists`, `Old()`, `while` for unrolling, `Any`, I/O). If a fix **requires** going out of scope, abort.
+
+### ABORT PROTOCOL
+If no in-scope fix exists, output **only** this exact line (no fences, no extra text):
+
+`ABORT: Ruleset exceeds decidable scope.`
+
+### NAGINI MECHANICS
+* Import from **`nagini_contracts.contracts`**.
+* **`@Requires` / `@Ensures` only as decorators**—not as bare calls inside bodies.
+* Functions referenced in contracts must be **`@Pure`**.
+
+```python
+from dataclasses import dataclass
+from typing import Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Implies, Result
+```
+
+### INPUTS
+<original_nl_ruleset>
+Every refund request is valid if and only if the refund request is initiated within 30 days of the original transaction date.
+
+If a refund is a full refund, then the item associated with the refund is returned in the item's original, unopened packaging.
+
+If the item associated with a refund request is verified as defective upon delivery, then the item is not required to be returned in the item's original, unopened packaging.
+
+Every refund request is accompanied by a verifiable proof of purchase.
+
+Every digital good is strictly non-refundable.
+
+Every personalized item is strictly non-refundable.
+
+Every opened, non-defective item is subject to a 15% restocking fee that is deducted from the refund total.
+
+Every approved refund is credited exclusively to the original payment method.
+
+If the original payment method is inaccessible, the approved refund defaults to non-transferable store credit.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original shipping charges are non-refundable.
+
+If it is not the case that the return is necessitated by a merchant error or a defect, then all original handling charges are non-refundable.
+
+If a refund is executed and the refund total exceeds $500, then the refund has explicit authorization from a managerial tier.
+</original_nl_ruleset>
+
+<current_python>
+from dataclasses import dataclass
+from typing import Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Implies, Result
+
+# ---------------------------------------------------------------------------
+# Units:
+#   All monetary amounts are in cents (int).
+#   days_since_transaction: int (number of days since original transaction).
+# ---------------------------------------------------------------------------
+
+@dataclass
+class RefundRequest:
+    # Timing
+    days_since_transaction: int          # days since original transaction date
+
+    # Item characteristics
+    is_digital_good: bool
+    is_personalized_item: bool
+    is_defective_on_delivery: bool
+    is_opened: bool                      # True if packaging was opened
+    is_full_refund: bool                 # True if requesting full refund
+
+    # Return reason
+    is_merchant_error: bool              # True if return due to merchant error
+
+    # Proof of purchase
+    has_proof_of_purchase: bool
+
+    # Payment method
+    original_payment_method_accessible: bool
+
+    # Amounts (in cents)
+    item_price_cents: int                # base item price
+    original_shipping_cents: int         # original shipping charge
+    original_handling_cents: int         # original handling charge
+
+    # Authorization
+    has_managerial_authorization: bool
+
+
+@dataclass
+class RefundDecision:
+    is_valid_request: bool               # request passes validity gate
+    is_refundable: bool                  # item is eligible for refund
+    requires_original_packaging: bool    # must item be in original packaging?
+    restocking_fee_cents: int            # restocking fee deducted (in cents)
+    refund_total_cents: int              # final refund amount (in cents)
+    credited_to_original_method: bool    # True => original method; False => store credit
+    store_credit: bool                   # True if defaulting to store credit
+    shipping_refunded: bool              # True if shipping is refunded
+    handling_refunded: bool              # True if handling is refunded
+    authorization_required: bool         # True if managerial auth required
+    authorization_satisfied: bool        # True if auth requirement is met
+
+
+# ---------------------------------------------------------------------------
+# Pure helpers (called inside contracts)
+# ---------------------------------------------------------------------------
+
+@Pure
+def request_is_valid(r: RefundRequest) -> bool:
+    return (r.days_since_transaction >= 0 and
+            r.days_since_transaction <= 30 and
+            r.has_proof_of_purchase)
+
+
+@Pure
+def item_is_refundable(r: RefundRequest) -> bool:
+    return not r.is_digital_good and not r.is_personalized_item
+
+
+@Pure
+def packaging_required(r: RefundRequest) -> bool:
+    if r.is_full_refund and not r.is_defective_on_delivery:
+        return True
+    return False
+
+
+@Pure
+def restocking_fee(r: RefundRequest) -> int:
+    if r.is_opened and not r.is_defective_on_delivery:
+        return (r.item_price_cents * 15) // 100
+    return 0
+
+
+@Pure
+def return_due_to_merchant_or_defect(r: RefundRequest) -> bool:
+    return r.is_merchant_error or r.is_defective_on_delivery
+
+
+@Pure
+def compute_refund_total(r: RefundRequest) -> int:
+    base = r.item_price_cents - restocking_fee(r)
+    shipping = r.original_shipping_cents if return_due_to_merchant_or_defect(r) else 0
+    handling = r.original_handling_cents if return_due_to_merchant_or_defect(r) else 0
+    return base + shipping + handling
+
+
+@Pure
+def authorization_required(refund_total_cents: int) -> bool:
+    return refund_total_cents > 50000
+
+
+@Pure
+def decision_valid_and_refundable(d: RefundDecision) -> bool:
+    return d.is_valid_request and d.is_refundable
+
+
+@Pure
+def decision_auth_required(d: RefundDecision) -> bool:
+    return d.authorization_required
+
+
+# ---------------------------------------------------------------------------
+# Main policy function
+# ---------------------------------------------------------------------------
+
+@Requires(r.item_price_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.original_shipping_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.original_handling_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.days_since_transaction >= 0)  # type: ignore[name-defined]
+@Ensures(Implies(not request_is_valid(r), not Result().is_valid_request))  # type: ignore[name-defined]
+@Ensures(Implies(not item_is_refundable(r), not Result().is_refundable))  # type: ignore[name-defined]
+@Ensures(Implies(request_is_valid(r) and item_is_refundable(r),
+                 Result().is_valid_request and Result().is_refundable))  # type: ignore[name-defined]
+@Ensures(Result().requires_original_packaging == packaging_required(r))  # type: ignore[name-defined]
+@Ensures(Result().restocking_fee_cents == restocking_fee(r))  # type: ignore[name-defined]
+@Ensures(Implies(decision_valid_and_refundable(Result()),
+                 Result().refund_total_cents == compute_refund_total(r)))  # type: ignore[name-defined]
+@Ensures(Implies(not decision_valid_and_refundable(Result()),
+                 Result().refund_total_cents == 0))  # type: ignore[name-defined]
+@Ensures(Result().shipping_refunded == return_due_to_merchant_or_defect(r))  # type: ignore[name-defined]
+@Ensures(Result().handling_refunded == return_due_to_merchant_or_defect(r))  # type: ignore[name-defined]
+@Ensures(Result().authorization_required ==
+         (authorization_required(compute_refund_total(r)) and  # type: ignore[name-defined]
+          decision_valid_and_refundable(Result())))
+@Ensures(Implies(decision_auth_required(Result()),
+                 Result().authorization_satisfied == r.has_managerial_authorization))  # type: ignore[name-defined]
+@Ensures(Implies(not decision_auth_required(Result()),
+                 Result().authorization_satisfied))
+@Ensures(Implies(decision_valid_and_refundable(Result()) and
+                 r.original_payment_method_accessible,  # type: ignore[name-defined]
+                 Result().credited_to_original_method and not Result().store_credit))
+@Ensures(Implies(decision_valid_and_refundable(Result()) and
+                 not r.original_payment_method_accessible,  # type: ignore[name-defined]
+                 not Result().credited_to_original_method and Result().store_credit))
+def evaluate_refund(r: RefundRequest) -> RefundDecision:
+    valid = request_is_valid(r)
+    refundable = item_is_refundable(r)
+
+    pkg_required = packaging_required(r)
+    fee = restocking_fee(r)
+
+    if valid and refundable:
+        total = compute_refund_total(r)
+    else:
+        total = 0
+
+    ship_refunded = return_due_to_merchant_or_defect(r)
+    hand_refunded = return_due_to_merchant_or_defect(r)
+
+    auth_req = authorization_required(compute_refund_total(r)) and valid and refundable
+    auth_satisfied = (not auth_req) or r.has_managerial_authorization
+
+    if valid and refundable:
+        if r.original_payment_method_accessible:
+            credited = True
+            store_cred = False
+        else:
+            credited = False
+            store_cred = True
+    else:
+        credited = False
+        store_cred = False
+
+    return RefundDecision(
+        is_valid_request=valid,
+        is_refundable=refundable,
+        requires_original_packaging=pkg_required,
+        restocking_fee_cents=fee,
+        refund_total_cents=total,
+        credited_to_original_method=credited,
+        store_credit=store_cred,
+        shipping_refunded=ship_refunded,
+        handling_refunded=hand_refunded,
+        authorization_required=auth_req,
+        authorization_satisfied=auth_satisfied,
+    )
+</current_python>
+
+<latest_diagnostic>
+Nagini frontend / parse error (attempt 2/2).
+Stdout:
+Translation failed
+Type error: "bool" not callable (C:\Users\PC\Documents\Project_Cursor\AutoV\exports\nagv_runs\test1_nl\candidate_verified.py@118.0)
+Type error: Name "r" is not defined (C:\Users\PC\Documents\Project_Cursor\AutoV\exports\nagv_runs\test1_nl\candidate_verified.py@124.0)
+
+Stderr:
+Picked up JAVA_TOOL_OPTIONS: -Xmx4g -Djava.awt.headless=true
+</latest_diagnostic>
+
+### OUTPUT FORMAT
+**Step 1 — Repair strategy**  
+Open `<repair_strategy>`. Name what failed (parse / critic / Nagini), how it maps to the code, and the **smallest** edit plan that fixes it while respecting the NL. If the diagnostic asks for something inconsistent with the NL, state that the **NL wins** and what you will do instead. Close `</repair_strategy>`.
+
+**Step 2 — Code**  
+After `</repair_strategy>`, output the **complete** revised program as the **only** fenced block: opening line is three backticks plus `python`, then the full file, then closing three backticks. Not a diff, not multiple fences. If no change is needed, re-emit the full current program **unchanged** inside that same structure—never answer with prose-only and no fence.
+
+No other markdown sections outside Step 1 and the single code block.
+
+
+--- user_text ---
+Apply OUTPUT FORMAT from the system instructions.
+
+--- model_output ---
+<repair_strategy>
+**Nagini frontend / type error — two issues:**
+
+1. **Line 118: `"bool" not callable`** — This is the `@Ensures` for `Result().authorization_required` which uses `authorization_required(compute_refund_total(r))`. The problem is that `authorization_required` is also the **name of a field** on `RefundDecision` (a `bool`), and Nagini's name resolution inside the contract decorator context picks up the field accessor rather than the module-level `@Pure` function. The fix is to rename the `@Pure` helper function to something unambiguous, e.g. `auth_required_for_total`, so it doesn't clash with the dataclass field name.
+
+2. **Line 124: `Name "r" is not defined`** — The decorators at lines around 124 are the `@Ensures` clauses that appear *after* the `@Ensures` on line ~121 which references `Result()` without a `# type: ignore`. Nagini processes decorators top-to-bottom; the issue is that the `@Ensures` on line ~121 (the `authorization_required` one) lacks a `# type: ignore[name-defined]` comment, causing a parse/translation cascade that makes `r` undefined for subsequent decorators. Adding the ignore comment and fixing the name clash resolves both.
+
+**Plan:**
+- Rename `@Pure` helper `authorization_required` → `auth_required_for_total` everywhere it is used (definition, calls in contracts, calls in body).
+- Add `# type: ignore[name-defined]` to the two `@Ensures` lines that are missing it (lines ~121 and ~122).
+- No semantic change; NL meaning is fully preserved.
+</repair_strategy>
+
+```python
+from dataclasses import dataclass
+from typing import Optional
+from nagini_contracts.contracts import Requires, Ensures, Pure, Implies, Result
+
+# ---------------------------------------------------------------------------
+# Units:
+#   All monetary amounts are in cents (int).
+#   days_since_transaction: int (number of days since original transaction).
+# ---------------------------------------------------------------------------
+
+@dataclass
+class RefundRequest:
+    # Timing
+    days_since_transaction: int          # days since original transaction date
+
+    # Item characteristics
+    is_digital_good: bool
+    is_personalized_item: bool
+    is_defective_on_delivery: bool
+    is_opened: bool                      # True if packaging was opened
+    is_full_refund: bool                 # True if requesting full refund
+
+    # Return reason
+    is_merchant_error: bool              # True if return due to merchant error
+
+    # Proof of purchase
+    has_proof_of_purchase: bool
+
+    # Payment method
+    original_payment_method_accessible: bool
+
+    # Amounts (in cents)
+    item_price_cents: int                # base item price
+    original_shipping_cents: int         # original shipping charge
+    original_handling_cents: int         # original handling charge
+
+    # Authorization
+    has_managerial_authorization: bool
+
+
+@dataclass
+class RefundDecision:
+    is_valid_request: bool               # request passes validity gate
+    is_refundable: bool                  # item is eligible for refund
+    requires_original_packaging: bool    # must item be in original packaging?
+    restocking_fee_cents: int            # restocking fee deducted (in cents)
+    refund_total_cents: int              # final refund amount (in cents)
+    credited_to_original_method: bool    # True => original method; False => store credit
+    store_credit: bool                   # True if defaulting to store credit
+    shipping_refunded: bool              # True if shipping is refunded
+    handling_refunded: bool              # True if handling is refunded
+    authorization_required: bool         # True if managerial auth required
+    authorization_satisfied: bool        # True if auth requirement is met
+
+
+# ---------------------------------------------------------------------------
+# Pure helpers (called inside contracts)
+# ---------------------------------------------------------------------------
+
+@Pure
+def request_is_valid(r: RefundRequest) -> bool:
+    return (r.days_since_transaction >= 0 and
+            r.days_since_transaction <= 30 and
+            r.has_proof_of_purchase)
+
+
+@Pure
+def item_is_refundable(r: RefundRequest) -> bool:
+    return not r.is_digital_good and not r.is_personalized_item
+
+
+@Pure
+def packaging_required(r: RefundRequest) -> bool:
+    if r.is_full_refund and not r.is_defective_on_delivery:
+        return True
+    return False
+
+
+@Pure
+def restocking_fee(r: RefundRequest) -> int:
+    if r.is_opened and not r.is_defective_on_delivery:
+        return (r.item_price_cents * 15) // 100
+    return 0
+
+
+@Pure
+def return_due_to_merchant_or_defect(r: RefundRequest) -> bool:
+    return r.is_merchant_error or r.is_defective_on_delivery
+
+
+@Pure
+def compute_refund_total(r: RefundRequest) -> int:
+    base = r.item_price_cents - restocking_fee(r)
+    shipping = r.original_shipping_cents if return_due_to_merchant_or_defect(r) else 0
+    handling = r.original_handling_cents if return_due_to_merchant_or_defect(r) else 0
+    return base + shipping + handling
+
+
+@Pure
+def auth_required_for_total(refund_total_cents: int) -> bool:
+    return refund_total_cents > 50000
+
+
+@Pure
+def decision_valid_and_refundable(d: RefundDecision) -> bool:
+    return d.is_valid_request and d.is_refundable
+
+
+@Pure
+def decision_auth_required(d: RefundDecision) -> bool:
+    return d.authorization_required
+
+
+# ---------------------------------------------------------------------------
+# Main policy function
+# ---------------------------------------------------------------------------
+
+@Requires(r.item_price_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.original_shipping_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.original_handling_cents >= 0)  # type: ignore[name-defined]
+@Requires(r.days_since_transaction >= 0)  # type: ignore[name-defined]
+@Ensures(Implies(not request_is_valid(r), not Result().is_valid_request))  # type: ignore[name-defined]
+@Ensures(Implies(not item_is_refundable(r), not Result().is_refundable))  # type: ignore[name-defined]
+@Ensures(Implies(request_is_valid(r) and item_is_refundable(r),
+                 Result().is_valid_request and Result().is_refundable))  # type: ignore[name-defined]
+@Ensures(Result().requires_original_packaging == packaging_required(r))  # type: ignore[name-defined]
+@Ensures(Result().restocking_fee_cents == restocking_fee(r))  # type: ignore[name-defined]
+@Ensures(Implies(decision_valid_and_refundable(Result()),
+                 Result().refund_total_cents == compute_refund_total(r)))  # type: ignore[name-defined]
+@Ensures(Implies(not decision_valid_and_refundable(Result()),
+                 Result().refund_total_cents == 0))  # type: ignore[name-defined]
+@Ensures(Result().shipping_refunded == return_due_to_merchant_or_defect(r))  # type: ignore[name-defined]
+@Ensures(Result().handling_refunded == return_due_to_merchant_or_defect(r))  # type: ignore[name-defined]
+@Ensures(Result().authorization_required ==  # type: ignore[name-defined]
+         (auth_required_for_total(compute_refund_total(r)) and
+          decision_valid_and_refundable(Result())))
+@Ensures(Implies(decision_auth_required(Result()),  # type: ignore[name-defined]
+                 Result().authorization_satisfied == r.has_managerial_authorization))
+@Ensures(Implies(not decision_auth_required(Result()),  # type: ignore[name-defined]
+                 Result().authorization_satisfied))
+@Ensures(Implies(decision_valid_and_refundable(Result()) and  # type: ignore[name-defined]
+                 r.original_payment_method_accessible,
+                 Result().credited_to_original_method and not Result().store_credit))
+@Ensures(Implies(decision_valid_and_refundable(Result()) and  # type: ignore[name-defined]
+                 not r.original_payment_method_accessible,
+                 not Result().credited_to_original_method and Result().store_credit))
+def evaluate_refund(r: RefundRequest) -> RefundDecision:
+    valid = request_is_valid(r)
+    refundable = item_is_refundable(r)
+
+    pkg_required = packaging_required(r)
+    fee = restocking_fee(r)
+
+    if valid and refundable:
+        total = compute_refund_total(r)
+    else:
+        total = 0
+
+    ship_refunded = return_due_to_merchant_or_defect(r)
+    hand_refunded = return_due_to_merchant_or_defect(r)
+
+    auth_req = auth_required_for_total(compute_refund_total(r)) and valid and refundable
+    auth_satisfied = (not auth_req) or r.has_managerial_authorization
+
+    if valid and refundable:
+        if r.original_payment_method_accessible:
+            credited = True
+            store_cred = False
+        else:
+            credited = False
+            store_cred = True
+    else:
+        credited = False
+        store_cred = False
+
+    return RefundDecision(
+        is_valid_request=valid,
+        is_refundable=refundable,
+        requires_original_packaging=pkg_required,
+        restocking_fee_cents=fee,
+        refund_total_cents=total,
+        credited_to_original_method=credited,
+        store_credit=store_cred,
+        shipping_refunded=ship_refunded,
+        handling_refunded=hand_refunded,
+        authorization_required=auth_req,
+        authorization_satisfied=auth_satisfied,
+    )
+```
