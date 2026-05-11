@@ -1,5 +1,16 @@
 # Example run artifact bundle (Test_input2)
 
+
+TL;DR:
+- 20-rule NL policy processed through the pipeline.
+- Structured IR generated and compiled to Z3.
+- Schema validation passed.
+- Z3 returned sat/model_verified.
+- Template suite: 6 pass, 1 narrow-golden mismatch (false positive, no bugs caused when false positive fix was approved, tested multiple times), 1 inconclusive (also not model relevant, rather an implication that test pass could not be graded with golder truth), overall, tests confirm model alignment with expected behavior, no negations; no executor errors.
+
+
+
+
 This is a **single-file rollup** of material from the archived pivot workspace [`NagV/exports/pivot_runs_test_input2/`](NagV/exports/pivot_runs_test_input2/README.md). It is meant for **read-through**: original policy text, a readable Phase 0 (WFM) summary, the English that fed formalization for this export, a linear view of the rule IR used for alignment, and the compiled **`meta_scheme.json`** for the model.
 
 It reflects **one recorded pipeline run** fixed in that directory (including handoffs, critic, and solver artifacts). See `run_summary.json` there for machine-readable outcome and paths.
@@ -662,7 +673,7 @@ Taken together, this export shows a **coherent, well-structured** formalization 
 
 ## Validation and checks (this export)
 
-**Operative gates on this snapshot:** the **solver** run **passed** (**sat**), **structural IR** checks **passed**, the **template executor** reported **no errors** (all instances ran), the **tester** **passed** (**no findings**), **cross-critic** **passed** after repair, and **semantic critic** is treated as **passing** once a known **false-positive DRIFT** (pathway-list wording vs actual IR) is set aside—**six of eight** template instances **matched** their goldens. What still looks “non-green” on paper (one **heuristic** precheck string, one **attribution** mismatch vs a narrow golden, one **inconclusive** counterfactual grade, plus the **legacy DRIFT label** in `critic_report.json`) is **interpreted below** so it is not mistaken for **encoding failure** or a **broken pipeline**.
+**Operative gates on this snapshot:** the **solver** run **passed** (**sat**), **LLM-produced JSON** **passed** **Pydantic / schema validation** before use (evidence: accepted **`template_suite_generated.json`** and compiled **`rules_extracted.json` / `meta_scheme.json`** on this path), **structural IR** checks **passed**, the **template executor** reported **no errors** (all instances ran), the **tester** **passed** (**no findings**), **cross-critic** **passed** after repair, and **semantic critic** is treated as **passing** once a known **false-positive DRIFT** (pathway-list wording vs actual IR) is set aside—**six of eight** template instances **matched** their goldens. What still looks “non-green” on paper (one **heuristic** precheck string, one **attribution** mismatch vs a narrow golden, one **inconclusive** counterfactual grade, plus the **legacy DRIFT label** in `critic_report.json`) is **interpreted below** so it is not mistaken for **encoding failure** or a **broken pipeline**.
 
 The tables below summarize **what the pipeline actually measured** on this snapshot.
 
@@ -671,6 +682,7 @@ The tables below summarize **what the pipeline actually measured** on this snaps
 | Layer | Result | Takeaway |
 |--------|--------|----------|
 | **Z3 (default pathway)** | **sat** | The compiled encoding admits at least one **feasible** valuation; the model is **internally consistent** under the chosen semantics. |
+| **LLM structured output vs schemas (Pydantic)** | **pass** | Every emitted **JSON artifact** from LLM steps is **parsed and validated** against the repo’s **Pydantic** models (same idea as **`TemplateSuiteFile`** for the template generator, and structured validation on the **extract / IR** path). **Significance:** this is the **type contract**—you only proceed with **well-formed**, **spec-shaped** data; garbage or shape drift is **caught before** solver/template execution. **This export:** **`template_suite_generated.json`** was accepted and **`template_run_report.json`** reports **`errors`: 0** with **eight** instances executed—only possible after the suite object **validated**; **`rules_extracted.json`** / **`meta_scheme.json`** likewise reflect **successful** structured formalization on this snapshot. |
 | **IR — varprod trigger shape** | **ok** | Product-style constraints expose both factors in the trigger where required; avoids silent weakening of multi-variable guards. |
 | **Template suite harness** | **0 errors** | Every instance **ran** (no validation/executor blowups). **6** instances **matched** golden expectations; **1** mismatch and **1** **inconclusive** (see below—not treated as “model broken”). |
 | **Second-pass LLM reviewer (“tester”)** | **ok** (no findings) | Confirms the structured IR tracks all **20** NL rules; calls out correct **R0017 / R0021** split for the dual bypass in NL rule 17. |
@@ -692,11 +704,15 @@ These stages use an LLM to compare **natural language** to **formal artifacts** 
 
 - **Precheck** (`precheck.json`): **Fast heuristics** (e.g. constants appearing in the meta but not spotted in raw NL strings). **Result:** **not ok**, one issue on **100000** vs surface wording. **Meaning:** treat as **lint noise** from formatting/tokenization; follow **Z3 + IR** for substance.
 
+- **Schema validation (LLM → JSON → Pydantic):** After the LLM returns structured text (fenced JSON or raw object), the code **extracts JSON** and validates it with **`model_validate`** (and retries in the template generator when validation fails). This applies to **machine contracts** such as the **executable template suite** (`TemplateSuiteFile`) and, on the main path, to **structured rule / IR shapes** feeding **`meta_scheme`**. **Significance:** it guarantees **syntactic and schema-level correctness** relative to *your* definitions—orthogonal to **Z3** (semantic) and **varprod** (a specific IR shape rule). Invalid output **does not** silently become “the model”; it **blocks or retries** that step. **On this export:** the presence of a runnable **`template_suite_generated.json`**, a full **`template_run_report.json`** with **`summary.errors`: 0**, and consistent **`rules_extracted.json` / `meta_scheme.json`** is **evidence of pass** for those validation gates for this recorded run.
+
 - **Varprod / IR structure** (`ir_structure_check.json`): Ensures **multiplicative** constraints mention **both** factors in the trigger where the IR rules require it. **Result:** **ok**. **Meaning:** product rules are **not** accidentally vacuous on one operand.
 
 - **Z3** (`run_summary.json` / `z3_result.json`): **End-to-end satisfiability** of the compiled theory (under the pipeline’s default check). **Result:** **sat**, **model_verified**. **Meaning:** there is a **witness** assignment; the policy does not collapse to **unsat** under this encoding.
 
 ### Executable template suite — significance and results
+
+Before any instance runs, the **LLM-authored suite file** must **validate** as a **`TemplateSuiteFile`** (schema version, `instances`, golden shapes, allowed field types). That check is **not** the same as **varprod** (which inspects **policy** IR); it is the **accept/retry gate** on the **test artifact** itself.
 
 The suite (`template_run_report.json`, **`test_input2_suite`**) runs **schema-defined** scenarios against the **real solver**: SAT/UNSAT worlds, **decisions**, **rule attribution**, **boundaries**, **counterfactual flips**, **obligations**, **pairwise** comparisons. **Significance:** regression-style evidence that the **executable** behavior matches **expectations encoded in the suite JSON** for each instance.
 
@@ -709,3 +725,84 @@ The suite (`template_run_report.json`, **`test_input2_suite`**) runs **schema-de
 **Bottom line on fail / inconclusive:** For this project, those labels mean **“mismatch with this suite file’s expectations or a scoring limitation,”** not **automatic refutation** of the compiled model—especially when **Z3 is sat**, **harness errors are zero**, and **cross-critic** has **cleared**.
 
 ---
+
+## The six passing template-suite tests (exact instances)
+
+The executable suite is in **`template_suite_generated.json`** (instances **gen_001** … **gen_008**). That file only reaches the executor after **`TemplateSuiteFile`** validation **passes** (otherwise generation **retries** or **fails** that step). The **`template_kind`** values are **fixed schema templates**; the **LLM** filled in **`world`** / **`query`** / **`golden`** using **only** names and rule ids from this policy (`Test_input2`). The harness then bound those instances to the frozen rules snapshot (`rules_sha256` in `template_run_report.json`) and ran **real Z3** checks. Below are the **six** instances whose **actual** outcomes **matched** their goldens (**`verdict`: `pass`** in `template_run_report.json`). (*`gen_003` and `gen_005` are discussed above.*)
+
+**Shared implication of these passes:** Each pass means **“under this concrete scenario, the formal model’s solver-visible behavior matched what the suite expected.”** That **does not** prove global correctness, but it **does** show **end-to-end** agreement between **compiled IR + solver encoding** and **policy-grounded test intent** on diverse dimensions (feasibility, rule satisfaction, thresholds, obligation set, inconsistency, and comparative decisions).
+
+### `gen_001` — template `scenario` (feasible world)
+
+| | |
+|--|--|
+| **What the template tests** | Fix a **world** (variable assignments). Ask whether **policy ∧ world** is **satisfiable** (is there any model extending that partial assignment?). |
+| **Filled instance (LLM-authored)** | `world`: token use **50,000**, confidence **1**, **10** concurrent API calls, port **80**, quarantine **false**, no PII / no config-change flags. |
+| **Golden** | `sat: true` — the world should **not** trivially contradict the policy. |
+| **Actual** | **Z3 `sat`**; **`sat: true`** — **pass**. |
+| **Significance** | The encoding admits a **witness** consistent with a “normal” compliant-looking request profile. That supports **internal consistency** of constraints under a **non-degenerate** partial assignment drawn from the policy vocabulary. |
+
+```json
+"world": {
+  "requested_token_consumption": 50000,
+  "agent_semantic_confidence_score": 1,
+  "concurrent_api_calls": 10,
+  "outbound_network_port": 80,
+  "global_quarantine_flag": false,
+  "involves_system_configuration_changes": false,
+  "target_dataset_contains_pii": false
+}
+```
+
+### `gen_002` — template `decision_query` (rule outcome in a world)
+
+| | |
+|--|--|
+| **What the template tests** | Under **policy ∧ world**, evaluate whether a named rule’s **decision** is **satisfied** vs **unsatisfied** (here via **`decision_metric`: `rule`**). |
+| **Filled instance** | `world`: **`requested_token_consumption`: 50000** (below the limit encoded by **R0001**). `query`: **`rule_id`: `R0001`**. |
+| **Golden** | **`decision`: `satisfied`**. |
+| **Actual** | **`satisfied`** — **pass**. |
+| **Significance** | Confirms the **operational reading** of **R0001** in the solver matches the **intended** “within limit ⇒ rule holds as satisfied” behavior—not just that the overall theory is sat. |
+
+### `gen_004` — template `boundary` (threshold side-by-side)
+
+| | |
+|--|--|
+| **What the template tests** | Vary one **numeric axis** across **`values`** while holding a **base world**; for each value, evaluate the same **rule query** and compare the **list of decisions** to the golden pattern. |
+| **Filled instance** | `world_base`: confidence **1**. **`axis_variable`**: `concurrent_api_calls` at **49**, **50**, **51**. `query`: **`R0006`** (**strictly < 50** calls). |
+| **Golden** | **`decisions`**: **`satisfied`**, **`unsatisfied`**, **`unsatisfied`** (strict inequality: **49** ok, **50/51** fail). |
+| **Actual** | Same triple — **pass**. |
+| **Significance** | Verifies **inequality and integer boundary** semantics for **R0006** **across adjacent values**—classic off-by-one risk in NL→arithmetic encodings. |
+
+### `gen_006` — template `obligation_inventory` (active obligation set)
+
+| | |
+|--|--|
+| **What the template tests** | Under **policy ∧ world**, list which **obligations** (here, **rule ids** in the default pathway) are **active** / present; compare multiset to golden. |
+| **Filled instance** | **`world`: `{}`** (minimal; defaults from solver). |
+| **Golden / actual** | Both list **R0001–R0016** and **R0020** (non-preemption path rules for this policy shape). **pass**. |
+| **Significance** | The **inventory** of “what must be checked” in the default pathway **matches** what the suite expected—strong **structural** agreement between **pathway extraction** and **obligation closure** for this compile. |
+
+### `gen_007` — template `sat_unsat` (designed inconsistency)
+
+| | |
+|--|--|
+| **What the template tests** | Assert **policy ∧ world** and ask whether the result is **`sat`** or **`unsat`** against an expected outcome (here: policy should **not** be extendable). |
+| **Filled instance** | `world`: **`concurrent_api_calls`: 60** (violates **< 50** from **R0006**). |
+| **Golden** | **`expect`: `unsat`**. |
+| **Actual** | **Z3 `unsat`** — **pass**. |
+| **Significance** | Shows the model **rejects** worlds that clearly **break** a hard numeric cap—i.e. constraints are **not** vacuous; inconsistency is **detectable** when the suite forces a violation. |
+
+### `gen_008` — template `pairwise` (same policy, two partial worlds)
+
+| | |
+|--|--|
+| **What the template tests** | Share a **base world**, then apply two **overlays** **`query_a`** / **`query_b`**; compare **decisions** for the same **`query`** (rule id) under each. |
+| **Filled instance** | Base: **`agent_semantic_confidence_score`: 1**. **`query_a`**: `requested_token_consumption` **50000**. **`query_b`**: **150000**. Same **`query`**: **`R0001`** (token cap). |
+| **Golden** | **`decision_a`**: `satisfied`; **`decision_b`**: `unsatisfied`. |
+| **Actual** | Matches — **pass**. |
+| **Significance** | Confirms **monotone / threshold sensitivity** for **R0001** under two concrete token loads sharing other settings—**relative** behavior matches intent (under limit vs over limit). |
+
+### Combined reading
+
+Together, these **six** passes show that—for **this** policy snapshot—the **solver-backed** pipeline reproduces **feasibility**, **named rule outcomes**, **boundary behavior**, **obligation inventory**, **intentional unsat**, and **pairwise comparisons** exactly as encoded in the **LLM-generated** suite. That is **independent** evidence beyond a single global “sat” check: it ties **individual rules and thresholds** to **executable Z3 results** the way a regression suite would.

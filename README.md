@@ -1,8 +1,26 @@
 # AutoV
 
+## For reviewers
+
+Start here:
+1. Read `example_run_artifact_bundle.md` for one complete run.
+2. View `Pipeline_Diagram_Simplified.png` for the control flow.
+3. Run `pivot-pipeline ...` from the quick start if you want to reproduce.
+4. See `NagV/pivot_pipeline/ARCHITECTURE.md` for implementation details.
+
+
+
+
 Monorepo workspace for **natural-language policy formalization**: chunked **writing workflows (WFM)**, **LLM-assisted extraction** into a structured rule IR, compilation to **Z3**, and optional **semantic / cross alignment** and **executable template-suite** checks against the solver.
 
 The main packaged surface for reviewers is the **pivot policy pipeline** (`pivot-pipeline`). The installable project name is **`autov-workspace`** (see [`pyproject.toml`](pyproject.toml)); this repository directory is **AutoV**.
+
+## Pipeline diagrams (Mermaids)
+
+1. **[`Pipeline_Diagram.png`](Pipeline_Diagram.png)** — full pipeline (detailed stages and branches).
+2. **[`Pipeline_Diagram_Simplified.png`](Pipeline_Diagram_Simplified.png)** — simplified overview.
+
+For the Architecture file - **editable Mermaid source**, narrative, and flag semantics, see **[`NagV/pivot_pipeline/ARCHITECTURE.md`](NagV/pivot_pipeline/ARCHITECTURE.md)**.
 
 ## Example artifact from a prior run
 
@@ -44,14 +62,16 @@ See **`pivot-pipeline --help`** for flags (`--skip-phase0`, `--with-critic`, `--
 | Topic | Location |
 |--------|-----------|
 | **Single-file read-through of one archived export** | [`example_run_artifact_bundle.md`](example_run_artifact_bundle.md) |
-| **End-to-end architecture (diagram + narrative)** | [`NagV/pivot_pipeline/ARCHITECTURE.md`](NagV/pivot_pipeline/ARCHITECTURE.md) |
+| **Pipeline diagram (PNG, from Mermaid)** | [`Pipeline_Diagram.png`](Pipeline_Diagram.png) |
+| **Pipeline diagram simplified (PNG, from Mermaid)** | [`Pipeline_Diagram_Simplified.png`](Pipeline_Diagram_Simplified.png) |
+| **End-to-end architecture (Mermaid source + narrative)** | [`NagV/pivot_pipeline/ARCHITECTURE.md`](NagV/pivot_pipeline/ARCHITECTURE.md) |
 | **Rule IR contract** | [`NagV/Extract-Pivot.md`](NagV/Extract-Pivot.md) |
 | **Pipeline-focused README** | [`NagV/pivot_pipeline/README.md`](NagV/pivot_pipeline/README.md) |
 | **Versioned example run + artifact glossary** | [`NagV/exports/pivot_runs_test_input2/README.md`](NagV/exports/pivot_runs_test_input2/README.md) |
 | **Plain read of template-suite results** | [`test-gen-results.md`](test-gen-results.md) |
 | **Older NagV Z3 formalizer path** | [`NagV/README.md`](NagV/README.md) |
 
-Optional: add a **screenshot** or short **demo recording** and link it here so the default GitHub view shows evidence of the pipeline in one click.
+The pipeline **diagram PNGs** above already give a visual overview on the default GitHub view; you can still add a **short demo recording** if you want motion capture of a full run.
 
 ## Tests
 
