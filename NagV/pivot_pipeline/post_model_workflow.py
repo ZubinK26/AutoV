@@ -106,6 +106,15 @@ def critic_repair_max_rounds() -> int:
         return 3
 
 
+def critic_repair_compile_attempts_max() -> int:
+    """LLM repairer invocations per user REPAIR before giving up on compile (clamped 1..10)."""
+    raw = os.getenv("PIVOT_CRITIC_SEMANTIC_REPAIR_COMPILE_ATTEMPTS", "3").strip()
+    try:
+        return max(1, min(int(raw), 10))
+    except ValueError:
+        return 3
+
+
 __all__ = [
     "TesterFinding",
     "TesterReport",
@@ -113,4 +122,5 @@ __all__ = [
     "run_pivot_tester",
     "tester_handoff_from_report",
     "critic_repair_max_rounds",
+    "critic_repair_compile_attempts_max",
 ]

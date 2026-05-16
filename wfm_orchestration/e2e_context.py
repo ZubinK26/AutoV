@@ -53,7 +53,13 @@ def build_llm_complete(*, mock_resolve: bool) -> Callable[[str, str], str]:
     return llm_complete
 
 
-def create_e2e_context(*, mock_resolve: bool = False, registry_session: RegistrySession | None = None) -> E2EContext:
+def create_e2e_context(
+    *,
+    mock_resolve: bool = False,
+    registry_session: RegistrySession | None = None,
+    gemini_model_override: str | None = None,
+    gemini_thinking_level_token: str | None = None,
+) -> E2EContext:
     """Requires ``GEMINI_API_KEY`` when ``mock_resolve`` is False (WFM still calls Gemini)."""
     load_dotenv_for_e2e()
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -63,10 +69,15 @@ def create_e2e_context(*, mock_resolve: bool = False, registry_session: Registry
     from google import genai
 
     client = genai.Client(api_key=api_key)
-    model = os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview").strip()
+    model = (gemini_model_override or os.environ.get("GEMINI_MODEL", "gemini-3.1-pro-preview")).strip()
     temperature = float(os.environ.get("GEMINI_TEMPERATURE", "0"))
     max_out = int(os.environ.get("GEMINI_MAX_OUTPUT_TOKENS", "16384"))
-    tl = env_thinking_level()
+    if gemini_thinking_level_token is not None and str(gemini_thinking_level_token).strip():
+        from registry_stage.llm.gemini_call import _thinking_level_from_str
+
+        tl = _thinking_level_from_str(str(gemini_thinking_level_token))
+    else:
+        tl = env_thinking_level()
     session = registry_session or RegistrySession(
         semantic_index=StubKeywordSemanticIndex(), index_preference="stub"
     )

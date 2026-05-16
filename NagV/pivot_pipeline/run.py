@@ -532,7 +532,7 @@ def run_pivot_pipeline(
                 ok=ok,
                 issues=issues,
             )
-            if early == "blocked_critic":
+            if early in ("blocked_critic", "blocked_semantic_repair_compile"):
                 return summary
             refresh_varprod_trigger_check()
             if fail_on_varprod_trigger and not summary.get("varprod_trigger_ok", True):
@@ -751,7 +751,7 @@ def run_pivot_pipeline(
                                 encoding="utf-8",
                             )
                             return summary
-                        if early == "blocked_critic":
+                        if early in ("blocked_critic", "blocked_semantic_repair_compile"):
                             summary["outcome"] = summary.get("outcome") or "blocked_post_cross_critic"
                             return summary
 
@@ -822,7 +822,7 @@ def run_pivot_pipeline(
                 ok=ok,
                 issues=issues,
             )
-            if early == "blocked_critic":
+            if early in ("blocked_critic", "blocked_semantic_repair_compile"):
                 return summary
         except Exception as e:
             summary["outcome"] = "blocked_critic"

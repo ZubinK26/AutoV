@@ -39,6 +39,7 @@ def run_pivot_wfm_one_line(
         rules_per_chunk=1,
         reset_progress=True,
         print_fn=print_fn,
+        auto_accept_wfm=True,
     )
     if rc != 0:
         raise RuntimeError(f"pivot WFM one-line failed (exit {rc}); scratch={scratch}")

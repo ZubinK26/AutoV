@@ -49,6 +49,8 @@ Run the pipeline (sample input shipped in-repo; use a fresh `--work-dir` so you 
 pivot-pipeline --input NagV\exports\pivot_runs_test_input2\source_policy_Test_input2.md --work-dir NagV\exports\pivot_runs\my_run
 ```
 
+**Optional — pre-WFM Scope Rewriter** (`scope-rewriter` after a successful `pip install -e .`, or run `python NagV\pivot_pipeline\scope_rewriter_cli.py …` from the repo root): turn a reference Markdown/policy note into pivot-oriented **plain rules** plus a JSON sidecar, with an interactive review loop, then point `pivot-pipeline --input` at `work-dir\scope_rewriter\latest.nl`.
+
 If you already have extracted rules JSON and want to skip Phase 1 LLM extraction:
 
 ```powershell

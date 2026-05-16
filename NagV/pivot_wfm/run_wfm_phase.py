@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 from typing import Any, Callable
@@ -80,8 +81,14 @@ def run_pivot_wfm_until_complete(
     print_fn: Callable[..., None] = print,
     interactive_policy: bool = False,
     input_fn: Callable[[str], str] | None = None,
+    auto_accept_wfm: bool = False,
 ) -> int:
-    """``wfm_profile=pivot`` handoffs only (no SMT / NagV formalizer)."""
+    """``wfm_profile=pivot`` handoffs only (no SMT / NagV formalizer).
+
+    By default ``auto_accept_wfm`` is false: each chunk requires the human **Accept entire
+    confirmation package…** step in the WFM orchestrator. Callers that run WFM without a TTY
+    (e.g. ``run_pivot_wfm_one_line``) pass ``auto_accept_wfm=True``.
+    """
     from pivot_pipeline.exceptions import PivotPipelineUserAbort
     from pivot_pipeline.llm import pivot_llm_complete
     from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN
@@ -90,7 +97,11 @@ def run_pivot_wfm_until_complete(
         analyze_chunk_handoff_coverage,
         patch_handoff_inject_missing_rules,
     )
-    from pivot_wfm.wfm_chunk_scope_rewrite import run_wfm_chunk_scope_rewrite
+    from pivot_wfm.wfm_chunk_scope_rewrite import (
+        parse_operator_notes_by_local_index,
+        parse_rule_numbers_to_local_indices,
+        run_wfm_chunk_scope_rewrite,
+    )
     from pivot_pipeline.llm import get_pivot_gemini_model, get_pivot_gemini_thinking_level_str
     from wfm_orchestration.e2e_context import create_e2e_context
     from wfm_orchestration.orchestrator import run_wfm_registry_e2e
@@ -110,6 +121,10 @@ def run_pivot_wfm_until_complete(
         _unlink_if_exists(work_dir / "pivot_wfm_dropped_rules.jsonl")
         _unlink_if_exists(work_dir / "pivot_wfm_coverage_log.jsonl")
         _unlink_if_exists(work_dir / "pivot_wfm_phase0_meta.json")
+        _unlink_if_exists(work_dir / "nl_chunk_progress.json")
+        _handoffs = work_dir / "wfm_handoffs"
+        if _handoffs.is_dir():
+            shutil.rmtree(_handoffs, ignore_errors=True)
 
     nl_hash = _sha256_file(nl_file)
     body = nl_file.read_text(encoding="utf-8")
@@ -221,12 +236,13 @@ def run_pivot_wfm_until_complete(
                 handoff_dir=wfm_dir,
                 persist_handoff=True,
                 skip_registry=True,
-                auto_accept=True,
+                auto_accept=auto_accept_wfm,
                 auto_artifacts=False,
                 example_id=f"pivot_{nl_file.stem}",
                 wfm_profile="pivot",
                 global_rule_index_start=start,
                 print_fn=print_fn,
+                input_fn=input_fn,
             )
 
             if dev is None:
@@ -287,17 +303,81 @@ def run_pivot_wfm_until_complete(
 
             if wfm_runs < max_wfm:
                 rewrite_accepted = False
+                last_proposal: list[str] | None = None
+                need_operator_targets = False
+                op_log = work_dir / "pivot_wfm_chunk_rewrite_operator_log.jsonl"
                 while True:
                     try:
-                        rewritten = run_wfm_chunk_scope_rewrite(
-                            chunk_rules,
-                            rule_index_start=start,
-                            rule_index_end_exclusive=end,
-                            file_label=nl_file.name,
-                            coverage_report=cov,
-                            handoff_path=handoff_path,
-                            llm=llm,
-                        )
+                        if not need_operator_targets:
+                            rewritten = run_wfm_chunk_scope_rewrite(
+                                chunk_rules,
+                                rule_index_start=start,
+                                rule_index_end_exclusive=end,
+                                file_label=nl_file.name,
+                                coverage_report=cov,
+                                handoff_path=handoff_path,
+                                llm=llm,
+                            )
+                        else:
+                            while True:
+                                spec = input_fn(
+                                    "\nRule numbers to revise only (same numbers as listed beside each line; "
+                                    "comma-separated or ranges e.g. 3, 5-7). "
+                                    "Enter alone for **full chunk** regen (all lines may change again against source).\n"
+                                    "Indices: "
+                                ).strip()
+                                try:
+                                    revise_local = parse_rule_numbers_to_local_indices(
+                                        chunk_start_0=start,
+                                        chunk_len=len(chunk_rules),
+                                        spec=spec,
+                                    )
+                                except ValueError as e:
+                                    print_fn(f"{e}\n")
+                                    continue
+                                break
+                            if revise_local is None:
+                                baseline_for_prompt = chunk_rules
+                                op_notes: dict[int, str] | None = None
+                            else:
+                                baseline_for_prompt = (
+                                    last_proposal if last_proposal is not None else chunk_rules
+                                )
+                                note_raw = input_fn(
+                                    "Optional notes for those lines only — lines like `12: fix iff`. "
+                                    "Enter for none: "
+                                ).strip()
+                                op_notes = (
+                                    parse_operator_notes_by_local_index(
+                                        note_raw,
+                                        chunk_start_0=start,
+                                        chunk_len=len(chunk_rules),
+                                    )
+                                    if note_raw
+                                    else None
+                                )
+                            rec = {
+                                "event": "chunk_scope_rewrite_operator",
+                                "rule_index_start": start,
+                                "rule_index_end": end,
+                                "revise_full_chunk": revise_local is None,
+                                "revise_local_indices": sorted(revise_local) if revise_local else None,
+                                "had_last_proposal": last_proposal is not None,
+                            }
+                            with op_log.open("a", encoding="utf-8") as lf:
+                                lf.write(json.dumps(rec, ensure_ascii=False) + "\n")
+                            rewritten = run_wfm_chunk_scope_rewrite(
+                                chunk_rules,
+                                rule_index_start=start,
+                                rule_index_end_exclusive=end,
+                                file_label=nl_file.name,
+                                coverage_report=cov,
+                                handoff_path=handoff_path,
+                                llm=llm,
+                                working_baseline=baseline_for_prompt,
+                                revise_local_indices=revise_local,
+                                operator_notes_by_local_index=op_notes,
+                            )
                     except Exception as ex:  # noqa: BLE001
                         print_fn(f"[pivot WFM] scope rewrite failed: {ex}\n")
                         ans = input_fn(
@@ -307,11 +387,16 @@ def run_pivot_wfm_until_complete(
                             break
                         continue
 
+                    last_proposal = list(rewritten)
+                    need_operator_targets = False
+
                     print_fn(
                         "\n[policy edit — chunk rewrite]\n"
                         "Accepting **y** replaces the **source text** for this chunk’s rule lines with the "
                         "proposed lines below. That becomes the **authoritative working policy** for Phase 0 "
                         "aggregation and for **later extract / formalization** — not a cosmetic-only change.\n"
+                        "Answering **n** lets you revise **only** specific rule numbers next round; unchanged "
+                        "numbers stay as in this proposal (or as source if this is the first proposal).\n"
                     )
                     print_fn("\n**Proposed chunk rewrite (LLM)** — one rule per line:\n")
                     for i, rtxt in enumerate(rewritten, start=1):
@@ -323,6 +408,7 @@ def run_pivot_wfm_until_complete(
                     if ans in ("g", "give-up", "give up"):
                         break
                     if ans not in ("y", "yes"):
+                        need_operator_targets = True
                         continue
                     for j, rtxt in enumerate(rewritten):
                         all_rules[start + j] = rtxt

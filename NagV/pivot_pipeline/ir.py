@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+import copy
 from enum import StrEnum
-from typing import Annotated, Literal, Union
+from typing import Annotated, Any, Literal, Union
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -276,6 +277,116 @@ class LogicalIff(BaseRule):
     right: ConditionExpr
 
 
+_RULE_MODEL_BY_TEMPLATE: dict[str, type[BaseModel]] = {
+    "CONSTANT_RELATIONAL": ConstantRelational,
+    "SET_INCLUSION": SetInclusion,
+    "VARIABLE_RELATIONAL": VariableRelational,
+    "ARITHMETIC_EVALUATION": ArithmeticEvaluation,
+    "LOGICAL_IMPLICATION": LogicalImplication,
+    "PREEMPTION": Preemption,
+    "EXCLUSIVE_CHOICE": ExclusiveChoice,
+    "LOGICAL_IFF": LogicalIff,
+}
+
+_CONDITION_KIND_FIELDS: dict[str, frozenset[str]] = {
+    "atom": frozenset({"kind", "variable", "operator", "value"}),
+    "varcmp": frozenset({"kind", "left_variable", "operator", "right_variable"}),
+    "varprod_cmp": frozenset({"kind", "left_variable", "right_variable", "operator", "rhs"}),
+    "and": frozenset({"kind", "children"}),
+    "or": frozenset({"kind", "children"}),
+    "not": frozenset({"kind", "child"}),
+}
+
+_VARPROD_RHS_KIND_FIELDS: dict[str, frozenset[str]] = {
+    "var": frozenset({"kind", "variable"}),
+    "const": frozenset({"kind", "value"}),
+}
+
+_CONDITION_FIELDS_BY_TEMPLATE: dict[str, tuple[str, ...]] = {
+    "LOGICAL_IMPLICATION": ("trigger_condition", "required_condition"),
+    "PREEMPTION": ("preempting_condition",),
+    "LOGICAL_IFF": ("left", "right"),
+}
+
+# Templates that require a Yields enum; LLM repair sometimes omits or nulls this field.
+_YIELDS_BEARING_TEMPLATES: frozenset[str] = frozenset(
+    {
+        "CONSTANT_RELATIONAL",
+        "SET_INCLUSION",
+        "VARIABLE_RELATIONAL",
+        "ARITHMETIC_EVALUATION",
+    }
+)
+
+
+def _sanitize_varprod_rhs(obj: dict[str, Any]) -> dict[str, Any]:
+    k = obj.get("kind")
+    if k in _VARPROD_RHS_KIND_FIELDS:
+        allow = _VARPROD_RHS_KIND_FIELDS[str(k)]
+        return {kk: obj[kk] for kk in allow if kk in obj}
+    return {kk: copy.deepcopy(vv) if isinstance(vv, dict) else vv for kk, vv in obj.items()}
+
+
+def _sanitize_condition(obj: object) -> object:
+    if isinstance(obj, list):
+        return [_sanitize_condition(x) for x in obj]
+    if not isinstance(obj, dict):
+        return obj
+    kind = obj.get("kind")
+    allowed = _CONDITION_KIND_FIELDS.get(kind)
+    if allowed is None:
+        return {k: _sanitize_condition(v) for k, v in obj.items()}
+    out: dict[str, Any] = {}
+    for k in allowed:
+        if k not in obj:
+            continue
+        v = obj[k]
+        if k == "rhs" and isinstance(v, dict):
+            out[k] = _sanitize_varprod_rhs(v)
+        elif k == "children" and isinstance(v, list):
+            out[k] = [_sanitize_condition(x) for x in v]
+        elif k == "child":
+            out[k] = _sanitize_condition(v)
+        elif isinstance(v, dict):
+            out[k] = copy.deepcopy(v)
+        else:
+            out[k] = v
+    return out
+
+
+def _sanitize_rule_dict(r: dict[str, Any]) -> dict[str, Any]:
+    t = r.get("template_class")
+    cls = _RULE_MODEL_BY_TEMPLATE.get(str(t) if t is not None else "")
+    if cls is None:
+        return copy.deepcopy(r)
+    allowed = frozenset(cls.model_fields.keys())
+    cond_keys = frozenset(_CONDITION_FIELDS_BY_TEMPLATE.get(str(t), ()))
+    out: dict[str, Any] = {}
+    for key in allowed:
+        if key not in r:
+            continue
+        val = r[key]
+        if key in cond_keys:
+            out[key] = _sanitize_condition(val)
+        elif isinstance(val, dict):
+            out[key] = copy.deepcopy(val)
+        elif isinstance(val, list):
+            out[key] = copy.deepcopy(val)
+        else:
+            out[key] = val
+    ts = str(t) if t is not None else ""
+    if ts in _YIELDS_BEARING_TEMPLATES:
+        y = out.get("yields")
+        if y is None or (isinstance(y, str) and y.strip() == ""):
+            out["yields"] = "SATISFIED"
+    return out
+
+
+def sanitize_rules_jsonable(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Drop unknown keys from rule dicts (and condition subtrees) before Pydantic validate."""
+    return [_sanitize_rule_dict(r) for r in rules]
+
+
 AtomicRule = Annotated[
     Union[
         ConstantRelational,
@@ -328,22 +439,13 @@ class MetaScheme(BaseModel):
 
 def load_rules_and_compile(policy_id: str, rules: list[dict]) -> MetaScheme:
     """Parse rule dicts from JSON and run :func:`build_meta_scheme`."""
+    rules = sanitize_rules_jsonable(rules)
     parsed: list[AtomicRule] = []
     for r in rules:
         t = r.get("template_class")
         if not t:
             raise ValueError(f"missing template_class: {r!r}")
-        model_map: dict[str, type] = {
-            "CONSTANT_RELATIONAL": ConstantRelational,
-            "SET_INCLUSION": SetInclusion,
-            "VARIABLE_RELATIONAL": VariableRelational,
-            "ARITHMETIC_EVALUATION": ArithmeticEvaluation,
-            "LOGICAL_IMPLICATION": LogicalImplication,
-            "PREEMPTION": Preemption,
-            "EXCLUSIVE_CHOICE": ExclusiveChoice,
-            "LOGICAL_IFF": LogicalIff,
-        }
-        cls = model_map.get(t)
+        cls = _RULE_MODEL_BY_TEMPLATE.get(t)
         if cls is None:
             raise ValueError(f"unknown template_class {t!r}")
         parsed.append(cls.model_validate(r))  # type: ignore[assignment]

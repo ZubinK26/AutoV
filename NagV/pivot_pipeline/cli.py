@@ -7,12 +7,22 @@ import json
 import sys
 from pathlib import Path
 
-_REPO = Path(__file__).resolve().parents[2]
+_script = Path(__file__).resolve()
+_REPO = _script.parents[2]
+_NAGV_ROOT = _script.parents[1]
+for _p in (_REPO, _NAGV_ROOT):
+    _s = str(_p)
+    if _s not in sys.path:
+        sys.path.insert(0, _s)
 
 from pivot_pipeline.paths import resolve_existing_user_file
 
 
 def main(argv: list[str] | None = None) -> int:
+    from registry_stage.llm.gemini_call import load_repo_dotenv
+
+    load_repo_dotenv()
+
     p = argparse.ArgumentParser(description="Pivot policy pipeline (NL → WFM → JSON IR → Z3)")
     p.add_argument(
         "--input",
@@ -24,7 +34,16 @@ def main(argv: list[str] | None = None) -> int:
             "resolve into the ``nagv`` package directory—prefer ``pivot_pipeline/inputs/...`` from the NagV root."
         ),
     )
-    p.add_argument("--work-dir", required=True, type=Path, help="Run output directory")
+    p.add_argument(
+        "--work-dir",
+        required=True,
+        type=Path,
+        help=(
+            "Run output directory (progress, handoffs, extracts, Z3, summaries). Use a **different** path per "
+            "``--input`` file so one policy run never overwrites another (e.g. ``.../pivot_runs/evaluation_...`` vs "
+            "``.../pivot_runs/test_input_...``)."
+        ),
+    )
     p.add_argument("--repo-root", type=Path, default=_REPO, help="AutoV repo root")
     p.add_argument(
         "--skip-phase0",
@@ -39,8 +58,9 @@ def main(argv: list[str] | None = None) -> int:
         "--reset-progress",
         action="store_true",
         help=(
-            "Clear nl_chunk_progress.json in --work-dir so Phase 0 re-runs WFM on --input (required to refresh "
-            "stale handoffs when rule-count gate fails but progress was already 'complete')"
+            "Phase 0: delete nl_chunk_progress.json, clear work_dir/wfm_handoffs/, and reset pivot WFM sidecar "
+            "files in --work-dir so the next run starts from rule 0 (use when you want a clean WFM pass). "
+            "Also use when the NL file or --rules-per-chunk changed and the progress file would otherwise error."
         ),
     )
     p.add_argument("--rules-per-chunk", type=int, default=5)
@@ -101,11 +121,12 @@ def main(argv: list[str] | None = None) -> int:
         "--interactive-policy",
         action="store_true",
         help=(
-            "TTY prompts: per-chunk WFM line coverage repair (scope rewrite + retry); "
+            "TTY prompts after Phase 0: per-chunk WFM **line coverage** repair (scope rewrite + retry); "
             "block when WFM rule count != source unless you type PROCEED_INCOMPLETE; "
             "extract ABORT rewrite rounds (see PIVOT_SCOPE_REWRITE_MAX_PROPOSALS_PER_LINE) then abort vs drop; "
             "critic DRIFT: type REPAIR for semantic Repairer_Piv, or PROCEED_INCOMPLETE to waive. "
-            "WFM chunk attempts: PIVOT_WFM_COVERAGE_MAX_WFM_ATTEMPTS (default 3)."
+            "(Phase 0 still prompts to **accept each WFM handoff** before it is saved, unless tools use internal "
+            "one-line WFM with auto-accept.) WFM chunk attempts: PIVOT_WFM_COVERAGE_MAX_WFM_ATTEMPTS (default 3)."
         ),
     )
     p.add_argument(
@@ -226,7 +247,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[pivot] golden snapshot written to {dest}", file=sys.stderr)
     outcome = summary.get("outcome", "")
     if outcome.startswith("blocked"):
-        return 1 if outcome != "blocked_critic" else 3
+        return (
+            1
+            if outcome not in ("blocked_critic", "blocked_semantic_repair_compile")
+            else 3
+        )
     if summary.get("precheck_ok") is False:
         return 2
     if summary.get("varprod_trigger_ok") is False:

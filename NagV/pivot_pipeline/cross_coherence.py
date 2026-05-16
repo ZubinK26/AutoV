@@ -81,7 +81,11 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps(summary, indent=2, ensure_ascii=False))
     outcome = summary.get("outcome", "")
     if outcome.startswith("blocked"):
-        return 1 if outcome != "blocked_critic" else 3
+        return (
+            1
+            if outcome not in ("blocked_critic", "blocked_semantic_repair_compile")
+            else 3
+        )
     if summary.get("precheck_ok") is False:
         return 2
     if summary.get("varprod_trigger_ok") is False:

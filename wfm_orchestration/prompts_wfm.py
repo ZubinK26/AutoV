@@ -12,8 +12,13 @@ def repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
-def load_wfm_prompts() -> tuple[str, str, str, str, int]:
-    """Returns (agent1, agent2, agent3, agent4, compound_limit)."""
+def load_wfm_prompts(wfm_profile: str | None = None) -> tuple[str, str, str, str, int]:
+    """Returns (agent1, agent2, agent3, agent4, compound_limit).
+
+    When ``wfm_profile`` is ``"pivot"``, Agent 2 system text additionally includes
+    ``NagV/pivot_wfm/prompts/agent_2_pivot_chunk_cardinality.md`` (one output line per
+    chunk input rule). Other profiles omit this block.
+    """
     gm = get_gemini_module()
     root = repo_root()
     cfg = json.loads((root / "WFM" / "config" / "wfm.json").read_text(encoding="utf-8"))
@@ -23,6 +28,10 @@ def load_wfm_prompts() -> tuple[str, str, str, str, int]:
         gm.extract_system_prompt(root / "WFM" / "prompts" / "agent_2_decomposition.md"),
         lim,
     )
+    if (wfm_profile or "").strip().lower() == "pivot":
+        card = root / "NagV" / "pivot_wfm" / "prompts" / "agent_2_pivot_chunk_cardinality.md"
+        if card.is_file():
+            p2 = f"{p2}\n\n{card.read_text(encoding='utf-8').strip()}\n"
     p3 = gm.extract_system_prompt(root / "WFM" / "prompts" / "agent_3_scope_rewrite.md")
     import sys
 

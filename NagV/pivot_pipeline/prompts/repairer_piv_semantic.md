@@ -10,6 +10,60 @@ You patch **Pivot IR rules** to fix **semantic drift** described in a critic or 
 - `effective_nl_excerpt`: truncated effective policy NL
 - `synthetic_excerpt`: truncated synthetic markdown
 - `rules`: current rules array
+- `compile_validation_error` (optional): when present, the **previous** `rules` patch failed `load_rules_and_compile` / Pydantic validation — fix the shape and remove illegal keys so validation passes.
+
+If a **## Compile validation error** section appears after the payload, treat it as authoritative feedback alongside `compile_validation_error` in the JSON.
+
+## Forbidden / ignored fields (denylist)
+
+These keys are **never** valid on **rule** objects (any `template_class`). The loader **drops** unknown keys, but you must **not** rely on that — omit them so the repair is stable:
+
+- `description`, `summary`, `notes`, `comment`, `explanation`, `rationale`, `natural_language`, `nl_text`, `prose`, `name`, `title`
+- `metadata`, `extra`, `tags`, `annotations`
+- Any parallel array of triggers/requireds at the rule top level (use `trigger_condition` / `required_condition` only on `LOGICAL_IMPLICATION`)
+
+**Allowlisted prose:** Only `evaluation_pathways[].description` exists in compiled meta-scheme, and you output **rules only** — pathways are derived. **Do not** stuff NL summaries into rule objects to satisfy “missing prose” findings; fix **logic** (`trigger_condition`, `required_condition`, `PREEMPTION`, sorts) instead.
+
+## Allowed keys per `template_class` (v1)
+
+Each rule object may include **only** `BaseRule` fields plus the template’s fields:
+
+- **Common:** `rule_id`, `applies_to` (default `GLOBAL`), `overrides` (optional), `template_class`
+- **CONSTANT_RELATIONAL:** `variable`, `relational_operator`, `constant_value`, `yields` (**required** string: `"SATISFIED"` or `"UNSATISFIED"` — never null / omit)
+- **SET_INCLUSION:** `variable`, `inclusion_operator`, `constant_array`, `yields` (same)
+- **VARIABLE_RELATIONAL:** `left_variable`, `relational_operator`, `right_variable`, `yields` (same)
+- **ARITHMETIC_EVALUATION:** `operand_1`, `math_operator`, `operand_2`, `relational_operator`, `target_limit`, `yields` (same)
+- **LOGICAL_IMPLICATION:** `trigger_condition`, `required_condition` (each a single condition tree)
+- **PREEMPTION:** `preempting_condition`, `action`, `target_rule_id` (one string or null)
+- **EXCLUSIVE_CHOICE:** `mode`, `variables`
+- **LOGICAL_IFF:** `left`, `right`
+
+### Minimal shape examples (illustrative)
+
+`LOGICAL_IMPLICATION` — only these keys on the rule (plus common):
+
+```json
+{
+  "rule_id": "R0001",
+  "template_class": "LOGICAL_IMPLICATION",
+  "applies_to": "GLOBAL",
+  "trigger_condition": { "kind": "atom", "variable": "x", "operator": "EQ", "value": true },
+  "required_condition": { "kind": "atom", "variable": "y", "operator": "GTE", "value": 3 }
+}
+```
+
+`PREEMPTION` — single string target:
+
+```json
+{
+  "rule_id": "R0009",
+  "template_class": "PREEMPTION",
+  "applies_to": "GLOBAL",
+  "preempting_condition": { "kind": "atom", "variable": "vip", "operator": "EQ", "value": true },
+  "action": "BYPASS_RULE",
+  "target_rule_id": "R0005"
+}
+```
 
 ## v1 IR shape (normative)
 

@@ -1,7 +1,8 @@
 # Pivot policy pipeline
 
 Machine contract for the extracted rule IR: [`NagV/Extract-Pivot.md`](../Extract-Pivot.md).  
-Architecture (Mermaid + plain language): [`ARCHITECTURE.md`](ARCHITECTURE.md).
+Architecture (Mermaid + plain language): [`ARCHITECTURE.md`](ARCHITECTURE.md).  
+**Template system** (all eight `template_class` values, routing, nesting, scope, reference meta-scheme + NL): [`PIVOT_TEMPLATE_SYSTEM.md`](PIVOT_TEMPLATE_SYSTEM.md).
 
 ## Prerequisites
 
@@ -31,6 +32,19 @@ Same, using the package module:
 
 ```bash
 python -m pivot_pipeline --input path/to/rules.nl --work-dir exports/pivot_runs/my_run
+```
+
+**Pre-WFM — Scope Rewriter** (optional: reference doc → plain `latest.nl` + `latest.json` before Phase 0):
+
+```bash
+scope-rewriter --reference path/to/reference.md --work-dir exports/scope_rewriter/my_run
+python -m pivot_pipeline.scope_rewriter_cli --reference path/to/reference.md --work-dir exports/scope_rewriter/my_run --non-interactive
+```
+
+If `scope-rewriter` is missing (editable install not refreshed), from the **AutoV** repo root run the script directly (no `PYTHONPATH` needed):
+
+```bash
+python NagV/pivot_pipeline/scope_rewriter_cli.py --reference path/to/reference.md --work-dir exports/scope_rewriter/my_run
 ```
 
 Skip WFM (uses `work-dir/phase0_normalized_nl.txt` if present and non-empty; otherwise raw `--input`):

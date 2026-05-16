@@ -2,7 +2,8 @@
 Build :class:`registry_stage.wfm_acceptance_handoff.WfmAcceptanceSnapshot` from Agent 2/3 text outputs.
 
 Uses the same parsers as ``test_sets/scripts/wfm_agent4_common.py`` (merge base / effective lines).
-Agent 2 indices are **1-based**; ``HandoffLine.line_index`` is **0-based** (``agent2_index - 1``).
+Agent 2 indices are **1-based**; ``HandoffLine.line_index`` is **0-based** global policy index:
+``agent2_index - 1 + global_rule_index_start``.
 """
 
 from __future__ import annotations
@@ -68,11 +69,16 @@ def wfm_acceptance_snapshot_from_agent_outputs(
     wfm_pipeline_timestamps: dict[str, Any] | None = None,
     provider_model: str | None = None,
     wfm_compound_operator_limit: int | None = None,
+    global_rule_index_start: int = 0,
 ) -> WfmAcceptanceSnapshot:
     """
     Build a snapshot for ``build_handoff_bundle`` after the user **accepts** the confirmation package.
 
     ``agent2_output`` / ``agent3_output`` must be the same strings used in the WFM run (verbatim).
+
+    Agent 2 / Agent 3 line numbers are **chunk-local** (1..N). ``HandoffLine.line_index`` is
+    **0-based in the full policy**: ``(agent3_line_number - 1) + global_rule_index_start``.
+    For a full-policy single chunk, ``global_rule_index_start`` is **0** (default).
     """
     effective, _warnings = w4.parse_agent3_effective_lines(agent3_output, agent2_output)
     if not effective:
@@ -106,7 +112,7 @@ def wfm_acceptance_snapshot_from_agent_outputs(
 
         lines.append(
             WfmAcceptanceLine(
-                line_index=idx - 1,
+                line_index=(idx - 1) + global_rule_index_start,
                 statement_nl=st,
                 agent3_verdict=v,
                 scope_report=scope,

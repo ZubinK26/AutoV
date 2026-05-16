@@ -121,3 +121,29 @@ def test_first_parse_ok_no_retry_flag(monkeypatch: pytest.MonkeyPatch) -> None:
     assert calls["n"] == 1
     assert used_retry is False
     assert out.rules == []
+
+
+def test_semantic_repair_includes_compile_validation_error_in_prompt(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("PIVOT_REPAIRER_JSON_PARSE_RETRIES", "0")
+    prompts: list[str] = []
+    body = json.dumps({"rules": [], "change_summary": []})
+
+    def fake_llm(p: str) -> str:
+        prompts.append(p)
+        return body
+
+    run_repairer_piv_semantic(
+        policy_id="t",
+        rules=[],
+        handoff={"source": "critic", "findings": []},
+        effective_nl_excerpt="line",
+        synthetic_excerpt="syn",
+        compile_validation_error='1 validation error for LogicalImplication\ndescription\n  Extra inputs are not permitted',
+        llm=fake_llm,
+    )
+    assert len(prompts) == 1
+    assert "compile_validation_error" in prompts[0]
+    assert "Compile validation error" in prompts[0]
+    assert "Extra inputs are not permitted" in prompts[0]

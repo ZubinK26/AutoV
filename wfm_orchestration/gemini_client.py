@@ -3,16 +3,20 @@
 from __future__ import annotations
 
 import importlib.util
+import sys
 from pathlib import Path
 
 
 def _load_folio_module():
     repo = Path(__file__).resolve().parent.parent
     path = repo / "test_sets" / "scripts" / "run_wfm_folio_gemini.py"
-    spec = importlib.util.spec_from_file_location("run_wfm_folio_gemini", path)
+    name = "run_wfm_folio_gemini"
+    spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load {path}")
     mod = importlib.util.module_from_spec(spec)
+    # Register before exec_module so dataclasses (and similar) can resolve cls.__module__.
+    sys.modules[name] = mod
     spec.loader.exec_module(mod)
     return mod
 

@@ -61,6 +61,19 @@ def repairer_json_parse_retry_count() -> int:
     return max(0, min(n, 3))
 
 
+def _compile_error_prompt_suffix(compile_validation_error: str) -> str:
+    msg = (compile_validation_error or "").strip()
+    if len(msg) > 3000:
+        msg = msg[: 3000 - 24] + "\n…(truncated)…\n"
+    return (
+        "\n\n---\n\n## Compile validation error (previous repair attempt)\n\n"
+        f"{msg}\n\n"
+        "The patched `rules` failed Pydantic / IR validation. Emit a corrected `rules` array only "
+        "(plus `change_summary`). Remove illegal extra keys on rule objects (see denylist). "
+        'Reply with **only** one JSON object with keys "rules" and "change_summary".\n'
+    )
+
+
 def _json_recovery_suffix(*, failed_raw: str, err: str) -> str:
     msg = (err or "").strip()
     if len(msg) > _JSON_ERR_SNIPPET_CAP:
@@ -150,6 +163,7 @@ def run_repairer_piv_semantic(
     handoff: dict[str, Any],
     effective_nl_excerpt: str,
     synthetic_excerpt: str,
+    compile_validation_error: str | None = None,
     llm: Callable[..., str] = pivot_llm_complete,
 ) -> tuple[RepairerPivOutput, bool]:
     sys = _tmpl_semantic()
@@ -161,8 +175,13 @@ def run_repairer_piv_semantic(
         "synthetic_excerpt": _truncate(synthetic_excerpt, 12000),
         "rules": rules,
     }
+    cve = (compile_validation_error or "").strip()
+    if cve:
+        payload["compile_validation_error"] = _truncate(cve, 4000)
     user = json.dumps(payload, ensure_ascii=False, indent=2)
     prompt = sys + "\n\n---\n\n## Current payload JSON\n\n" + user
+    if cve:
+        prompt += _compile_error_prompt_suffix(cve)
     return _llm_repairer_output(base_prompt=prompt, llm=llm)
 
 

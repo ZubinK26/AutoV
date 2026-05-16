@@ -20,12 +20,21 @@ def repo_root_containing_registry_stage() -> Path:
 
 def load_repo_dotenv() -> None:
     try:
-        from dotenv import load_dotenv
+        from dotenv import dotenv_values, load_dotenv
     except ImportError:
         return
     env_file = repo_root_containing_registry_stage() / ".env"
-    if env_file.is_file():
-        load_dotenv(env_file, override=False)
+    if not env_file.is_file():
+        return
+    load_dotenv(env_file, override=False)
+    # ``override=False`` skips vars already present in os.environ. On Windows, GEMINI_API_KEY is
+    # sometimes set to an empty string in the shell/user profile, which blocks loading from .env.
+    if os.environ.get("GEMINI_API_KEY", "").strip():
+        return
+    vals = dotenv_values(env_file)
+    raw = (vals.get("GEMINI_API_KEY") or "").strip()
+    if raw:
+        os.environ["GEMINI_API_KEY"] = raw
 
 
 def _thinking_level_from_str(raw: str) -> Any:
@@ -59,12 +68,15 @@ def gemini_complete(
     thinking_level: str | None = None,
     max_output_tokens: int | None = None,
     temperature: float | None = None,
+    response_mime_type: str | None = None,
+    response_json_schema: dict[str, Any] | None = None,
 ) -> str:
     """
     One Gemini ``generate_content`` turn. Raises if ``GEMINI_API_KEY`` is missing.
 
-    Optional ``model``, ``thinking_level``, ``max_output_tokens``, and ``temperature`` override
-    ``GEMINI_*`` environment defaults when provided (used by pivot / NagV / policy refinement).
+    Optional ``model``, ``thinking_level``, ``max_output_tokens``, ``temperature``,
+    ``response_mime_type`` (e.g. ``application/json``), and ``response_json_schema`` override
+    defaults when provided (used by pivot / NagV / policy refinement).
     """
     load_repo_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -94,6 +106,10 @@ def gemini_complete(
         "temperature": temperature_eff,
         "max_output_tokens": max_out,
     }
+    if response_mime_type:
+        cfg_kwargs["response_mime_type"] = response_mime_type.strip()
+    if response_json_schema is not None:
+        cfg_kwargs["response_json_schema"] = response_json_schema
     if thinking_level_eff is not None:
         cfg_kwargs["thinking_config"] = genai_types.ThinkingConfig(
             thinking_level=thinking_level_eff,

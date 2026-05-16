@@ -34,6 +34,7 @@ from registry_stage.wfm_acceptance_handoff import (
 
 from wfm_orchestration.agent4_call import call_agent4_gemini
 from wfm_orchestration.gemini_client import call_gemini, env_thinking_level
+from wfm_orchestration.oos_rewrite_suggest import maybe_print_pivot_oos_rewrite_attempt1
 from wfm_orchestration.prompts_wfm import load_wfm_prompts
 from wfm_orchestration.snapshot_from_agents import wfm_acceptance_snapshot_from_agent_outputs
 from wfm_orchestration.run_metadata import (
@@ -103,13 +104,42 @@ def run_wfm_registry_e2e(
     input_fn: Callable[[str], str] = input,
     print_fn: Callable[..., None] = print,
     stderr: TextIO = sys.stderr,
+    repo_root: Path | None = None,
+    skip_registry: bool = False,
+    auto_accept: bool = False,
+    wfm_profile: str | None = None,
+    global_rule_index_start: int = 0,
+    **_: Any,
 ) -> DevSessionSnapshot | None:
     """
     Interactive console session: WFM loop(s) then registry when user accepts.
 
     **Environment:** ``GEMINI_API_KEY`` required. Run from repo root so ``registry_stage`` imports work.
+
+    ``global_rule_index_start`` (0-based) offsets chunk-local Agent 2/3 line numbers into **global**
+    ``line_index`` values in the handoff (pivot Phase 0 chunks). Default **0**.
+
+    ``wfm_profile`` (e.g. ``"pivot"``) selects extra Agent 2 system instructions where implemented.
+
+    Other keyword arguments (e.g. ``handoff_dir``, ``example_id``) are accepted for call-site
+    compatibility and ignored.
+
+    When ``auto_accept`` is true, the confirmation prompt is answered as **accept** automatically.
+    When ``skip_registry`` is true, the handoff bundle is written (if ``handoff_json`` is set) and
+    the function returns a :class:`DevSessionSnapshot` with only ``bundle`` populated — Phase 1
+    registry materialization is skipped (Pivot / NL-chunk pipelines use this).
     """
-    p1, p2, p3, p4, compound_limit = load_wfm_prompts()
+    repo_root_eff = repo_root if repo_root is not None else _REPO
+    read_input: Callable[[str], str] = input_fn
+    if auto_accept:
+        base_read = input_fn
+
+        def read_input(prompt: str) -> str:
+            if "Accept entire confirmation package" in prompt:
+                return ""
+            return base_read(prompt)
+
+    p1, p2, p3, p4, compound_limit = load_wfm_prompts(wfm_profile=wfm_profile)
     bid = bundle_id or new_bundle_id(prefix=bundle_id_prefix)
     user_original_input = initial_user_text
     user_nl = initial_user_text
@@ -159,8 +189,20 @@ def run_wfm_registry_e2e(
         print_fn("\n### Agent 3 (scope / rewrite)\n")
         print_fn(a3_text)
         print_fn("")
+        maybe_print_pivot_oos_rewrite_attempt1(
+            agent2_output=a2_text,
+            agent3_output=a3_text,
+            wfm_profile=wfm_profile,
+            client=client,
+            model=model,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            thinking_level=thinking_level,
+            print_fn=print_fn,
+            stderr=stderr,
+        )
 
-        ans = input_fn("Accept entire confirmation package for registry handoff? [Y/n]: ").strip().lower()
+        ans = read_input("Accept entire confirmation package for registry handoff? [Y/n]: ").strip().lower()
         if ans in ("", "y", "yes"):
             ts_dict = wfm_pipeline_timestamps_at_accept()
             snap = wfm_acceptance_snapshot_from_agent_outputs(
@@ -175,11 +217,22 @@ def run_wfm_registry_e2e(
                 wfm_pipeline_timestamps=ts_dict,
                 provider_model=provider_model or model,
                 wfm_compound_operator_limit=compound_limit,
+                global_rule_index_start=global_rule_index_start,
             )
             bundle = validate_handoff_roundtrip(build_handoff_bundle(snap))
             if handoff_json is not None:
                 write_handoff_bundle(handoff_json, bundle)
                 print_fn(f"Wrote handoff: {handoff_json}")
+            if skip_registry:
+                dev = DevSessionSnapshot(bundle=bundle, notes="skip_registry")
+                if export_json is not None:
+                    export_session(export_json, dev)
+                    print_fn(f"Wrote dev export: {export_json}")
+                if auto_artifacts:
+                    _write_e2e_auto_artifacts(
+                        dev, repo_root=repo_root_eff, print_fn=print_fn, stderr=stderr
+                    )
+                return dev
             cfg = LineDriverConfig(enable_llm=True, llm_complete=llm_complete)
             dev = run_bundle_through_registry(
                 bundle,
@@ -191,11 +244,14 @@ def run_wfm_registry_e2e(
                 export_session(export_json, dev)
                 print_fn(f"Wrote dev export: {export_json}")
             if auto_artifacts:
-                _write_e2e_auto_artifacts(dev, repo_root=_REPO, print_fn=print_fn, stderr=stderr)
+                _write_e2e_auto_artifacts(
+                    dev, repo_root=repo_root_eff, print_fn=print_fn, stderr=stderr
+                )
             return dev
 
-        raw_d = input_fn(
-            "1-based line indices to disagree (comma-separated), or 'abort' to stop: "
+        raw_d = read_input(
+            "1-based line indices to disagree (comma-separated), or 'abort' to stop — "
+            "your comments drive **attempt 2** (Agent 4 structured merge; optional after attempt 1 suggestions above): "
         ).strip()
         if raw_d.lower() == "abort":
             print_fn("Aborted.")
@@ -207,13 +263,13 @@ def run_wfm_registry_e2e(
 
         comments: list[str] = []
         for d in disagree:
-            c = input_fn(f"Comment for line {d} (non-empty): ").strip()
+            c = read_input(f"Comment for line {d} (non-empty): ").strip()
             if not c:
                 stderr.write("Empty comment — abort.\n")
                 return None
             comments.append(c)
 
-        raw_o = input_fn(
+        raw_o = read_input(
             "1-based OUT_OF_SCOPE line indices to **confirm omit** (comma-separated), or empty: "
         ).strip()
         omit_confirmed = _parse_int_list(raw_o)

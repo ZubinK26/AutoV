@@ -35,6 +35,25 @@ OUT_OF_SCOPE: 2. "Second line statement." | transitive closure is out of scope f
     assert bundle.bundle_id == "t1"
 
 
+def test_global_rule_index_start_offsets_line_index() -> None:
+    a2 = """1. "First."
+2. "Second."
+"""
+    a3 = """PASS: 1. "First."
+PASS: 2. "Second."
+"""
+    snap = wfm_acceptance_snapshot_from_agent_outputs(
+        bundle_id="off",
+        user_original_input="u",
+        agent2_output=a2,
+        agent3_output=a3,
+        global_rule_index_start=5,
+    )
+    assert len(snap.lines) == 2
+    assert snap.lines[0].line_index == 5
+    assert snap.lines[1].line_index == 6
+
+
 def test_rewrite_verdict() -> None:
     a2 = """1. "Original."
 """
