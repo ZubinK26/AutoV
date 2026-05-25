@@ -12,8 +12,14 @@ The diagram below is written in [Mermaid](https://mermaid.js.org/). A plain text
 
 ```mermaid
 flowchart TB
+  subgraph prewfm["Optional pre–WFM — Scope rewriter"]
+    REF["Reference doc / policy_intent_spec"]
+    SR["scope-rewriter CLI"]
+    LAT["latest.nl + latest.json sidecar"]
+  end
+
   subgraph inputs["Inputs"]
-    NL["Source policy text (NL rules file)"]
+    NL["Source NL rules file (--input)"]
   end
 
   subgraph phase0["Phase 0 — Pivot WFM"]
@@ -28,7 +34,7 @@ flowchart TB
   end
 
   subgraph formal["Formal model & solver"]
-    COMP["Build math model from rules"]
+    COMP["Build meta-scheme + Z3 encoding from rules"]
     Z3["Automated consistency check (SAT solver)"]
     REPAIR_STRUCT["Structural repair when compilation fails (repairer rounds; see --repairer-max-rounds)"]
   end
@@ -38,11 +44,11 @@ flowchart TB
   end
 
   subgraph tester["Tester (--with-tester)"]
-    TEST["Second LLM review (tester report)"]
+    TEST["Processed NL vs linearized IR (per-rule content)"]
   end
 
   subgraph critic["Semantic critic (--with-critic)"]
-    SYN["English summary of the math model"]
+    SYN["English summary of the math model (synthetic_en.md)"]
     COMPARE["Compare normalized text to summary"]
     DRIFT["PASS or mismatch (DRIFT)"]
     SEM_REPAIR["Semantic repair (Repairer_Piv / interactive DRIFT path)"]
@@ -63,9 +69,9 @@ flowchart TB
   end
 
   subgraph templates["Template suite (--with-template-generator or --template-suite)"]
-    TGEN["Suite JSON: LLM fills instances under a fixed template schema (--with-template-generator)"]
-    TRUN["Execute scenarios in the real solver; compare to expected"]
-    TREP["Per-scenario pass / fail / error report"]
+    TGEN["Suite JSON: LLM fills instances under fixed kinds (--with-template-generator)"]
+    TRUN["Execute instances in real Z3; compare to golden"]
+    TREP["template_run_report.json"]
   end
 
   subgraph out["Outputs"]
@@ -73,6 +79,8 @@ flowchart TB
     ART["Artifacts on disk (JSON, reports, traces)"]
   end
 
+  REF --> SR --> LAT
+  LAT -.->|often used as pivot --input| NL
   NL --> WFM --> WFMout --> EXT --> REG --> RULES
   RULES --> COMP
   COMP --> REPAIR_STRUCT
@@ -97,9 +105,9 @@ flowchart TB
   XC --- VAR
   CRIT2 --- VAR
 
-  CRIT2 --> TGEN
+  CRIT2 -.-> TGEN
+  PRE -.-> TGEN
   TGEN --> TRUN --> TREP
-  CRIT2 --> TRUN
   VAR --> TGEN
 
   TREP --> SUM --> ART
@@ -112,17 +120,21 @@ flowchart TB
 - **Default CLI** runs WFM → extract (with registry, unless `--skip-registry`) → compile → Z3 → precheck → outcome. Stages in boxes labeled with **`--with-...`** run only when that flag is set (or when a failure triggers repair loops).
 - **Structural repair** runs when compilation fails and LLM repair is allowed (not when `--no-llm` or repair rounds are zero).
 - **Guards** (internal rule-shape checks) can run at several points and may **stop the run** if you pass strict failure flags.
-- **Template suite** runs **late** (after critic / cross / post–cross paths when those run), so it exercises the model produced by that run. **Template kinds and JSON shape are fixed by schema**; with `--with-template-generator`, an LLM **instantiates** concrete tests (worlds, queries, golden expectations) from policy context—not inventing the template format.
+- **Optional scope rewriter** (`scope-rewriter` / `scope_rewriter_cli`) turns a **reference Markdown** (or policy-intent spec) into **`latest.nl`** + **`latest.json`** before Phase 0; pivot is then run with **`--input`** pointing at that NL file (or equivalent).
+- **Template suite** runs **late**, after the run has reached **precheck** and any optional **tester / critic / cross-critic / post–cross** stages you enabled—it exercises the **same** compiled model for that work-dir. Arrows from **both** `CRIT2` and `PRE` to `TGEN` indicate: if cross-critic never runs, the pipeline can still reach template generation when flags are set (no hard dependency on the post–cross critic-only path). **Template kinds and JSON shape are fixed by schema**; with `--with-template-generator`, an LLM **instantiates** concrete tests (worlds, queries, golden expectations) from policy context—not inventing the template format.
 
 ---
 
 ## Workflow (plain language)
 
 **What you start with**  
-Someone writes a policy as a list of plain-English rules in a file. The pipeline’s job is to make that policy **precise enough for a computer to reason about** and to give you **evidence** that the computer’s version matches what the English says.
+Someone writes a policy as a list of plain-English rules in a file, or a longer document that an optional **scope rewriter** turns into encodable lines (`latest.nl`) plus a sidecar (`latest.json`). The pipeline’s job is to make that policy **precise enough for a computer to reason about** and to give you **evidence** that the computer’s version matches what the English says.
+
+**Step 0 — Scope rewriter (optional)**  
+When used, a **pre-WFM** step normalizes long-form text into **one rule per line** NL and records fidelity notes. Pivot WFM then runs on the resulting **`--input`** file.
 
 **Step 1 — Clean and stabilize the English (Pivot WFM)**  
-The system processes the file **in chunks** through a fixed writing workflow. It may rewrite unclear phrasing, split or merge chunks, and records what it did per chunk so you can **resume** if something fails mid-run. The main output is **normalized English**: the version of the policy the rest of the steps will treat as authoritative, plus supporting logs and handoff records.
+The system processes the **`--input`** file **in chunks** through a fixed writing workflow. It may rewrite unclear phrasing, split or merge chunks, and records what it did per chunk so you can **resume** if something fails mid-run. The main output is **normalized English**: the version of the policy the rest of the steps will treat as authoritative, plus supporting logs and handoff records.
 
 **Step 2 — Extract structured rules**  
 A step (often LLM-assisted) turns the normalized English into a **structured list of rules**—conditions, thresholds, allowed values, exceptions—in a machine-readable format. **By default**, an **identifier registry** pass **standardizes names** (variables, enums) so everything lines up; you can skip it with `--skip-registry` when you need to. If extraction hits a bad line, interactive mode can ask how to fix or skip.
@@ -133,8 +145,11 @@ Those structured rules are **compiled** into a mathematical model. A **solver** 
 **Step 4 — Quick sanity pass**  
 A lightweight check compares the English and the model for obvious mismatches (for example numbers that appear in the model but not in the source text). This is **heuristic**: it can warn without meaning the model is wrong.
 
-**Step 5 — Tester (`--with-tester`)**  
-When enabled, a **second LLM review** produces a **tester report**—another semantic pass before or alongside deeper alignment stages, depending on how you invoke the CLI.
+**Step 5 — Tester (`--with-tester`)**
+When enabled, an LLM audit compares **processed NL** (one line per rule) to the **deterministic linearized IR** (`linearized_model_for_cross_critic.txt`) for **per-rule content** alignment. Runs **after precheck, before pivot critic**. Replay on an existing work dir: `pivot-tester --work-dir … --input …` or `pivot-pipeline --skip-phase0 --with-tester` (omit `--with-critic`).
+
+**Step 5b — Test-Repairer (optional, interactive)**
+When `--with-test-repair` and `--interactive-tester` or `--interactive-policy` are set and the tester reports `issues`, the operator **triages each finding** (approve / ignore), then may type `REPAIR` to run **Test-Repairer** on **approved findings only**, or `PROCEED_INCOMPLETE` to continue. After repair: recompile → Z3 → synthetic → precheck → linearize → **re-run tester** (bounded rounds via `PIVOT_TESTER_REPAIR_MAX_ROUNDS`). Artifacts: `tester_repair_handoff.json`, `rules_after_test_repair.json`, `test_repairer_trace.jsonl`.
 
 **Step 6 — Semantic critic (`--with-critic`)**  
 When enabled, the system generates a **plain-English description of what the math model actually enforces** and compares it to the normalized policy text. If they disagree in a material way, you get a **mismatch (DRIFT)** verdict; you can run **semantic repair**, type through interactive prompts, or explicitly agree to continue with known gaps (`PROCEED_INCOMPLETE`-style handoff).

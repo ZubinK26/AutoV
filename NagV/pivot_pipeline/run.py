@@ -34,6 +34,8 @@ def run_pivot_pipeline(
     interactive_cross_coherence: bool = False,
     with_tester: bool = False,
     fail_on_tester_findings: bool = False,
+    with_test_repair: bool = False,
+    interactive_tester: bool = False,
     repairer_max_rounds: int = 2,
     with_cross_critic: bool = False,
     with_cross_repair: bool = False,
@@ -60,9 +62,12 @@ def run_pivot_pipeline(
         cross_repair_max_rounds,
         run_cross_repairer,
     )
-    from pivot_pipeline.linearize_rules import linearize_rules_for_cross_critic
+    from pivot_pipeline.linearize_rules import build_and_write_linearized, linearized_model_artifact_path
     from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN, enforce_wfm_rule_coverage
-    from pivot_pipeline.post_model_workflow import format_tester_report_terminal, run_pivot_tester
+    from pivot_pipeline.tester_interactive_loop import (
+        BLOCKED_TEST_REPAIR_COMPILE,
+        run_tester_interactive_loop,
+    )
     from pivot_pipeline.precheck import run_precheck
     from pivot_pipeline.registry_pass import registry_pass_from_nl_and_rules
     from pivot_pipeline.repairer_piv_agent import append_repairer_trace, run_repairer_piv_structural
@@ -93,10 +98,26 @@ def run_pivot_pipeline(
 
     interactive_any = interactive_policy or interactive_extract_abort
     interactive_cross_any = interactive_policy or interactive_cross_coherence
+    interactive_tester_any = interactive_policy or interactive_tester
     if interactive_any:
         summary["interactive_policy"] = True
+    if interactive_tester:
+        summary["interactive_tester"] = True
     if interactive_cross_coherence:
         summary["interactive_cross_coherence"] = True
+    if with_test_repair and not with_tester:
+        summary["outcome"] = "blocked_tester"
+        summary["message"] = "--with-test-repair requires --with-tester"
+        (work_dir / "run_summary.json").write_text(
+            json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        return summary
+    if with_test_repair and not interactive_tester_any:
+        print_fn(
+            "[pivot pipeline] --with-test-repair set without --interactive-tester or "
+            "--interactive-policy; Test-Repairer will not run until a gate is enabled.\n"
+        )
 
     if not skip_phase0:
         try:
@@ -477,28 +498,49 @@ def run_pivot_pipeline(
         )
         return summary
 
+    linearized: str | None = None
+    if with_tester or with_cross_critic:
+        linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
+        summary["linearized_model_for_cross_critic"] = str(
+            linearized_model_artifact_path(work_dir).resolve()
+        )
+
     if with_tester:
         try:
-            z3_blob = json.dumps(z3_result, ensure_ascii=False, indent=2) if z3_result else ""
-            _raw_t, tester_rep = run_pivot_tester(
-                effective_nl=nl_text_for_artifacts,
-                synthetic_en=synth,
-                z3_summary=z3_blob[:12_000],
+            rules, meta, synth, z3_result, ok, issues, linearized, early = run_tester_interactive_loop(
+                work_dir=work_dir,
+                nl_text_for_artifacts=nl_text_for_artifacts,
+                nl_for_precheck=nl_for_precheck,
+                nl_lines_reg=nl_lines_reg,
+                policy_id=policy_id,
+                rules=rules,
+                meta_path=meta_path,
+                skip_registry=skip_registry,
+                no_llm=no_llm,
+                interactive_any=interactive_tester_any,
+                with_test_repair=with_test_repair,
+                fail_on_tester_findings=fail_on_tester_findings,
+                print_fn=print_fn,
+                input_fn=input_fn,
+                summary=summary,
+                synth=synth,
+                meta=meta,
+                z3_result=z3_result,
+                ok=ok,
+                issues=issues,
+                linearized=linearized,
+                refresh_varprod_trigger_check=refresh_varprod_trigger_check,
             )
-            (work_dir / "tester_report.json").write_text(
-                tester_rep.model_dump_json(indent=2) + "\n",
+            if early in ("blocked_tester", BLOCKED_TEST_REPAIR_COMPILE):
+                return summary
+        except PivotPipelineUserAbort as e:
+            summary["outcome"] = "blocked_user_abort"
+            summary["message"] = str(e)
+            (work_dir / "run_summary.json").write_text(
+                json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
                 encoding="utf-8",
             )
-            summary["tester_verdict"] = tester_rep.verdict
-            print_fn(format_tester_report_terminal(tester_rep))
-            if tester_rep.verdict == "issues" and fail_on_tester_findings:
-                summary["outcome"] = "blocked_tester"
-                summary["message"] = "Tester reported issues (--fail-on-tester-findings)"
-                (work_dir / "run_summary.json").write_text(
-                    json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
-                    encoding="utf-8",
-                )
-                return summary
+            return summary
         except Exception as e:
             summary["outcome"] = "blocked_tester"
             summary["message"] = f"tester failed: {e}"
@@ -584,13 +626,11 @@ def run_pivot_pipeline(
                 )
                 return summary
 
-        linearized = linearize_rules_for_cross_critic(rules)
-        (work_dir / "linearized_model_for_cross_critic.txt").write_text(
-            linearized, encoding="utf-8"
-        )
-        summary["linearized_model_for_cross_critic"] = str(
-            (work_dir / "linearized_model_for_cross_critic.txt").resolve()
-        )
+        if linearized is None:
+            linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
+            summary["linearized_model_for_cross_critic"] = str(
+                linearized_model_artifact_path(work_dir).resolve()
+            )
 
         try:
             xc_raw, xc_report = run_cross_critic_parsed(nl_text_for_artifacts, linearized)
@@ -715,9 +755,9 @@ def run_pivot_pipeline(
                             + "\n",
                             encoding="utf-8",
                         )
-                        linearized = linearize_rules_for_cross_critic(rules)
-                        (work_dir / "linearized_model_for_cross_critic.txt").write_text(
-                            linearized, encoding="utf-8"
+                        linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
+                        summary["linearized_model_for_cross_critic"] = str(
+                            linearized_model_artifact_path(work_dir).resolve()
                         )
 
                         try:

@@ -5,7 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from pivot_pipeline.linearize_rules import linearize_rules_for_cross_critic
+from pivot_pipeline.linearize_rules import (
+    build_and_write_linearized,
+    linearize_rules_for_cross_critic,
+    linearized_model_artifact_path,
+)
 
 _FIXTURE_RULES = (
     Path(__file__).resolve().parents[2] / "exports" / "pivot_runs_test_input2" / "rules_extracted.json"
@@ -39,3 +43,20 @@ def test_linearize_minimal_rule() -> None:
     ]
     s = linearize_rules_for_cross_critic(rules)
     assert "R0001 | CONSTANT_RELATIONAL | n LTE 3 | yields SATISFIED" in s
+
+
+def test_build_and_write_linearized_writes_artifact(tmp_path: Path) -> None:
+    rules = [
+        {
+            "rule_id": "R0001",
+            "applies_to": "GLOBAL",
+            "overrides": None,
+            "template_class": "CONSTANT_RELATIONAL",
+            "variable": "n",
+            "relational_operator": "LTE",
+            "constant_value": 1,
+            "yields": "SATISFIED",
+        }
+    ]
+    build_and_write_linearized(work_dir=tmp_path, rules=rules)
+    assert linearized_model_artifact_path(tmp_path).is_file()

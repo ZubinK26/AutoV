@@ -9,7 +9,7 @@
 | **Critic → Repairer_Piv semantic** (`REPAIR` at gate, bounded rounds `PIVOT_CRITIC_SEMANTIC_REPAIR_MAX`, default 3) | **Done** — `repairer_piv_agent.py`, `prompts/repairer_piv_semantic.md` |
 | **Compile failure → Repairer_Piv structural** (`--repairer-max-rounds`, default 2; `0` disables) | **Done** — `prompts/repairer_piv_structural.md`, `run.py` |
 | **Trace logs** | `repairer_piv_structural_trace.jsonl`, `repairer_piv_semantic_trace.jsonl` |
-| **Optional Tester** (`--with-tester`, `tester_report.json`, `--fail-on-tester-findings`) | **Done** — `post_model_workflow.py`, `tester_pivot_semantic.md` |
+| **Optional Tester** (`--with-tester`, `pivot-tester`, `tester_report.json`, `--fail-on-tester-findings`) | **Superseded** — see `dev_plan_pivot_tester_nl_linearized_alignment_v1.md`. Tester now compares **processed NL vs linearized IR** (per-rule content), not NL vs synthetic_en. |
 | **Interactive gates** | Critic: `REPAIR` / `PROCEED_INCOMPLETE` / Enter abort. Requires `--interactive-policy` (or extract-interactive) for REPAIR/PROCEED paths. |
 | **Registry re-run** | After structural or semantic repair, `registry_pass_from_nl_and_rules` re-applied when `skip_registry` is false. |
 

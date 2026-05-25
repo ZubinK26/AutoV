@@ -1,1 +1,0 @@
-The three slot codes must be pairwise different.

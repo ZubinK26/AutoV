@@ -2,6 +2,7 @@
 
 Machine contract for the extracted rule IR: [`NagV/Extract-Pivot.md`](../Extract-Pivot.md).  
 Architecture (Mermaid + plain language): [`ARCHITECTURE.md`](ARCHITECTURE.md).  
+**Demo / presentation** (templates, meta-scheme, test templates, artifact paths): [`../demo-presentation-file.md`](../demo-presentation-file.md).  
 **Template system** (all eight `template_class` values, routing, nesting, scope, reference meta-scheme + NL): [`PIVOT_TEMPLATE_SYSTEM.md`](PIVOT_TEMPLATE_SYSTEM.md).
 
 ## Prerequisites
@@ -16,7 +17,7 @@ From a natural-language rules file, a typical run:
 
 1. **Phase 0 — Pivot WFM** normalizes the policy text in chunks (unless `--skip-phase0` and a usable `phase0_normalized_nl.txt` already exists in `--work-dir`).
 2. **Phase 1 — Extraction** turns lines into structured rule objects (JSON IR), then by default a **registry** pass aligns identifiers across rules (disable with `--skip-registry`).
-3. **Compile + Z3**, heuristic **precheck**, then optional stages when you pass flags (tester, semantic critic, cross-critic, template suite, etc.).
+3. **Compile + Z3**, heuristic **precheck**, then optional stages when you pass flags (**tester** = NL↔linearized per-rule content, semantic critic, cross-critic, template suite, etc.).
 
 You can **reuse** prior extraction by passing **`--rules-json`** pointing at an existing `{ "policy_id": "…", "rules": [ … ] }` file; if that file exists, Phase 1 **skips** the extract LLM. Use **`--no-llm`** only when you intend to forbid LLM calls (extraction will not run without a usable `--rules-json`).
 
@@ -65,7 +66,7 @@ Stop after extraction (writes `rules_extracted.json`):
 pivot-pipeline --input path/to/rules.nl --work-dir exports/pivot_runs/extract_only --extract-only
 ```
 
-**Further options:** `pivot-pipeline --help` (e.g. `--with-critic`, `--with-cross-critic`, `--with-cross-repair`, `--with-tester`, `--with-template-generator`, `--template-suite`, `--repairer-max-rounds`, interactive modes).
+**Further options:** `pivot-pipeline --help` (e.g. `--with-critic`, `--with-cross-critic`, `--with-cross-repair`, `--with-tester`, `--with-test-repair`, `--interactive-tester`, `pivot-tester` for replay on existing work dirs, `--with-template-generator`, `--template-suite`, `--repairer-max-rounds`, interactive modes).
 
 ## Fixtures and tests
 

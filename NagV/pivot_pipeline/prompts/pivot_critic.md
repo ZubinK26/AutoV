@@ -28,6 +28,10 @@ Schema:
 - `audit_trail_bullets`: short strings summarizing reasoning (may be empty).
 - `notes`: optional string.
 
+**What the synthetic doc normally looks like (expected, not a defect):** The pipeline’s “Synthetic English” is a **deterministic, compact index** of the compiled IR — **not** a full natural-language rewrite of the policy. You should typically see: a short header (policy id, semantics version), `## Rules` with **one line per rule** listing **rule id**, **template class** (e.g. `LOGICAL_IMPLICATION`, `PREEMPTION`), **`applies_to`**, and **`overrides`**; optional **PREEMPTION** detail; then `## Pathways` with each pathway’s **`must_satisfy_all`** / **`must_not_trigger`** (and optional pathway descriptions). The synthetic block **does not** repeat obligations, thresholds, or trigger/required logic as English prose — that detail lives in the IR and may appear only in the **Variable-product rules** excerpt (when applicable). **Do not** treat “no paragraph under each rule restating the NL” as DRIFT; that is normal.
+
+**What “missing obvious NL content” means here:** It refers to **structural failure or absence** of what the synthetic **should** contain — e.g. the synthetic block is blank or whitespace-only while the policy clearly has rules; mandatory sections (`## Rules`, `## Pathways` when pathways exist) are missing; lists are clearly truncated or replaced by error/placeholder text; or pathways contradict the rule list in a way that makes the summary unusable. It **does not** mean “the synthetic doesn’t narrate each threshold in English.”
+
 If the synthetic text is empty or missing obvious NL content, verdict **DRIFT** with findings explaining what is missing.
 
 ---

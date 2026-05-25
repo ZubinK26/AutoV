@@ -97,12 +97,31 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument(
         "--with-tester",
         action="store_true",
-        help="Optional second semantic review (tester_report.json); runs after precheck, before critic if both on.",
+        help=(
+            "Per-rule processed NL vs linearized IR alignment (tester_report.json); "
+            "runs after precheck, before --with-critic when both are set."
+        ),
     )
     p.add_argument(
         "--fail-on-tester-findings",
         action="store_true",
         help="When --with-tester and verdict is 'issues', exit blocked_tester (CI-style).",
+    )
+    p.add_argument(
+        "--with-test-repair",
+        action="store_true",
+        help=(
+            "Allow Test-Repairer when interactive tester gate chooses REPAIR "
+            "(requires --with-tester and --interactive-tester or --interactive-policy)."
+        ),
+    )
+    p.add_argument(
+        "--interactive-tester",
+        action="store_true",
+        help=(
+            "TTY prompts when Pivot Tester reports issues: per-finding approve/ignore triage, "
+            "then REPAIR (Test-Repairer) or PROCEED_INCOMPLETE."
+        ),
     )
     p.add_argument(
         "--repairer-max-rounds",
@@ -202,6 +221,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = p.parse_args(argv)
 
+    if args.with_test_repair and not args.with_tester:
+        print("error: --with-test-repair requires --with-tester", file=sys.stderr)
+        return 2
+
     from pivot_pipeline.run import run_pivot_pipeline
 
     nl_source = resolve_existing_user_file(args.input)
@@ -223,6 +246,8 @@ def main(argv: list[str] | None = None) -> int:
         interactive_cross_coherence=args.interactive_cross_coherence,
         with_tester=args.with_tester,
         fail_on_tester_findings=args.fail_on_tester_findings,
+        with_test_repair=args.with_test_repair,
+        interactive_tester=args.interactive_tester,
         repairer_max_rounds=args.repairer_max_rounds,
         with_cross_critic=args.with_cross_critic,
         with_cross_repair=args.with_cross_repair,
@@ -249,7 +274,8 @@ def main(argv: list[str] | None = None) -> int:
     if outcome.startswith("blocked"):
         return (
             1
-            if outcome not in ("blocked_critic", "blocked_semantic_repair_compile")
+            if outcome
+            not in ("blocked_critic", "blocked_semantic_repair_compile", "blocked_test_repair_compile")
             else 3
         )
     if summary.get("precheck_ok") is False:

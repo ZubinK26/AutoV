@@ -20,6 +20,13 @@ class TesterFinding(BaseModel):
         "contradiction",
         "pathway_mislabel",
         "preemption_gap",
+        "threshold",
+        "wrong_operator",
+        "wrong_variable",
+        "template_mismatch",
+        "preemption_mismatch",
+        "ordering",
+        "misalignment",
         "other",
     ] = "other"
     nl_pointer: str = ""
@@ -32,6 +39,7 @@ class TesterReport(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     verdict: Literal["ok", "issues"]
+    compared_against: str = "processed_nl_and_linearized_model"
     findings: list[TesterFinding] = Field(default_factory=list)
     notes: str = ""
 
@@ -51,7 +59,13 @@ def _tester_tmpl() -> str:
 
 
 def format_tester_report_terminal(report: TesterReport) -> str:
-    lines = ["", "=== Pivot Tester (semantic) ===", f"Verdict: {report.verdict}", ""]
+    lines = [
+        "",
+        "=== Pivot Tester (NL ↔ linearized IR) ===",
+        f"Verdict: {report.verdict}",
+        f"Compared: {report.compared_against}",
+        "",
+    ]
     if report.findings:
         for f in report.findings:
             lines.append(f"  [{f.id}] {f.severity.upper()} / {f.category}: {f.explanation}")
@@ -66,21 +80,21 @@ def format_tester_report_terminal(report: TesterReport) -> str:
 
 def run_pivot_tester(
     *,
-    effective_nl: str,
-    synthetic_en: str,
-    z3_summary: str | None = None,
+    processed_nl: str,
+    linearized_model: str,
     llm: Callable[..., str] = pivot_llm_complete,
 ) -> tuple[str, TesterReport]:
     tmpl = _tester_tmpl()
-    z3s = z3_summary or "(not provided)"
     prompt = (
-        tmpl.replace("<<<EFFECTIVE_NL>>>", _truncate(effective_nl, 14000))
-        .replace("<<<SYNTHETIC_EN>>>", _truncate(synthetic_en, 14000))
-        .replace("<<<Z3_SUMMARY>>>", _truncate(z3s, 4000))
+        tmpl.replace("<<<PROCESSED_NL>>>", _truncate(processed_nl, 14000))
+        .replace("<<<LINEARIZED_MODEL>>>", _truncate(linearized_model, 14000))
     )
     raw = llm(prompt)
     data = parse_json_object(raw)
-    return raw, TesterReport.model_validate(data)
+    report = TesterReport.model_validate(data)
+    if not report.compared_against:
+        report = report.model_copy(update={"compared_against": "processed_nl_and_linearized_model"})
+    return raw, report
 
 
 def tester_handoff_from_report(
@@ -93,6 +107,7 @@ def tester_handoff_from_report(
         "source": "pivot_tester",
         "source_note": source_note,
         "verdict": report.verdict,
+        "compared_against": report.compared_against,
         "findings": [f.model_dump(mode="json") for f in report.findings],
         "notes": report.notes,
     }

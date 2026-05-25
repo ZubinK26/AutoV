@@ -1,0 +1,145 @@
+## ADD Course — Unified Evaluation Policy
+
+This document is the **single, unified** evaluation policy for the ADD course. It replaces and consolidates:
+
+- `wyniki/OCENIANIE_RULES_TEMPLATE.md`
+- `wyniki/STUDENT_EVALUATION_GUIDE.md`
+
+All evaluation notes and grading outputs under `wyniki/` should follow this policy.
+
+---
+
+## 1) Scope of evidence (what is evaluated)
+
+- Always update local repositories before grading (at minimum: `git fetch --all --prune`).
+- Evaluate full repository evidence in this order:
+  - `main` (default expectation)
+  - other branches
+  - pull requests / PR branches
+- If the best valid implementation is not on `main`, the evaluation is based on the branch/PR that contains the **most complete, task-relevant deliverables**.
+
+---
+
+## 2) What the grade represents
+
+- Grades are assigned **per task, per student** (even for group repositories).
+- The baseline maximum for a task is typically **10.0 points**.
+- Some tasks allow **bonus points** (see Section 4).  
+  **Critical rule:** bonus points are awarded **only if the baseline score is 10.0/10.0** (i.e., the team fully meets the base task requirements).
+- If a penalty rule applies (Section 5), it can override bonus points.
+
+---
+
+## 3) Base grading (how to grade)
+
+- Grade strictly by the **official task specification** for the given week/task.
+- Partial completion can receive partial points, but the evaluator must list missing core elements explicitly.
+- Feedback reports must contain **concrete gaps** (what is missing, where it should be, what evidence was expected).
+- Language in feedback reports is **English**.
+
+### Task 04 special rule (clarity of `data_examples/`)
+
+If the Task 04 report does not clearly separate:
+
+- earlier-task samples in `data_examples/` (e.g. acquisition/schema fixtures), from
+- Task 04 pipeline outputs (cleaned/joined/aggregated samples, EDA exports, and where full outputs live),
+
+then the evaluator must note this, referencing **Task 04 spec §4.1.1**.
+
+---
+
+## 4) Team size, expectations, and bonus points
+
+### 4.1 Team size inference
+
+Team size is inferred from repository naming (number of `sXXXXX` tokens, e.g. `s12345_s23456` = 2-person team).
+
+### 4.2 Baseline-first rule (mandatory)
+
+**Bonuses are awarded only if the baseline score is 10.0/10.0.**
+
+- If the base score is **< 10.0**, then **bonus = 0.0**, even if some higher-tier elements are present.
+- This prevents inconsistent grading such as “8.5 with a solo bonus”.
+
+### 4.3 Bonus types (cumulative up to cap)
+
+If (and only if) baseline is 10.0/10.0, apply bonuses:
+
+- **Solo completion bonus:** `+0.5` for a one-person team.
+- **One-tier-up bonus:** `+0.5` for completing requirements intended for a team **one size larger** (most commonly: a 1- or 2-person team that fully meets the 3-person **cloud compute** requirement).
+- **Four-person tier bonus:** `+1.0` for completing 4-person requirements (cloud compute + IaC + per-member contributions documented).
+
+Bonuses are cumulative. Maximum bonus is `+2.0`.
+
+### 4.4 Maximum achievable scores (with baseline-first rule)
+
+| Team size | Maximum score | How to reach it |
+|-----------|--------------|-----------------|
+| 1 person  | **12.0** | 10 (base) + 0.5 (solo) + 0.5 (cloud) + 1.0 (IaC) |
+| 2 persons | **11.5** | 10 (base) + 0.5 (cloud) + 1.0 (IaC) |
+| 3 persons | **11.0** | 10 (base) + 1.0 (IaC) |
+| 4 persons | **10.0** | 10 (base) |
+
+---
+
+## 5) Contribution split and penalties (group work)
+
+### 5.1 Contribution split scope
+
+- Contribution split is based on **code files only** (not `.md`, not data files).
+- If task-specific code lines are **< 30**, skip contribution split penalties for that task.
+- Default split basis: task-specific code scope.
+- Fairness fallback: if task-specific split is strongly one-sided, also check whole-repository code split before penalty.
+
+### 5.2 Penalty rules
+
+- If a student’s share is `< 0.25`, an imbalance penalty may apply (case-by-case, documented).
+- If a student’s share is `< 0.05`:
+  - that student receives **0** points (final),
+  - the teammate receives a **-2** penalty and **cannot keep bonus points**,
+  - the decision must be documented in feedback.
+
+---
+
+## 6) GitHub Projects (task quality checks)
+
+When the specification requires GitHub Project evidence (by team size), evaluation checks:
+
+- Existence and correct mapping to the correct course task (e.g. “Task 06 — Feature Engineering”).
+- Acceptance criteria quality (“done means…” criteria that are concrete).
+- Ownership (when “one per person” is required).
+- Traceability (links between tasks/issues and repo work: commits/branches/PRs).
+
+Poor-quality Project tasks reduce points **only when the specification requires Project evidence**.
+
+---
+
+## 7) Git usage quality (engineering hygiene)
+
+Git usage can affect notes and borderline decisions:
+
+- Branch names should be descriptive and task-related (not `test`, `new`, `asd`).
+- Commit messages should be meaningful and consistent (imperative mood preferred).
+- Avoid committing large datasets.
+- For teamwork: PRs and reviews are a plus; avoid force-push to shared branches.
+
+---
+
+## 8) Student feedback notes (`.md`)
+
+- Feedback notes are written in **English**.
+- By default, a student receives a feedback `.md` file **only if the score is < 10.0**.
+- A feedback file may also be created for special policy notes (e.g., contribution penalty), even if score is `>= 10.0`.
+
+Feedback should focus on **missing core deliverables** and **serious gaps**, not minor style issues.
+
+---
+
+## 9) Output files under `wyniki/`
+
+Per task, create folder: `wyniki/zadanie_X/` with:
+
+- `wyniki_zadanieX_grupa11.csv`
+- `wyniki_zadanieX_grupa12.csv`
+- `reports_md/` with student feedback reports when required
+- optional repo-level audit CSV (e.g. evaluated branch/commit, points breakdown, code-line counts)

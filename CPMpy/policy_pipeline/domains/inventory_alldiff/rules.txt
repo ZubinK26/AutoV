@@ -1,1 +1,0 @@
-No bin may hold more than four items.

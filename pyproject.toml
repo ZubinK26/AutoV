@@ -14,6 +14,7 @@ dependencies = [
 
 [project.scripts]
 pivot-pipeline = "pivot_pipeline.cli:main"
+pivot-tester = "pivot_pipeline.run_tester:main"
 pivot-template-suite = "pivot_pipeline.template_suite.__main__:main"
 scope-rewriter = "pivot_pipeline.scope_rewriter_cli:main"
 

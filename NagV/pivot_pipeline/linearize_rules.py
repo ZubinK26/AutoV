@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any, Mapping
 
 
@@ -125,4 +126,19 @@ def linearize_rules_for_cross_critic(rules: list[dict[str, Any]]) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
-__all__ = ["linearize_rules_for_cross_critic"]
+def linearized_model_artifact_path(work_dir: Path) -> Path:
+    return work_dir / "linearized_model_for_cross_critic.txt"
+
+
+def build_and_write_linearized(*, work_dir: Path, rules: list[dict[str, Any]]) -> str:
+    """Deterministic linearization written to ``work_dir/linearized_model_for_cross_critic.txt``."""
+    linearized = linearize_rules_for_cross_critic(rules)
+    linearized_model_artifact_path(work_dir).write_text(linearized, encoding="utf-8")
+    return linearized
+
+
+__all__ = [
+    "build_and_write_linearized",
+    "linearize_rules_for_cross_critic",
+    "linearized_model_artifact_path",
+]

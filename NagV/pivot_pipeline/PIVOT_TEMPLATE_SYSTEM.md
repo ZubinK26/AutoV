@@ -20,6 +20,10 @@ Phase 1 extraction turns **one** normalized policy line into **one** JSON object
 
 Structured LLM output is **parsed as JSON** and validated against **Pydantic** models (same contract as this document). Invalid shape → retries or a **hard stop** on that step—not silent acceptance.
 
+### 1.4 Optional pre-WFM — Scope rewriter
+
+**Not** a ninth `template_class`. The **scope rewriter** ([`scope_rewriter_cli.py`](scope_rewriter_cli.py), entry point `scope-rewriter`) runs **before** Pivot WFM when you want to turn a **long reference document** or **policy_intent_spec** into **plain one-line rules** (`latest.nl`) plus a **JSON sidecar** (`latest.json`: fidelity, omissions, `ready_for_wfm`, etc.). That NL file is then used as pivot **`--input`**. It does not change the eight-class IR vocabulary; it changes **what text** arrives at Phase 0.
+
 ---
 
 ## 2. The eight `template_class` values (closed vocabulary)
