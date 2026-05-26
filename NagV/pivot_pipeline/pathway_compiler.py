@@ -100,7 +100,12 @@ def _resolve_symbolic_preemption_targets(rules: list[AtomicRule]) -> list[Atomic
     return out
 
 
-def build_meta_scheme(*, policy_id: str, rules: list[AtomicRule]) -> MetaScheme:
+def build_meta_scheme(
+    *,
+    policy_id: str,
+    rules: list[AtomicRule],
+    policy_semantics_version: str | None = None,
+) -> MetaScheme:
     assert_override_dag_acyclic(rules)
     rules = _resolve_symbolic_preemption_targets(rules)
     known = {r.rule_id for r in rules}
@@ -141,4 +146,12 @@ def build_meta_scheme(*, policy_id: str, rules: list[AtomicRule]) -> MetaScheme:
         must_satisfy_all=must,
         must_not_trigger=[],
     )
-    return MetaScheme(policy_id=policy_id, evaluation_pathways=[pw], rules=rules)
+    from pivot_pipeline.constants import POLICY_SEMANTICS_VERSION_DEFAULT
+
+    ver = policy_semantics_version or POLICY_SEMANTICS_VERSION_DEFAULT
+    return MetaScheme(
+        policy_id=policy_id,
+        policy_semantics_version=ver,
+        evaluation_pathways=[pw],
+        rules=rules,
+    )

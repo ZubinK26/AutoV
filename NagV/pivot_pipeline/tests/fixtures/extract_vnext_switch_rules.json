@@ -1,0 +1,19 @@
+{
+  "policy_id": "vnext_switch_int",
+  "policy_semantics_version": "1.1",
+  "pivot_ir_extensions": ["vnext_8"],
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "template_class": "EXHAUSTIVE_SWITCH",
+      "discriminant_variable": "mode",
+      "cases": [
+        {
+          "value": 1,
+          "consequence": { "kind": "atom", "variable": "active", "operator": "EQ", "value": 1 }
+        }
+      ],
+      "default_consequence": { "kind": "atom", "variable": "active", "operator": "EQ", "value": 0 }
+    }
+  ]
+}

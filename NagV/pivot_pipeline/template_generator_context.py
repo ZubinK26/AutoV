@@ -52,7 +52,35 @@ def build_template_generator_context(work_dir: Path, *, max_total_chars: int = 1
     if synth_path.is_file():
         synth_excerpt = _truncate(synth_path.read_text(encoding="utf-8"), 4_000, label="synthetic_en.md")
 
+    from pivot_pipeline.ir_vnext import VNEXT_TEMPLATE_CLASSES
+
+    vnext_ids = [
+        r.get("rule_id")
+        for r in rules
+        if str(r.get("template_class")) in VNEXT_TEMPLATE_CLASSES
+    ]
+    vnext_note = ""
+    if vnext_ids:
+        vnext_note = (
+            "### vNext expansion rules (prioritize tests for these rule_ids)\n"
+            f"Expansion template rule_ids in extract JSON: {json.dumps(vnext_ids, ensure_ascii=False)}\n"
+            "Author instances that set worlds exercising variables in clauses, terms, rows, "
+            "switch cases, and INT_RANGE bounds. meta_scheme lists **lowered** core rule_ids; "
+            "still cite expansion rule_ids above when targeting template shape.\n\n"
+        )
+
+    assessment_path = work_dir / "linearized_model_for_assessment.txt"
+    assessment_excerpt = ""
+    if assessment_path.is_file():
+        assessment_excerpt = _truncate(
+            assessment_path.read_text(encoding="utf-8"), 3_500, label="assessment linearized"
+        )
+
     chunks: list[str] = ["## POLICY CONTEXT", "", "### rules_extracted.json (full)", rules_json, ""]
+    if vnext_note:
+        chunks.extend([vnext_note])
+    if assessment_excerpt:
+        chunks.extend(["### linearized_model_for_assessment.txt (excerpt)", assessment_excerpt, ""])
     if meta_note:
         chunks.extend(["### meta_scheme (pathway + sorts)", meta_note, ""])
     if synth_excerpt:

@@ -1,0 +1,54 @@
+{
+  "schema_version": "1",
+  "suite_id": "vnext_eight_smoke",
+  "instances": [
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn01_int_range_sat",
+      "world": { "x": 2 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn02_decision_row_sat",
+      "world": { "flag": 1, "y": 0 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn03_table_block_sat",
+      "world": { "a": 1, "b": 1 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn04_bounded_forall_sat",
+      "world": { "role": 1 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn05_k_of_n_sat",
+      "world": { "p": 1, "q": 0 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn06_switch_sat",
+      "world": { "mode": 1, "active": 1 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn07_defined_as_sat",
+      "world": { "threshold": 5 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "vn08_sum_threshold_sat",
+      "world": { "units": 1, "hours": 1 },
+      "golden": { "sat": true }
+    }
+  ]
+}

@@ -141,6 +141,7 @@ def run_pivot_critic(
     synthetic_en: str,
     *,
     varprod_rules_linearized: str = "",
+    expansion_assessment_digest: str = "",
     llm: Callable[..., str] = pivot_llm_complete,
     thinking_level: str | None = None,
 ) -> str:
@@ -148,10 +149,14 @@ def run_pivot_critic(
     vp = (varprod_rules_linearized or "").strip()
     if not vp:
         vp = "(none — no LOGICAL_IMPLICATION rules with varprod_cmp in this policy snapshot)"
+    digest = (expansion_assessment_digest or "").strip()
+    if not digest:
+        digest = "(none — no vNext expansion templates in rules_extracted.json)"
     prompt = (
         tmpl.replace("<<<NL_POLICY>>>", nl_policy)
         .replace("<<<SYNTHETIC_EN>>>", synthetic_en)
         .replace("<<<VARPROD_RULES_LINEARIZED>>>", vp)
+        .replace("<<<EXPANSION_ASSESSMENT_DIGEST>>>", digest)
     )
     if llm is pivot_llm_complete:
         return pivot_llm_complete(prompt, thinking_level=thinking_level)
@@ -163,6 +168,7 @@ def run_pivot_critic_parsed(
     synthetic_en: str,
     *,
     varprod_rules_linearized: str = "",
+    expansion_assessment_digest: str = "",
     llm: Callable[..., str] = pivot_llm_complete,
     thinking_level: str | None = None,
 ) -> tuple[str, CriticReport]:
@@ -170,6 +176,7 @@ def run_pivot_critic_parsed(
         nl_policy,
         synthetic_en,
         varprod_rules_linearized=varprod_rules_linearized,
+        expansion_assessment_digest=expansion_assessment_digest,
         llm=llm,
         thinking_level=thinking_level,
     )

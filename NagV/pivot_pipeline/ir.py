@@ -12,6 +12,7 @@ from pivot_pipeline.constants import (
     CONDITION_EXPR_MAX_DEPTH,
     PATHWAY_CAP,
     POLICY_SEMANTICS_VERSION_DEFAULT,
+    POLICY_SEMANTICS_VERSIONS_SUPPORTED,
 )
 
 
@@ -315,8 +316,17 @@ _YIELDS_BEARING_TEMPLATES: frozenset[str] = frozenset(
         "SET_INCLUSION",
         "VARIABLE_RELATIONAL",
         "ARITHMETIC_EVALUATION",
+        "INT_RANGE",
+        "SUM_THRESHOLD",
     }
 )
+
+_VNEXT_CONDITION_FIELDS_BY_TEMPLATE: dict[str, tuple[str, ...]] = {
+    "DECISION_TABLE_ROW": ("trigger_condition", "required_condition"),
+    "BOUNDED_FORALL": ("required_condition",),
+    "DEFINED_AS": ("definition",),
+    "EXHAUSTIVE_SWITCH": ("default_consequence",),
+}
 
 
 def _sanitize_varprod_rhs(obj: dict[str, Any]) -> dict[str, Any]:
@@ -354,13 +364,76 @@ def _sanitize_condition(obj: object) -> object:
     return out
 
 
+def _sanitize_vnext_list_field(key: str, val: list[Any]) -> list[Any]:
+    if key == "clauses":
+        return [_sanitize_condition(c) for c in val]
+    if key == "rows":
+        out_rows: list[Any] = []
+        for row in val:
+            if not isinstance(row, dict):
+                continue
+            out_rows.append(
+                {
+                    kk: _sanitize_condition(vv) if kk in ("trigger_condition", "required_condition") else vv
+                    for kk, vv in row.items()
+                    if kk in ("trigger_condition", "required_condition")
+                }
+            )
+        return out_rows
+    if key == "cases":
+        out_cases: list[Any] = []
+        for case in val:
+            if not isinstance(case, dict):
+                continue
+            oc = {kk: vv for kk, vv in case.items() if kk in ("value", "consequence")}
+            if "consequence" in oc:
+                oc["consequence"] = _sanitize_condition(oc["consequence"])
+            out_cases.append(oc)
+        return out_cases
+    if key == "terms":
+        out_terms: list[Any] = []
+        for term in val:
+            if isinstance(term, dict):
+                out_terms.append({kk: term[kk] for kk in ("coeff", "variable") if kk in term})
+        return out_terms
+    return copy.deepcopy(val)
+
+
 def _sanitize_rule_dict(r: dict[str, Any]) -> dict[str, Any]:
+    from pivot_pipeline.ir_vnext import VNEXT_MODEL_BY_TEMPLATE, VNEXT_TEMPLATE_CLASSES
+
     t = r.get("template_class")
-    cls = _RULE_MODEL_BY_TEMPLATE.get(str(t) if t is not None else "")
+    ts = str(t) if t is not None else ""
+    if ts in VNEXT_TEMPLATE_CLASSES:
+        cls = VNEXT_MODEL_BY_TEMPLATE[ts]
+        allowed = frozenset(cls.model_fields.keys())
+        cond_keys = frozenset(_VNEXT_CONDITION_FIELDS_BY_TEMPLATE.get(ts, ()))
+        out: dict[str, Any] = {}
+        for key in allowed:
+            if key not in r:
+                continue
+            val = r[key]
+            if key in cond_keys:
+                out[key] = _sanitize_condition(val)
+            elif key in ("clauses", "rows", "cases", "terms") and isinstance(val, list):
+                out[key] = _sanitize_vnext_list_field(key, val)
+            elif isinstance(val, dict):
+                out[key] = copy.deepcopy(val)
+            elif isinstance(val, list):
+                out[key] = copy.deepcopy(val)
+            else:
+                out[key] = val
+        if ts in _YIELDS_BEARING_TEMPLATES:
+            y = out.get("yields")
+            if y is None or (isinstance(y, str) and y.strip() == ""):
+                out["yields"] = "SATISFIED"
+        return out
+
+    cls = _RULE_MODEL_BY_TEMPLATE.get(ts)
     if cls is None:
         return copy.deepcopy(r)
     allowed = frozenset(cls.model_fields.keys())
-    cond_keys = frozenset(_CONDITION_FIELDS_BY_TEMPLATE.get(str(t), ()))
+    cond_keys = frozenset(_CONDITION_FIELDS_BY_TEMPLATE.get(ts, ()))
     out: dict[str, Any] = {}
     for key in allowed:
         if key not in r:
@@ -374,7 +447,6 @@ def _sanitize_rule_dict(r: dict[str, Any]) -> dict[str, Any]:
             out[key] = copy.deepcopy(val)
         else:
             out[key] = val
-    ts = str(t) if t is not None else ""
     if ts in _YIELDS_BEARING_TEMPLATES:
         y = out.get("yields")
         if y is None or (isinstance(y, str) and y.strip() == ""):
@@ -424,10 +496,9 @@ class MetaScheme(BaseModel):
     @field_validator("policy_semantics_version")
     @classmethod
     def _semver(cls, v: str) -> str:
-        if v != POLICY_SEMANTICS_VERSION_DEFAULT:
-            raise ValueError(
-                f"unsupported policy_semantics_version {v!r} (only {POLICY_SEMANTICS_VERSION_DEFAULT!r})"
-            )
+        if v not in POLICY_SEMANTICS_VERSIONS_SUPPORTED:
+            supported = ", ".join(sorted(POLICY_SEMANTICS_VERSIONS_SUPPORTED))
+            raise ValueError(f"unsupported policy_semantics_version {v!r} (supported: {supported})")
         return v
 
     @model_validator(mode="after")
@@ -437,8 +508,37 @@ class MetaScheme(BaseModel):
         return self
 
 
-def load_rules_and_compile(policy_id: str, rules: list[dict]) -> MetaScheme:
-    """Parse rule dicts from JSON and run :func:`build_meta_scheme`."""
+def load_rules_and_compile(
+    policy_id: str,
+    rules: list[dict],
+    *,
+    lowering_stats: dict[str, Any] | None = None,
+    skip_vnext_lowering: bool = False,
+    policy_semantics_version: str | None = None,
+) -> MetaScheme:
+    """Parse rule dicts from JSON and run :func:`build_meta_scheme`.
+
+    vNext expansion templates (``INT_RANGE``, ``K_OF_N``, …) are lowered to core
+    templates before validation unless ``skip_vnext_lowering`` is True (debug).
+    Optional ``lowering_stats`` receives a summary dict.
+    """
+    from pivot_pipeline.ir_vnext import VNEXT_TEMPLATE_CLASSES
+    from pivot_pipeline.vnext_lowering import LoweringStats, expand_rules_to_core
+
+    rules = sanitize_rules_jsonable(rules)
+    if skip_vnext_lowering:
+        for r in rules:
+            tc = r.get("template_class")
+            if tc in VNEXT_TEMPLATE_CLASSES:
+                raise ValueError(
+                    f"skip_vnext_lowering set but rule {r.get('rule_id')!r} uses expansion "
+                    f"template {tc!r}; remove flag or use core-only rules"
+                )
+    else:
+        st = LoweringStats()
+        rules = expand_rules_to_core(rules, stats=st)
+        if lowering_stats is not None:
+            lowering_stats.update(st.as_dict())
     rules = sanitize_rules_jsonable(rules)
     parsed: list[AtomicRule] = []
     for r in rules:
@@ -453,7 +553,12 @@ def load_rules_and_compile(policy_id: str, rules: list[dict]) -> MetaScheme:
     from pivot_pipeline.var_product_validate import validate_var_product_rules
 
     validate_var_product_rules(parsed)
-    return build_meta_scheme(policy_id=policy_id, rules=parsed)
+    version = policy_semantics_version or POLICY_SEMANTICS_VERSION_DEFAULT
+    return build_meta_scheme(
+        policy_id=policy_id,
+        rules=parsed,
+        policy_semantics_version=version,
+    )
 
 
 # Backward-compatible alias

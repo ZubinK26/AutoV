@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
-from pivot_pipeline.paths import PROMPTS_DIR
+from pivot_pipeline.paths import PROMPTS_DIR, read_vnext_template_examples
 
 _JSON_ERR_SNIPPET_CAP = 1500
 _FAILED_RAW_CAP = 800
@@ -30,18 +30,27 @@ class RepairerPivOutput(BaseModel):
     change_summary: list[RepairerChangeSummaryItem] = Field(default_factory=list)
 
 
+def _vnext_repairer_appendix() -> str:
+    return (
+        "\n\n---\n\n## vNext expansion templates (optional in `rules`)\n\n"
+        "Rules may use expansion `template_class` values; `load_rules_and_compile` **lowers** them to core IR. "
+        "Keep expansion shape in output when fixing NL↔IR drift. **`SUM_THRESHOLD`:** at most **4** terms.\n\n"
+        + read_vnext_template_examples()
+    )
+
+
 def _tmpl_structural() -> str:
     p = PROMPTS_DIR / "repairer_piv_structural.md"
     if not p.is_file():
         raise FileNotFoundError(f"missing {p}")
-    return p.read_text(encoding="utf-8")
+    return p.read_text(encoding="utf-8") + _vnext_repairer_appendix()
 
 
 def _tmpl_semantic() -> str:
     p = PROMPTS_DIR / "repairer_piv_semantic.md"
     if not p.is_file():
         raise FileNotFoundError(f"missing {p}")
-    return p.read_text(encoding="utf-8")
+    return p.read_text(encoding="utf-8") + _vnext_repairer_appendix()
 
 
 def _truncate(s: str, n: int) -> str:

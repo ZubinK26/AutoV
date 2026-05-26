@@ -176,9 +176,31 @@ def apply_registry_to_rules(rules: list[dict[str, Any]], alias_map: dict[str, st
                     "preempting_condition",
                     "left",
                     "right",
+                    "definition",
+                    "default_consequence",
                 ):
                     if cond_key in out:
                         out[cond_key] = walk(out[cond_key])
+                if isinstance(out.get("clauses"), list):
+                    out["clauses"] = [walk(c) for c in out["clauses"]]
+                if isinstance(out.get("rows"), list):
+                    out["rows"] = [walk(row) for row in out["rows"]]
+                if isinstance(out.get("cases"), list):
+                    out["cases"] = [walk(case) for case in out["cases"]]
+                if isinstance(out.get("terms"), list):
+                    new_terms = []
+                    for term in out["terms"]:
+                        if isinstance(term, dict) and isinstance(term.get("variable"), str):
+                            term = dict(term)
+                            term["variable"] = _remap_var_name(term["variable"], alias_map)
+                            new_terms.append(term)
+                        else:
+                            new_terms.append(term)
+                    out["terms"] = new_terms
+                for vkey in ("iter_variable", "discriminant_variable"):
+                    v = out.get(vkey)
+                    if isinstance(v, str):
+                        out[vkey] = _remap_var_name(v, alias_map)
                 return out
             return {kk: walk(vv) for kk, vv in out.items()}
         if isinstance(obj, list):

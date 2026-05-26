@@ -9,7 +9,11 @@ from typing import Any, Callable, Literal
 
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
-from pivot_pipeline.paths import PROMPTS_DIR, read_v1_policy_encodability_contract
+from pivot_pipeline.paths import (
+    PROMPTS_DIR,
+    read_extractor_vnext_addendum,
+    read_v1_policy_encodability_contract,
+)
 
 
 def is_abort_response(text: str) -> bool:
@@ -222,8 +226,9 @@ def _model_map() -> dict[str, type]:
         SetInclusion,
         VariableRelational,
     )
+    from pivot_pipeline.ir_vnext import VNEXT_MODEL_BY_TEMPLATE
 
-    return {
+    core = {
         "CONSTANT_RELATIONAL": ConstantRelational,
         "SET_INCLUSION": SetInclusion,
         "VARIABLE_RELATIONAL": VariableRelational,
@@ -233,6 +238,7 @@ def _model_map() -> dict[str, type]:
         "EXCLUSIVE_CHOICE": ExclusiveChoice,
         "LOGICAL_IFF": LogicalIff,
     }
+    return {**core, **VNEXT_MODEL_BY_TEMPLATE}
 
 
 def validate_rule_dict(rule: dict[str, Any], *, line_index: int) -> dict[str, Any]:
@@ -242,7 +248,11 @@ def validate_rule_dict(rule: dict[str, Any], *, line_index: int) -> dict[str, An
     mm = _model_map()
     cls = mm.get(str(t))
     if cls is None:
-        raise ExtractValidationError(line_index, f"unknown template_class {t!r}", rule)
+        raise ExtractValidationError(
+            line_index,
+            f"unknown template_class {t!r} (core eight or vNext expansion eight only)",
+            rule,
+        )
     try:
         m = cls.model_validate(rule)
     except Exception as e:

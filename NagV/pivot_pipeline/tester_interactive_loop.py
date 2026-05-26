@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from pivot_pipeline.exceptions import PivotPipelineUserAbort
-from pivot_pipeline.linearize_rules import build_and_write_linearized, linearized_model_artifact_path
+from pivot_pipeline.assessment_linearize import build_and_write_assessment_artifacts
 from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN, REPAIR_CRITIC_DRIFT_TOKEN
 from pivot_pipeline.post_model_workflow import (
     TesterReport,
@@ -151,9 +151,8 @@ def run_tester_interactive_loop(
     summary["tester_repair_rounds"] = 0
 
     if linearized is None:
-        linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
-        summary["linearized_model_for_cross_critic"] = str(
-            linearized_model_artifact_path(work_dir).resolve()
+        linearized = build_and_write_assessment_artifacts(
+            work_dir=work_dir, rules=rules, summary=summary
         )
 
     while True:

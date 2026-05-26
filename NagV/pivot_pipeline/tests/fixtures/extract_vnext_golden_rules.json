@@ -1,0 +1,80 @@
+{
+  "policy_id": "extract_vnext_golden",
+  "policy_semantics_version": "1.1",
+  "pivot_ir_extensions": ["vnext_8"],
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "template_class": "INT_RANGE",
+      "variable": "x",
+      "lo": 1,
+      "hi": 3,
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0002",
+      "template_class": "DECISION_TABLE_ROW",
+      "trigger_condition": { "kind": "atom", "variable": "flag", "operator": "EQ", "value": 1 },
+      "required_condition": { "kind": "atom", "variable": "y", "operator": "GTE", "value": 0 }
+    },
+    {
+      "rule_id": "R0003",
+      "template_class": "TABLE_BLOCK",
+      "table_id": "T1",
+      "rows": [
+        {
+          "trigger_condition": { "kind": "atom", "variable": "a", "operator": "EQ", "value": 1 },
+          "required_condition": { "kind": "atom", "variable": "b", "operator": "EQ", "value": 1 }
+        }
+      ]
+    },
+    {
+      "rule_id": "R0004",
+      "template_class": "BOUNDED_FORALL",
+      "iter_variable": "role",
+      "domain": [1, 2],
+      "required_condition": { "kind": "atom", "variable": "role", "operator": "GTE", "value": 1 }
+    },
+    {
+      "rule_id": "R0005",
+      "template_class": "K_OF_N",
+      "k": 1,
+      "clauses": [
+        { "kind": "atom", "variable": "p", "operator": "EQ", "value": 1 },
+        { "kind": "atom", "variable": "q", "operator": "EQ", "value": 1 }
+      ]
+    },
+    {
+      "rule_id": "R0006",
+      "template_class": "EXHAUSTIVE_SWITCH",
+      "discriminant_variable": "mode",
+      "cases": [
+        {
+          "value": 1,
+          "consequence": { "kind": "atom", "variable": "active", "operator": "EQ", "value": 1 }
+        },
+        {
+          "value": 2,
+          "consequence": { "kind": "atom", "variable": "active", "operator": "EQ", "value": 0 }
+        }
+      ]
+    },
+    {
+      "rule_id": "R0007",
+      "template_class": "DEFINED_AS",
+      "variable": "threshold",
+      "definition": { "kind": "atom", "variable": "threshold", "operator": "GTE", "value": 1 }
+    },
+    {
+      "rule_id": "R0008",
+      "template_class": "SUM_THRESHOLD",
+      "terms": [
+        { "coeff": 2, "variable": "units" },
+        { "coeff": 1, "variable": "hours" }
+      ],
+      "relational_operator": "LTE",
+      "limit": 10,
+      "yields": "SATISFIED"
+    }
+  ]
+}

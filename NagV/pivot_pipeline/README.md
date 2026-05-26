@@ -66,7 +66,15 @@ Stop after extraction (writes `rules_extracted.json`):
 pivot-pipeline --input path/to/rules.nl --work-dir exports/pivot_runs/extract_only --extract-only
 ```
 
-**Further options:** `pivot-pipeline --help` (e.g. `--with-critic`, `--with-cross-critic`, `--with-cross-repair`, `--with-tester`, `--with-test-repair`, `--interactive-tester`, `pivot-tester` for replay on existing work dirs, `--with-template-generator`, `--template-suite`, `--repairer-max-rounds`, interactive modes).
+**Further options:** `pivot-pipeline --help` (e.g. `--with-critic`, `--with-cross-critic`, `--with-cross-repair`, `--with-tester`, `--with-test-repair`, `--interactive-tester`, `pivot-tester` for replay on existing work dirs, `--with-template-generator`, `--template-suite`, `--no-vnext-lowering`, `--repairer-max-rounds`, interactive modes).
+
+### vNext expansion templates
+
+Eight optional `template_class` values (`K_OF_N`, `SUM_THRESHOLD`, …) may appear in `rules_extracted.json`. They are **lowered to core IR** before Z3 unless `--no-vnext-lowering` is set. Policies with expansion rules use **`policy_semantics_version`: `"1.1"`** and **`pivot_ir_extensions`: `["vnext_8"]`**. `SUM_THRESHOLD` allows **at most 4** terms. See [`PIVOT_TEMPLATE_SYSTEM.md`](PIVOT_TEMPLATE_SYSTEM.md) and [`dev_plans/VNEXT_OPERATOR_REMINDERS.md`](../../dev_plans/VNEXT_OPERATOR_REMINDERS.md).
+
+`run_summary.json` may include: `vnext_lowering`, `policy_semantics_version`, `pivot_ir_extensions`, `assessment_linearized`, `expansion_assessment_digest`.
+
+**Template suite (vNext smoke):** `pytest` includes `test_template_suite_vnext.py`; fixture suite `tests/fixtures/template_suite_vnext_suite.json` with `extract_vnext_golden_rules.json`.
 
 ## Fixtures and tests
 

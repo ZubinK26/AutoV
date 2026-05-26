@@ -1,0 +1,17 @@
+{
+  "policy_id": "vnext_k_of_n",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "template_class": "K_OF_N",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "k": 2,
+      "clauses": [
+        {"kind": "atom", "variable": "a", "operator": "EQ", "value": 1},
+        {"kind": "atom", "variable": "b", "operator": "EQ", "value": 1},
+        {"kind": "atom", "variable": "c", "operator": "EQ", "value": 1}
+      ]
+    }
+  ]
+}

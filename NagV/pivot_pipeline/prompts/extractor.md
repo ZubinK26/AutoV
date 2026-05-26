@@ -75,7 +75,7 @@ Use `snake_case` variable names (e.g. `days_since_purchase`, `refund_amount`).
 ## Common mistakes (check before you answer)
 
 - **Output shape:** one JSON object only — no markdown fences, no trailing comma, no comments.
-- **template_class:** only the **closed list** in **`extractor.md`** / encodability contract — never invent a new class name; map NL to `LOGICAL_IMPLICATION`, `CONSTANT_RELATIONAL`, etc. If impossible without a new type, the correct response is **`ABORT: Ruleset exceeds decidable scope.`** (not a made-up `template_class`).
+- **template_class:** **core eight** or **vNext expansion eight** (see appended encodability contract + vNext addendum) — never invent a new class name. Prefer core `LOGICAL_IMPLICATION` / `CONSTANT_RELATIONAL` when sufficient; use expansion (e.g. `K_OF_N`, `SUM_THRESHOLD` with **≤4 terms**) when NL clearly requires it. If impossible, **`ABORT: Ruleset exceeds decidable scope.`**
 - **Enums:** uppercase tokens only (`SATISFIED`, `BYPASS_RULE`, `EQ`, …).
 - **PREEMPTION:** for `BYPASS_RULE` / `FORCE_*`, always set `target_rule_id` to a **prior** line's `rule_id` (`R0001`…), never to another `PREEMPTION`.
 - **ConditionExpr:** every node has `kind`; `and` / `or` need **at least two** children.

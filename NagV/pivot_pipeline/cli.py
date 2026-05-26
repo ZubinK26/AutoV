@@ -206,6 +206,14 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     p.add_argument(
+        "--no-vnext-lowering",
+        action="store_true",
+        help=(
+            "Debug: skip expand_rules_to_core before compile (fails if rules still contain vNext templates). "
+            "Default lowers INT_RANGE, K_OF_N, SUM_THRESHOLD, etc. to core IR."
+        ),
+    )
+    p.add_argument(
         "--save-golden",
         action="store_true",
         help=(
@@ -256,6 +264,7 @@ def main(argv: list[str] | None = None) -> int:
         fail_on_varprod_trigger=args.fail_on_varprod_trigger,
         with_template_generator=args.with_template_generator,
         template_suite_path=args.template_suite,
+        no_vnext_lowering=args.no_vnext_lowering,
         input_fn=input,
         print_fn=print,
     )

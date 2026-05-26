@@ -83,6 +83,15 @@ or, only if the context shows a **bool** sort for that variable:
 
 Include **at least one** instance per `template_kind` when the policy context is rich enough; if the policy is tiny, include as many kinds as you can without inventing names. Prefer **small** worlds and **realistic** goldens.
 
+## vNext expansion templates (important)
+
+When POLICY CONTEXT lists **vNext expansion rule_ids** (`INT_RANGE`, `K_OF_N`, `SUM_THRESHOLD`, `TABLE_BLOCK`, …):
+
+1. **Prioritize** `decision_query`, `boundary`, and `scenario` instances whose `world` assignments exercise variables named in expansion fields (clauses, `terms[]`, table rows, switch discriminant).
+2. Use **expansion `rule_id`s** from `rules_extracted.json` in `query.rule_id` when testing a specific expansion rule’s intent, even if `meta_scheme` shows lowered core ids for pathways.
+3. Read **`linearized_model_for_assessment.txt`** (excerpt) when present — it shows pre-lowering template shape.
+4. For **`SUM_THRESHOLD`**, worlds must respect **at most 4** weighted terms (see extract JSON `terms[]`).
+
 ## JSON discipline
 
 - Valid UTF-8 JSON; double quotes; no trailing commas.

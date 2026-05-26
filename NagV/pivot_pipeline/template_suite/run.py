@@ -29,13 +29,17 @@ class RunSummary:
     inconclusive: int = 0
 
 
-def load_meta_from_rules_path(path: Path) -> Any:
+def load_meta_from_rules_path(path: Path, *, skip_vnext_lowering: bool = False) -> Any:
+    from pivot_pipeline.rules_document import parse_rules_document
+
     data = json.loads(path.read_text(encoding="utf-8"))
-    policy_id = data.get("policy_id")
-    rules = data.get("rules")
-    if not policy_id or not isinstance(rules, list):
-        raise ValueError(f"rules_extracted JSON missing policy_id or rules list: {path}")
-    return load_rules_and_compile(str(policy_id), rules)
+    policy_id, rules, envelope = parse_rules_document(data)
+    return load_rules_and_compile(
+        policy_id,
+        rules,
+        skip_vnext_lowering=skip_vnext_lowering,
+        policy_semantics_version=envelope.get("policy_semantics_version"),
+    )
 
 
 def run_template_suite(

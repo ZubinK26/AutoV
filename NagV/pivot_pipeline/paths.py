@@ -16,6 +16,22 @@ def read_v1_policy_encodability_contract() -> str:
     return p.read_text(encoding="utf-8")
 
 
+def read_extractor_vnext_addendum() -> str:
+    """Optional expansion templates for Phase 1 extract (appended after encodability contract)."""
+    p = PROMPTS_DIR / "extractor_vnext_addendum.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing extractor vNext addendum: {p}")
+    return p.read_text(encoding="utf-8")
+
+
+def read_vnext_template_examples() -> str:
+    """Minimal JSON examples per vNext template (repairer / extract reference)."""
+    p = PROMPTS_DIR / "vnext_template_examples.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing vNext template examples: {p}")
+    return p.read_text(encoding="utf-8")
+
+
 def resolve_existing_user_file(
     path: Path,
     *,

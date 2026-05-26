@@ -10,7 +10,25 @@ Only these **eight** values are valid — spell them **exactly** (uppercase, und
 
 `CONSTANT_RELATIONAL`, `SET_INCLUSION`, `VARIABLE_RELATIONAL`, `ARITHMETIC_EVALUATION`, `LOGICAL_IMPLICATION`, `PREEMPTION`, `EXCLUSIVE_CHOICE`, `LOGICAL_IFF`.
 
-**There are no other** `template_class` values in v1. Natural-language phrases that *sound* like templates (“decision rule”, “access rule”, “constraint type”, “policy block”, etc.) **must not** appear as `template_class`. Encode meaning with the list above — most conditional obligations use **`LOGICAL_IMPLICATION`** and nested **`ConditionExpr`**. If a line cannot be encoded without inventing a new class name, extract must respond **`ABORT: Ruleset exceeds decidable scope.`** (not a fabricated type).
+**Core-only rule:** If a line cannot be encoded with **core eight** or **vNext expansion eight** (below), extract must respond **`ABORT: Ruleset exceeds decidable scope.`** (not a fabricated type). Natural-language labels (“decision rule”, “policy block”, …) are **not** valid `template_class` strings.
+
+Most conditional obligations use **`LOGICAL_IMPLICATION`** and nested **`ConditionExpr`** when no expansion template fits.
+
+## vNext expansion templates (optional — extract / repair)
+
+Eight **additional** `template_class` values may appear in `rules_extracted.json`. They are **lowered to core eight** before compile/Z3. Use when NL clearly matches and caps are satisfied (see `extractor_vnext_addendum.md`).
+
+`INT_RANGE`, `DECISION_TABLE_ROW`, `TABLE_BLOCK`, `BOUNDED_FORALL`, `K_OF_N`, `EXHAUSTIVE_SWITCH`, `DEFINED_AS`, `SUM_THRESHOLD`
+
+| Template | Key caps |
+|----------|----------|
+| `TABLE_BLOCK` | ≤ 32 rows |
+| `BOUNDED_FORALL` | domain ≤ 32 values |
+| `K_OF_N` | 1 ≤ k ≤ n, n ≤ 10 clauses |
+| `EXHAUSTIVE_SWITCH` | ≤ 32 cases |
+| **`SUM_THRESHOLD`** | **1–4 terms** in `terms[]` (never 5+); coeff bounded |
+
+Still **ABORT** for unbounded ∀, infinite domains, or constructs outside core + expansion lists.
 
 Nested conditions use **`ConditionExpr`** with `kind`: `atom`, `varcmp`, `varprod_cmp`, `and`, `or`, `not` — **max depth** equals `CONDITION_EXPR_MAX_DEPTH` in code (currently **8**).
 

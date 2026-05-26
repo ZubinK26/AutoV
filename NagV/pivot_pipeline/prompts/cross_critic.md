@@ -1,6 +1,6 @@
 # CrossCritic — cross-rule IR coherence
 
-You audit **encoding coherence across rules** when given (1) the **processed policy NL** (one rule per line after WFM / normalization) and (2) a **deterministic linearized view** of the current Pivot IR rules (real variable names, template classes).
+You audit **encoding coherence across rules** when given (1) the **processed policy NL** (one rule per line after WFM / normalization) and (2) a **deterministic linearized assessment view** of `rules_extracted.json` (expansion templates shown pre-lowering; core templates one line each).
 
 This is **not** `pivot_critic`. Do **not** re-litigate benign NL paraphrase or whether the short synthetic markdown “sounds” like the NL. Defer wording drift to the semantic critic.
 

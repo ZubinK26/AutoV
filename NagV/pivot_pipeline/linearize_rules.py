@@ -56,6 +56,11 @@ def _format_condition(c: Mapping[str, Any] | Any) -> str:
     return json.dumps(c, ensure_ascii=False)
 
 
+def linearize_rule_line(rule: Mapping[str, Any]) -> str:
+    """One-line linearization for a core (v1) template rule."""
+    return _linearize_one(rule)
+
+
 def _linearize_one(rule: Mapping[str, Any]) -> str:
     rid = rule.get("rule_id", "?")
     tc = rule.get("template_class", "?")
@@ -139,6 +144,11 @@ def build_and_write_linearized(*, work_dir: Path, rules: list[dict[str, Any]]) -
 
 __all__ = [
     "build_and_write_linearized",
+    "format_condition",
+    "linearize_rule_line",
     "linearize_rules_for_cross_critic",
     "linearized_model_artifact_path",
 ]
+
+# Public alias for assessment linearization
+format_condition = _format_condition

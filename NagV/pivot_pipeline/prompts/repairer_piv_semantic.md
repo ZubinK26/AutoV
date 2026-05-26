@@ -24,9 +24,15 @@ These keys are **never** valid on **rule** objects (any `template_class`). The l
 
 **Allowlisted prose:** Only `evaluation_pathways[].description` exists in compiled meta-scheme, and you output **rules only** — pathways are derived. **Do not** stuff NL summaries into rule objects to satisfy “missing prose” findings; fix **logic** (`trigger_condition`, `required_condition`, `PREEMPTION`, sorts) instead.
 
-## Allowed keys per `template_class` (v1)
+## vNext expansion templates
 
-Each rule object may include **only** `BaseRule` fields plus the template’s fields:
+You may output **expansion** `template_class` values (`K_OF_N`, `TABLE_BLOCK`, `SUM_THRESHOLD`, …) when the handoff/NL requires them. **`SUM_THRESHOLD`:** **1–4** terms in `terms[]` (never 5+). Compile lowers expansion to core IR; assessment linearization keeps expansion shape.
+
+Minimal examples are appended after this file (`vnext_template_examples.md`).
+
+## Allowed keys per `template_class` (core v1)
+
+Each **core** rule object may include **only** `BaseRule` fields plus the template’s fields:
 
 - **Common:** `rule_id`, `applies_to` (default `GLOBAL`), `overrides` (optional), `template_class`
 - **CONSTANT_RELATIONAL:** `variable`, `relational_operator`, `constant_value`, `yields` (**required** string: `"SATISFIED"` or `"UNSATISFIED"` — never null / omit)

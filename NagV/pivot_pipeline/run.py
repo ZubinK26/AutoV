@@ -44,6 +44,7 @@ def run_pivot_pipeline(
     fail_on_varprod_trigger: bool = False,
     with_template_generator: bool = False,
     template_suite_path: Path | None = None,
+    no_vnext_lowering: bool = False,
     input_fn: Callable[[str], str] | None = None,
     print_fn: Callable[..., None] = print,
 ) -> dict[str, Any]:
@@ -62,7 +63,8 @@ def run_pivot_pipeline(
         cross_repair_max_rounds,
         run_cross_repairer,
     )
-    from pivot_pipeline.linearize_rules import build_and_write_linearized, linearized_model_artifact_path
+    from pivot_pipeline.assessment_linearize import build_and_write_assessment_artifacts
+    from pivot_pipeline.rules_document import build_rules_document, parse_rules_document
     from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN, enforce_wfm_rule_coverage
     from pivot_pipeline.tester_interactive_loop import (
         BLOCKED_TEST_REPAIR_COMPILE,
@@ -250,15 +252,22 @@ def run_pivot_pipeline(
 
     policy_id = nl_source.stem
     rules: list[dict[str, Any]]
+    rules_envelope: dict[str, Any] = {}
+
+    def _write_rules_extracted(path: Path) -> None:
+        doc = build_rules_document(policy_id, rules)
+        path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        rules_envelope.clear()
+        rules_envelope.update(
+            {k: doc[k] for k in ("policy_semantics_version", "pivot_ir_extensions") if k in doc}
+        )
+        summary.update(rules_envelope)
 
     use_file = rules_json is not None and rules_json.is_file()
     if use_file:
         rules_body = json.loads(rules_json.read_text(encoding="utf-8"))
-        policy_id = str(rules_body.get("policy_id") or policy_id)
-        raw_rules = rules_body.get("rules")
-        if not isinstance(raw_rules, list):
-            raise ValueError("--rules-json must contain { policy_id?, rules: [...] }")
-        rules = raw_rules
+        policy_id, rules, rules_envelope = parse_rules_document(rules_body)
+        summary.update(rules_envelope)
         summary["rules_json"] = str(rules_json.resolve())
     elif no_llm:
         summary["outcome"] = "blocked_no_rules_json"
@@ -355,10 +364,7 @@ def run_pivot_pipeline(
             json.dumps(reg_obj, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         extracted_path = work_dir / "rules_extracted.json"
-        extracted_path.write_text(
-            json.dumps({"policy_id": policy_id, "rules": rules}, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
+        _write_rules_extracted(extracted_path)
         summary["rules_extracted"] = str(extracted_path.resolve())
 
         if extract_only:
@@ -388,7 +394,18 @@ def run_pivot_pipeline(
     max_struct = max(0, repairer_max_rounds)
     for s_round in range(max_struct + 1):
         try:
-            meta = load_rules_and_compile(policy_id, rules)
+            lowering_stats: dict[str, Any] = {}
+            meta = load_rules_and_compile(
+                policy_id,
+                rules,
+                lowering_stats=lowering_stats,
+                skip_vnext_lowering=no_vnext_lowering,
+                policy_semantics_version=rules_envelope.get("policy_semantics_version"),
+            )
+            if lowering_stats:
+                summary["vnext_lowering"] = lowering_stats
+            if no_vnext_lowering:
+                summary["vnext_lowering_skipped"] = True
             compile_exc = None
             break
         except Exception as e:
@@ -426,7 +443,7 @@ def run_pivot_pipeline(
             )
             rules = out.rules
             (work_dir / "rules_after_structural_repair.json").write_text(
-                json.dumps({"policy_id": policy_id, "rules": rules}, indent=2, ensure_ascii=False) + "\n",
+                json.dumps(build_rules_document(policy_id, rules), indent=2, ensure_ascii=False) + "\n",
                 encoding="utf-8",
             )
             if not skip_registry:
@@ -441,10 +458,7 @@ def run_pivot_pipeline(
                     )
                     return summary
             extracted_path = work_dir / "rules_extracted.json"
-            extracted_path.write_text(
-                json.dumps({"policy_id": policy_id, "rules": rules}, indent=2, ensure_ascii=False) + "\n",
-                encoding="utf-8",
-            )
+            _write_rules_extracted(extracted_path)
             summary["rules_extracted"] = str(extracted_path.resolve())
 
     if meta is None:
@@ -498,12 +512,9 @@ def run_pivot_pipeline(
         )
         return summary
 
-    linearized: str | None = None
-    if with_tester or with_cross_critic:
-        linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
-        summary["linearized_model_for_cross_critic"] = str(
-            linearized_model_artifact_path(work_dir).resolve()
-        )
+    linearized = build_and_write_assessment_artifacts(
+        work_dir=work_dir, rules=rules, summary=summary
+    )
 
     if with_tester:
         try:
@@ -627,9 +638,8 @@ def run_pivot_pipeline(
                 return summary
 
         if linearized is None:
-            linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
-            summary["linearized_model_for_cross_critic"] = str(
-                linearized_model_artifact_path(work_dir).resolve()
+            linearized = build_and_write_assessment_artifacts(
+                work_dir=work_dir, rules=rules, summary=summary
             )
 
         try:
@@ -721,17 +731,18 @@ def run_pivot_pipeline(
                                 print_fn(f"[policy gate] Registry after cross repair failed: {re}\n")
                                 continue
                         try:
-                            meta = load_rules_and_compile(policy_id, new_rules)
+                            meta = load_rules_and_compile(
+                                policy_id,
+                                new_rules,
+                                skip_vnext_lowering=no_vnext_lowering,
+                                policy_semantics_version=rules_envelope.get("policy_semantics_version"),
+                            )
                         except Exception as ce:
                             print_fn(f"[policy gate] Cross-repaired rules did not compile: {ce}\n")
                             continue
                         rules = new_rules
                         extracted_path = work_dir / "rules_extracted.json"
-                        extracted_path.write_text(
-                            json.dumps({"policy_id": policy_id, "rules": rules}, indent=2, ensure_ascii=False)
-                            + "\n",
-                            encoding="utf-8",
-                        )
+                        _write_rules_extracted(extracted_path)
                         summary["rules_extracted"] = str(extracted_path.resolve())
                         meta_path.write_text(meta.model_dump_json(indent=2), encoding="utf-8")
                         summary["meta_scheme"] = str(meta_path.resolve())
@@ -755,9 +766,8 @@ def run_pivot_pipeline(
                             + "\n",
                             encoding="utf-8",
                         )
-                        linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
-                        summary["linearized_model_for_cross_critic"] = str(
-                            linearized_model_artifact_path(work_dir).resolve()
+                        linearized = build_and_write_assessment_artifacts(
+                            work_dir=work_dir, rules=rules, summary=summary
                         )
 
                         try:

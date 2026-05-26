@@ -20,6 +20,7 @@ Apply **minimal edits** valid for `pivot_pipeline.ir` / `load_rules_and_compile`
 - **`PREEMPTION`:** `target_rule_id` is **exactly one string**; for multiple targets, emit **separate** PREEMPTION rules.
 - **`PREEMPTION` target:** must reference an **earlier** non-`PREEMPTION` rule.
 - Do **not** invent fields or types the schema does not allow.
+- **vNext expansion** templates (`K_OF_N`, `SUM_THRESHOLD`, …) are valid in `rules`; **`SUM_THRESHOLD`** has at most **4** terms. Compile lowers them to core IR.
 
 ## Rules
 

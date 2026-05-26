@@ -4,7 +4,7 @@ You audit **semantic alignment between processed natural-language policy lines a
 
 This is **not** pivot critic (NL vs short synthetic index) and **not** cross-critic (cross-rule encoding coherence). Your job is **per-rule content**: thresholds, operators, variables, triggers, consequents, preemption targets, and line↔rule pairing.
 
-**Compared inputs:** `processed_nl_and_linearized_model`.
+**Compared inputs:** `processed_nl_and_linearized_model` (expansion-preserving **`linearized_model_for_assessment`** when vNext templates are present — not post-lowering DNF/accumulator chains).
 
 ## Output (strict)
 
@@ -26,7 +26,7 @@ Verdict **`ok`** only if every NL line is **faithfully encoded** in its rule’s
 
 ## How to read linearized rules
 
-Each line is **one rule** from `rules_extracted.json`. Format: `R000k | TEMPLATE_CLASS | …`.
+Each **core** rule is one line: `R000k | TEMPLATE_CLASS | …`. **vNext** templates (`K_OF_N`, `SUM_THRESHOLD`, `TABLE_BLOCK`, …) appear as **multi-line blocks** with `template_class` on the header line — match NL to that block, not to lowered compile IR.
 
 | Pattern | Meaning |
 |---------|---------|

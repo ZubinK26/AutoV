@@ -8,7 +8,7 @@ from typing import Any
 
 from pivot_pipeline.backtranslate import meta_scheme_to_markdown
 from pivot_pipeline.ir import load_rules_and_compile
-from pivot_pipeline.linearize_rules import build_and_write_linearized, linearized_model_artifact_path
+from pivot_pipeline.assessment_linearize import build_and_write_assessment_artifacts
 from pivot_pipeline.precheck import run_precheck
 from pivot_pipeline.z3_compile import run_z3_check
 
@@ -59,10 +59,7 @@ def apply_repaired_rules_and_refresh(
     )
     linearized: str | None = None
     if refresh_linearized:
-        linearized = build_and_write_linearized(work_dir=work_dir, rules=rules)
-        summary["linearized_model_for_cross_critic"] = str(
-            linearized_model_artifact_path(work_dir).resolve()
-        )
+        build_and_write_assessment_artifacts(work_dir=work_dir, rules=rules, summary=summary)
     return rules, meta, synth, z3_result, ok, issues, linearized
 
 

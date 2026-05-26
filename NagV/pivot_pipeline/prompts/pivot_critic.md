@@ -57,3 +57,11 @@ Use it to verify **multi-factor numeric / product** NL lines (e.g. core-hours, b
 If this section is ``(none — …)``, skip product-specific cross-checks.
 
 <<<VARPROD_RULES_LINEARIZED>>>
+
+---
+
+## Expansion assessment digest (pre-lowering rules)
+
+When this block is not ``(none — …)``, the policy uses **vNext expansion templates** (`K_OF_N`, `SUM_THRESHOLD`, `TABLE_BLOCK`, etc.) in `rules_extracted.json`. The **synthetic English** above reflects **lowered core IR** used for Z3 (e.g. `K_OF_N` may appear as one large `LOGICAL_IMPLICATION`). For **shape and clause-level** alignment with the effective NL, treat this digest as **authoritative** for expansion templates. Do **not** treat a lowered DNF or accumulator chain as a second policy.
+
+<<<EXPANSION_ASSESSMENT_DIGEST>>>

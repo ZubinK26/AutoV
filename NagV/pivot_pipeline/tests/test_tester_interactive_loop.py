@@ -146,7 +146,7 @@ def test_tester_loop_rerun_after_repair(
         lambda **_k: (True, []),
     )
     monkeypatch.setattr(
-        "pivot_pipeline.tester_interactive_loop.build_and_write_linearized",
+        "pivot_pipeline.tester_interactive_loop.build_and_write_assessment_artifacts",
         lambda **_k: "linearized",
     )
 

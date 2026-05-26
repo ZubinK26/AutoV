@@ -1,6 +1,6 @@
 # Dev plan: 8 new expansion templates (Pivot IR vNext fragment)
 
-**Status:** planning only — **not implemented** by this document.  
+**Status:** **implemented (lowering + compile + assessment + extract/repair prompts)** — live extract NL goldens and per-template template-suite catalog still optional.  
 **Codename:** `8-new-expansion`  
 **Goal:** Add eight **additive**, **capped**, **lowering-based** rule templates so more real policy idioms are maintainable, while preserving today’s satisfiability story (finite attributes, conservative SMT).
 
@@ -129,8 +129,16 @@ For **each** of the eight, complete at minimum:
 
 ---
 
-## 8. Ready to execute?
+## 8. Implementation log (2026-05)
 
-When you pick this up: start **Phase A** in a feature branch, merge lowering tests before enabling extract prompts; roll forward through H with version bumps as needed.
+| Phase | Template | Code |
+|-------|----------|------|
+| A–H | all eight | `NagV/pivot_pipeline/ir_vnext.py`, `vnext_lowering.py`, `load_rules_and_compile` pre-pass |
+| Tests | smoke + unit | `tests/test_vnext_lowering.py`, `tests/fixtures/vnext_*.json` |
+| Docs | | `PIVOT_TEMPLATE_SYSTEM.md` §2.1 |
+
+**Still TODO:** per-template extract prompt slices, repairer denylist examples, template-suite instances per kind, `policy_semantics_version` 1.1 gate (optional).
+
+**Follow-on (approved, not yet coded):** assessment dual-view ([`dev_plan_k_of_n_and_assessment_views_v1.md`](dev_plan_k_of_n_and_assessment_views_v1.md)), multi-term `SUM_THRESHOLD` ([`dev_plan_sum_threshold_multi_term_v1.md`](dev_plan_sum_threshold_multi_term_v1.md)), pipeline integration ([`dev_plan_vnext_pipeline_integration_v1.md`](dev_plan_vnext_pipeline_integration_v1.md)).
 
 **This file is ready** as `dev_plans/dev_plan_8_new_expansion_v1.md`.

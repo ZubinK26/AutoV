@@ -1,0 +1,17 @@
+{
+  "policy_id": "sum3",
+  "rules": [
+    {
+      "rule_id": "R001",
+      "template_class": "SUM_THRESHOLD",
+      "terms": [
+        {"coeff": 1, "variable": "a"},
+        {"coeff": 1, "variable": "b"},
+        {"coeff": 1, "variable": "c"}
+      ],
+      "relational_operator": "LTE",
+      "limit": 10,
+      "yields": "SATISFIED"
+    }
+  ]
+}

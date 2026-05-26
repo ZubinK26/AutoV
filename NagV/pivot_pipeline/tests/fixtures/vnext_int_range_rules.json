@@ -1,0 +1,15 @@
+{
+  "policy_id": "vnext_int_range",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "template_class": "INT_RANGE",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "variable": "score",
+      "lo": 3,
+      "hi": 10,
+      "yields": "SATISFIED"
+    }
+  ]
+}

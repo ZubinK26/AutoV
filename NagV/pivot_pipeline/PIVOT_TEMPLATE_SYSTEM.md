@@ -45,6 +45,36 @@ Spell **exactly** as below (uppercase, underscores). **No other strings** are va
 
 Domain phrases (“access rule”, “decision template”, …) **must never** appear as `template_class`; they map into this list.
 
+### 2.1 vNext expansion templates (`vnext_8`) — optional, lowered before compile
+
+Eight **additional** `template_class` values may appear in `rules_extracted.json` (manual JSON or future extract). They are **not** stored in `meta_scheme.json`; `load_rules_and_compile` **lowers** them deterministically to the core eight above, then runs the pathway compiler and Z3 as today.
+
+| `template_class` | Meaning | Lowers to (typical) |
+|------------------|---------|---------------------|
+| **`INT_RANGE`** | Inclusive int range on one variable | `CONSTANT_RELATIONAL` GTE/LTE (or single EQ when `lo==hi`) |
+| **`DECISION_TABLE_ROW`** | One if-then row | `LOGICAL_IMPLICATION` |
+| **`TABLE_BLOCK`** | Capped list of rows (`table_id`, `rows[]`) | Multiple `LOGICAL_IMPLICATION` (`rule_id` suffixes) |
+| **`BOUNDED_FORALL`** | Finite `domain[]` over `iter_variable` | `LOGICAL_IMPLICATION` per domain value |
+| **`K_OF_N`** | At least **`k`** of **`clauses`** hold | One `LOGICAL_IMPLICATION` (OR/AND unfold, `n ≤ 10`) |
+| **`EXHAUSTIVE_SWITCH`** | Discriminant + cases (+ optional default) | `SET_INCLUSION` coverage + case `LOGICAL_IMPLICATION`s |
+| **`DEFINED_AS`** | Variable must satisfy `definition` | `LOGICAL_IMPLICATION` |
+| **`SUM_THRESHOLD`** | **`terms[]`** vs **`limit`** (v1 lowering: **1–4** terms; assessment shows all terms) | `CONSTANT_RELATIONAL` / `ARITHMETIC_EVALUATION` chain (multi-term) |
+
+Implementation: [`ir_vnext.py`](ir_vnext.py), [`vnext_lowering.py`](vnext_lowering.py). Caps in [`constants.py`](constants.py). Run summary may include `vnext_lowering` stats. Extract prompts still target the **core eight** until extract is extended per template.
+
+### 2.2 Two views: compile vs assessment (approved policy)
+
+| View | Source | Used for |
+|------|--------|----------|
+| **Compile** | `expand_rules_to_core(rules)` → core eight only | `meta_scheme.json`, Z3, `synthetic_en.md` (from meta) |
+| **Assessment** | **Pre-lowering** `rules_extracted.json` (expansion templates intact) | Pivot Tester, CrossCritic, expansion digest for pivot critic |
+
+**Why:** Some lowerings (especially **`K_OF_N`** DNF and **multi-term `SUM_THRESHOLD`** accumulators) are correct but hard to read. LLM gates compare NL to the **assessment** view (`linearized_model_for_assessment.txt`), not the lowered blob.
+
+**Plans:** [`dev_plans/dev_plan_k_of_n_and_assessment_views_v1.md`](../../dev_plans/dev_plan_k_of_n_and_assessment_views_v1.md), [`dev_plans/dev_plan_sum_threshold_multi_term_v1.md`](../../dev_plans/dev_plan_sum_threshold_multi_term_v1.md).
+
+**Templates where assessment view is critical:** `K_OF_N`, `SUM_THRESHOLD` (2+ terms). **All eight** vNext templates use the same assessment path for consistency.
+
 ---
 
 ## 3. Every rule carries routing keys

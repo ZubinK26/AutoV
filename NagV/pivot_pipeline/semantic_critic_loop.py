@@ -19,6 +19,7 @@ from pivot_pipeline.post_model_workflow import critic_repair_compile_attempts_ma
 from pivot_pipeline.precheck import run_precheck
 from pivot_pipeline.registry_pass import registry_pass_from_nl_and_rules
 from pivot_pipeline.repairer_piv_agent import append_repairer_trace, run_repairer_piv_semantic
+from pivot_pipeline.assessment_linearize import expansion_assessment_digest_path
 from pivot_pipeline.varprod_trigger_validate import linearize_varprod_rules_excerpt
 from pivot_pipeline.z3_compile import run_z3_check
 
@@ -72,10 +73,15 @@ def run_semantic_critic_interactive_loop(
     session_limit = critic_repair_max_rounds()
 
     while True:
+        digest_path = expansion_assessment_digest_path(work_dir)
+        expansion_digest = (
+            digest_path.read_text(encoding="utf-8") if digest_path.is_file() else ""
+        )
         crit_raw, report = run_pivot_critic_parsed(
             nl_text_for_artifacts,
             synth,
             varprod_rules_linearized=linearize_varprod_rules_excerpt(rules),
+            expansion_assessment_digest=expansion_digest,
         )
         (work_dir / "critic_report.json").write_text(
             report.model_dump_json(indent=2) + "\n",

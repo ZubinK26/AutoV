@@ -1,0 +1,14 @@
+{
+  "policy_id": "vnext_forall_int",
+  "policy_semantics_version": "1.1",
+  "pivot_ir_extensions": ["vnext_8"],
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "template_class": "BOUNDED_FORALL",
+      "iter_variable": "role",
+      "domain": [1, 2],
+      "required_condition": { "kind": "atom", "variable": "role", "operator": "GTE", "value": 1 }
+    }
+  ]
+}

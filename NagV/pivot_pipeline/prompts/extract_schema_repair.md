@@ -7,7 +7,7 @@ You fix **one** invalid model output so it becomes a **single** valid Pivot IR J
 1. Output **only** one JSON object. **No** markdown fences, **no** prose before or after, **no** comments.
 2. Preserve the **meaning** of the input line. Do not swap triggers, actions, or variables.
 3. The pipeline sets `rule_id` to `R` + zero-padded line index; you may omit `rule_id` or leave a placeholder — it will be overwritten.
-4. `template_class` must be **literally** one of the eight allowed strings in **`extractor.md`** / encodability contract (`CONSTANT_RELATIONAL`, …, `LOGICAL_IFF`). **Never** invent names for “kinds” of rules described in English; remap to an allowed template (usually `LOGICAL_IMPLICATION` + `ConditionExpr`). If the line cannot be encoded without a new `template_class`, output **`ABORT: Ruleset exceeds decidable scope.`** instead of a fake type.
+4. `template_class` must be **literally** one of **core eight** or **vNext expansion eight** in the encodability contract (`CONSTANT_RELATIONAL`, …, `LOGICAL_IFF`, or `K_OF_N`, `SUM_THRESHOLD`, …). **`SUM_THRESHOLD`:** at most **4** terms in `terms[]`. **Never** invent names; if impossible, **`ABORT: Ruleset exceeds decidable scope.`**
 5. **v1 encodability:** No variable×variable products in `ARITHMETIC_EVALUATION`; use `varprod_cmp` in `ConditionExpr` only as in the contract. PREEMPTION `target_rule_id` rules as in the shared contract appended to the extractor prompt.
 
 ## PREEMPTION (common fix)

@@ -1,0 +1,51 @@
+{
+  "description": "Deterministic extract goldens: expected_rule validated without live LLM. NL lines are documentation for operators.",
+  "cases": [
+    {
+      "template_class": "INT_RANGE",
+      "nl_line": "Variable x must be between 1 and 3 inclusive.",
+      "expected_rule": {
+        "template_class": "INT_RANGE",
+        "variable": "x",
+        "lo": 1,
+        "hi": 3,
+        "yields": "SATISFIED"
+      }
+    },
+    {
+      "template_class": "DECISION_TABLE_ROW",
+      "nl_line": "When flag equals 1, outcome y must be at least 0.",
+      "expected_rule": {
+        "template_class": "DECISION_TABLE_ROW",
+        "trigger_condition": { "kind": "atom", "variable": "flag", "operator": "EQ", "value": 1 },
+        "required_condition": { "kind": "atom", "variable": "y", "operator": "GTE", "value": 0 }
+      }
+    },
+    {
+      "template_class": "K_OF_N",
+      "nl_line": "At least 2 of: p is 1, q is 1.",
+      "expected_rule": {
+        "template_class": "K_OF_N",
+        "k": 2,
+        "clauses": [
+          { "kind": "atom", "variable": "p", "operator": "EQ", "value": 1 },
+          { "kind": "atom", "variable": "q", "operator": "EQ", "value": 1 }
+        ]
+      }
+    },
+    {
+      "template_class": "SUM_THRESHOLD",
+      "nl_line": "Twice units plus hours must be at most 10.",
+      "expected_rule": {
+        "template_class": "SUM_THRESHOLD",
+        "terms": [
+          { "coeff": 2, "variable": "units" },
+          { "coeff": 1, "variable": "hours" }
+        ],
+        "relational_operator": "LTE",
+        "limit": 10,
+        "yields": "SATISFIED"
+      }
+    }
+  ]
+}
