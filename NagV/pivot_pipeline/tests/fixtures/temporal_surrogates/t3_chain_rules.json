@@ -1,0 +1,41 @@
+{
+  "policy_id": "temporal_t3",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "step_b_complete",
+        "operator": "EQ",
+        "value": 1
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "step_a_complete",
+        "operator": "EQ",
+        "value": 1
+      }
+    },
+    {
+      "rule_id": "R0002",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "step_c_complete",
+        "operator": "EQ",
+        "value": 1
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "step_b_complete",
+        "operator": "EQ",
+        "value": 1
+      }
+    }
+  ]
+}

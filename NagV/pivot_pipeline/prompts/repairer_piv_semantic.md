@@ -30,6 +30,10 @@ You may output **expansion** `template_class` values (`K_OF_N`, `TABLE_BLOCK`, `
 
 Minimal examples are appended after this file (`vnext_template_examples.md`).
 
+## Temporal surrogates
+
+When NL or findings involve **order**, **prerequisites**, or **step completion**, preserve **`LOGICAL_IMPLICATION`** chains and **`VARIABLE_RELATIONAL`** scalar order — do not delete guards or collapse multi-line sequence structure into a single implication. See appended `temporal_surrogates_addendum.md`.
+
 ## Allowed keys per `template_class` (core v1)
 
 Each **core** rule object may include **only** `BaseRule` fields plus the template’s fields:

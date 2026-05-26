@@ -7,7 +7,7 @@ from typing import Any, Callable
 
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
-from pivot_pipeline.paths import PROMPTS_DIR, read_v1_policy_encodability_contract
+from pivot_pipeline.paths import PROMPTS_DIR, read_pivot_encodability_prompt_stack
 
 
 def scope_rewrite_hint_max_chars() -> int:
@@ -38,8 +38,8 @@ def _prompt_template() -> str:
         raise FileNotFoundError(f"missing scope_rewrite prompt: {path}")
     return (
         path.read_text(encoding="utf-8")
-        + "\n\n---\n\n## Normative v1 encodability (shared)\n\n"
-        + read_v1_policy_encodability_contract()
+        + "\n\n---\n\n## Normative encodability stack (shared)\n\n"
+        + read_pivot_encodability_prompt_stack()
     )
 
 

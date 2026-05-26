@@ -11,8 +11,7 @@ from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
 from pivot_pipeline.paths import (
     PROMPTS_DIR,
-    read_extractor_vnext_addendum,
-    read_v1_policy_encodability_contract,
+    read_pivot_encodability_prompt_stack,
 )
 
 
@@ -210,8 +209,8 @@ def _extract_prompt_template() -> str:
     base = path.read_text(encoding="utf-8")
     return (
         base
-        + "\n\n---\n\n## Normative v1 encodability (shared with Phase 0 pivot WFM)\n\n"
-        + read_v1_policy_encodability_contract()
+        + "\n\n---\n\n## Normative encodability stack (shared with Phase 0 pivot WFM)\n\n"
+        + read_pivot_encodability_prompt_stack()
     )
 
 

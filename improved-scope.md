@@ -373,6 +373,29 @@ Extract / rewrite should **ABORT** or push scope rewrite unless the line is refr
 
 ---
 
+# Part G — Temporal surrogates (in scope)
+
+Pivot has **no time axis** — only **one-world** constraints. “Before”, “then”, and “in order” use **named variables** and existing templates (no new `template_class`).
+
+| ID | Intent | Preferred NL | Templates | Lines |
+|----|--------|--------------|-----------|-------|
+| **T1** | Scalar ordering | `start_x` must be before `start_y` | `VARIABLE_RELATIONAL` | 1 |
+| **T2** | Prerequisite gating | B only if A / guard flag | `LOGICAL_IMPLICATION` | 1–2 |
+| **T3** | Total order on steps | If B complete then A complete; … | `LOGICAL_IMPLICATION` × (n−1) | **n−1** lines |
+| **T4** | Finite phase enum | `phase` in {1,2,3} + per-phase rules | `SET_INCLUSION`, `INT_RANGE`, `EXHAUSTIVE_SWITCH` | 2+ |
+| **T5** | One active mode | Exactly one of draft/review/published | `EXCLUSIVE_CHOICE` | 1 |
+| **T6** | At least k of n checks | At least 3 of: … verified … | `K_OF_N` (n≤10) | 1 |
+| **T7** | Phase-dependent table | When state PENDING, … | `TABLE_BLOCK` / row implications | 1+ |
+| **T8** | Counter bounds | retry_count between 0 and 5 | `INT_RANGE` | 1 |
+
+**Authoring rules:** Use `snake_case` flags (`step_a_complete`, `identity_verified`). Split T3 — never one line “a, b, c in order”. Prefer int-coded `phase`. Policies with vNext (T4, T6, T7, T8) use **`policy_semantics_version` 1.1**.
+
+**Out of scope:** LTL/CTL, event logs, unnamed sequence blobs, calendar strings without int surrogate.
+
+Prompt cookbook: `NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md`.
+
+---
+
 # Part F — Related project docs
 
 | Doc | Content |
@@ -381,6 +404,8 @@ Extract / rewrite should **ABORT** or push scope rewrite unless the line is refr
 | [`NagV/pivot_pipeline/prompts/v1_policy_encodability_contract.md`](NagV/pivot_pipeline/prompts/v1_policy_encodability_contract.md) | Normative limits for WFM / extract |
 | [`NagV/pivot_pipeline/prompts/extractor_vnext_addendum.md`](NagV/pivot_pipeline/prompts/extractor_vnext_addendum.md) | Extractor hints for vNext |
 | [`dev_plans/VNEXT_OPERATOR_REMINDERS.md`](dev_plans/VNEXT_OPERATOR_REMINDERS.md) | Operator checklist after integration |
+| [`dev_plans/dev_plan_temporal_surrogates_v1.md`](dev_plans/dev_plan_temporal_surrogates_v1.md) | Temporal surrogates implementation plan |
+| [`NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md`](NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md) | Injected T1–T8 cookbook |
 
 ---
 

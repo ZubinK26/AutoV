@@ -1,0 +1,13 @@
+{
+  "policy_id": "temporal_t5",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "EXCLUSIVE_CHOICE",
+      "mode": "exactly_one",
+      "variables": ["draft_mode", "review_mode", "published_mode"]
+    }
+  ]
+}

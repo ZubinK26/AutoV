@@ -1,0 +1,45 @@
+{
+  "description": "Eight temporal surrogate patterns (T1–T8); deterministic compile/Z3 smoke.",
+  "patterns": [
+    {
+      "pattern_id": "T1",
+      "nl_line": "start_x must be strictly before start_y.",
+      "rules_file": "t1_scalar_order_rules.json"
+    },
+    {
+      "pattern_id": "T2",
+      "nl_line": "Refund may be issued only if identity_verified equals 1.",
+      "rules_file": "t2_prerequisite_rules.json"
+    },
+    {
+      "pattern_id": "T3",
+      "nl_line": "If step_b_complete equals 1 then step_a_complete must equal 1.",
+      "rules_file": "t3_chain_rules.json"
+    },
+    {
+      "pattern_id": "T4",
+      "nl_line": "When phase equals 2, review_required must equal 1.",
+      "rules_file": "t4_phase_switch_rules.json"
+    },
+    {
+      "pattern_id": "T5",
+      "nl_line": "Exactly one of draft_mode, review_mode, published_mode must be true.",
+      "rules_file": "t5_exclusive_rules.json"
+    },
+    {
+      "pattern_id": "T6",
+      "nl_line": "At least 2 of income_verified, identity_verified, address_verified, employment_verified must hold.",
+      "rules_file": "t6_k_of_n_rules.json"
+    },
+    {
+      "pattern_id": "T7",
+      "nl_line": "When workflow_state is pending, approver_assigned must be 1.",
+      "rules_file": "t7_table_block_rules.json"
+    },
+    {
+      "pattern_id": "T8",
+      "nl_line": "retry_count must be between 0 and 5 inclusive.",
+      "rules_file": "t8_int_range_rules.json"
+    }
+  ]
+}

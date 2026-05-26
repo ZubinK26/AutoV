@@ -92,6 +92,14 @@ When POLICY CONTEXT lists **vNext expansion rule_ids** (`INT_RANGE`, `K_OF_N`, `
 3. Read **`linearized_model_for_assessment.txt`** (excerpt) when present — it shows pre-lowering template shape.
 4. For **`SUM_THRESHOLD`**, worlds must respect **at most 4** weighted terms (see extract JSON `terms[]`).
 
+## Temporal-shaped rules (prerequisites, order, k-of-n)
+
+When rules use **`LOGICAL_IMPLICATION`** prerequisite chains, **`VARIABLE_RELATIONAL`** scalar order, or **`K_OF_N`** verification flags:
+
+1. Author **scenario** worlds that set `step_*_complete`, `*_verified`, or order scalars **consistently** with NL intent.
+2. Include at least one world that **violates** a prerequisite chain (expect `unsat` or failed query) and one that **satisfies** it when the policy is small enough.
+3. For **`K_OF_N`**, set enough clause variables to meet `k` in the golden.
+
 ## JSON discipline
 
 - Valid UTF-8 JSON; double quotes; no trailing commas.

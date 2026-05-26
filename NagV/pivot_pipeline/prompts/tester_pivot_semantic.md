@@ -46,6 +46,8 @@ Each **core** rule is one line: `R000k | TEMPLATE_CLASS | …`. **vNext** templa
 
 **Order convention:** Rule `R000k` should encode **NL line k** (1-based). Flag `ordering` or `misalignment` if line count ≠ rule count or a line clearly maps to a different `rule_id`.
 
+**Temporal / process order (`ordering` category):** Check **step prerequisite** chains (`step_b_complete` ⇒ `step_a_complete`), **scalar before** (`VARIABLE_RELATIONAL` on `start_*` / `rank_*`), and guard flags in triggers. Assessment view may show expansion templates pre-lowering; compile may show only lowered `LOGICAL_IMPLICATION` — judge against **assessment** linearization, not compile-only chains.
+
 ## Benign differences (do NOT flag)
 
 - Wording paraphrase with same logic.

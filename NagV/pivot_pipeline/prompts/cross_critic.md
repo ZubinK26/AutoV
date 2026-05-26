@@ -7,7 +7,7 @@ This is **not** `pivot_critic`. Do **not** re-litigate benign NL paraphrase or w
 ## Focus
 
 - **Rejection / veto channel split (narrow)** — the **same English idea** of **deny / reject / blocked / not permitted** appears as **different formal mechanisms** across rules (e.g. `decision`, `request_is_denied`, `CONSTANT_RELATIONAL` with `yields UNSATISFIED`, etc.). Flag this only when the rules involved are **actually in that semantic family** (see **Discipline** below). Do **not** treat “must set field X” obligations as part of this family.
-- **Duplicated obligation patterns** with inconsistent formal slots **within the same obligation shape** (not across obligation vs rejection).
+- **Duplicated obligation patterns** with inconsistent formal slots **within the same obligation shape** (not across obligation vs rejection). **Do not** treat **prerequisite chains** or **step-order implications** as duplicate obligations when NL requires sequence (T2/T3 temporal surrogates).
 - **PREEMPTION** vs obligation interactions that look inconsistent when read next to the linearized list and NL.
 - **Visible contradictions** or awkward splits **across** rules (not single-rule typos unless they cause cross-rule confusion).
 

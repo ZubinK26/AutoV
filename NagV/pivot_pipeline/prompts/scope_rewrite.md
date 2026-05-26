@@ -4,8 +4,8 @@ The extractor replied with **ABORT** for the policy line below — it cannot be 
 
 Your job: propose **one** replacement English rule line that:
 
-1. **Fits v1** — encodable using: `CONSTANT_RELATIONAL`, `SET_INCLUSION`, `VARIABLE_RELATIONAL`, `ARITHMETIC_EVALUATION` (only linear forms: no variable×variable multiplication; division only with numeric divisor), `LOGICAL_IMPLICATION`, `PREEMPTION`, `EXCLUSIVE_CHOICE`, `LOGICAL_IFF`, with nested `ConditionExpr` (`kind`: `atom`, `varcmp`, `and`, `or`, `not`) depth ≤ 6.
-2. **Preserves intent** as far as those constraints allow — e.g. replace “A × B ≤ c” with a **single** named scalar already implied by the context (“estimated_total_cost”, “declared_monthly_spend”) and state **clearly** that the data model must supply that value.
+1. **Fits v1** — encodable using core eight + vNext expansion + **temporal surrogates T1–T8** (appended contract): scalar order (`VARIABLE_RELATIONAL`), prerequisites and step chains (`LOGICAL_IMPLICATION` with named flags), phases (`EXCLUSIVE_CHOICE`, `K_OF_N`, `INT_RANGE`, tables), etc.
+2. **Preserves intent** as far as those constraints allow — for process order, emit **T1–T8 shaped** English (named `step_*_complete`, `phase`, order scalars), not generic simplification that drops order.
 3. Does **not** silently strengthen or weaken policy: call out tradeoffs in `semantic_deltas`.
 
 ## Output

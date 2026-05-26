@@ -30,6 +30,23 @@ Eight **additional** `template_class` values may appear in `rules_extracted.json
 
 Still **ABORT** for unbounded ∀, infinite domains, or constructs outside core + expansion lists.
 
+## Temporal surrogates (in scope — not LTL)
+
+Process order, prerequisites, and phases are **encodable** with existing templates (see `temporal_surrogates_addendum.md`). **Do not ABORT** when NL matches:
+
+| ID | Templates |
+|----|-----------|
+| T1 | `VARIABLE_RELATIONAL` (scalar before/after) |
+| T2 | `LOGICAL_IMPLICATION` (guard → obligation) |
+| T3 | `LOGICAL_IMPLICATION` chain (one line per link; named `step_*_complete` flags) |
+| T4 | `SET_INCLUSION` / `INT_RANGE` / `EXHAUSTIVE_SWITCH` + stage rules |
+| T5 | `EXCLUSIVE_CHOICE` |
+| T6 | `K_OF_N` (vNext) |
+| T7 | `TABLE_BLOCK` / `DECISION_TABLE_ROW` / `LOGICAL_IMPLICATION` per phase |
+| T8 | `INT_RANGE` or `CONSTANT_RELATIONAL` on counters |
+
+**Out of scope:** LTL/CTL (“eventually”, “until”), event logs, unnamed “A then B then C” in one line without flags.
+
 Nested conditions use **`ConditionExpr`** with `kind`: `atom`, `varcmp`, `varprod_cmp`, `and`, `or`, `not` — **max depth** equals `CONDITION_EXPR_MAX_DEPTH` in code (currently **8**).
 
 ## Arithmetic (strict)

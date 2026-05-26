@@ -27,6 +27,7 @@ Fix compile/validation errors **only** with shapes the loader accepts. **Never**
 3. Preserve each rule's `rule_id` where possible. Do not rename variables unless the error requires it.
 4. PREEMPTION: `BYPASS_RULE` / `FORCE_SATISFIED` / `FORCE_UNSATISFIED` require non-null `target_rule_id` as a **single string** (see v1 IR shape above).
 5. Every rule must satisfy the v1 extractor schema (**core eight** or **vNext expansion eight**). Expansion rules are lowered before compile; do not strip `K_OF_N`, `SUM_THRESHOLD`, etc. unless the error requires core-only shape.
+6. **Temporal surrogates:** Do not remove prerequisite or scalar-order structure when fixing validation errors on `LOGICAL_IMPLICATION` / `VARIABLE_RELATIONAL` chains (see appended temporal addendum).
 
 ## change_summary
 

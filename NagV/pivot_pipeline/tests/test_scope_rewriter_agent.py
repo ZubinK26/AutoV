@@ -119,8 +119,10 @@ def test_parse_llm_output_extended_sidecar() -> None:
         "line_encodability_tags": ["state_constraint", "temporal_or_process_order"],
         "high_friction_line_indices": [2],
         "suggested_human_review_focus": ["branch naming"],
+        "temporal_surrogate_applied": [{"line_index": 2, "pattern_id": "T3"}],
     }
     p = parse_llm_output(json.dumps(payload))
+    assert p.temporal_surrogate_applied[0].pattern_id == "T3"
     assert p.enumerations_compressed[0].topic == "checks"
     assert p.enumerations_compressed[0].dropped_facets == ["C"]
     assert p.line_encodability_tags == [
@@ -197,7 +199,7 @@ def test_scope_rewriter_prompt_exists() -> None:
 def test_load_system_prompt_contains_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     import pivot_pipeline.scope_rewriter_agent as sra
 
-    monkeypatch.setattr(sra, "read_v1_policy_encodability_contract", lambda: "CONTRACT_STUB")
+    monkeypatch.setattr(sra, "read_pivot_encodability_prompt_stack", lambda: "CONTRACT_STUB")
     txt = sra.load_scope_rewriter_system_prompt()
     assert "CONTRACT_STUB" in txt
     assert "Scope Rewriter" in txt

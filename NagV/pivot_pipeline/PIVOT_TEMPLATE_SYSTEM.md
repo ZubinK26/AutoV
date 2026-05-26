@@ -119,6 +119,9 @@ Nested boolean structure and guarded comparisons use **`ConditionExpr`** (see [`
 - **`ARITHMETIC_EVALUATION`** with **variable × variable** multiply.
 - **Non-linear** or unconstrained arithmetic that breaks the encodability contract.
 - **Imperative programs**, arbitrary **time / loops**, unconstrained **quantifiers** over infinite domains—policy lines must map to the **flat + ConditionExpr** shapes above.
+- **Temporal logics** (LTL/CTL, “eventually”, event logs) — **out of scope**.
+
+**Temporal surrogates (in scope):** Process order, prerequisites, finite phases, and k-of-n checks are encoded with **existing** templates only (patterns **T1–T8** in [`../../improved-scope.md`](../../improved-scope.md) Part G and [`prompts/temporal_surrogates_addendum.md`](prompts/temporal_surrogates_addendum.md)). There is **no** separate time dimension in Z3 — only variables in one assignment.
 
 The pipeline is built for **stateless policy-style constraints**, not general mathematics or Turing-complete control flow.
 

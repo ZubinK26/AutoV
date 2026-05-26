@@ -9,7 +9,7 @@ from pathlib import Path
 
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
-from pivot_pipeline.paths import PROMPTS_DIR, read_v1_policy_encodability_contract
+from pivot_pipeline.paths import PROMPTS_DIR, read_pivot_encodability_prompt_stack
 
 from pivot_wfm.handoff_coverage import ChunkCoverageReport, read_handoff_lines_dicts
 
@@ -191,7 +191,7 @@ def run_wfm_chunk_scope_rewrite(
         notes_block = "(not used in full mode)"
 
     tmpl = _prompt_template().replace(
-        "<<<V1_ENCODABILITY>>>", read_v1_policy_encodability_contract()
+        "<<<V1_ENCODABILITY>>>", read_pivot_encodability_prompt_stack()
     )
     summary = _coverage_summary(coverage_report)
     ho_sum = handoff_line_summary(handoff_path, max_rows=30) if handoff_path else "(no handoff path)"

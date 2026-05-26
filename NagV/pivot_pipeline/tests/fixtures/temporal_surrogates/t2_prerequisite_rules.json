@@ -1,0 +1,23 @@
+{
+  "policy_id": "temporal_t2",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "LOGICAL_IMPLICATION",
+      "trigger_condition": {
+        "kind": "atom",
+        "variable": "identity_verified",
+        "operator": "EQ",
+        "value": 1
+      },
+      "required_condition": {
+        "kind": "atom",
+        "variable": "refund_may_be_issued",
+        "operator": "EQ",
+        "value": 1
+      }
+    }
+  ]
+}

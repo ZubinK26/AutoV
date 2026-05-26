@@ -1,0 +1,35 @@
+{
+  "policy_id": "temporal_t4",
+  "policy_semantics_version": "1.1",
+  "pivot_ir_extensions": ["vnext_8"],
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "SET_INCLUSION",
+      "variable": "phase",
+      "inclusion_operator": "IN",
+      "constant_array": [1, 2, 3],
+      "yields": "SATISFIED"
+    },
+    {
+      "rule_id": "R0002",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "EXHAUSTIVE_SWITCH",
+      "discriminant_variable": "phase",
+      "cases": [
+        {
+          "value": 2,
+          "consequence": {
+            "kind": "atom",
+            "variable": "review_required",
+            "operator": "EQ",
+            "value": 1
+          }
+        }
+      ]
+    }
+  ]
+}

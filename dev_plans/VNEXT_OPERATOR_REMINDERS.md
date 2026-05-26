@@ -40,3 +40,10 @@ When running `--with-template-generator`, verify generated `template_suite_gener
 - Template generator **quality gate** asserting min coverage of vNext rule_ids in generated suite.
 
 See [`dev_plan_vnext_pipeline_integration_v1.md`](dev_plan_vnext_pipeline_integration_v1.md) acceptance criteria.
+
+## Temporal surrogates (T1–T8)
+
+- **In scope** via existing templates only — see [`dev_plan_temporal_surrogates_v1.md`](dev_plan_temporal_surrogates_v1.md) and `prompts/temporal_surrogates_addendum.md` (injected into scope rewriter, extract, WFM scope rewrite).
+- **Authoring:** [`improved-scope.md`](../improved-scope.md) Part G.
+- **CI:** `pytest …/test_temporal_surrogates.py` (no API keys).
+- **Optional live extract:** `PIVOT_RUN_LLM_EXTRACT=1 pytest …/test_extract_temporal_live.py`

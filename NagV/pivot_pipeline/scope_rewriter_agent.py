@@ -9,12 +9,12 @@ import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from pivot_pipeline.llm import get_pivot_gemini_model, get_pivot_gemini_thinking_level_str
-from pivot_pipeline.paths import read_v1_policy_encodability_contract
+from pivot_pipeline.paths import read_pivot_encodability_prompt_stack
 from registry_stage.llm.gemini_call import gemini_complete
 
 SCHEMA_VERSION = "scope_rewriter_sidecar_v1"
@@ -107,7 +107,16 @@ class EnumerationCompressed(BaseModel):
         return _coerce_string_list(v)
 
 
+class TemporalSurrogateApplied(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
+    line_index: int = Field(ge=1)
+    pattern_id: Literal["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]
+
+
 class ScopeRewriterLLMOutput(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+
     schema_version: str
     plain_rules: str
     fidelity_summary: str = ""
@@ -122,6 +131,7 @@ class ScopeRewriterLLMOutput(BaseModel):
     line_encodability_tags: list[str] = Field(default_factory=list)
     high_friction_line_indices: list[int] = Field(default_factory=list)
     suggested_human_review_focus: list[str] = Field(default_factory=list)
+    temporal_surrogate_applied: list[TemporalSurrogateApplied] = Field(default_factory=list)
 
     @field_validator(
         "semantic_deltas",
@@ -177,9 +187,9 @@ def load_scope_rewriter_system_prompt() -> str:
     if not base_path.is_file():
         raise FileNotFoundError(f"Scope Rewriter prompt missing: {base_path}")
     base = base_path.read_text(encoding="utf-8")
-    contract = read_v1_policy_encodability_contract()
+    stack = read_pivot_encodability_prompt_stack()
     return (
-        f"{base}\n\n---\n\n## Pivot v1 encodability contract (injected)\n\n{contract}\n"
+        f"{base}\n\n---\n\n## Pivot encodability stack (injected)\n\n{stack}\n"
     )
 
 

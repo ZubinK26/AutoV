@@ -32,6 +32,33 @@ def read_vnext_template_examples() -> str:
     return p.read_text(encoding="utf-8")
 
 
+def read_temporal_surrogates_addendum() -> str:
+    """Eight temporal surrogate patterns (T1–T8); no new template_class values."""
+    p = PROMPTS_DIR / "temporal_surrogates_addendum.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing temporal surrogates addendum: {p}")
+    return p.read_text(encoding="utf-8")
+
+
+def read_temporal_surrogates_examples() -> str:
+    """NL examples per temporal pattern (optional second inject)."""
+    p = PROMPTS_DIR / "temporal_surrogates_examples.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing temporal surrogates examples: {p}")
+    return p.read_text(encoding="utf-8")
+
+
+def read_pivot_encodability_prompt_stack() -> str:
+    """Shared contract + vNext addendum + temporal addendum (inject into agents)."""
+    return (
+        read_v1_policy_encodability_contract()
+        + "\n\n---\n\n"
+        + read_extractor_vnext_addendum()
+        + "\n\n---\n\n"
+        + read_temporal_surrogates_addendum()
+    )
+
+
 def resolve_existing_user_file(
     path: Path,
     *,

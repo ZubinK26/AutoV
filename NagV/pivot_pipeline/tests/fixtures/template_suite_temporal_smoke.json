@@ -1,0 +1,63 @@
+{
+  "schema_version": "1",
+  "suite_id": "temporal_eight_smoke",
+  "instances": [
+    {
+      "template_kind": "scenario",
+      "instance_id": "t01_scalar_order_sat",
+      "world": { "start_x": 1, "start_y": 5 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t02_prerequisite_sat",
+      "world": { "identity_verified": 1, "refund_may_be_issued": 1 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t03_chain_sat",
+      "world": {
+        "step_a_complete": 1,
+        "step_b_complete": 1,
+        "step_c_complete": 0
+      },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t04_phase_sat",
+      "world": { "phase": 2, "review_required": 1 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t05_exclusive_sat",
+      "world": { "draft_mode": 1, "review_mode": 0, "published_mode": 0 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t06_k_of_n_sat",
+      "world": {
+        "income_verified": 1,
+        "identity_verified": 1,
+        "address_verified": 0,
+        "employment_verified": 0
+      },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t07_table_sat",
+      "world": { "workflow_state": 1, "approver_assigned": 1, "payment_released": 0 },
+      "golden": { "sat": true }
+    },
+    {
+      "template_kind": "scenario",
+      "instance_id": "t08_int_range_sat",
+      "world": { "retry_count": 3 },
+      "golden": { "sat": true }
+    }
+  ]
+}

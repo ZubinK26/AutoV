@@ -82,6 +82,10 @@ Use `snake_case` variable names (e.g. `days_since_purchase`, `refund_amount`).
 - **Number vs string:** use JSON numbers for numeric constants unless the schema expects a variable name string.
 - **Quotes in NL:** do not paste raw double quotes inside strings in a way that breaks JSON; escape `\"` inside JSON string values.
 
+## Temporal surrogates
+
+When the line matches **T1–T8** in the appended temporal addendum (scalar order, prerequisites, step chains, phases, k-of-n, phase tables, int counters), emit the mapped **core or vNext** template — **do not ABORT**. T3 requires **one rule per implication link** in the policy file (one line in → one JSON out per call). Prerequisite and ordering structure must appear as named variables in conditions.
+
 ## Scope and abstain
 
 If the line is **not** an encodable policy rule, or is out of schema, reply with **exactly**:

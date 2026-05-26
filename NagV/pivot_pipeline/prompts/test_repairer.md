@@ -22,6 +22,10 @@ Apply **minimal edits** valid for `pivot_pipeline.ir` / `load_rules_and_compile`
 - **`PREEMPTION` target:** must reference an **earlier** non-`PREEMPTION` rule.
 - Do **not** invent fields or types the schema does not allow.
 
+## Temporal structure
+
+When approved findings touch **ordering**, **prerequisites**, or **step flags**, preserve **`LOGICAL_IMPLICATION`** / **`VARIABLE_RELATIONAL`** structure in the assessment view — do not merge or delete guard chains.
+
 ## Rules
 
 1. Output **only** `{ "rules": [...], "change_summary": [...] }`.

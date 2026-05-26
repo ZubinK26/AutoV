@@ -69,6 +69,35 @@ def build_template_generator_context(work_dir: Path, *, max_total_chars: int = 1
             "still cite expansion rule_ids above when targeting template shape.\n\n"
         )
 
+    temporal_vars: list[str] = []
+    for r in rules:
+        if not isinstance(r, dict):
+            continue
+        tc = str(r.get("template_class") or "")
+        if tc in ("LOGICAL_IMPLICATION", "VARIABLE_RELATIONAL", "EXCLUSIVE_CHOICE", "K_OF_N"):
+            blob = json.dumps(r, ensure_ascii=False)
+            for token in (
+                "step_",
+                "start_",
+                "rank_",
+                "deadline_",
+                "phase",
+                "workflow_state",
+                "_verified",
+                "_complete",
+            ):
+                if token in blob:
+                    temporal_vars.append(tc)
+                    break
+    temporal_note = ""
+    if temporal_vars:
+        temporal_note = (
+            "### Temporal-shaped rules (prerequisite / order / k-of-n)\n"
+            "Policy includes implication chains, scalar order, or verification flags. "
+            "Set worlds so step/verification flags and order scalars are internally consistent; "
+            "add one scenario that breaks prerequisite order when multiple step rules exist.\n\n"
+        )
+
     assessment_path = work_dir / "linearized_model_for_assessment.txt"
     assessment_excerpt = ""
     if assessment_path.is_file():
@@ -79,6 +108,8 @@ def build_template_generator_context(work_dir: Path, *, max_total_chars: int = 1
     chunks: list[str] = ["## POLICY CONTEXT", "", "### rules_extracted.json (full)", rules_json, ""]
     if vnext_note:
         chunks.extend([vnext_note])
+    if temporal_note:
+        chunks.extend([temporal_note])
     if assessment_excerpt:
         chunks.extend(["### linearized_model_for_assessment.txt (excerpt)", assessment_excerpt, ""])
     if meta_note:

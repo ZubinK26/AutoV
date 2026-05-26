@@ -80,7 +80,7 @@ The following block is normative **only** when the user message’s `input_mode`
 | `state_constraint` | Static predicated facts, roles, caps that are not inherently procedural order. |
 | `arithmetic_threshold` | Numeric comparisons, piecewise caps, floors/ceilings. |
 | `enumeration` | Closed sets, forbidden literals, allowed branch names when the set is finite and explicit. |
-| `temporal_or_process_order` | Before/after, fixed evaluation order, gating by phase — **high friction** for WFM. |
+| `temporal_or_process_order` | Before/after, fixed evaluation order, gating by phase — use **temporal surrogates** (T1–T8 in injected addendum): rewrite to state-shaped lines with named flags/ints; **do not** summarize away order. Still tag the line; set `temporal_surrogate_applied` when you apply a pattern. |
 | `comparative_judgment` | Superlatives (best/most/relevant) without a defined metric — **high friction**. |
 | `artifact_or_filesystem` | Paths, directory layout, filenames — **high friction** if out of scope. |
 | `mixed` | Needs splitting or a surrogate; or you cannot pick one primary type honestly. |
@@ -124,6 +124,7 @@ Reply with **exactly one** JSON object, **UTF-8**, **no** markdown fences, **no*
 | `line_encodability_tags` | array of string | Same length as `plain_rules` lines; taxonomy above. |
 | `high_friction_line_indices` | array of integer | 1-based. |
 | `suggested_human_review_focus` | array of string | Short flags for human review. |
+| `temporal_surrogate_applied` | array of object | Optional: `{ "line_index", "pattern_id": "T1"|…|"T8" }` when a surrogate was applied. |
 
 ## Rules of behavior (both modes)
 

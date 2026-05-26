@@ -1,0 +1,65 @@
+{
+  "description": "Deterministic temporal NL goldens: validate expected_rule without live LLM.",
+  "cases": [
+    {
+      "pattern_id": "T1",
+      "nl_line": "start_x must be strictly before start_y.",
+      "expected_rule": {
+        "template_class": "VARIABLE_RELATIONAL",
+        "left_variable": "start_x",
+        "relational_operator": "LT",
+        "right_variable": "start_y",
+        "yields": "SATISFIED"
+      }
+    },
+    {
+      "pattern_id": "T2",
+      "nl_line": "Refund may be issued only if identity_verified equals 1.",
+      "expected_rule": {
+        "template_class": "LOGICAL_IMPLICATION",
+        "trigger_condition": {
+          "kind": "atom",
+          "variable": "identity_verified",
+          "operator": "EQ",
+          "value": 1
+        },
+        "required_condition": {
+          "kind": "atom",
+          "variable": "refund_may_be_issued",
+          "operator": "EQ",
+          "value": 1
+        }
+      }
+    },
+    {
+      "pattern_id": "T3",
+      "nl_line": "If step_b_complete equals 1 then step_a_complete must equal 1.",
+      "expected_rule": {
+        "template_class": "LOGICAL_IMPLICATION",
+        "trigger_condition": {
+          "kind": "atom",
+          "variable": "step_b_complete",
+          "operator": "EQ",
+          "value": 1
+        },
+        "required_condition": {
+          "kind": "atom",
+          "variable": "step_a_complete",
+          "operator": "EQ",
+          "value": 1
+        }
+      }
+    },
+    {
+      "pattern_id": "T8",
+      "nl_line": "retry_count must be between 0 and 5 inclusive.",
+      "expected_rule": {
+        "template_class": "INT_RANGE",
+        "variable": "retry_count",
+        "lo": 0,
+        "hi": 5,
+        "yields": "SATISFIED"
+      }
+    }
+  ]
+}

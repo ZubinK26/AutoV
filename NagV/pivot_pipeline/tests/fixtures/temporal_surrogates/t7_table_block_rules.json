@@ -1,0 +1,44 @@
+{
+  "policy_id": "temporal_t7",
+  "policy_semantics_version": "1.1",
+  "pivot_ir_extensions": ["vnext_8"],
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "TABLE_BLOCK",
+      "table_id": "workflow",
+      "rows": [
+        {
+          "trigger_condition": {
+            "kind": "atom",
+            "variable": "workflow_state",
+            "operator": "EQ",
+            "value": 1
+          },
+          "required_condition": {
+            "kind": "atom",
+            "variable": "approver_assigned",
+            "operator": "EQ",
+            "value": 1
+          }
+        },
+        {
+          "trigger_condition": {
+            "kind": "atom",
+            "variable": "workflow_state",
+            "operator": "EQ",
+            "value": 2
+          },
+          "required_condition": {
+            "kind": "atom",
+            "variable": "payment_released",
+            "operator": "EQ",
+            "value": 1
+          }
+        }
+      ]
+    }
+  ]
+}

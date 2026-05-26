@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
-from pivot_pipeline.paths import PROMPTS_DIR, read_vnext_template_examples
+from pivot_pipeline.paths import PROMPTS_DIR, read_temporal_surrogates_addendum, read_vnext_template_examples
 
 _JSON_ERR_SNIPPET_CAP = 1500
 _FAILED_RAW_CAP = 800
@@ -36,6 +36,8 @@ def _vnext_repairer_appendix() -> str:
         "Rules may use expansion `template_class` values; `load_rules_and_compile` **lowers** them to core IR. "
         "Keep expansion shape in output when fixing NL↔IR drift. **`SUM_THRESHOLD`:** at most **4** terms.\n\n"
         + read_vnext_template_examples()
+        + "\n\n---\n\n"
+        + read_temporal_surrogates_addendum()
     )
 
 

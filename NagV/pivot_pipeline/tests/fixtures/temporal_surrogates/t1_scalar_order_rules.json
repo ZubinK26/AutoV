@@ -1,0 +1,15 @@
+{
+  "policy_id": "temporal_t1",
+  "rules": [
+    {
+      "rule_id": "R0001",
+      "applies_to": "GLOBAL",
+      "overrides": null,
+      "template_class": "VARIABLE_RELATIONAL",
+      "left_variable": "start_x",
+      "relational_operator": "LT",
+      "right_variable": "start_y",
+      "yields": "SATISFIED"
+    }
+  ]
+}
