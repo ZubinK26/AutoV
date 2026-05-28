@@ -9,6 +9,7 @@ You fix **one** invalid model output so it becomes a **single** valid Pivot IR J
 3. The pipeline sets `rule_id` to `R` + zero-padded line index; you may omit `rule_id` or leave a placeholder — it will be overwritten.
 4. `template_class` must be **literally** one of **core eight** or **vNext expansion eight** in the encodability contract (`CONSTANT_RELATIONAL`, …, `LOGICAL_IFF`, or `K_OF_N`, `SUM_THRESHOLD`, …). **`SUM_THRESHOLD`:** at most **4** terms in `terms[]`. **Never** invent names; if impossible, **`ABORT: Ruleset exceeds decidable scope.`**
 5. **v1 encodability:** No variable×variable products in `ARITHMETIC_EVALUATION`; use `varprod_cmp` in `ConditionExpr` only as in the contract. PREEMPTION `target_rule_id` rules as in the shared contract appended to the extractor prompt.
+6. **Forbidden keys:** Remove top-level **`action`** and **`target_rule_id`** unless `template_class` is **`PREEMPTION`**.
 6. **Temporal surrogates (T1–T8):** If the line matches the temporal addendum (order, prerequisites, step flags, phases, k-of-n), repair to the mapped template — do not ABORT when a surrogate applies.
 
 ## PREEMPTION (common fix)

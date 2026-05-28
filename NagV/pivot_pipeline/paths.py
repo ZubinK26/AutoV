@@ -32,6 +32,35 @@ def read_vnext_template_examples() -> str:
     return p.read_text(encoding="utf-8")
 
 
+def read_repairer_ir_normative() -> str:
+    """Shared denylist, allowlists, and v1 IR shape for repairer and test-repairer."""
+    p = PROMPTS_DIR / "repairer_ir_normative.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing repairer IR normative block: {p}")
+    return p.read_text(encoding="utf-8")
+
+
+def read_test_repairer_ir_addendum() -> str:
+    p = PROMPTS_DIR / "test_repairer_ir_addendum.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing test-repairer IR addendum: {p}")
+    return p.read_text(encoding="utf-8")
+
+
+def read_cross_repairer_ir_addendum() -> str:
+    p = PROMPTS_DIR / "cross_repairer_ir_addendum.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing cross-repairer IR addendum: {p}")
+    return p.read_text(encoding="utf-8")
+
+
+def read_semantic_repairer_ir_addendum() -> str:
+    p = PROMPTS_DIR / "semantic_repairer_ir_addendum.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing semantic-repairer IR addendum: {p}")
+    return p.read_text(encoding="utf-8")
+
+
 def read_temporal_surrogates_addendum() -> str:
     """Eight temporal surrogate patterns (T1–T8); no new template_class values."""
     p = PROMPTS_DIR / "temporal_surrogates_addendum.md"

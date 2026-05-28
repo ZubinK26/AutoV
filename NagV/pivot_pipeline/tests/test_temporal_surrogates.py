@@ -11,7 +11,7 @@ from pivot_pipeline.rules_document import parse_rules_document
 
 FIX = Path(__file__).resolve().parent / "fixtures" / "temporal_surrogates"
 MANIFEST = FIX / "temporal_surrogates_manifest.json"
-IMPROVED_SCOPE = Path(__file__).resolve().parents[3] / "improved-scope.md"
+IMPROVED_SCOPE = Path(__file__).resolve().parents[3] / "improved-scope-time.md"
 
 
 def _manifest_entries() -> list[dict]:
@@ -52,7 +52,7 @@ def test_temporal_manifest_covers_eight_patterns() -> None:
     assert ids == {f"T{i}" for i in range(1, 9)}
 
 
-def test_improved_scope_mentions_all_pattern_ids() -> None:
+def test_improved_scope_time_mentions_all_pattern_ids() -> None:
     text = IMPROVED_SCOPE.read_text(encoding="utf-8")
     for i in range(1, 9):
         assert f"**T{i}**" in text

@@ -10,5 +10,6 @@ The user message for each chunk includes a **numbered list of source rules** for
 2. **One input line → exactly one output line.** Line *k* in your output is the decomposition of **only** source rule *k* — **not** a merge of two sources, **not** a split of one source into two outputs.
 3. **Do not** “fully decompose” one source rule into multiple numbered lines. Extra lines break downstream handoff coverage (each source index must map to **one** forward row). If one source rule cannot be expressed in one line within the compound-operator budget, output **`LIMIT_EXCEEDED`** for the chunk per the standard schema — **do not** add extra SUCCESS lines.
 4. Decomposition **within** that single line still follows the global Agent 2 rules and counterexamples (e.g. do not illegitimately split conditionals).
+5. **Preserve finite enumerations:** For source rule *k*, the text on output line *k* must retain **every named alternative** from source rule *k* (job titles, platforms, industries, regions, etc.). Do **not** replace explicit `or`-lists with umbrella labels like "customer-facing roles" or "technology environments" — extract needs the full finite list.
 
-This **overrides** the generic urge to “split into the smallest sub-statements” **when** that would increase the line count above **N**.
+This **overrides** the generic urge to “split into the smallest sub-statements” **when** that would increase the line count above **N**. It also overrides shortening long `or`-lists for readability.

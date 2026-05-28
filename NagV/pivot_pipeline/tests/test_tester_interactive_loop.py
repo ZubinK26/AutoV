@@ -77,7 +77,7 @@ def test_run_test_repairer_mock_llm(monkeypatch: pytest.MonkeyPatch) -> None:
         fake_complete,
     )
     handoff = {
-        "findings": [{"id": "T001"}],
+        "findings": [{"id": "T001", "formal_pointer": "R0001"}],
         "ignored_finding_ids": ["T002"],
     }
     out, _ = run_test_repairer(
@@ -90,6 +90,8 @@ def test_run_test_repairer_mock_llm(monkeypatch: pytest.MonkeyPatch) -> None:
     assert out.rules == [{"rule_id": "R0001"}]
     assert "tester_nl_alignment" in captured["prompt"]
     assert "T002" in captured["prompt"]
+    assert "focus_rule_ids" in captured["prompt"]
+    assert "repairer_ir_normative" in captured["prompt"] or "denylist" in captured["prompt"]
 
 
 def test_tester_loop_rerun_after_repair(
@@ -104,16 +106,20 @@ def test_tester_loop_rerun_after_repair(
     def fake_tester(*_a, **_k):
         calls["tester"] += 1
         if calls["tester"] == 1:
-            return "{}", TesterReport(
-                verdict="issues",
-                findings=[
-                    TesterFinding(id="T001", severity="warn", category="threshold", explanation="fix me"),
-                ],
+            return (
+                "{}",
+                TesterReport(
+                    verdict="issues",
+                    findings=[
+                        TesterFinding(id="T001", severity="warn", category="threshold", explanation="fix me"),
+                    ],
+                ),
+                0,
             )
-        return "{}", TesterReport(verdict="ok", findings=[])
+        return "{}", TesterReport(verdict="ok", findings=[]), 0
 
     monkeypatch.setattr(
-        "pivot_pipeline.tester_interactive_loop.run_pivot_tester",
+        "pivot_pipeline.tester_interactive_loop.run_pivot_tester_with_repairs",
         fake_tester,
     )
 
@@ -130,8 +136,12 @@ def test_tester_loop_rerun_after_repair(
     meta.model_dump_json = lambda indent=2: "{}"
 
     monkeypatch.setattr(
+        "pivot_pipeline.tester_interactive_loop.precompile_repaired_rules",
+        lambda _p, r: r,
+    )
+    monkeypatch.setattr(
         "pivot_pipeline.repair_apply.load_rules_and_compile",
-        lambda _p, _r: meta,
+        lambda _p, _r, **_kw: meta,
     )
     monkeypatch.setattr(
         "pivot_pipeline.repair_apply.run_z3_check",
@@ -147,6 +157,10 @@ def test_tester_loop_rerun_after_repair(
     )
     monkeypatch.setattr(
         "pivot_pipeline.tester_interactive_loop.build_and_write_assessment_artifacts",
+        lambda **_k: "linearized",
+    )
+    monkeypatch.setattr(
+        "pivot_pipeline.repair_apply.build_and_write_assessment_artifacts",
         lambda **_k: "linearized",
     )
 
@@ -188,13 +202,14 @@ def test_proceed_incomplete_writes_handoff(
     tmp_path: Path,
 ) -> None:
     monkeypatch.setattr(
-        "pivot_pipeline.tester_interactive_loop.run_pivot_tester",
+        "pivot_pipeline.tester_interactive_loop.run_pivot_tester_with_repairs",
         lambda **_k: (
             "{}",
             TesterReport(
                 verdict="issues",
                 findings=[TesterFinding(id="T001", severity="warn", category="other", explanation="x")],
             ),
+            0,
         ),
     )
     inputs = iter(["i", PROCEED_INCOMPLETE_TOKEN])
@@ -245,13 +260,14 @@ def test_exhaust_test_repair_sessions_returns_blocked(
     monkeypatch.setenv("PIVOT_TESTER_REPAIR_COMPILE_ATTEMPTS", "1")
 
     monkeypatch.setattr(
-        "pivot_pipeline.tester_interactive_loop.run_pivot_tester",
+        "pivot_pipeline.tester_interactive_loop.run_pivot_tester_with_repairs",
         lambda **_k: (
             "{}",
             TesterReport(
                 verdict="issues",
                 findings=[TesterFinding(id="T001", severity="warn", category="other", explanation="x")],
             ),
+            0,
         ),
     )
 
@@ -269,7 +285,7 @@ def test_exhaust_test_repair_sessions_returns_blocked(
         raise ValueError(msg)
 
     monkeypatch.setattr(
-        "pivot_pipeline.repair_apply.load_rules_and_compile",
+        "pivot_pipeline.tester_interactive_loop.precompile_repaired_rules",
         boom,
     )
 

@@ -29,7 +29,9 @@ The following block is normative **only** when the user message’s `input_mode`
 
 ### Enumerations (reference mode)
 
-- Mandatory lists: keep in output (multiple lines if needed) **or** compress with **`partial_rewrites`** per dropped facet; set **`strict_equivalence_achievable: false`** if equivalence is not guaranteed.
+- **Finite explicit lists** (job titles, platforms, industries, tools, regions): **keep every named alternative** in `plain_rules` — use **one line per obligation** when needed, but **do not** replace lists with umbrella phrases ("customer-facing roles", "support platforms", "SaaS environments").
+- **`enumerations_compressed`** is only for cases where you **intentionally** split one source list across lines or drop a facet with **`partial_rewrites`** + **`strict_equivalence_achievable: false`** — never use it to justify silent hypernym substitution.
+- Prefer wording encodable as **`SET_INCLUSION`**, **`K_OF_N`**, or *at least one of: A, B, C, …* per the injected encodability contract.
 
 ### Optional / “plus” norms (reference mode)
 
@@ -85,7 +87,7 @@ The following block is normative **only** when the user message’s `input_mode`
 | `artifact_or_filesystem` | Paths, directory layout, filenames — **high friction** if out of scope. |
 | `mixed` | Needs splitting or a surrogate; or you cannot pick one primary type honestly. |
 
-**High-friction** tags: prefer **faithful surrogate** toward `state_constraint` / `enumeration`, or **explicit** `partial_rewrites` + **`strict_equivalence_achievable: false`**.
+**High-friction** tags: prefer **faithful surrogate** toward `state_constraint` / **`enumeration`** (preserve named alternatives), or **explicit** `partial_rewrites` + **`strict_equivalence_achievable: false`**. **Do not** compress enumerations into vague category labels.
 
 Do **not** collapse normative ordering (A then B then C) into one vague line without disclosure.
 

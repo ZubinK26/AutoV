@@ -1,6 +1,8 @@
 # Improved scope — Pivot rule templates (for NL policy authoring)
 
-**Purpose:** This document defines **every rule template** the AutoV / NagV pivot pipeline can represent. Use it when writing or rewriting **natural-language (NL) policies** so lines are encodable, readable, and—where appropriate—**use the newer expansion templates** instead of awkward nested logic.
+**Purpose:** This document defines **every rule template** and the **total logical expressivity** of the **`16-template-version`** pivot branch (core eight + vNext eight). Use it when writing or rewriting **natural-language (NL) policies** so lines are encodable, readable, and—where appropriate—**use expansion templates** instead of awkward nested logic.
+
+**Branch scope:** **`16-template-version`** on PML — sixteen `template_class` values, deterministic lowering, assessment views. **Process order / temporal surrogates** are **not** covered here; use [`improved-scope-time.md`](improved-scope-time.md) for the **`temporal-version`** branch.
 
 **Audience:** Humans and AI agents (scope rewriter, WFM, extract). You do **not** need to emit JSON here; write **one clear English rule per line**. Extraction maps each line to exactly one `template_class`.
 
@@ -27,6 +29,67 @@
 - **Assessment view** — original expansion shape preserved for tester / critic (easier to match NL for `K_OF_N`, multi-term sums, tables).
 
 Policies that use expansion templates should declare **`policy_semantics_version`: `"1.1"`** and **`pivot_ir_extensions`: `["vnext_8"]`** in the rules file (the pipeline adds this automatically on extract).
+
+---
+
+# Total logical expressivity (what this branch can express)
+
+This section is the **logical boundary** for policy authoring on **`16-template-version`**. It is separate from the per-template catalog in Parts A–B below.
+
+## Evaluation model
+
+| Property | Meaning for authors |
+|----------|-------------------|
+| **Single world** | Each check is one **variable assignment** (one snapshot). There is **no** built-in time axis, event log, or “next state.” |
+| **Decidable fragment** | Policies compile to **SMT-friendly** constraints (guarded linear integer arithmetic + finite Boolean structure), then **Z3 satisfiability** runs on pathways. |
+| **Pathways** | Rules group into **evaluation pathways** (`applies_to`, `overrides`, `PREEMPTION`). Conditional **policy** logic is mostly **`LOGICAL_IMPLICATION`** / **`LOGICAL_IFF`** / **`ConditionExpr`** trees. |
+
+## In scope — logical shapes you can write
+
+All of the following must map into **one of sixteen templates** per NL line (Parts A–B). Combinations use **nesting inside conditions** or **multiple lines**, not invented template names.
+
+| Family | What you can express | How it appears in IR |
+|--------|----------------------|----------------------|
+| **Ground comparisons** | Variable vs constant (`≤`, `=`, …) | `CONSTANT_RELATIONAL`, `INT_RANGE` (expansion) |
+| **Variable–variable order** | Two ints comparable in the same world | `VARIABLE_RELATIONAL` |
+| **Finite enumeration** | Variable ∈ finite list; switch on discriminant | `SET_INCLUSION`, `EXHAUSTIVE_SWITCH`, `BOUNDED_FORALL` |
+| **Conditional obligations** | If trigger then requirement | `LOGICAL_IMPLICATION` (nested `and` / `or` / `not` / `atom` / `varcmp`) |
+| **Biconditional** | Iff between two condition trees | `LOGICAL_IFF` |
+| **Mutual exclusion** | Exactly one / at most one of flags | `EXCLUSIVE_CHOICE` |
+| **Override earlier rules** | Bypass or force outcome of prior rule | `PREEMPTION` (single `target_rule_id` per line) |
+| **Linear arithmetic** | One op per evaluation step vs limit | `ARITHMETIC_EVALUATION` (no var×var `MULTIPLY`) |
+| **Weighted sums** | Σ coeff·var compared to limit (≤ **4** terms) | `SUM_THRESHOLD` |
+| **Cardinality** | At least **k** of **n** conditions (n ≤ **10**) | `K_OF_N` |
+| **Tabular decisions** | Rows / blocks of if-then (≤ **32** rows/cases) | `DECISION_TABLE_ROW`, `TABLE_BLOCK` |
+| **Definitions** | Variable must satisfy defining condition | `DEFINED_AS` |
+| **Single product bound** | One var×var comparison per rule | `varprod_cmp` inside `ConditionExpr` (integers, capped) |
+
+**Nesting:** Boolean structure inside triggers and requirements uses **`ConditionExpr`** with max depth **8**; `and` / `or` need **at least two** children.
+
+**Routing:** Every rule has **`rule_id`**, **`applies_to`** (`GLOBAL` or another id), **`overrides`** — this is **not** temporal logic; it tells the **compiler** how obligations group for pathways.
+
+## Out of scope — outside this branch’s logical expressivity
+
+Do **not** write NL that requires constructs below; extract should **ABORT** or scope-rewrite must reframe (see Part E).
+
+| Outside expressivity | Examples |
+|----------------------|----------|
+| **New template names** | “decision_rule”, “policy_block”, invented `template_class` strings |
+| **Unbounded quantification** | “for every customer”, infinite domains |
+| **Non-linear / unconstrained math** | General polynomials, division by variables, unconstrained reals |
+| **Multiple products per rule** | More than one `varprod_cmp` or var×var in `MULTIPLY` |
+| **Oversized finite structures** | k-of-n with n > 10; sum with 5+ terms; tables/switches > 32 rows/cases |
+| **Temporal logics & simulation** | LTL/CTL (“eventually”, “until”), event traces, multi-step state machines **without** named snapshot variables |
+| **Process order without surrogates** | “A then B then C” in **one** line with no flags or scalars — see **`temporal-version`** doc if you need that |
+
+**Temporal encoding** (prerequisites, step flags, phase ints) uses the **same sixteen templates** but has its own authoring cookbook on branch **`temporal-version`**: [`improved-scope-time.md`](improved-scope-time.md).
+
+## Practical summary for generators
+
+- **One English line → one `template_class`.**
+- Prefer **expansion** templates when English matches (range, k-of-n, table, switch, sum).
+- Stay inside **finite** lists, **linear** arithmetic, and **explicit** variable names.
+- Anything that sounds like **time evolution** or **unordered process prose** either gets **reframed** into flags/scalars/ implications (temporal branch doc) or stays **out of scope** on this branch.
 
 ---
 
@@ -369,30 +432,7 @@ Extract / rewrite should **ABORT** or push scope rewrite unless the line is refr
 - Variable × variable in **`ARITHMETIC_EVALUATION` MULTIPLY**.
 - More than **4** terms in one sum rule.
 - More than **10** clauses in one k-of-n rule.
-- Non-linear arithmetic, unconstrained strings, or full temporal logics.
-
----
-
-# Part G — Temporal surrogates (in scope)
-
-Pivot has **no time axis** — only **one-world** constraints. “Before”, “then”, and “in order” use **named variables** and existing templates (no new `template_class`).
-
-| ID | Intent | Preferred NL | Templates | Lines |
-|----|--------|--------------|-----------|-------|
-| **T1** | Scalar ordering | `start_x` must be before `start_y` | `VARIABLE_RELATIONAL` | 1 |
-| **T2** | Prerequisite gating | B only if A / guard flag | `LOGICAL_IMPLICATION` | 1–2 |
-| **T3** | Total order on steps | If B complete then A complete; … | `LOGICAL_IMPLICATION` × (n−1) | **n−1** lines |
-| **T4** | Finite phase enum | `phase` in {1,2,3} + per-phase rules | `SET_INCLUSION`, `INT_RANGE`, `EXHAUSTIVE_SWITCH` | 2+ |
-| **T5** | One active mode | Exactly one of draft/review/published | `EXCLUSIVE_CHOICE` | 1 |
-| **T6** | At least k of n checks | At least 3 of: … verified … | `K_OF_N` (n≤10) | 1 |
-| **T7** | Phase-dependent table | When state PENDING, … | `TABLE_BLOCK` / row implications | 1+ |
-| **T8** | Counter bounds | retry_count between 0 and 5 | `INT_RANGE` | 1 |
-
-**Authoring rules:** Use `snake_case` flags (`step_a_complete`, `identity_verified`). Split T3 — never one line “a, b, c in order”. Prefer int-coded `phase`. Policies with vNext (T4, T6, T7, T8) use **`policy_semantics_version` 1.1**.
-
-**Out of scope:** LTL/CTL, event logs, unnamed sequence blobs, calendar strings without int surrogate.
-
-Prompt cookbook: `NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md`.
+- Non-linear arithmetic, unconstrained strings, or temporal logics (see [`improved-scope-time.md`](improved-scope-time.md) for encodable process-order patterns on **`temporal-version`**).
 
 ---
 
@@ -404,9 +444,8 @@ Prompt cookbook: `NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md`.
 | [`NagV/pivot_pipeline/prompts/v1_policy_encodability_contract.md`](NagV/pivot_pipeline/prompts/v1_policy_encodability_contract.md) | Normative limits for WFM / extract |
 | [`NagV/pivot_pipeline/prompts/extractor_vnext_addendum.md`](NagV/pivot_pipeline/prompts/extractor_vnext_addendum.md) | Extractor hints for vNext |
 | [`dev_plans/VNEXT_OPERATOR_REMINDERS.md`](dev_plans/VNEXT_OPERATOR_REMINDERS.md) | Operator checklist after integration |
-| [`dev_plans/dev_plan_temporal_surrogates_v1.md`](dev_plans/dev_plan_temporal_surrogates_v1.md) | Temporal surrogates implementation plan |
-| [`NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md`](NagV/pivot_pipeline/prompts/temporal_surrogates_addendum.md) | Injected T1–T8 cookbook |
+| [`improved-scope-time.md`](improved-scope-time.md) | **Temporal-version** branch: same sixteen templates + T1–T8 process-order authoring |
 
 ---
 
-*This file is the **scope-oriented** catalog for template-aware NL authoring. Implementation details and JSON schemas live in the pivot_pipeline package; lowering is implemented in `vnext_lowering.py`.*
+*This file is the **scope-oriented** catalog for **`16-template-version`** NL authoring (logical expressivity + sixteen templates). Lowering: `vnext_lowering.py`. Temporal process-order patterns: `improved-scope-time.md`.*

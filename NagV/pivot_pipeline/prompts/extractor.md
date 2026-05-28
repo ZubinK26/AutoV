@@ -72,6 +72,11 @@ Every node is an object with a **`kind`** field:
 
 Use `snake_case` variable names (e.g. `days_since_purchase`, `refund_amount`).
 
+## Forbidden keys (template-specific)
+
+- Emit **`action`** and **`target_rule_id`** **only** when `template_class` is exactly **`PREEMPTION`**.
+- Escalation, “must not advance”, “until”, rejection, or queue routing in English → **`LOGICAL_IMPLICATION`** (or vNext / temporal surrogate), **not** `PREEMPTION`, unless the line explicitly bypasses another rule by **`rule_id`** (`R0001`, …).
+
 ## Common mistakes (check before you answer)
 
 - **Output shape:** one JSON object only — no markdown fences, no trailing comma, no comments.

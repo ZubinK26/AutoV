@@ -5,6 +5,7 @@ import json
 import pytest
 
 from pivot_pipeline.repairer_piv_agent import (
+    _compile_error_prompt_suffix,
     repairer_json_parse_retry_count,
     run_repairer_piv_semantic,
     run_repairer_piv_structural,
@@ -147,3 +148,12 @@ def test_semantic_repair_includes_compile_validation_error_in_prompt(
     assert "compile_validation_error" in prompts[0]
     assert "Compile validation error" in prompts[0]
     assert "Extra inputs are not permitted" in prompts[0]
+
+
+def test_compile_error_suffix_includes_k_of_n_hint_when_relevant() -> None:
+    suffix = _compile_error_prompt_suffix(
+        "Input tag 'k_of_n' found using 'kind' does not match any of the expected tags"
+    )
+    assert "Likely fix" in suffix
+    assert "atom" in suffix
+    assert "k_of_n" in suffix.lower()

@@ -20,7 +20,16 @@ def extract_first_json_value(text: str) -> Union[dict, list]:
         except json.JSONDecodeError:
             pass
 
-    # First { ... } or [ ... ]
+    # Prefer outermost delimiter at payload start (avoid matching inner `{` inside `[{...}]`)
+    lead = t.lstrip()
+    if lead.startswith("["):
+        blk = _balanced_json(t, "[", "]")
+        if blk is not None:
+            return json.loads(blk)
+    if lead.startswith("{"):
+        blk = _balanced_json(t, "{", "}")
+        if blk is not None:
+            return json.loads(blk)
     blk = _balanced_json(t, "{", "}")
     if blk is not None:
         return json.loads(blk)

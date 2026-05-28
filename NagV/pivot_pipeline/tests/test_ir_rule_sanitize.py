@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from pivot_pipeline.ir import load_rules_and_compile, sanitize_rules_jsonable
+from pivot_pipeline.ir import (
+    load_rules_and_compile,
+    sanitize_rule_dict,
+    sanitize_rules_jsonable,
+)
 
 
 def test_sanitize_strips_description_and_nested_junk() -> None:
@@ -30,6 +34,23 @@ def test_sanitize_strips_description_and_nested_junk() -> None:
     r0 = meta.rules[0]
     assert r0.template_class == "LOGICAL_IMPLICATION"
     assert getattr(r0, "trigger_condition", None) is not None
+
+
+def test_sanitize_rule_dict_strips_action_on_non_preemption() -> None:
+    atom = {"kind": "atom", "variable": "x", "operator": "EQ", "value": True}
+    raw = {
+        "rule_id": "R1",
+        "template_class": "LOGICAL_IMPLICATION",
+        "applies_to": "GLOBAL",
+        "action": "BYPASS_RULE",
+        "target_rule_id": "R0009",
+        "trigger_condition": atom,
+        "required_condition": atom,
+    }
+    clean = sanitize_rule_dict(raw)
+    assert "action" not in clean
+    assert "target_rule_id" not in clean
+    assert clean["template_class"] == "LOGICAL_IMPLICATION"
 
 
 def test_sanitize_rules_jsonable_returns_only_schema_keys() -> None:

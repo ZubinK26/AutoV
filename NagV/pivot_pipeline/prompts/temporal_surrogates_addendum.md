@@ -4,7 +4,7 @@ Pivot checks **one world** (variable assignment). “Before”, “then”, and 
 
 Use **only** existing `template_class` values (core eight + vNext where noted). When NL clearly matches a row below, **encode it** — do **not** respond `ABORT` or dilute order into vague prose.
 
-Full NL examples: `temporal_surrogates_examples.md`. Author catalog: repo-root `improved-scope.md` Part G.
+Full NL examples: `temporal_surrogates_examples.md`. Author catalog: repo-root `improved-scope-time.md` (Part G).
 
 ## Pattern quick map (T1–T8)
 

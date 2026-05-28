@@ -99,6 +99,7 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help=(
             "Per-rule processed NL vs linearized IR alignment (tester_report.json); "
+            "JSON repair retries via PIVOT_TESTER_JSON_REPAIR_MAX; "
             "runs after precheck, before --with-critic when both are set."
         ),
     )
@@ -122,6 +123,20 @@ def main(argv: list[str] | None = None) -> int:
             "TTY prompts when Pivot Tester reports issues: per-finding approve/ignore triage, "
             "then REPAIR (Test-Repairer) or PROCEED_INCOMPLETE."
         ),
+    )
+    p.add_argument(
+        "--resume-tester-repair",
+        action="store_true",
+        help=(
+            "Skip Pivot Tester LLM; load tester_report.json + tester_repair_handoff.json "
+            "(non-empty approved_finding_ids) and continue at REPAIR gate. Requires "
+            "--with-test-repair and --interactive-tester or --interactive-policy."
+        ),
+    )
+    p.add_argument(
+        "--retriage-tester",
+        action="store_true",
+        help="With --resume-tester-repair, re-run per-finding triage instead of reusing approvals.",
     )
     p.add_argument(
         "--repairer-max-rounds",
@@ -152,7 +167,8 @@ def main(argv: list[str] | None = None) -> int:
         "--interactive-cross-coherence",
         action="store_true",
         help=(
-            "TTY prompts when CrossCritic reports ISSUES (REPAIR with --with-cross-repair, or PROCEED_INCOMPLETE)."
+            "TTY prompts when CrossCritic reports ISSUES: triage findings (accept all or "
+            "disagree by number), then REPAIR with --with-cross-repair, or PROCEED_INCOMPLETE."
         ),
     )
     p.add_argument(
@@ -256,6 +272,8 @@ def main(argv: list[str] | None = None) -> int:
         fail_on_tester_findings=args.fail_on_tester_findings,
         with_test_repair=args.with_test_repair,
         interactive_tester=args.interactive_tester,
+        resume_tester_repair=args.resume_tester_repair,
+        retriage_tester=args.retriage_tester,
         repairer_max_rounds=args.repairer_max_rounds,
         with_cross_critic=args.with_cross_critic,
         with_cross_repair=args.with_cross_repair,

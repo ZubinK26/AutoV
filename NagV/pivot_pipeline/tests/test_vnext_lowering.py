@@ -79,6 +79,28 @@ def test_k_of_n_handoff_filter_count() -> None:
     assert out[0]["template_class"] == "LOGICAL_IMPLICATION"
 
 
+def test_k_of_n_lowering_result_variable_binds_aggregate() -> None:
+    m = KOfN.model_validate(
+        {
+            "rule_id": "R1",
+            "template_class": "K_OF_N",
+            "k": 2,
+            "result_variable": "meets_competency",
+            "clauses": [
+                {"kind": "atom", "variable": "a", "operator": "EQ", "value": True},
+                {"kind": "atom", "variable": "b", "operator": "EQ", "value": True},
+            ],
+        }
+    )
+    out = lower_k_of_n(m)
+    assert len(out) == 1
+    req = out[0]["required_condition"]
+    assert req["kind"] == "atom"
+    assert req["variable"] == "meets_competency"
+    assert req["operator"] == "EQ"
+    assert req["value"] is True
+
+
 def test_expand_rules_to_core_preserves_core_templates() -> None:
     core = [
         {

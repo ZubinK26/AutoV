@@ -97,6 +97,8 @@ def run_pivot_wfm_until_complete(
         analyze_chunk_handoff_coverage,
         patch_handoff_inject_missing_rules,
     )
+    from pivot_wfm.chunk_wfm_context import PivotChunkWfmContext
+    from pivot_wfm.policy_drops import drop_rules_at_global_indices, write_effective_source_nl
     from pivot_wfm.wfm_chunk_scope_rewrite import (
         parse_operator_notes_by_local_index,
         parse_rule_numbers_to_local_indices,
@@ -126,8 +128,16 @@ def run_pivot_wfm_until_complete(
         if _handoffs.is_dir():
             shutil.rmtree(_handoffs, ignore_errors=True)
 
-    nl_hash = _sha256_file(nl_file)
-    body = nl_file.read_text(encoding="utf-8")
+    rules_path = nl_file
+    eff_path = work_dir / "pivot_wfm_effective_source.nl"
+    drop_log = work_dir / "pivot_wfm_dropped_rules.jsonl"
+    if not reset_progress and eff_path.is_file() and eff_path.stat().st_size > 0 and drop_log.is_file():
+        rules_path = eff_path
+        print_fn(
+            f"[pivot WFM] Resuming with effective policy ({eff_path.name}) after prior drop(s).\n"
+        )
+    nl_hash = _sha256_file(rules_path)
+    body = rules_path.read_text(encoding="utf-8")
     all_rules = parse_nl_rules(body)
     total = len(all_rules)
 
@@ -139,7 +149,7 @@ def run_pivot_wfm_until_complete(
     try:
         prog = load_or_init_progress(
             progress_path,
-            nl_path=nl_file,
+            nl_path=rules_path,
             nl_hash=nl_hash,
             rules_per_chunk=rules_per_chunk,
             work_dir=work_dir,
@@ -164,21 +174,23 @@ def run_pivot_wfm_until_complete(
         chunk_seq: int,
         bundle_id: str,
         handoff_path: Path,
+        omitted_global_indices: list[int] | None = None,
     ) -> None:
         try:
             hrel = str(handoff_path.resolve().relative_to(repo_root.resolve()))
         except ValueError:
             hrel = str(handoff_path.resolve())
-        prog.chunk_records.append(
-            {
-                "chunk_seq": chunk_seq,
-                "rule_index_start": start,
-                "rule_index_end": end,
-                "bundle_id": bundle_id,
-                "handoff_relposix": hrel,
-                "pivot_wfm_only": True,
-            }
-        )
+        rec: dict[str, Any] = {
+            "chunk_seq": chunk_seq,
+            "rule_index_start": start,
+            "rule_index_end": end,
+            "bundle_id": bundle_id,
+            "handoff_relposix": hrel,
+            "pivot_wfm_only": True,
+        }
+        if omitted_global_indices:
+            rec["omitted_global_indices"] = sorted(set(omitted_global_indices))
+        prog.chunk_records.append(rec)
         prog.next_rule_index = end
         prog.pending_smt = None
         save_progress(progress_path, prog)
@@ -191,10 +203,19 @@ def run_pivot_wfm_until_complete(
             f"duplicates={list(cov.duplicate_indices)}, extras={list(cov.extra_indices)}"
         )
 
+    chunk_ctx = PivotChunkWfmContext(
+        all_rules=all_rules,
+        work_dir=work_dir,
+        chunk_start=0,
+        rules_per_chunk=rules_per_chunk,
+        progress_path=progress_path,
+    )
+
     while prog.next_rule_index < len(all_rules):
         start = prog.next_rule_index
         end = min(start + rules_per_chunk, len(all_rules))
         chunk_seq = len(prog.chunk_records)
+        chunk_ctx.begin_chunk(start, end)
         chunk_rules = all_rules[start:end]
         chunk_text = _format_pivot_chunk_text(chunk_rules, start=start, file_label=nl_file.name)
 
@@ -202,6 +223,7 @@ def run_pivot_wfm_until_complete(
         committed = False
 
         while not committed:
+            end = chunk_ctx.active_chunk_end_exclusive
             wfm_runs += 1
             bundle_id = new_bundle_id(prefix="pivotwfm")
             handoff_path = handoff_write_path(repo_root, bundle_id, handoff_dir=wfm_dir)
@@ -220,6 +242,7 @@ def run_pivot_wfm_until_complete(
                 print_fn(f"error: {e}", file=sys.stderr)
                 return 2
 
+            chunk_ctx.retry_chunk = False
             dev = run_wfm_registry_e2e(
                 initial_user_text=chunk_text,
                 client=ctx.client,
@@ -241,9 +264,38 @@ def run_pivot_wfm_until_complete(
                 example_id=f"pivot_{nl_file.stem}",
                 wfm_profile="pivot",
                 global_rule_index_start=start,
+                pivot_chunk_ctx=chunk_ctx,
                 print_fn=print_fn,
                 input_fn=input_fn,
             )
+
+            if chunk_ctx.retry_chunk:
+                dropped_any = dropped_any or chunk_ctx.dropped_any
+                end = chunk_ctx.active_chunk_end_exclusive
+                wfm_runs = 0
+                if start >= len(all_rules):
+                    prog.next_rule_index = len(all_rules)
+                    save_progress(progress_path, prog)
+                    committed = True
+                    print_fn("[pivot WFM] Policy empty after omit; Phase 0 complete.\n")
+                    break
+                chunk_rules = all_rules[start:end]
+                if not chunk_rules:
+                    prog.next_rule_index = len(all_rules)
+                    save_progress(progress_path, prog)
+                    committed = True
+                    print_fn("[pivot WFM] No rules in chunk after omit; advancing.\n")
+                    break
+                chunk_text = _format_pivot_chunk_text(
+                    chunk_rules, start=start, file_label=nl_file.name
+                )
+                if handoff_path.is_file():
+                    _unlink_if_exists(handoff_path)
+                print_fn(
+                    f"[pivot WFM] Retry chunk after omit ({len(chunk_rules)} rule(s), "
+                    f"global {start + 1}–{end}).\n"
+                )
+                continue
 
             if dev is None:
                 print_fn("WFM failed (no handoff).", file=sys.stderr)
@@ -270,6 +322,7 @@ def run_pivot_wfm_until_complete(
                     chunk_seq=chunk_seq,
                     bundle_id=bundle_id,
                     handoff_path=handoff_path,
+                    omitted_global_indices=chunk_ctx.omitted_global_indices or None,
                 )
                 chunks_this_invocation += 1
                 committed = True
@@ -459,6 +512,7 @@ def run_pivot_wfm_until_complete(
                     chunk_seq=chunk_seq,
                     bundle_id=bundle_id,
                     handoff_path=handoff_path,
+                    omitted_global_indices=chunk_ctx.omitted_global_indices or None,
                 )
                 chunks_this_invocation += 1
                 committed = True
@@ -470,28 +524,33 @@ def run_pivot_wfm_until_complete(
                 if not drop_ix:
                     print_fn("error: no missing indices to drop.", file=sys.stderr)
                     return 1
-                drop_path = work_dir / "pivot_wfm_dropped_rules.jsonl"
                 for di in drop_ix:
                     if not (start <= di < end):
                         print_fn(f"error: missing index {di} not in current chunk span.", file=sys.stderr)
                         return 1
-                    dropped_line = all_rules.pop(di)
-                    dropped_any = True
-                    rec = {
-                        "rule_index_dropped": di,
-                        "line": dropped_line,
-                        "reason": "operator_drop_wfm_coverage",
-                        "chunk_bundle_id": bundle_id,
-                    }
-                    with drop_path.open("a", encoding="utf-8") as lf:
-                        lf.write(json.dumps(rec, ensure_ascii=False) + "\n")
+                try:
+                    drop_rules_at_global_indices(
+                        all_rules,
+                        list(cov.missing_indices),
+                        work_dir=work_dir,
+                        reason="operator_drop_wfm_coverage",
+                        bundle_id=bundle_id,
+                        chunk_rule_index_start=start,
+                        chunk_rule_index_end=end,
+                    )
+                except ValueError as ex:
+                    print_fn(f"error: {ex}", file=sys.stderr)
+                    return 1
+                dropped_any = True
+                chunk_ctx.active_chunk_end_exclusive = end - len(drop_ix)
+                chunk_ctx._sync_progress_hash()
                 if start >= len(all_rules):
                     prog.next_rule_index = len(all_rules)
                     save_progress(progress_path, prog)
                     committed = True
                     print_fn("[pivot WFM] Dropped the remainder of the policy; Phase 0 complete.\n")
                     break
-                end = min(start + rules_per_chunk, len(all_rules))
+                end = chunk_ctx.active_chunk_end_exclusive
                 chunk_rules = all_rules[start:end]
                 if not chunk_rules:
                     prog.next_rule_index = len(all_rules)
@@ -508,11 +567,8 @@ def run_pivot_wfm_until_complete(
                 f"pivot WFM chunk coverage repair exhausted or aborted (rules {start + 1}–{end})"
             )
 
-    if dropped_any:
-        (work_dir / "pivot_wfm_effective_source.nl").write_text(
-            "\n\n".join(all_rules) + "\n",
-            encoding="utf-8",
-        )
+    if dropped_any or chunk_ctx.dropped_any:
+        write_effective_source_nl(work_dir, all_rules)
     elif chunks_this_invocation > 0:
         _unlink_if_exists(work_dir / "pivot_wfm_effective_source.nl")
 

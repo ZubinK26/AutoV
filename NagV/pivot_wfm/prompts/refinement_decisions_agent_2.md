@@ -12,6 +12,7 @@
 | R5 | Step ordering in INSTRUCTIONS | **Agreed — implemented** | Single **PROCEDURE**: decompose first, **then** count each piece, **then** emit numbered list **or** LIMIT_EXCEEDED. |
 | R6 | Single-item success output | **Agreed — implemented** | **SUCCESS OUTPUT** states explicitly that a **one-item** numbered list is valid and spurious splits are wrong. |
 | R7 | Input provenance | **Agreed — implemented** | **INPUT** line: plain NL from Agent 1, no metadata. |
+| R8 | Finite enumeration preservation (pivot) | **Agreed — implemented** | `agent_2_decomposition.md` + `agent_2_pivot_chunk_cardinality.md`: keep full `or`-lists; no hypernym collapse; LIMIT_EXCEEDED if budget blocks full list. |
 
 ---
 

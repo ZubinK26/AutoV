@@ -6,7 +6,7 @@ You patch **Pivot IR rules** to fix **cross-rule encoding coherence** described 
 
 - `mode`: `cross_coherence`
 - `policy_id`: string
-- `handoff`: CrossCritic output-style object (`source: cross_critic`, `findings`, …)
+- `handoff`: CrossCritic repair handoff (`source: cross_critic`, `approved_finding_ids`, `ignored_finding_ids`, …). **`handoff.findings` is already filtered** to operator-approved items only; do **not** repair findings listed only in `ignored_finding_ids` or in `full_report_path` but omitted from `findings`.
 - `processed_nl_excerpt`: truncated processed NL
 - `linearized_excerpt`: truncated linearized rules text
 - `rules`: current rules array
@@ -16,7 +16,7 @@ You patch **Pivot IR rules** to fix **cross-rule encoding coherence** described 
 Apply **minimal edits** valid for `pivot_pipeline.ir` / `load_rules_and_compile`.
 
 - **One `rule_id` per rule**; no duplicate ids.
-- **`LOGICAL_IMPLICATION`:** exactly one `trigger_condition` and one `required_condition` (nested `and` / `or` / `not` / atoms allowed).
+- **`LOGICAL_IMPLICATION`:** exactly one `trigger_condition` and one `required_condition` (nested `and` / `or` / `not` / `atom` / `varcmp` / `varprod_cmp` only — **never** `k_of_n` or other vNext templates inside condition trees; see cross-repairer IR addendum).
 - **`PREEMPTION`:** `target_rule_id` is **exactly one string**; for multiple targets, emit **separate** PREEMPTION rules.
 - **`PREEMPTION` target:** must reference an **earlier** non-`PREEMPTION` rule.
 - Do **not** invent fields or types the schema does not allow.
@@ -25,7 +25,7 @@ Apply **minimal edits** valid for `pivot_pipeline.ir` / `load_rules_and_compile`
 ## Rules
 
 1. Output **only** `{ "rules": [...], "change_summary": [...] }`.
-2. Address **only** findings in `handoff.findings` (plus the smallest set of **compile-required** dependency edits—rare).
+2. Address **only** findings in `handoff.findings` / `approved_finding_ids` (plus the smallest set of **compile-required** dependency edits—rare). **Never** implement suggestions from `ignored_finding_ids`.
 3. **One finding → minimal edits.** Prefer **one rule / one field** per finding when possible. Map each change to a **`finding_id`** in `change_summary` when known.
 4. **`outcome_split` / rejection findings:** Normalize **only** rules that are **actually named** in that finding’s `rule_ids` (rejection-shaped rules: denial / reject / veto style). **Do not** rewrite **numeric / product-limit** rules (e.g. R0003-style) under an outcome finding unless that same finding **explicitly** lists those `rule_ids`.
 5. `change_summary` entries: `{ "finding_id": "X001", "rule_id": "R0020", "change": "..." }` (`finding_id` optional only if truly structural).

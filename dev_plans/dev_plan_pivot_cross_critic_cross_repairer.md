@@ -97,6 +97,8 @@ python -m pivot_pipeline --input pivot_pipeline/golden_test_run/input/Test_input
 
 **Implemented** — `linearize_rules.py`, `cross_critic_agent.py`, `cross_repairer_agent.py`, `semantic_critic_loop.py`, `cross_coherence.py` entry, CLI flags on `pivot_pipeline`, orchestration in `run.py`, tests under `pivot_pipeline/tests/`.
 
+**Selective repair (v1.1):** per-finding triage before CrossRepairer — see `dev_plan_cross_critic_finding_triage_v1.md` (`cross_critic_interactive_loop.py`, `cross_repair_handoff.json`).
+
 ---
 
 ## Proposed workflow (post-dev, simple language)

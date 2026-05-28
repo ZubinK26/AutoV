@@ -8,6 +8,7 @@ from typing import Any, Mapping
 
 from pivot_pipeline.ir_vnext import VNEXT_TEMPLATE_CLASSES
 from pivot_pipeline.linearize_rules import format_condition, linearize_rule_line
+from pivot_pipeline.repair_ir_validation import k_of_n_binding_note
 
 
 def rules_contain_vnext(rules: list[dict[str, Any]]) -> bool:
@@ -42,6 +43,9 @@ def _linearize_vnext(rule: Mapping[str, Any]) -> list[str]:
         clauses = rule.get("clauses") or []
         k = rule.get("k")
         lines[0] = f"[{rid}] K_OF_N at_least k={k} of n={len(clauses)}"
+        binding = k_of_n_binding_note(rule)
+        if binding:
+            lines.append(f"  {binding}")
         lines.append("  clauses:")
         for idx, c in enumerate(clauses):
             lines.append(f"    clause {idx + 1}: {format_condition(c)}")

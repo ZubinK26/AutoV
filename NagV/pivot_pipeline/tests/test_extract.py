@@ -37,6 +37,24 @@ def test_validate_rule_dict_rejects_unknown_class() -> None:
         validate_rule_dict({"template_class": "UNKNOWN", "rule_id": "R1"}, line_index=3)
 
 
+def test_validate_rule_dict_strips_spurious_action_on_implication() -> None:
+    atom = {"kind": "atom", "variable": "flag", "operator": "EQ", "value": True}
+    raw = {
+        "template_class": "LOGICAL_IMPLICATION",
+        "rule_id": "R0017",
+        "applies_to": "GLOBAL",
+        "overrides": None,
+        "action": "BYPASS_RULE",
+        "target_rule_id": "R0001",
+        "trigger_condition": atom,
+        "required_condition": atom,
+    }
+    out = validate_rule_dict(raw, line_index=17)
+    assert out["template_class"] == "LOGICAL_IMPLICATION"
+    assert "action" not in out
+    assert "target_rule_id" not in out
+
+
 def test_schema_repair_second_llm_call_fixes_json(monkeypatch: pytest.MonkeyPatch) -> None:
     tmpl = "Return JSON only.\n<<<LINE>>>"
     calls: list[str] = []

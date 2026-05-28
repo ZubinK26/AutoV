@@ -42,9 +42,14 @@ from wfm_orchestration.run_metadata import (
     orchestration_run_id_accept,
     wfm_pipeline_timestamps_at_accept,
 )
+from wfm_orchestration.prompt_parse import prompt_int_list
 from wfm_orchestration.style_a_merge import style_a_merged_nl
 
 OUTER_PASSES_MAX = 4
+
+_ACCEPT_PROMPT = (
+    "Accept entire confirmation package for registry handoff? [Y/n/o]: "
+)
 
 
 def _write_e2e_auto_artifacts(
@@ -72,19 +77,6 @@ def _write_e2e_auto_artifacts(
     print_fn(f"  Readable viewer (start here): {viewer_dir / 'index.md'}")
 
 
-def _parse_int_list(s: str) -> list[int]:
-    s = s.strip()
-    if not s:
-        return []
-    out: list[int] = []
-    for part in s.split(","):
-        part = part.strip()
-        if not part:
-            continue
-        out.append(int(part))
-    return out
-
-
 def run_wfm_registry_e2e(
     *,
     initial_user_text: str,
@@ -109,6 +101,7 @@ def run_wfm_registry_e2e(
     auto_accept: bool = False,
     wfm_profile: str | None = None,
     global_rule_index_start: int = 0,
+    pivot_chunk_ctx: Any = None,
     **_: Any,
 ) -> DevSessionSnapshot | None:
     """
@@ -128,6 +121,11 @@ def run_wfm_registry_e2e(
     When ``skip_registry`` is true, the handoff bundle is written (if ``handoff_json`` is set) and
     the function returns a :class:`DevSessionSnapshot` with only ``bundle`` populated — Phase 1
     registry materialization is skipped (Pivot / NL-chunk pipelines use this).
+
+    When ``pivot_chunk_ctx`` is a :class:`pivot_wfm.chunk_wfm_context.PivotChunkWfmContext`,
+    **o** / **omit** at accept drops chunk-local lines from the in-run policy and sets
+    ``retry_chunk`` (returns ``None`` without writing a handoff). **n** + **confirm omit** applies
+    drops before Agent 4 merge.
     """
     repo_root_eff = repo_root if repo_root is not None else _REPO
     read_input: Callable[[str], str] = input_fn
@@ -135,7 +133,7 @@ def run_wfm_registry_e2e(
         base_read = input_fn
 
         def read_input(prompt: str) -> str:
-            if "Accept entire confirmation package" in prompt:
+            if _ACCEPT_PROMPT in prompt or "Accept entire confirmation package" in prompt:
                 return ""
             return base_read(prompt)
 
@@ -202,8 +200,57 @@ def run_wfm_registry_e2e(
             stderr=stderr,
         )
 
-        ans = read_input("Accept entire confirmation package for registry handoff? [Y/n]: ").strip().lower()
+        if pivot_chunk_ctx is not None and wfm_profile == "pivot":
+            print_fn(
+                "[Pivot WFM accept] Y = accept Agent 3 package as-is | "
+                "n = disagree (Agent 4 merge) | o = omit lines from policy and retry chunk "
+                "(advisory OOS suggestions are not applied on Y).\n"
+            )
+
+        ans = read_input(_ACCEPT_PROMPT).strip().lower()
+        if ans in ("o", "omit"):
+            if pivot_chunk_ctx is None:
+                stderr.write("error: omit is only available for pivot Phase 0 WFM.\n")
+                return None
+            try:
+                omit_local = prompt_int_list(
+                    input_fn=read_input,
+                    stderr=stderr,
+                    prompt=(
+                        "1-based chunk line indices to omit from the policy "
+                        "(comma-separated): "
+                    ),
+                    allow_empty=False,
+                )
+                pivot_chunk_ctx.drop_local_1based(
+                    omit_local,
+                    reason="operator_omit_wfm_confirm",
+                    bundle_id=bid,
+                )
+            except ValueError as e:
+                stderr.write(f"error: omit failed: {e}\n")
+                return None
+            pivot_chunk_ctx.retry_chunk = True
+            print_fn(
+                "[Orchestration] Omitted line(s); pivot will retry WFM on shortened chunk "
+                "(no handoff written for this attempt).\n"
+            )
+            return None
+
         if ans in ("", "y", "yes"):
+            if pivot_chunk_ctx is not None and wfm_profile == "pivot":
+                from wfm_orchestration.snapshot_from_agents import verdicts_for_indices
+
+                oos = sorted(
+                    i
+                    for i, v in verdicts_for_indices(a3_text).items()
+                    if v == "OUT_OF_SCOPE"
+                )
+                if oos:
+                    stderr.write(
+                        f"[Pivot WFM] Warning: chunk line(s) {oos} are OUT_OF_SCOPE — "
+                        "accepting (Y) will fail chunk coverage. Use **o** to omit or **n** to disagree.\n"
+                    )
             ts_dict = wfm_pipeline_timestamps_at_accept()
             snap = wfm_acceptance_snapshot_from_agent_outputs(
                 bundle_id=bid,
@@ -256,9 +303,20 @@ def run_wfm_registry_e2e(
         if raw_d.lower() == "abort":
             print_fn("Aborted.")
             return None
-        disagree = _parse_int_list(raw_d)
+        try:
+            disagree = prompt_int_list(
+                input_fn=read_input,
+                stderr=stderr,
+                prompt="",
+                allow_empty=True,
+                initial=raw_d,
+            )
+        except ValueError:
+            disagree = []
         if not disagree:
-            stderr.write("No disagreed lines — type 'abort' or provide at least one index.\n")
+            stderr.write(
+                "No disagreed lines — type 'abort', provide line numbers (e.g. 2), or use **o** at accept to omit only.\n"
+            )
             return None
 
         comments: list[str] = []
@@ -269,10 +327,29 @@ def run_wfm_registry_e2e(
                 return None
             comments.append(c)
 
-        raw_o = read_input(
-            "1-based OUT_OF_SCOPE line indices to **confirm omit** (comma-separated), or empty: "
-        ).strip()
-        omit_confirmed = _parse_int_list(raw_o)
+        omit_confirmed = prompt_int_list(
+            input_fn=read_input,
+            stderr=stderr,
+            prompt=(
+                "1-based OUT_OF_SCOPE line indices to **confirm omit** "
+                "(comma-separated), or empty: "
+            ),
+            allow_empty=True,
+        )
+        if omit_confirmed and pivot_chunk_ctx is not None:
+            try:
+                pivot_chunk_ctx.drop_local_1based(
+                    omit_confirmed,
+                    reason="operator_omit_agent4_confirm",
+                    bundle_id=bid,
+                )
+                print_fn(
+                    f"[Orchestration] Dropped {len(omit_confirmed)} line(s) from in-run policy "
+                    "before Agent 4 merge.\n"
+                )
+            except ValueError as e:
+                stderr.write(f"error: omit failed: {e}\n")
+                return None
 
         row: dict[str, Any] = {
             "example_id": bid,

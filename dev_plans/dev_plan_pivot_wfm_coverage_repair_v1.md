@@ -1,5 +1,7 @@
 # Dev plan: Pivot WFM coverage repair loop (M-next)
 
+**Status:** Implemented. Omit-at-confirm wired in `dev_plan_pivot_wfm_interactive_omit_v1.md` (`policy_drops.py`, orchestrator `o`, `PivotChunkWfmContext`).
+
 ## Goal
 
 Phase 0 (`pivot_wfm/run_wfm_phase.py`) currently commits each WFM chunk after a single registry handoff. A **post-aggregate** count gate (`enforce_wfm_rule_coverage`) catches silent merges/drops, but only after all chunks finish. We add a **per-chunk coverage repair loop** so operators can detect gaps early, rewrite chunk scope for WFM, retry WFM with a fixed budget, and only then choose abort, drop missing rules from the in-memory ruleset, or explicitly proceed with **raw-NL injection** for missing indices.

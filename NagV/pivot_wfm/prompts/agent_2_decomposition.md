@@ -50,6 +50,20 @@ Input: "If a book is overdue and the borrower is a member, then the borrower is 
 Output:
 1. "If a book is overdue and the borrower is a member, then the borrower is suspended."
 
+FINITE ENUMERATIONS — DO NOT COLLAPSE (critical for pivot extract):
+
+When the input names an **explicit finite disjunction** (roles, tools, platforms, industries, regions, etc.), **keep every named alternative** in that output line. The downstream stack encodes these as **finite sets** (`SET_INCLUSION`, `K_OF_N`, `one of: …`).
+
+- **Forbidden:** Replacing a list with a **category hypernym** or umbrella phrase (e.g. turning "customer support, customer success operations, technical support, helpdesk operations, … or another customer-facing operations role" into "customer-facing operations roles" only).
+- **Forbidden:** Dropping trailing "or another X" / "or similar" qualifiers when the source includes them.
+- **Allowed:** Light grammar fixes (*the* → *a*), explicit *one of:* framing, or single-quote inner tokens per MACHINE DELIMITER — **without** removing alternatives.
+- **Operator budget:** A long `or`-chain may use many connective counts; if the **single** source line cannot fit in 8 operators **without** dropping named alternatives, output **`LIMIT_EXCEEDED`** — do **not** shorten the list to fit.
+
+Example (preserve list — pivot profile one-line-per-source still applies):
+Input: "The candidate must have at least 2 years of experience in customer support, customer success operations, technical support, helpdesk operations, support operations, account operations, or another customer-facing operations role."
+Output (one line, same chunk index):
+`k. "The candidate must have at least 2 years of experience in customer support, customer success operations, technical support, helpdesk operations, support operations, account operations, or another customer-facing operations role."`
+
 COUNTEREXAMPLES — DO NOT SPLIT THESE:
 
 - "If A and B then C" — the antecedent may use *and*, but the rule is **one** conditional. Do **not** split into "If A then C" and "If B then C" — that is invalid.

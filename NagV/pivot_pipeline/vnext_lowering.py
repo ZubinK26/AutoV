@@ -263,9 +263,22 @@ def lower_bounded_forall(rule: BoundedForall) -> list[dict[str, Any]]:
 
 
 def lower_k_of_n(rule: KOfN) -> list[dict[str, Any]]:
-    from pivot_pipeline.ir import LogicalImplication
+    from pivot_pipeline.ir import LogicalImplication, RelationalOperator
 
-    required = _at_least_k_of_n_conditions(rule.clauses, rule.k)
+    k_cond = _at_least_k_of_n_conditions(rule.clauses, rule.k)
+    if rule.result_variable:
+        rv = str(rule.result_variable).strip()
+        return [
+            _dump_rule(
+                LogicalImplication(
+                    rule_id=rule.rule_id,
+                    applies_to=rule.applies_to,
+                    overrides=rule.overrides,
+                    trigger_condition=k_cond,
+                    required_condition=_atom(rv, RelationalOperator.EQ, True),
+                )
+            )
+        ]
     trigger = _tautology_from_clauses(rule.clauses)
     return [
         _dump_rule(
@@ -274,7 +287,7 @@ def lower_k_of_n(rule: KOfN) -> list[dict[str, Any]]:
                 applies_to=rule.applies_to,
                 overrides=rule.overrides,
                 trigger_condition=trigger,
-                required_condition=required,
+                required_condition=k_cond,
             )
         )
     ]

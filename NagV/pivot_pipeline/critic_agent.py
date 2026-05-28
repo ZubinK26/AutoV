@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from pathlib import Path
 from typing import Any, Callable, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -196,10 +197,43 @@ def critic_handoff_dict(report: CriticReport, *, source_note: str) -> dict[str, 
     }
 
 
+def critic_repair_handoff_dict(
+    report: CriticReport,
+    *,
+    approved_ids: list[str],
+    ignored_ids: list[str],
+    full_report_path: Path,
+    source_note: str,
+    **extra: Any,
+) -> dict[str, Any]:
+    approved_set = set(approved_ids)
+    index_map = {
+        str(i): f.id
+        for i, f in enumerate(sorted(report.findings, key=lambda x: x.id), start=1)
+    }
+    h: dict[str, Any] = {
+        "handoff_schema_version": "1.1",
+        "source": "pivot_critic",
+        "source_note": source_note,
+        "verdict": report.verdict,
+        "compared_against": report.compared_against,
+        "approved_finding_ids": sorted(approved_ids),
+        "ignored_finding_ids": sorted(ignored_ids),
+        "triage_index_map": index_map,
+        "findings": [f.model_dump(mode="json") for f in report.findings if f.id in approved_set],
+        "full_report_path": str(full_report_path.resolve()),
+        "audit_trail_bullets": list(report.audit_trail_bullets),
+        "notes": report.notes,
+    }
+    h.update(extra)
+    return h
+
+
 __all__ = [
     "CriticFinding",
     "CriticReport",
     "critic_handoff_dict",
+    "critic_repair_handoff_dict",
     "critic_report_passed",
     "format_critic_report_terminal",
     "parse_critic_response",

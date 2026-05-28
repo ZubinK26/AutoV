@@ -7,17 +7,32 @@ from pathlib import Path
 from typing import Any, Callable
 
 from pivot_pipeline.exceptions import PivotPipelineUserAbort
+from pivot_pipeline.llm import pivot_llm_complete
 from pivot_pipeline.assessment_linearize import build_and_write_assessment_artifacts
 from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN, REPAIR_CRITIC_DRIFT_TOKEN
 from pivot_pipeline.post_model_workflow import (
     TesterReport,
     format_tester_report_terminal,
-    run_pivot_tester,
+    run_pivot_tester_with_repairs,
 )
-from pivot_pipeline.registry_pass import registry_pass_from_nl_and_rules
 from pivot_pipeline.repair_apply import apply_repaired_rules_and_refresh
+from pivot_pipeline.rules_document import envelope_from_summary_or_body
+from pivot_pipeline.tester_repair_resume import (
+    TesterRepairResumeError,
+    load_last_test_repair_compile_error,
+    triage_sets_from_handoff,
+    validate_tester_repair_resume,
+)
+from pivot_pipeline.test_repair_registry import (
+    is_repairer_api_error,
+    run_test_repair_registry,
+    test_repair_count_api_as_attempt,
+    test_repair_registry_attempts_max,
+)
 from pivot_pipeline.tester_repairer_agent import (
+    MergeRepairerOutputError,
     append_test_repairer_trace,
+    precompile_repaired_rules,
     run_test_repairer,
     test_repair_compile_attempts_max,
     test_repair_max_rounds,
@@ -92,6 +107,10 @@ def _write_tester_repair_handoff(
     approved: set[str],
     ignored: set[str],
     source_note: str,
+    last_compile_validation_error: str | None = None,
+    last_repair_error_stage: str | None = None,
+    last_registry_error: str | None = None,
+    repair_session_count: int | None = None,
 ) -> Path:
     handoff_path = work_dir / "tester_repair_handoff.json"
     tester_path = work_dir / "tester_report.json"
@@ -101,9 +120,50 @@ def _write_tester_repair_handoff(
         ignored_ids=sorted(ignored),
         full_report_path=tester_path,
         source_note=source_note,
+        last_compile_validation_error=last_compile_validation_error,
+        last_repair_error_stage=last_repair_error_stage,
+        last_registry_error=last_registry_error,
+        repair_session_count=repair_session_count,
     )
     handoff_path.write_text(json.dumps(h, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return handoff_path
+
+
+def _print_policy_gate(
+    *,
+    print_fn: Callable[..., None],
+    n_total: int,
+    n_approved: int,
+    short: bool,
+    compile_attempt_cap: int,
+    resume_from_handoff: bool = False,
+) -> None:
+    if resume_from_handoff:
+        print_fn(
+            f"[policy gate] Resuming Test-Repairer from saved handoff "
+            f"({n_approved} approved finding(s); no Pivot Tester LLM).\n"
+            f"  Type {REPAIR_TOKEN!r} to run Test-Repairer (up to {compile_attempt_cap} compile tries per REPAIR), "
+            f"{PROCEED_INCOMPLETE_TOKEN!r} to waive, or Enter to abort.\n"
+            f"  Type 'retriage' to re-run finding triage (a/i).\n"
+        )
+    elif short:
+        print_fn(
+            f"[policy gate] Compile budget exhausted ({compile_attempt_cap} attempts in last REPAIR); "
+            "policy artifacts unchanged.\n"
+            f"  Same approved findings still active ({n_approved} of {n_total}). "
+            f"No new Pivot Tester call until repair succeeds.\n"
+            f"  Type {REPAIR_TOKEN!r} to run Test-Repairer again, {PROCEED_INCOMPLETE_TOKEN!r} to waive, "
+            "or Enter to abort.\n"
+            f"  Type 'retriage' to re-run finding triage (a/i).\n"
+        )
+    else:
+        print_fn(
+            f"[policy gate] Tester reported issues ({n_total} total; {n_approved} approved for repair).\n"
+            f"  Type {REPAIR_TOKEN!r} to run Test-Repairer on approved findings only, then re-run Tester.\n"
+            f"  Type {PROCEED_INCOMPLETE_TOKEN!r} to continue without repair "
+            f"(writes tester_repair_handoff.json with approvals/ignores for audit).\n"
+            "  Press Enter to abort.\n"
+        )
 
 
 def run_tester_interactive_loop(
@@ -120,6 +180,8 @@ def run_tester_interactive_loop(
     interactive_any: bool,
     with_test_repair: bool,
     fail_on_tester_findings: bool,
+    resume_tester_repair: bool = False,
+    retriage_tester: bool = False,
     print_fn: Callable[..., None],
     input_fn: Callable[[str], str],
     summary: dict[str, Any],
@@ -149,71 +211,129 @@ def run_tester_interactive_loop(
     compile_attempt_cap = test_repair_compile_attempts_max()
     repair_sessions_used = 0
     summary["tester_repair_rounds"] = 0
+    skip_triage_once = False
+    sticky_approved: set[str] | None = None
+    sticky_ignored: set[str] | None = None
 
     if linearized is None:
         linearized = build_and_write_assessment_artifacts(
             work_dir=work_dir, rules=rules, summary=summary
         )
 
-    while True:
-        _raw_t, tester_rep = run_pivot_tester(
-            processed_nl=nl_text_for_artifacts,
-            linearized_model=linearized or "",
-        )
-        tester_path = work_dir / "tester_report.json"
-        tester_path.write_text(tester_rep.model_dump_json(indent=2) + "\n", encoding="utf-8")
-        (work_dir / "tester_result.txt").write_text(_raw_t, encoding="utf-8")
+    tester_rep: TesterReport | None = None
+    if resume_tester_repair:
+        try:
+            tester_rep, handoff = validate_tester_repair_resume(work_dir)
+        except TesterRepairResumeError as e:
+            summary["outcome"] = BLOCKED_TEST_REPAIR_COMPILE
+            summary["message"] = str(e)
+            (work_dir / "run_summary.json").write_text(
+                json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            return rules, meta, synth, z3_result, ok, issues, linearized, BLOCKED_TEST_REPAIR_COMPILE
+        sticky_approved, sticky_ignored = triage_sets_from_handoff(handoff)
+        skip_triage_once = not retriage_tester
+        resume_gate = not retriage_tester
+        summary["tester_resume_repair"] = True
         summary["tester_verdict"] = tester_rep.verdict
-        summary["tester_compared_against"] = tester_rep.compared_against
-        summary["tester_report"] = str(tester_path.resolve())
+        summary["tester_report"] = str((work_dir / "tester_report.json").resolve())
+        print_fn(
+            "\n[pivot pipeline] --resume-tester-repair: skipping Pivot Tester LLM; "
+            f"using saved report and {len(sticky_approved)} approved finding(s).\n"
+        )
         print_fn(format_tester_report_terminal(tester_rep))
-
-        if tester_report_passed(tester_rep):
-            summary["tester_passed"] = True
-            return rules, meta, synth, z3_result, ok, issues, linearized, None
-
         if not interactive_any:
             summary["tester_passed"] = False
-            if fail_on_tester_findings:
-                summary["outcome"] = "blocked_tester"
-                summary["message"] = "Tester reported issues (--fail-on-tester-findings)"
-                (work_dir / "run_summary.json").write_text(
-                    json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
-                    encoding="utf-8",
-                )
-                return rules, meta, synth, z3_result, ok, issues, linearized, "blocked_tester"
-            return rules, meta, synth, z3_result, ok, issues, linearized, None
+            summary["outcome"] = "blocked_tester"
+            summary["message"] = "resume-tester-repair requires --interactive-tester or --interactive-policy"
+            return rules, meta, synth, z3_result, ok, issues, linearized, "blocked_tester"
 
-        user_waived = False
-        while True:
-            approved, ignored = run_finding_triage(
-                tester_rep,
-                input_fn=input_fn,
-                print_fn=print_fn,
+    while True:
+        if tester_rep is None:
+            _raw_t, tester_rep, json_repair_attempts = run_pivot_tester_with_repairs(
+                processed_nl=nl_text_for_artifacts,
+                linearized_model=linearized or "",
+                work_dir=work_dir,
             )
-            print_fn(_format_triage_summary(tester_rep, approved, ignored))
+            summary["tester_json_repair_attempts"] = json_repair_attempts
+            tester_path = work_dir / "tester_report.json"
+            tester_path.write_text(tester_rep.model_dump_json(indent=2) + "\n", encoding="utf-8")
+            (work_dir / "tester_result.txt").write_text(_raw_t, encoding="utf-8")
+            summary["tester_verdict"] = tester_rep.verdict
+            summary["tester_compared_against"] = tester_rep.compared_against
+            summary["tester_report"] = str(tester_path.resolve())
+            print_fn(format_tester_report_terminal(tester_rep))
+
+            if tester_report_passed(tester_rep):
+                summary["tester_passed"] = True
+                return rules, meta, synth, z3_result, ok, issues, linearized, None
+
+            if not interactive_any:
+                summary["tester_passed"] = False
+                if fail_on_tester_findings:
+                    summary["outcome"] = "blocked_tester"
+                    summary["message"] = "Tester reported issues (--fail-on-tester-findings)"
+                    (work_dir / "run_summary.json").write_text(
+                        json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8",
+                    )
+                    return rules, meta, synth, z3_result, ok, issues, linearized, "blocked_tester"
+                return rules, meta, synth, z3_result, ok, issues, linearized, None
+
+        assert tester_rep is not None
+        user_waived = False
+        short_gate = False
+        resume_gate = False
+        while True:
+            if skip_triage_once and sticky_approved is not None:
+                approved = set(sticky_approved)
+                ignored = set(sticky_ignored or ())
+                skip_triage_once = False
+                short_gate = not resume_gate
+                print_fn(_format_triage_summary(tester_rep, approved, ignored))
+            else:
+                short_gate = False
+                approved, ignored = run_finding_triage(
+                    tester_rep,
+                    input_fn=input_fn,
+                    print_fn=print_fn,
+                )
+                print_fn(_format_triage_summary(tester_rep, approved, ignored))
+                sticky_approved = set(approved)
+                sticky_ignored = set(ignored)
 
             n_total = len(tester_rep.findings)
             n_approved = len(approved)
-            print_fn(
-                f"[policy gate] Tester reported issues ({n_total} total; {n_approved} approved for repair).\n"
-                f"  Type {REPAIR_TOKEN!r} to run Test-Repairer on approved findings only, then re-run Tester.\n"
-                f"  Type {PROCEED_INCOMPLETE_TOKEN!r} to continue without repair "
-                f"(writes tester_repair_handoff.json with approvals/ignores for audit).\n"
-                "  Press Enter to abort.\n"
+            _print_policy_gate(
+                print_fn=print_fn,
+                n_total=n_total,
+                n_approved=n_approved,
+                short=short_gate,
+                compile_attempt_cap=compile_attempt_cap,
+                resume_from_handoff=resume_gate,
             )
+            if resume_gate:
+                resume_gate = False
             ans = input_fn("[policy gate] Tester issues — REPAIR / PROCEED_INCOMPLETE / Enter abort: ").strip()
+            ans_norm = ans.strip().upper()
 
             if not ans:
                 raise PivotPipelineUserAbort("Tester gate: empty input (abort)")
 
-            if ans == PROCEED_INCOMPLETE_TOKEN:
+            if ans.lower() == "retriage":
+                skip_triage_once = False
+                sticky_approved = None
+                continue
+
+            if ans_norm == PROCEED_INCOMPLETE_TOKEN:
                 handoff_path = _write_tester_repair_handoff(
                     work_dir,
                     tester_rep,
                     approved=approved,
                     ignored=ignored,
                     source_note="user chose PROCEED_INCOMPLETE after tester issues",
+                    repair_session_count=repair_sessions_used,
                 )
                 summary["tester_repair_handoff"] = str(handoff_path.resolve())
                 summary["user_consented_tester_issues"] = True
@@ -221,7 +341,7 @@ def run_tester_interactive_loop(
                 user_waived = True
                 break
 
-            if ans == REPAIR_TOKEN:
+            if ans_norm == REPAIR_TOKEN:
                 if not with_test_repair:
                     print_fn(
                         "[policy gate] --with-test-repair not set; cannot run Test-Repairer.\n"
@@ -238,28 +358,61 @@ def run_tester_interactive_loop(
                         f"[policy gate] Max Test-Repairer rounds ({session_limit}); "
                         f"type {PROCEED_INCOMPLETE_TOKEN!r} or press Enter to abort.\n"
                     )
-                    continue
+                    summary["outcome"] = BLOCKED_TEST_REPAIR_COMPILE
+                    summary["message"] = (
+                        f"test repair: exhausted {session_limit} REPAIR session(s) without compiling patch"
+                    )
+                    summary["tester_passed"] = False
+                    (work_dir / "run_summary.json").write_text(
+                        json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8",
+                    )
+                    return (
+                        rules,
+                        meta,
+                        synth,
+                        z3_result,
+                        ok,
+                        issues,
+                        linearized,
+                        BLOCKED_TEST_REPAIR_COMPILE,
+                    )
                 if no_llm:
                     print_fn("[policy gate] --no-llm set; cannot run Test-Repairer.\n")
                     continue
 
                 repair_sessions_used += 1
                 summary["tester_repair_rounds"] = repair_sessions_used
+                use_saved_error = short_gate or resume_tester_repair
+                if resume_tester_repair:
+                    resume_tester_repair = False
+                initial_feedback = (
+                    load_last_test_repair_compile_error(work_dir) if use_saved_error else None
+                )
                 handoff_path = _write_tester_repair_handoff(
                     work_dir,
                     tester_rep,
                     approved=approved,
                     ignored=ignored,
                     source_note="Test-Repairer from approved tester findings",
+                    last_compile_validation_error=initial_feedback,
+                    repair_session_count=repair_sessions_used,
                 )
                 summary["tester_repair_handoff"] = str(handoff_path.resolve())
                 h = json.loads(handoff_path.read_text(encoding="utf-8"))
 
                 last_error: BaseException | None = None
                 repaired = False
-                compile_feedback: str | None = None
+                compile_feedback: str | None = initial_feedback
+                merge_feedback: str | None = None
+                last_stage: str | None = None
+                last_registry_error: str | None = None
+                registry_cap = test_repair_registry_attempts_max()
+                count_api = test_repair_count_api_as_attempt()
+                compile_attempt = 0
+                api_retries_no_burn = 0
 
-                for compile_attempt in range(compile_attempt_cap):
+                while compile_attempt < compile_attempt_cap:
                     if compile_attempt > 0:
                         print_fn(
                             f"[policy gate] Retrying Test-Repairer (compile attempt "
@@ -273,10 +426,48 @@ def run_tester_interactive_loop(
                             processed_nl_excerpt=nl_text_for_artifacts,
                             linearized_excerpt=linearized or "",
                             compile_validation_error=compile_feedback,
+                            merge_validation_error=merge_feedback,
                         )
+                    except MergeRepairerOutputError as me:
+                        print_fn(
+                            f"[policy gate] Test-Repairer returned incomplete rules "
+                            f"(attempt {compile_attempt + 1}/{compile_attempt_cap}): {me}\n"
+                        )
+                        last_error = me
+                        last_stage = "rules_merge"
+                        merge_feedback = str(me)
+                        compile_feedback = None
+                        append_test_repairer_trace(
+                            work_dir,
+                            {
+                                "repair_session": repair_sessions_used,
+                                "compile_attempt": compile_attempt + 1,
+                                "error_stage": "rules_merge",
+                                "error": str(me),
+                                "approved_finding_ids": sorted(approved),
+                            },
+                        )
+                        compile_attempt += 1
+                        continue
                     except Exception as re:
-                        print_fn(f"[policy gate] Test-Repairer failed: {re}\n")
+                        stage = "repairer_api" if is_repairer_api_error(re) else "repairer_json"
+                        print_fn(f"[policy gate] Test-Repairer failed ({stage}): {re}\n")
                         last_error = re
+                        last_stage = stage
+                        append_test_repairer_trace(
+                            work_dir,
+                            {
+                                "repair_session": repair_sessions_used,
+                                "compile_attempt": compile_attempt + 1,
+                                "error_stage": stage,
+                                "error": str(re),
+                                "approved_finding_ids": sorted(approved),
+                            },
+                        )
+                        if stage == "repairer_api" and not count_api:
+                            api_retries_no_burn += 1
+                            if api_retries_no_burn < 3:
+                                continue
                         break
 
                     append_test_repairer_trace(
@@ -291,18 +482,81 @@ def run_tester_interactive_loop(
                             "approved_finding_ids": sorted(approved),
                         },
                     )
-                    new_rules = out.rules
-                    if not skip_registry:
-                        try:
-                            _, new_rules = registry_pass_from_nl_and_rules(nl_lines_reg, new_rules)
-                        except Exception as re:
-                            print_fn(
-                                f"[policy gate] Registry after test repair failed (attempt "
-                                f"{compile_attempt + 1}/{compile_attempt_cap}): {re}\n"
-                            )
-                            last_error = re
-                            compile_feedback = str(re)
-                            continue
+                    merged_rules = out.rules
+                    rules_before = rules
+
+                    try:
+                        new_rules = precompile_repaired_rules(policy_id, merged_rules)
+                    except Exception as ce:
+                        print_fn(
+                            f"[policy gate] Test-repaired rules did not compile (attempt "
+                            f"{compile_attempt + 1}/{compile_attempt_cap}): {ce}\n"
+                        )
+                        last_error = ce
+                        last_stage = "rules_compile"
+                        compile_feedback = str(ce)
+                        merge_feedback = None
+                        append_test_repairer_trace(
+                            work_dir,
+                            {
+                                "repair_session": repair_sessions_used,
+                                "compile_attempt": compile_attempt + 1,
+                                "error_stage": "rules_compile",
+                                "compile_validation_error": str(ce),
+                                "approved_finding_ids": sorted(approved),
+                            },
+                        )
+                        compile_attempt += 1
+                        continue
+
+                    registry_ok = False
+                    if skip_registry:
+                        registry_ok = True
+                    else:
+                        for reg_attempt in range(registry_cap):
+                            try:
+                                _reg, new_rules, reused = run_test_repair_registry(
+                                    work_dir=work_dir,
+                                    nl_lines_reg=nl_lines_reg,
+                                    rules_before=rules_before,
+                                    merged_rules=new_rules,
+                                    cli_skip_registry=False,
+                                    llm=pivot_llm_complete,
+                                )
+                                if reused:
+                                    print_fn(
+                                        "[policy gate] Registry skipped (slug set unchanged); "
+                                        "reusing identifier_registry.json.\n"
+                                    )
+                                registry_ok = True
+                                break
+                            except Exception as re:
+                                reg_stage = (
+                                    "registry_api"
+                                    if is_repairer_api_error(re)
+                                    else "registry_json"
+                                )
+                                last_registry_error = str(re)
+                                last_stage = reg_stage
+                                last_error = re
+                                print_fn(
+                                    f"[policy gate] Registry pass failed ({reg_stage}) "
+                                    f"(registry attempt {reg_attempt + 1}/{registry_cap}): {re}\n"
+                                )
+                                append_test_repairer_trace(
+                                    work_dir,
+                                    {
+                                        "repair_session": repair_sessions_used,
+                                        "compile_attempt": compile_attempt + 1,
+                                        "registry_attempt": reg_attempt + 1,
+                                        "error_stage": reg_stage,
+                                        "error": str(re),
+                                        "approved_finding_ids": sorted(approved),
+                                    },
+                                )
+                        if not registry_ok:
+                            break
+
                     try:
                         rules, meta, synth, z3_result, ok, issues, linearized = (
                             apply_repaired_rules_and_refresh(
@@ -314,15 +568,18 @@ def run_tester_interactive_loop(
                                 summary=summary,
                                 after_rules_basename="rules_after_test_repair.json",
                                 refresh_linearized=True,
+                                rules_envelope=envelope_from_summary_or_body(summary),
                             )
                         )
                     except Exception as ce:
                         print_fn(
-                            f"[policy gate] Test-repaired rules did not compile (attempt "
-                            f"{compile_attempt + 1}/{compile_attempt_cap}): {ce}\n"
+                            f"[policy gate] Artifact refresh failed after test repair "
+                            f"(attempt {compile_attempt + 1}/{compile_attempt_cap}): {ce}\n"
                         )
                         last_error = ce
+                        last_stage = "rules_compile"
                         compile_feedback = str(ce)
+                        compile_attempt += 1
                         continue
 
                     refresh_varprod_trigger_check()
@@ -334,12 +591,29 @@ def run_tester_interactive_loop(
                     break
 
                 if repaired:
+                    tester_rep = None
+                    sticky_approved = None
+                    sticky_ignored = None
                     break
 
                 msg_tail = f" Last error: {last_error}" if last_error is not None else ""
-                print_fn(
-                    "[policy gate] Test repair did not yield compiling rules after "
-                    f"{compile_attempt_cap} attempt(s) in this session; policy artifacts unchanged.{msg_tail}\n"
+                compile_err = (
+                    compile_feedback
+                    if last_stage in (None, "rules_compile", "rules_merge")
+                    else None
+                )
+                if last_stage == "rules_compile" and not compile_err and last_error is not None:
+                    compile_err = str(last_error)
+                _write_tester_repair_handoff(
+                    work_dir,
+                    tester_rep,
+                    approved=approved,
+                    ignored=ignored,
+                    source_note="Test-Repairer compile budget exhausted; awaiting REPAIR",
+                    last_compile_validation_error=compile_err,
+                    last_repair_error_stage=last_stage,
+                    last_registry_error=last_registry_error,
+                    repair_session_count=repair_sessions_used,
                 )
                 if repair_sessions_used >= session_limit:
                     summary["outcome"] = BLOCKED_TEST_REPAIR_COMPILE
@@ -362,18 +636,22 @@ def run_tester_interactive_loop(
                         linearized,
                         BLOCKED_TEST_REPAIR_COMPILE,
                     )
+                skip_triage_once = True
+                sticky_approved = set(approved)
+                sticky_ignored = set(ignored)
                 continue
 
-            summary["outcome"] = "blocked_tester"
-            (work_dir / "run_summary.json").write_text(
-                json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
-                encoding="utf-8",
+            print_fn(
+                f"[policy gate] Unrecognized input {ans!r}; use {REPAIR_TOKEN!r}, "
+                f"{PROCEED_INCOMPLETE_TOKEN!r}, 'retriage', or Enter to abort.\n"
             )
-            return rules, meta, synth, z3_result, ok, issues, linearized, "blocked_tester"
+            continue
 
         if user_waived:
             return rules, meta, synth, z3_result, ok, issues, linearized, None
-        # Successful repair: outer loop re-runs tester.
+        if resume_tester_repair and tester_rep is not None:
+            resume_tester_repair = False
+        # Successful repair or resume path: outer loop re-runs tester (tester_rep cleared).
 
 
 __all__ = [

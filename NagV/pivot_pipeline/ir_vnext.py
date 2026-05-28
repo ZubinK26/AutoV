@@ -122,6 +122,13 @@ class KOfN(BaseRule):
     template_class: Literal["K_OF_N"] = "K_OF_N"
     k: int
     clauses: list[ConditionExpr] = Field(min_length=K_OF_N_MIN_CLAUSES)
+    result_variable: str | None = Field(
+        default=None,
+        description=(
+            "Optional aggregate boolean set true when at least k clauses hold; "
+            "lowered to LOGICAL_IMPLICATION (k-of-n trigger → result_variable EQ true)."
+        ),
+    )
 
     @model_validator(mode="after")
     def _k_of_n(self) -> KOfN:
@@ -130,6 +137,8 @@ class KOfN(BaseRule):
             raise ValueError(f"K_OF_N clauses exceeds cap {K_OF_N_MAX_CLAUSES}")
         if self.k < 1 or self.k > n:
             raise ValueError(f"K_OF_N: k={self.k} must satisfy 1 <= k <= n={n}")
+        if self.result_variable is not None and not str(self.result_variable).strip():
+            raise ValueError("K_OF_N: result_variable must be non-empty when set")
         return self
 
 

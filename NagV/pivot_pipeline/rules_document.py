@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Any
 
 from pivot_pipeline.constants import (
@@ -39,17 +41,11 @@ def parse_rules_document(body: dict[str, Any]) -> tuple[str, list[dict[str, Any]
 
     has_vnext = rules_contain_vnext_templates(rules)
     if has_vnext:
+        # Normalize stripped envelopes (e.g. after test-repair wrote rules-only JSON).
         if version == POLICY_SEMANTICS_VERSION_DEFAULT:
-            raise ValueError(
-                "rules contain vNext expansion templates but policy_semantics_version is "
-                f"{POLICY_SEMANTICS_VERSION_DEFAULT!r}; use {POLICY_SEMANTICS_VERSION_VNEXT!r} with "
-                f'pivot_ir_extensions: ["{PIVOT_IR_EXTENSIONS_MANIFEST}"]'
-            )
+            version = POLICY_SEMANTICS_VERSION_VNEXT
         if PIVOT_IR_EXTENSIONS_MANIFEST not in extensions:
-            raise ValueError(
-                f"rules contain vNext templates; pivot_ir_extensions must include "
-                f"{PIVOT_IR_EXTENSIONS_MANIFEST!r}"
-            )
+            extensions.append(PIVOT_IR_EXTENSIONS_MANIFEST)
 
     if version not in (POLICY_SEMANTICS_VERSION_DEFAULT, POLICY_SEMANTICS_VERSION_VNEXT):
         raise ValueError(
@@ -94,8 +90,46 @@ def build_rules_document(
     return out
 
 
+def write_rules_document_file(
+    path: Path,
+    policy_id: str,
+    rules: list[dict[str, Any]],
+    *,
+    rules_envelope: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Write ``rules_extracted.json`` (or sibling) with correct vNext envelope metadata."""
+    env = rules_envelope or {}
+    ext = env.get("pivot_ir_extensions")
+    doc = build_rules_document(
+        policy_id,
+        rules,
+        policy_semantics_version=env.get("policy_semantics_version"),
+        pivot_ir_extensions=list(ext) if isinstance(ext, list) else None,
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return doc
+
+
+def envelope_from_summary_or_body(
+    summary: dict[str, Any] | None,
+    body: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Collect envelope fields for writes after repair / refresh."""
+    out: dict[str, Any] = {}
+    for src in (summary, body):
+        if not isinstance(src, dict):
+            continue
+        for key in ("policy_semantics_version", "pivot_ir_extensions"):
+            if key in src and key not in out:
+                out[key] = src[key]
+    return out
+
+
 __all__ = [
     "build_rules_document",
+    "envelope_from_summary_or_body",
     "parse_rules_document",
     "rules_contain_vnext_templates",
+    "write_rules_document_file",
 ]

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
@@ -22,8 +23,17 @@ def test_assessment_linearize_k_of_n() -> None:
     text = build_assessment_linearized(body["rules"])
     assert "K_OF_N at_least k=" in text
     assert "clause 1:" in text
+    assert "no result_variable" in text
     assert "OR(" not in text
-    assert "LOGICAL_IMPLICATION" not in text
+    assert text.strip().startswith("LINEARIZED MODEL")
+
+
+def test_assessment_linearize_k_of_n_result_variable() -> None:
+    body = json.loads((FIX / "vnext_k_of_n_rules.json").read_text(encoding="utf-8"))
+    rules = copy.deepcopy(body["rules"])
+    rules[0]["result_variable"] = "meets_competency"
+    text = build_assessment_linearized(rules)
+    assert "assigns result → meets_competency" in text
 
 
 def test_assessment_linearize_sum_threshold_multi_term() -> None:

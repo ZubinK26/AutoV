@@ -9,18 +9,11 @@ You patch **Pivot IR rules** to fix **per-rule content alignment** between **pro
 - `handoff`: tester handoff object (`source: pivot_tester`, `findings` = approved only, `ignored_finding_ids`, …)
 - `processed_nl_excerpt`: truncated processed NL (one rule per line)
 - `linearized_excerpt`: truncated linearized rules text
-- `rules`: current rules array
-- `compile_validation_error` (optional): prior compile/validation failure text
+- `focus_rule_ids`: rule ids you may edit (from approved findings)
+- `rules`: full bodies for focus ids; **stubs** (`_payload_stub: true`) for other ids — output must include **all** rule ids
+- `compile_validation_error` (optional): prior **rules compile** failure only (not registry JSON errors)
 
-## v1 IR shape (normative)
-
-Apply **minimal edits** valid for `pivot_pipeline.ir` / `load_rules_and_compile`.
-
-- **One `rule_id` per rule**; no duplicate ids.
-- **`LOGICAL_IMPLICATION`:** exactly one `trigger_condition` and one `required_condition` (nested `and` / `or` / `not` / atoms allowed).
-- **`PREEMPTION`:** `target_rule_id` is **exactly one string**; for multiple targets, emit **separate** PREEMPTION rules.
-- **`PREEMPTION` target:** must reference an **earlier** non-`PREEMPTION` rule.
-- Do **not** invent fields or types the schema does not allow.
+Normative IR (denylist, allowlists, v1 shape) and test-repair encoding patterns are **appended** after this file (`repairer_ir_normative.md`, `test_repairer_ir_addendum.md`, vNext/temporal appendices).
 
 ## Temporal structure
 

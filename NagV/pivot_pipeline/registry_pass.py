@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import json
+import os
 import re
+from pathlib import Path
 from typing import Any, Callable
 
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
 from pivot_pipeline.paths import PROMPTS_DIR
+
+_INVALID_RAW_CAP = 800
+_DIAG_CAP = 1500
 
 _SLUG_SKIP = re.compile(r"^R\d+$", re.IGNORECASE)
 
@@ -243,3 +248,118 @@ def registry_pass_from_nl_and_rules(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     numbered = [(i + 1, ln) for i, ln in enumerate(nl_lines)]
     return run_registry_pass(numbered, rules, llm=llm)
+
+
+def registry_json_repair_max_attempts() -> int:
+    raw = os.getenv("PIVOT_REGISTRY_JSON_REPAIR_MAX", "3").strip()
+    try:
+        return max(0, min(int(raw), 10))
+    except ValueError:
+        return 3
+
+
+def _registry_repair_prompt_template() -> str:
+    path = PROMPTS_DIR / "registry_json_repair.md"
+    if not path.is_file():
+        raise FileNotFoundError(f"missing registry JSON repair prompt: {path}")
+    return path.read_text(encoding="utf-8")
+
+
+def _truncate_registry_text(s: str, cap: int) -> str:
+    t = (s or "").strip()
+    if len(t) <= cap:
+        return t
+    return t[: cap - 24] + "\n…(truncated)…\n"
+
+
+def append_registry_pass_trace(work_dir: Path, entry: dict[str, Any]) -> None:
+    path = work_dir / "registry_pass_trace.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({"kind": "registry_pass", **entry}, ensure_ascii=False) + "\n")
+
+
+def run_registry_pass_with_repairs(
+    numbered_lines: list[tuple[int, str]],
+    rules: list[dict[str, Any]],
+    *,
+    llm: Callable[..., str] = pivot_llm_complete,
+    max_repairs: int | None = None,
+    work_dir: Path | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]], int]:
+    """
+    Registry LLM pass with JSON repair retries.
+
+    Returns ``(registry, updated_rules, json_repair_rounds)``.
+    """
+    repairs = max_repairs if max_repairs is not None else registry_json_repair_max_attempts()
+    slugs = collect_used_slugs(rules)
+    lines_txt = "\n".join(f"{i}. {t}" for i, t in numbered_lines)
+    slugs_txt = json.dumps(slugs, ensure_ascii=False)
+    tmpl = _registry_prompt_template()
+    prompt = tmpl.replace("<<<NUMBERED_LINES>>>", lines_txt).replace("<<<USED_SLUGS>>>", slugs_txt)
+    raw = llm(prompt)
+    repair_rounds = 0
+    last: BaseException | None = None
+
+    for attempt in range(repairs + 1):
+        try:
+            reg = parse_json_object(raw)
+            alias_map = build_alias_map(reg)
+            updated = apply_registry_to_rules(rules, alias_map)
+            return reg, updated, repair_rounds
+        except (json.JSONDecodeError, ValueError) as e:
+            last = e
+
+        if work_dir is not None:
+            fail_path = work_dir / f"registry_result_invalid_attempt_{attempt}.txt"
+            fail_path.write_text(raw, encoding="utf-8")
+
+        if attempt >= repairs:
+            msg = f"invalid registry JSON after {repairs} repair attempts: {last}"
+            if work_dir is not None:
+                append_registry_pass_trace(
+                    work_dir,
+                    {"attempt": attempt, "error": str(last), "exhausted": True},
+                )
+            raise ValueError(msg) from last
+
+        r_tmpl = _registry_repair_prompt_template()
+        repair_prompt = (
+            r_tmpl.replace("<<<USED_SLUGS>>>", slugs_txt)
+            .replace("<<<NUMBERED_LINES>>>", _truncate_registry_text(lines_txt, 4000))
+            .replace("<<<INVALID_OUTPUT>>>", _truncate_registry_text(raw, _INVALID_RAW_CAP))
+            .replace("<<<DIAGNOSTIC>>>", _truncate_registry_text(str(last), _DIAG_CAP))
+        )
+        if work_dir is not None:
+            append_registry_pass_trace(
+                work_dir,
+                {
+                    "attempt": attempt,
+                    "repair_round": repair_rounds + 1,
+                    "error": str(last),
+                },
+            )
+        raw = llm(repair_prompt)
+        repair_rounds += 1
+
+    raise RuntimeError("registry repair: unreachable")
+
+
+def registry_pass_from_nl_and_rules_with_repairs(
+    nl_lines: list[str],
+    rules: list[dict[str, Any]],
+    *,
+    llm: Callable[..., str] = pivot_llm_complete,
+    max_repairs: int | None = None,
+    work_dir: Path | None = None,
+) -> tuple[dict[str, Any], list[dict[str, Any]], int]:
+    numbered = [(i + 1, ln) for i, ln in enumerate(nl_lines)]
+    reg, updated, rounds = run_registry_pass_with_repairs(
+        numbered,
+        rules,
+        llm=llm,
+        max_repairs=max_repairs,
+        work_dir=work_dir,
+    )
+    return reg, updated, rounds

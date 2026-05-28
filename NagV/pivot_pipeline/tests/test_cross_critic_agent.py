@@ -4,8 +4,10 @@ import json
 from pathlib import Path
 
 from pivot_pipeline.cross_critic_agent import (
+    CrossCriticOutputError,
     format_cross_critic_report_terminal,
     parse_cross_critic_response,
+    run_cross_critic_parsed_with_repairs,
 )
 from pivot_pipeline.cross_repairer_agent import run_cross_repairer
 
@@ -35,6 +37,60 @@ def test_parse_cross_critic_json() -> None:
     assert r.verdict == "ISSUES"
     assert r.findings[0].category == "outcome_split"
     assert "X001" in format_cross_critic_report_terminal(r)
+
+
+def test_parse_cross_critic_findings_array_only() -> None:
+    findings = [
+        {
+            "id": "X001",
+            "severity": "warn",
+            "category": "inconsistency",
+            "rule_ids": ["R0037"],
+            "explanation": "gap",
+            "recommendation": "",
+        }
+    ]
+    r = parse_cross_critic_response(json.dumps(findings))
+    assert r.verdict == "ISSUES"
+    assert len(r.findings) == 1
+    assert r.findings[0].id == "X001"
+
+
+def test_cross_critic_json_repair_after_invalid() -> None:
+    good = {
+        "verdict": "PASS",
+        "compared_against": "processed_nl_and_linearized_model",
+        "findings": [],
+        "audit_trail_bullets": [],
+        "notes": "",
+    }
+    calls = {"n": 0}
+
+    def fake_llm(prompt: str) -> str:
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return '{"verdict": "PASS", "findings": [}'  # truncated invalid JSON
+        return json.dumps(good)
+
+    raw, report, repairs = run_cross_critic_parsed_with_repairs(
+        "nl",
+        "lin",
+        llm=fake_llm,
+        max_repairs=1,
+    )
+    assert repairs == 1
+    assert report.verdict == "PASS"
+    assert raw
+
+
+def test_cross_critic_output_error_when_repairs_exhausted(monkeypatch) -> None:
+    def bad_llm(_prompt: str) -> str:
+        return "not json at all {{{"
+
+    import pytest
+
+    with pytest.raises(CrossCriticOutputError):
+        run_cross_critic_parsed_with_repairs("nl", "lin", llm=bad_llm, max_repairs=0)
 
 
 def test_cross_repairer_mock_llm() -> None:

@@ -454,6 +454,11 @@ def _sanitize_rule_dict(r: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def sanitize_rule_dict(rule: dict[str, Any]) -> dict[str, Any]:
+    """Drop unknown top-level keys for this rule's template_class before Pydantic validate."""
+    return _sanitize_rule_dict(rule)
+
+
 def sanitize_rules_jsonable(rules: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Drop unknown keys from rule dicts (and condition subtrees) before Pydantic validate."""
     return [_sanitize_rule_dict(r) for r in rules]

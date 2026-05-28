@@ -109,8 +109,8 @@ def maybe_print_pivot_oos_rewrite_attempt1(
 
     print_fn("\n### Automatic in-scope rewrite suggestions (attempt 1 — advisory only)\n")
     print_fn(
-        "The handoff is still built from the **Agent 3 verdicts above** until you accept. "
-        "Rejecting the package and naming line indices with comments triggers **attempt 2** (Agent 4 merge path).\n"
+        "Not applied on **Y**. To fix: **n** + line index + comment (Agent 4 merge), or **o** at accept to "
+        "**omit** lines from the policy and retry the chunk (pivot Phase 0).\n"
     )
     try:
         raw_out, _u = call_gemini(

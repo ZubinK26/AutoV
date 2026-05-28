@@ -36,6 +36,8 @@ def run_pivot_pipeline(
     fail_on_tester_findings: bool = False,
     with_test_repair: bool = False,
     interactive_tester: bool = False,
+    resume_tester_repair: bool = False,
+    retriage_tester: bool = False,
     repairer_max_rounds: int = 2,
     with_cross_critic: bool = False,
     with_cross_repair: bool = False,
@@ -53,16 +55,21 @@ def run_pivot_pipeline(
     from pivot_pipeline.extract import ExtractAbort, ExtractValidationError, extract_rules_from_lines
     from pivot_pipeline.ir import load_rules_and_compile
     from pivot_pipeline.cross_critic_agent import (
-        cross_critic_handoff_dict,
+        CrossCriticOutputError,
         cross_critic_report_ok,
         format_cross_critic_report_terminal,
-        run_cross_critic_parsed,
     )
-    from pivot_pipeline.cross_repairer_agent import (
-        append_cross_repairer_trace,
-        cross_repair_max_rounds,
-        run_cross_repairer,
+    from pivot_pipeline.cross_critic_interactive_loop import (
+        REPAIR_TOKEN as CROSS_REPAIR_TOKEN,
+        CrossCriticResumeAtGate,
+        fetch_cross_critic_report,
+        format_cross_triage_summary,
+        run_cross_finding_triage,
+        write_cross_repair_handoff,
     )
+    from pivot_pipeline.cross_repair_apply import run_cross_repair_session
+    from pivot_pipeline.cross_repairer_agent import cross_repair_handoff_dict, cross_repair_max_rounds
+    from pivot_pipeline.test_repair_registry import is_repairer_api_error
     from pivot_pipeline.assessment_linearize import build_and_write_assessment_artifacts
     from pivot_pipeline.rules_document import build_rules_document, parse_rules_document
     from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN, enforce_wfm_rule_coverage
@@ -105,8 +112,26 @@ def run_pivot_pipeline(
         summary["interactive_policy"] = True
     if interactive_tester:
         summary["interactive_tester"] = True
+    if resume_tester_repair:
+        summary["resume_tester_repair"] = True
     if interactive_cross_coherence:
         summary["interactive_cross_coherence"] = True
+    if resume_tester_repair and not with_tester:
+        summary["outcome"] = "blocked_tester"
+        summary["message"] = "--resume-tester-repair requires --with-tester"
+        (work_dir / "run_summary.json").write_text(
+            json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        return summary
+    if resume_tester_repair and not with_test_repair:
+        summary["outcome"] = "blocked_tester"
+        summary["message"] = "--resume-tester-repair requires --with-test-repair"
+        (work_dir / "run_summary.json").write_text(
+            json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        return summary
     if with_test_repair and not with_tester:
         summary["outcome"] = "blocked_tester"
         summary["message"] = "--with-test-repair requires --with-tester"
@@ -155,6 +180,11 @@ def run_pivot_pipeline(
                 encoding="utf-8",
             )
             return summary
+        drop_log = work_dir / "pivot_wfm_dropped_rules.jsonl"
+        if drop_log.is_file():
+            summary["wfm_dropped_rule_count"] = sum(
+                1 for ln in drop_log.read_text(encoding="utf-8").splitlines() if ln.strip()
+            )
         agg = aggregate_pivot_wfm_nl(repo_root=repo_root, work_dir=work_dir, print_fn=print_fn)
         summary["wfm_forward_lines"] = agg.forward_line_count
         if not agg.ok:
@@ -530,6 +560,8 @@ def run_pivot_pipeline(
                 no_llm=no_llm,
                 interactive_any=interactive_tester_any,
                 with_test_repair=with_test_repair,
+                resume_tester_repair=resume_tester_repair,
+                retriage_tester=retriage_tester,
                 fail_on_tester_findings=fail_on_tester_findings,
                 print_fn=print_fn,
                 input_fn=input_fn,
@@ -553,8 +585,15 @@ def run_pivot_pipeline(
             )
             return summary
         except Exception as e:
-            summary["outcome"] = "blocked_tester"
-            summary["message"] = f"tester failed: {e}"
+            from pivot_pipeline.post_model_workflow import TesterOutputError
+
+            if isinstance(e, TesterOutputError):
+                summary["outcome"] = "blocked_tester_output_parse"
+                summary["message"] = str(e)
+                summary["tester_json_repair_attempts"] = e.repair_attempts
+            else:
+                summary["outcome"] = "blocked_tester"
+                summary["message"] = f"tester failed: {e}"
             (work_dir / "run_summary.json").write_text(
                 json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
                 encoding="utf-8",
@@ -576,6 +615,7 @@ def run_pivot_pipeline(
                 skip_registry=skip_registry,
                 no_llm=no_llm,
                 interactive_any=interactive_any,
+                with_cross_repair=with_cross_repair,
                 print_fn=print_fn,
                 input_fn=input_fn,
                 summary=summary,
@@ -643,7 +683,15 @@ def run_pivot_pipeline(
             )
 
         try:
-            xc_raw, xc_report = run_cross_critic_parsed(nl_text_for_artifacts, linearized)
+            xc_raw, xc_report = fetch_cross_critic_report(
+                nl_text_for_artifacts,
+                linearized,
+                work_dir=work_dir,
+                summary=summary,
+                interactive_any=interactive_cross_any,
+                input_fn=input_fn,
+                print_fn=print_fn,
+            )
             (work_dir / "cross_critic_report.json").write_text(
                 xc_report.model_dump_json(indent=2) + "\n",
                 encoding="utf-8",
@@ -652,7 +700,11 @@ def run_pivot_pipeline(
             xc_path.write_text(xc_raw, encoding="utf-8")
             summary["cross_critic_result"] = str(xc_path.resolve())
             summary["cross_critic_verdict"] = xc_report.verdict
-            print_fn(format_cross_critic_report_terminal(xc_report))
+            print_fn(
+                format_cross_critic_report_terminal(
+                    xc_report, numbered=interactive_cross_any and not cross_critic_report_ok(xc_report)
+                )
+            )
 
             if not cross_critic_report_ok(xc_report):
                 if not interactive_cross_any:
@@ -668,154 +720,209 @@ def run_pivot_pipeline(
                     )
                     return summary
 
-                from pivot_pipeline.policy_gates import REPAIR_CRITIC_DRIFT_TOKEN
-
                 cross_repairs_used = 0
+                cross_approved: set[str] = set()
+                cross_ignored: set[str] = set()
+                skip_cross_triage_once = False
+                sticky_cross_approved: set[str] | None = None
+                sticky_cross_ignored: set[str] | None = None
                 while not cross_critic_report_ok(xc_report):
+                    if not skip_cross_triage_once or sticky_cross_approved is None:
+                        cross_approved, cross_ignored = run_cross_finding_triage(
+                            xc_report,
+                            input_fn=input_fn,
+                            print_fn=print_fn,
+                        )
+                        sticky_cross_approved = set(cross_approved)
+                        sticky_cross_ignored = set(cross_ignored)
+                        skip_cross_triage_once = False
+                    else:
+                        cross_approved = sticky_cross_approved
+                        cross_ignored = sticky_cross_ignored or set()
+                    handoff_path = write_cross_repair_handoff(
+                        work_dir,
+                        xc_report,
+                        approved=cross_approved,
+                        ignored=cross_ignored,
+                    )
+                    summary["cross_repair_handoff"] = str(handoff_path.resolve())
+                    summary["cross_repair_approved_count"] = len(cross_approved)
+                    summary["cross_repair_ignored_ids"] = sorted(cross_ignored)
+                    print_fn(format_cross_triage_summary(cross_approved, cross_ignored))
+
+                    total = len(xc_report.findings)
                     print_fn(
-                        "\n[policy gate] CrossCritic reported ISSUES.\n"
-                        f"  Type {REPAIR_CRITIC_DRIFT_TOKEN!r} to run CrossRepairer from this report, then re-check "
-                        "alignment with the semantic critic.\n"
+                        "\n[policy gate] CrossCritic reported ISSUES "
+                        f"({total} total; {len(cross_approved)} approved for repair).\n"
+                        f"  Type {CROSS_REPAIR_TOKEN!r} to run CrossRepairer on approved findings only, "
+                        "then re-check alignment with the semantic critic.\n"
                         f"  Type {PROCEED_INCOMPLETE_TOKEN!r} to continue anyway (cross coherence issues accepted).\n"
+                        "  Type 'retriage' to re-run CrossCritic triage.\n"
                         "  Press Enter to abort.\n"
                     )
                     ans = input_fn("> ").strip()
+                    if ans.lower() == "retriage":
+                        continue
+
                     if ans == PROCEED_INCOMPLETE_TOKEN:
                         summary["cross_critic_passed"] = False
                         summary["user_consented_cross_critic_issues"] = True
                         break
 
-                    if ans == REPAIR_CRITIC_DRIFT_TOKEN:
+                    if ans == CROSS_REPAIR_TOKEN:
                         if not with_cross_repair:
                             print_fn(
                                 "[policy gate] Enable --with-cross-repair to use CrossRepairer, "
                                 f"or type {PROCEED_INCOMPLETE_TOKEN!r} to skip.\n"
                             )
                             continue
+                        if not cross_approved:
+                            print_fn(
+                                "[policy gate] No findings approved for repair; "
+                                "re-run triage or type 'retriage'.\n"
+                            )
+                            continue
                         limit = cross_repair_max_rounds()
-                        if cross_repairs_used >= limit:
+                        if limit > 0 and cross_repairs_used >= limit:
                             print_fn(
                                 f"[policy gate] Max CrossRepairer rounds ({limit}); "
-                                f"type {PROCEED_INCOMPLETE_TOKEN!r} or press Enter to abort.\n"
+                                f"set PIVOT_CROSS_REPAIR_MAX_ROUNDS=0 for unlimited, or "
+                                f"type {PROCEED_INCOMPLETE_TOKEN!r} / press Enter to abort.\n"
                             )
                             continue
                         cross_repairs_used += 1
-                        h = cross_critic_handoff_dict(
+                        h = cross_repair_handoff_dict(
                             xc_report,
-                            source_note="CrossRepairer from CrossCritic ISSUES",
+                            approved_ids=sorted(cross_approved),
+                            ignored_ids=sorted(cross_ignored),
+                            full_report_path=work_dir / "cross_critic_report.json",
+                            source_note="CrossRepairer from approved CrossCritic findings",
                         )
-                        try:
-                            out, json_parse_retry_used = run_cross_repairer(
-                                policy_id=policy_id,
-                                rules=rules,
-                                handoff=h,
-                                processed_nl_excerpt=nl_text_for_artifacts,
-                                linearized_excerpt=linearized,
-                            )
-                        except Exception as re:
-                            print_fn(f"[policy gate] CrossRepairer failed: {re}\n")
+                        repair_result = run_cross_repair_session(
+                            work_dir=work_dir,
+                            policy_id=policy_id,
+                            rules=rules,
+                            handoff=h,
+                            cross_approved=cross_approved,
+                            cross_ignored=cross_ignored,
+                            cross_repairs_used=cross_repairs_used,
+                            processed_nl_excerpt=nl_text_for_artifacts,
+                            linearized_excerpt=linearized or "",
+                            nl_lines_reg=nl_lines_reg,
+                            skip_registry=skip_registry,
+                            meta_path=meta_path,
+                            nl_for_precheck=nl_for_precheck,
+                            summary=summary,
+                            rules_envelope=rules_envelope,
+                            no_vnext_lowering=no_vnext_lowering,
+                            print_fn=print_fn,
+                        )
+                        if not repair_result.success:
+                            skip_cross_triage_once = True
                             continue
-                        append_cross_repairer_trace(
-                            work_dir,
-                            {
-                                "round": cross_repairs_used,
-                                "change_summary": [c.model_dump() for c in out.change_summary],
-                                "json_parse_retry_used": json_parse_retry_used,
-                            },
-                        )
-                        new_rules = out.rules
-                        if not skip_registry:
+                        rules = repair_result.rules
+                        meta = repair_result.meta
+                        synth = repair_result.synth or ""
+                        z3_result = repair_result.z3_result or {}
+                        ok = repair_result.precheck_ok if repair_result.precheck_ok is not None else True
+                        issues = repair_result.precheck_issues or []
+                        linearized = repair_result.linearized
+
+                        early: str | None = None
+                        if skip_critic:
+                            summary["post_cross_repair_semantic_critic"] = "skipped"
+                        else:
                             try:
-                                _, new_rules = registry_pass_from_nl_and_rules(nl_lines_reg, new_rules)
-                            except Exception as re:
-                                print_fn(f"[policy gate] Registry after cross repair failed: {re}\n")
-                                continue
-                        try:
-                            meta = load_rules_and_compile(
-                                policy_id,
-                                new_rules,
-                                skip_vnext_lowering=no_vnext_lowering,
-                                policy_semantics_version=rules_envelope.get("policy_semantics_version"),
-                            )
-                        except Exception as ce:
-                            print_fn(f"[policy gate] Cross-repaired rules did not compile: {ce}\n")
-                            continue
-                        rules = new_rules
-                        extracted_path = work_dir / "rules_extracted.json"
-                        _write_rules_extracted(extracted_path)
-                        summary["rules_extracted"] = str(extracted_path.resolve())
-                        meta_path.write_text(meta.model_dump_json(indent=2), encoding="utf-8")
-                        summary["meta_scheme"] = str(meta_path.resolve())
-                        z3_result = run_z3_check(meta)
-                        summary["z3"] = z3_result
-                        (work_dir / "z3_result.json").write_text(
-                            json.dumps(z3_result, indent=2, ensure_ascii=False) + "\n",
-                            encoding="utf-8",
-                        )
-                        synth = meta_scheme_to_markdown(meta)
-                        (work_dir / "synthetic_en.md").write_text(synth, encoding="utf-8")
-                        ok, issues = run_precheck(nl_path=nl_for_precheck, meta=meta)
-                        summary["precheck_ok"] = ok
-                        summary["precheck_issues"] = issues
-                        (work_dir / "precheck.json").write_text(
-                            json.dumps({"ok": ok, "issues": issues}, indent=2) + "\n",
-                            encoding="utf-8",
-                        )
-                        (work_dir / "rules_after_cross_repair.json").write_text(
-                            json.dumps({"policy_id": policy_id, "rules": rules}, indent=2, ensure_ascii=False)
-                            + "\n",
-                            encoding="utf-8",
-                        )
-                        linearized = build_and_write_assessment_artifacts(
-                            work_dir=work_dir, rules=rules, summary=summary
-                        )
-
-                        try:
-                            rules, meta, synth, z3_result, ok, issues, early = (
-                                run_semantic_critic_interactive_loop(
-                                    work_dir=work_dir,
-                                    nl_text_for_artifacts=nl_text_for_artifacts,
-                                    nl_for_precheck=nl_for_precheck,
-                                    nl_lines_reg=nl_lines_reg,
-                                    policy_id=policy_id,
-                                    rules=rules,
-                                    meta_path=meta_path,
-                                    skip_registry=skip_registry,
-                                    no_llm=no_llm,
-                                    interactive_any=interactive_cross_any,
-                                    print_fn=print_fn,
-                                    input_fn=input_fn,
-                                    summary=summary,
-                                    synth=synth,
-                                    meta=meta,
-                                    z3_result=z3_result,
-                                    ok=ok,
-                                    issues=issues,
+                                rules, meta, synth, z3_result, ok, issues, early = (
+                                    run_semantic_critic_interactive_loop(
+                                        work_dir=work_dir,
+                                        nl_text_for_artifacts=nl_text_for_artifacts,
+                                        nl_for_precheck=nl_for_precheck,
+                                        nl_lines_reg=nl_lines_reg,
+                                        policy_id=policy_id,
+                                        rules=rules,
+                                        meta_path=meta_path,
+                                        skip_registry=skip_registry,
+                                        no_llm=no_llm,
+                                        interactive_any=interactive_cross_any,
+                                        with_cross_repair=with_cross_repair,
+                                        print_fn=print_fn,
+                                        input_fn=input_fn,
+                                        summary=summary,
+                                        synth=synth,
+                                        meta=meta,
+                                        z3_result=z3_result,
+                                        ok=ok,
+                                        issues=issues,
+                                    )
                                 )
+                            except Exception as e:
+                                if interactive_cross_any and is_repairer_api_error(e):
+                                    print_fn(
+                                        "[policy gate] Post-repair Pivot Critic API unavailable; "
+                                        "returning to cross repair gate.\n"
+                                    )
+                                    skip_cross_triage_once = True
+                                    continue
+                                summary["outcome"] = "blocked_post_cross_critic"
+                                summary["message"] = (
+                                    f"post cross-repair semantic critic failed: {e}"
+                                )
+                                (work_dir / "run_summary.json").write_text(
+                                    json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                                    encoding="utf-8",
+                                )
+                                return summary
+                            if early in ("blocked_critic", "blocked_semantic_repair_compile"):
+                                if interactive_cross_any:
+                                    print_fn(
+                                        "[policy gate] Post-repair semantic critic blocked; "
+                                        "returning to cross repair gate.\n"
+                                    )
+                                    skip_cross_triage_once = True
+                                    continue
+                                summary["outcome"] = (
+                                    summary.get("outcome") or "blocked_post_cross_critic"
+                                )
+                                (work_dir / "run_summary.json").write_text(
+                                    json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                                    encoding="utf-8",
+                                )
+                                return summary
+                            summary["post_cross_repair_critic_done"] = True
+                        try:
+                            xc_raw, xc_report = fetch_cross_critic_report(
+                                nl_text_for_artifacts,
+                                linearized,
+                                work_dir=work_dir,
+                                summary=summary,
+                                interactive_any=interactive_cross_any,
+                                input_fn=input_fn,
+                                print_fn=print_fn,
+                                resume_at_gate=True,
                             )
-                        except Exception as e:
-                            summary["outcome"] = "blocked_post_cross_critic"
-                            summary["message"] = f"post cross-repair semantic critic failed: {e}"
-                            (work_dir / "run_summary.json").write_text(
-                                json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
-                                encoding="utf-8",
+                        except CrossCriticResumeAtGate:
+                            print_fn(
+                                "[policy gate] CrossCritic re-check skipped; "
+                                "returning to repair gate (prior findings unchanged).\n"
                             )
-                            return summary
-                        if early in ("blocked_critic", "blocked_semantic_repair_compile"):
-                            summary["outcome"] = summary.get("outcome") or "blocked_post_cross_critic"
-                            return summary
-
-                        summary["post_cross_repair_critic_done"] = True
-                        xc_raw, xc_report = run_cross_critic_parsed(nl_text_for_artifacts, linearized)
+                            skip_cross_triage_once = True
+                            continue
                         (work_dir / "cross_critic_report.json").write_text(
                             xc_report.model_dump_json(indent=2) + "\n",
                             encoding="utf-8",
                         )
                         (work_dir / "cross_critic_result.txt").write_text(xc_raw, encoding="utf-8")
                         summary["cross_critic_verdict"] = xc_report.verdict
-                        print_fn(format_cross_critic_report_terminal(xc_report))
+                        print_fn(
+                            format_cross_critic_report_terminal(
+                                xc_report, numbered=not cross_critic_report_ok(xc_report)
+                            )
+                        )
                         if cross_critic_report_ok(xc_report):
                             summary["cross_critic_passed"] = True
+                        sticky_cross_approved = None
+                        sticky_cross_ignored = None
                         continue
 
                     summary["outcome"] = "blocked_cross_critic"
@@ -826,6 +933,14 @@ def run_pivot_pipeline(
                     return summary
             else:
                 summary["cross_critic_passed"] = True
+        except CrossCriticOutputError as e:
+            summary["outcome"] = "blocked_cross_critic"
+            summary["message"] = f"cross critic failed: {e}"
+            (work_dir / "run_summary.json").write_text(
+                json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            return summary
         except Exception as e:
             summary["outcome"] = "blocked_cross_critic"
             summary["message"] = f"cross critic failed: {e}"
@@ -863,6 +978,7 @@ def run_pivot_pipeline(
                 skip_registry=skip_registry,
                 no_llm=no_llm,
                 interactive_any=interactive_any or interactive_cross_any,
+                with_cross_repair=with_cross_repair,
                 print_fn=print_fn,
                 input_fn=input_fn,
                 summary=summary,

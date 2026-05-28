@@ -55,4 +55,5 @@ Return **only** a JSON object (no markdown, no code fences). Keys:
 - Under **full** mode, each line may change; stay faithful to the authoritative source rules above unless a change is required for encodability or coverage.
 - Each string is one English policy rule line.
 - Prefer wording that avoids OUT_OF_SCOPE in pivot WFM (no unsupported arithmetic, no variable×variable products, etc.).
+- **Finite enumerations:** When the **authoritative source** line lists named alternatives (roles, tools, industries, platforms), the rewritten line must **retain every alternative** — no hypernym collapse ("customer-facing operations roles" instead of seven named titles). Rephrase to *one of:* / *at least one of:* only if all items remain.
 - **Temporal surrogates (T1–T8):** Do **not** mark process-order lines OUT_OF_SCOPE when they can be rewritten per the injected temporal addendum (named flags, scalar order, split step chains).

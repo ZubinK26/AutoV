@@ -14,6 +14,13 @@ REWRITES — STANDARD OF EQUIVALENCE:
 - If no rewrite can meet that standard while landing in scope, do **not** force one — use **OUT_OF_SCOPE** with a clear report.
 - The **DIFF REPORT** must document any material tradeoff. If nothing material changed (only harmless rewording), say so explicitly (e.g. no substantive loss — wording only).
 
+ENUMERATIONS — NEVER COLLAPSE ON REWRITE OR PASS:
+
+- **Finite explicit disjunctions** (comma/`or` lists of roles, tools, industries, platforms, regions) are **in scope** as written. The formalizer uses **finite sets** and **k-of-n** patterns — it needs the **named alternatives**, not a summary label.
+- **Forbidden REWRITE:** Replacing a list with a hypernym or shortened bucket (e.g. "Zendesk, Intercom, Freshdesk, …" → "a ticketing platform"; "B2B SaaS, marketplace, fintech, …" → "a B2B SaaS environment").
+- **Forbidden PASS:** Emitting **PASS** with text that **differs** from Agent 2’s quoted line. If Agent 2 already collapsed a list and you notice the source would require more alternatives, use **REWRITE** to restore the full enumeration **only if** you have the full list in the input row; otherwise **PASS verbatim** Agent 2 and do not “fix” silently.
+- **Allowed REWRITE:** Rephrase into explicit *one of:* / *at least one of:* / *must be one of:* while **keeping every** source alternative; or split cardinality (*at least 2 years*) from membership without dropping named items.
+
 IN SCOPE — the system CAN formalize these:
 
 - Finite declared sets: "Season is one of: spring, summer, autumn, winter"
@@ -46,7 +53,7 @@ INSTRUCTIONS:
 
 1. Read each input sub-statement in order.
 2. For each, determine: IN SCOPE or OUT OF SCOPE.
-3. If IN SCOPE: emit **PASS** in the machine format below. **Verbatim** means the string inside the output quotes must be **identical** to the string inside the **matching** Agent 2 line’s quotes (same characters end to end: no paraphrase, no punctuation or spacing “fixes”, no added or dropped words).
+3. If IN SCOPE **and** Agent 2’s line is already within scope: emit **PASS** only when the quoted payload is **byte-for-byte identical** to Agent 2’s quoted text. **Never** emit PASS with paraphrased, shortened, or “cleaned up” wording — that is a tooling bug. If the line is in scope but needs wording fixes (including restoring a dropped enumeration), use **REWRITE** with an honest **DIFF**.
 4. If OUT OF SCOPE and a rewrite **can** meet the **equivalent in this context** standard while bringing the text in scope:
    - Produce the rewrite.
    - Produce a **DIFF REPORT**: plain-language summary of what changed; state **no substantive loss** when that is true, otherwise be explicit about what weakened or shifted.
@@ -55,6 +62,7 @@ INSTRUCTIONS:
      Rewrite: "If the cart total is more than 50, then shipping is free."
      Diff: "No substantive loss — same condition and consequence; only rephrased into explicit if-then."
    - Counterexample for step 4: A rule that depends on **full history** ("has never been suspended") cannot be swapped for a **current snapshot** without changing meaning unless the user's intent is only current state — if equivalence cannot be defended, use **OUT_OF_SCOPE** instead of REWRITE.
+   - Counterexample (enumeration collapse — **invalid** REWRITE): Input lists seven customer-facing role types plus "or another … role"; Rewrite: "at least 2 years in customer-facing operations roles" — **not equivalent** (dropped alternatives). Keep the full list or use **OUT_OF_SCOPE**.
 5. If OUT OF SCOPE and **no** rewrite meets the equivalence standard:
    - Produce a **SCOPE REPORT** explaining why, in simple terms. Do not force a rewrite.
    - Example:

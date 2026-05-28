@@ -6,8 +6,10 @@ from pathlib import Path
 import pytest
 
 from pivot_pipeline.linearize_rules import build_and_write_linearized, linearized_model_artifact_path
+
+from pivot_pipeline.post_model_workflow import TesterOutputError
 from pivot_pipeline.post_model_workflow import TesterReport as PivotTesterReport
-from pivot_pipeline.post_model_workflow import run_pivot_tester
+from pivot_pipeline.post_model_workflow import run_pivot_tester, run_pivot_tester_with_repairs
 
 
 def test_tester_report_parses_new_categories() -> None:
@@ -30,6 +32,49 @@ def test_tester_report_parses_new_categories() -> None:
     report = PivotTesterReport.model_validate(payload)
     assert report.verdict == "issues"
     assert report.findings[0].category == "threshold"
+
+
+def test_tester_repair_second_llm_fixes_json() -> None:
+    calls: list[str] = []
+    good = json.dumps(
+        {
+            "verdict": "ok",
+            "compared_against": "processed_nl_and_linearized_model",
+            "findings": [],
+            "notes": "",
+        }
+    )
+
+    def fake_llm(prompt: str, **kwargs: object) -> str:
+        calls.append(prompt)
+        if len(calls) == 1:
+            return '{"verdict": "ok", "findings": ['
+        return good
+
+    raw, report, attempts = run_pivot_tester_with_repairs(
+        processed_nl="line one",
+        linearized_model="R0001 | CONSTANT_RELATIONAL | x EQ 1",
+        llm=fake_llm,
+        max_repairs=2,
+    )
+    assert report.verdict == "ok"
+    assert attempts == 1
+    assert len(calls) == 2
+    assert "JSON parse" in calls[1] or "Pivot Tester — JSON" in calls[1]
+    assert raw == good
+
+
+def test_tester_repair_exhausted_raises() -> None:
+    def bad_llm(prompt: str, **kwargs: object) -> str:
+        return '{"verdict": "issues", "findings": ['
+
+    with pytest.raises(TesterOutputError, match="invalid tester JSON after 0 repair"):
+        run_pivot_tester_with_repairs(
+            processed_nl="x",
+            linearized_model="R0001 | CONSTANT_RELATIONAL | x EQ 1",
+            llm=bad_llm,
+            max_repairs=0,
+        )
 
 
 def test_run_pivot_tester_prompt_includes_linearization() -> None:
@@ -110,7 +155,10 @@ def test_skip_phase0_with_tester_only_writes_report(tmp_path: Path, monkeypatch:
             ),
         )
 
-    monkeypatch.setattr("pivot_pipeline.tester_interactive_loop.run_pivot_tester", fake_tester)
+    monkeypatch.setattr(
+        "pivot_pipeline.tester_interactive_loop.run_pivot_tester_with_repairs",
+        lambda **kwargs: fake_tester(**kwargs) + (0,),
+    )
 
     nl = export.parent.parent / "pivot_pipeline" / "golden_test_run" / "input" / "Test_input2.md"
     if not nl.is_file():

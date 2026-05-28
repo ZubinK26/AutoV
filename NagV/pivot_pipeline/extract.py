@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Literal
 
+from pivot_pipeline.ir import sanitize_rule_dict
 from pivot_pipeline.json_util import parse_json_object
 from pivot_pipeline.llm import pivot_llm_complete
 from pivot_pipeline.paths import (
@@ -252,6 +253,7 @@ def validate_rule_dict(rule: dict[str, Any], *, line_index: int) -> dict[str, An
             f"unknown template_class {t!r} (core eight or vNext expansion eight only)",
             rule,
         )
+    rule = sanitize_rule_dict(rule)
     try:
         m = cls.model_validate(rule)
     except Exception as e:

@@ -80,3 +80,32 @@ def test_registry_pass_monkeypatch_llm() -> None:
     reg, updated = rp.run_registry_pass([(1, "if foo_var then ok")], rules, llm=fake_llm)
     assert reg["canonical_variables"]
     assert updated[0]["variable"] == "foo"
+
+
+def test_registry_pass_with_repairs_recovers_json() -> None:
+    from pivot_pipeline import registry_pass as rp
+
+    rules = [
+        {
+            "template_class": "CONSTANT_RELATIONAL",
+            "rule_id": "R0001",
+            "applies_to": "GLOBAL",
+            "variable": "foo_var",
+            "relational_operator": "EQ",
+            "constant_value": 1,
+            "yields": "SATISFIED",
+        }
+    ]
+    calls = {"n": 0}
+
+    def fake_llm(prompt: str) -> str:
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return '{"canonical_variables": [{"id": "foo"'
+        return '{"canonical_variables": [{"id": "foo", "aliases": ["foo_var"]}]}'
+
+    reg, updated, repair_rounds = rp.run_registry_pass_with_repairs(
+        [(1, "line")], rules, llm=fake_llm, max_repairs=2
+    )
+    assert repair_rounds == 1
+    assert updated[0]["variable"] == "foo"
