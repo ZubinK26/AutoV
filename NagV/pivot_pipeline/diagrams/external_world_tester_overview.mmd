@@ -1,0 +1,8 @@
+flowchart LR
+  SRC[External source] --> WB[World builder]
+  WB --> TR[Trust / provenance]
+  TR -->|PASS| PQ[Policy query Z3]
+  PQ --> EX[Explainer]
+  EX --> RPT[policy_case_report.json]
+  EX -.->|optional| NL[LLM narrative]
+  TR -->|FAIL refill stated| WB

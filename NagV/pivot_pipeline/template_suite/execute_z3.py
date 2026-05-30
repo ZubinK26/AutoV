@@ -104,21 +104,24 @@ def _satisfied_rule_ids_in_model(
     return sorted(out)
 
 
-def _run_sat(meta: MetaScheme, world: dict[str, int | bool]) -> tuple[str, Any | None, dict[str, Any]]:
-    """Return z3 status str, model or None, aux."""
+def _run_sat_with_model(
+    meta: MetaScheme,
+    world_pin: dict[str, int | bool],
+) -> tuple[str, Any | None, dict[str, Any]]:
+    """Return z3 status str, model (if sat), aux. Pins only keys present in world_pin."""
     solver, aux = build_solver(meta)
     sym = aux["symbols"]
     sorts: dict[str, str] = aux["sorts"]
-    wz = _world_to_z3(sym, sorts, world)
-    solver.push()
-    solver.add(wz)
+    if world_pin:
+        solver.add(_world_to_z3(sym, sorts, world_pin))
     res = solver.check()
-    model = None
-    if res == sat:
-        model = solver.model()
-    solver.pop()
-    st = str(res).lower()
-    return st, model, aux
+    model = solver.model() if res == sat else None
+    return str(res).lower(), model, aux
+
+
+def _run_sat(meta: MetaScheme, world: dict[str, int | bool]) -> tuple[str, Any | None, dict[str, Any]]:
+    """Return z3 status str, model or None, aux."""
+    return _run_sat_with_model(meta, world)
 
 
 def execute_instance(meta: MetaScheme, inst: TemplateInstance) -> dict[str, Any]:

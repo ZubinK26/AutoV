@@ -17,7 +17,9 @@ from pivot_pipeline.ir import (
     PreemptionAction,
     RelationalOperator,
 )
-from pivot_pipeline.z3_compile import run_z3_check
+from pivot_pipeline.template_suite.execute_z3 import execute_instance
+from pivot_pipeline.template_suite.schemas import DecisionQueryInstance
+from pivot_pipeline.z3_compile import build_solver, run_z3_check
 
 
 FIX = Path(__file__).resolve().parent / "fixtures" / "minimal_rules.json"
@@ -186,3 +188,47 @@ def test_preemption_unknown_target_rule_id_errors() -> None:
     ]
     with pytest.raises(ValueError, match="target_rule_id"):
         build_meta_scheme(policy_id="p", rules=rules)
+
+
+def test_bool_atom_conditions_compile_with_world() -> None:
+    """Regression: bool atoms must not compare Bool vars to int 0/1 literals."""
+    rules = [
+        ConstantRelational(
+            rule_id="R0001",
+            applies_to="GLOBAL",
+            overrides=None,
+            variable="score",
+            relational_operator=RelationalOperator.GTE,
+            constant_value=1,
+            yields="SATISFIED",
+        ),
+        LogicalImplication(
+            rule_id="R0002",
+            applies_to="GLOBAL",
+            overrides=None,
+            trigger_condition=ConditionAtom(
+                variable="flag",
+                operator=RelationalOperator.EQ,
+                value=True,
+            ),
+            required_condition=ConditionAtom(
+                variable="ok",
+                operator=RelationalOperator.EQ,
+                value=True,
+            ),
+        ),
+    ]
+    meta = build_meta_scheme(
+        policy_id="p",
+        rules=rules,
+    ).model_copy(update={"variable_sorts": {"score": "int", "flag": "bool", "ok": "bool"}})
+    build_solver(meta)
+    inst = DecisionQueryInstance(
+        instance_id="ext_test",
+        world={"score": 2, "flag": True, "ok": True},
+        query={"decision_metric": "rule", "rule_id": "R0001"},
+        golden={"decision": "satisfied"},
+    )
+    actual = execute_instance(meta, inst)
+    assert actual.get("z3_status") == "sat"
+    assert actual.get("decision") in ("satisfied", "unsatisfied")

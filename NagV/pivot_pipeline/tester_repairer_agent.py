@@ -21,6 +21,8 @@ from pivot_pipeline.test_repair_rules_payload import (
     build_rules_payload_stubs,
     focus_rule_ids_from_handoff,
     merge_repairer_output,
+    repair_allow_append_rules,
+    repairer_append_payload_fields,
 )
 
 RepairErrorStage = Literal[
@@ -142,15 +144,19 @@ def run_test_repairer(
     focus_ids = focus_rule_ids_from_handoff(handoff)
     rules_payload = build_rules_payload_stubs(rules, focus_ids)
 
+    allow_append = repair_allow_append_rules()
     payload: dict[str, Any] = {
         "mode": "tester_nl_alignment",
         "policy_id": policy_id,
         "handoff": handoff,
         "focus_rule_ids": focus_ids,
+        "allow_append_rules": allow_append,
         "processed_nl_excerpt": _truncate(processed_nl_excerpt, 14_000),
         "linearized_excerpt": _truncate(linearized_excerpt, 14_000),
         "rules": rules_payload,
     }
+    if allow_append:
+        payload.update(repairer_append_payload_fields(rules))
     cve = (compile_validation_error or "").strip()
     if cve:
         payload["compile_validation_error"] = _truncate(cve, 4000)
@@ -168,6 +174,7 @@ def run_test_repairer(
         full_rules=rules,
         repairer_rules=out.rules,
         focus_rule_ids=focus_ids,
+        allow_append_rules=allow_append,
     )
     out.rules = merged
     return out, json_retry

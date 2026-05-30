@@ -115,10 +115,20 @@ def gemini_complete(
             thinking_level=thinking_level_eff,
         )
 
+    from registry_stage.api_retry import api_auto_retries_max, call_with_transient_api_retries
+
     client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(
-        model=model_eff,
-        contents=user_text,
-        config=genai_types.GenerateContentConfig(**cfg_kwargs),
+
+    def _generate() -> str:
+        response = client.models.generate_content(
+            model=model_eff,
+            contents=user_text,
+            config=genai_types.GenerateContentConfig(**cfg_kwargs),
+        )
+        return (response.text or "").strip()
+
+    return call_with_transient_api_retries(
+        _generate,
+        label="gemini_complete",
+        max_retries=api_auto_retries_max(),
     )
-    return (response.text or "").strip()

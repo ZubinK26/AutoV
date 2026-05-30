@@ -136,8 +136,8 @@ def test_tester_loop_rerun_after_repair(
     meta.model_dump_json = lambda indent=2: "{}"
 
     monkeypatch.setattr(
-        "pivot_pipeline.tester_interactive_loop.precompile_repaired_rules",
-        lambda _p, r: r,
+        "pivot_pipeline.tester_interactive_loop.precompile_repaired_rules_validated",
+        lambda _p, r, **_kw: (r, {}),
     )
     monkeypatch.setattr(
         "pivot_pipeline.repair_apply.load_rules_and_compile",
@@ -285,8 +285,8 @@ def test_exhaust_test_repair_sessions_returns_blocked(
         raise ValueError(msg)
 
     monkeypatch.setattr(
-        "pivot_pipeline.tester_interactive_loop.precompile_repaired_rules",
-        boom,
+        "pivot_pipeline.tester_interactive_loop.precompile_repaired_rules_validated",
+        lambda *_a, **_k: (_ for _ in ()).throw(ValueError("did not compile")),
     )
 
     inputs = iter(["a", REPAIR_CRITIC_DRIFT_TOKEN, ""])

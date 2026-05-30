@@ -34,6 +34,7 @@ def test_assessment_linearize_k_of_n_result_variable() -> None:
     rules[0]["result_variable"] = "meets_competency"
     text = build_assessment_linearized(rules)
     assert "assigns result → meets_competency" in text
+    assert "enforcement: via compile lowering" in text
 
 
 def test_assessment_linearize_sum_threshold_multi_term() -> None:

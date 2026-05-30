@@ -6,6 +6,8 @@ Overview of the full pivot pipeline (including Pivot WFM), with a diagram and a 
 
 The diagram below is written in [Mermaid](https://mermaid.js.org/). A plain text editor shows the source only; you need a **Markdown preview that supports Mermaid**, or view this file on **GitHub** (which renders Mermaid in `.md` files). You can also paste the fenced `mermaid` block into [mermaid.live](https://mermaid.live) to view or export PNG/SVG.
 
+**Simpler overviews (recommended for newcomers):** [`diagrams/pipeline_e2e_overview.md`](diagrams/pipeline_e2e_overview.md) and [`diagrams/external_world_tester_overview.md`](diagrams/external_world_tester_overview.md) — plus `.mmd` files for one-click paste into mermaid.live.
+
 ---
 
 ## Architecture diagram
@@ -166,6 +168,9 @@ The pipeline runs **internal consistency checks** on how certain rule patterns a
 
 **Step 9 — Template suite (`--with-template-generator` / `--template-suite`)**  
 Near the end of a successful run, you can **ask the LLM to populate** a JSON suite—**using predefined template kinds** (scenario types, fields, and schema are fixed; the model only fills in allowed instances from your policy context)—or **supply** a suite file you wrote or checked in yourself. Each scenario is executed with the **real solver** and compared to expectations in the file; a **report** records pass, fail, and error counts. Template failures are typically **non-fatal** for the pipeline exit code (they inform you without always blocking the run).
+
+**Step 9b — Template repair (optional, interactive)**  
+When `--with-template-repair` and `--interactive-template-suite` or `--interactive-policy` are set and `template_run_report.json` has **fail** or **inconclusive** tests, **Template Diagnostician** explains diffs; the operator **triages** findings (approve / ignore), then may type **`REPAIR`** to run **Template Repairer** on approved **`policy_ir`** findings only, or **`PROCEED_INCOMPLETE`** to continue. Prompt stack: `template_repairer.md` + shared `repairer_ir_normative.md` + `template_repairer_ir_addendum.md` + vNext appendices. Per `REPAIR`: **`PIVOT_TEMPLATE_REPAIR_COMPILE_ATTEMPTS`** (default **5**), **`PIVOT_TEMPLATE_REPAIR_MAX_ROUNDS`** (default **3**); registry reuse matches Test-Repairer. After IR apply: optional re-verify **tester → critic → cross → template suite** (`PIVOT_TEMPLATE_REPAIR_REVERIFY_CRITIC` default on). Standalone: **`pivot-template-repair`** on an existing work dir. Artifacts: `template_diagnostic_report.json`, `template_repair_handoff.json`, `rules_after_template_repair.json`. See `dev_plans/dev_plan_template_suite_repair_loop_v1.md`.
 
 **What you end up with**  
 On disk you get **normalized text**, **structured rules**, **compiled model**, **solver output**, **reports from whichever alignment stages you enabled**, and a **single run summary** that says whether the run completed, was blocked, or finished with warnings. Together that package is what you would share or archive to show **what was formalized and how strongly it was validated**.

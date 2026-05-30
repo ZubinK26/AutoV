@@ -102,11 +102,20 @@ def merge_error_prompt_suffix(merge_error: str) -> str:
     msg = (merge_error or "").strip()
     if len(msg) > 3000:
         msg = msg[: 3000 - 24] + "\n…(truncated)…\n"
+    append_hint = ""
+    if "unknown rule_id" in msg.lower() or "missing rule_id" in msg.lower():
+        append_hint = (
+            " You may **append** new rules with fresh `rule_id` values (see "
+            "`suggested_next_rule_ids` in the payload) for companion templates such as "
+            "`CONSTANT_RELATIONAL` — but you must still include every existing `rule_id` "
+            "(stubs for non-focus)."
+        )
     return (
         "\n\n---\n\n## Merge validation error (previous repair attempt)\n\n"
         f"{msg}\n\n"
         "Your `rules` array must include **every** `rule_id` from the input payload. "
-        "Return stubs unchanged for non-focus rules. "
+        "Return stubs unchanged for non-focus rules."
+        f"{append_hint} "
         'Reply with **only** one JSON object with keys "rules" and "change_summary".\n'
     )
 
@@ -159,6 +168,22 @@ def _json_recovery_suffix(*, failed_raw: str, err: str) -> str:
     )
 
 
+def _coerce_repairer_payload(data: dict[str, Any]) -> dict[str, Any]:
+    """Normalize common LLM shape mistakes before Pydantic validation."""
+    cs = data.get("change_summary")
+    if not isinstance(cs, list):
+        return data
+    coerced: list[Any] = []
+    for item in cs:
+        if isinstance(item, str):
+            coerced.append({"finding_id": None, "rule_id": None, "change": item})
+        else:
+            coerced.append(item)
+    data = dict(data)
+    data["change_summary"] = coerced
+    return data
+
+
 def _llm_repairer_output(
     *,
     base_prompt: str,
@@ -186,7 +211,7 @@ def _llm_repairer_output(
                 last_err = e2
         else:
             raise last_err
-    out = RepairerPivOutput.model_validate(data)
+    out = RepairerPivOutput.model_validate(_coerce_repairer_payload(data))
     return out, json_parse_retry_used
 
 

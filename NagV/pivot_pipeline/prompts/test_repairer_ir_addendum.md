@@ -20,5 +20,20 @@ When a finding asks to align NL “if any of these platforms / categories, set f
 
 - The payload lists **full** rule bodies only for ids in `focus_rule_ids`.
 - Other rules appear as **stubs** (`_payload_stub: true`) with only `rule_id`, `template_class`, `applies_to`.
-- Your output **`rules`** array must include **every** `rule_id` from the input (same count and order).
-- **Only edit** rules in `focus_rule_ids`; return stubs **unchanged** for all other ids.
+- Your output **`rules`** array must include **every existing** `rule_id` from the input (stubs for non-focus).
+- **Default (Way B):** do **not** append new `rule_id`s. When `allow_append_rules` is true, you may append using `suggested_next_rule_ids` (full bodies, not stubs).
+- **Only edit** rules in `focus_rule_ids`; return stubs **unchanged** for all other **existing** ids.
+
+## `K_OF_N` (when in focus — critical)
+
+The assessment linearized view shows `no result_variable` or `assigns result → <name>` under each `K_OF_N` block. When a finding cites **missing outcome / yields / enforcement** on `K_OF_N`:
+
+- **`K_OF_N` allowed top-level fields:** `rule_id`, `template_class`, `applies_to`, `overrides`, `k`, `clauses`, optional **`result_variable`** (string).
+- **Forbidden on `K_OF_N`:** top-level `variable`, `yields`, `trigger_condition`, `required_condition` — the loader **silently drops** these; the repair round **fails validation** if you only add them.
+- **Correct fix (GLOBAL “every applicant” obligations — Way B):**
+  1. Set `"result_variable": "<aggregate_boolean>"` on the cited `K_OF_N` rule (same name gatekeepers already reference when present).
+  2. Fix `k` and `clauses` to match NL; use snake_case clause variables consistent with the policy.
+  3. **Do not** put `yields` or `variable` on `K_OF_N`; compile lowering enforces `result_variable`. **Do not** append a separate `CONSTANT_RELATIONAL` rule for the same NL line unless `allow_append_rules` is true.
+  4. Replace `K_OF_N` with `LOGICAL_IMPLICATION` + `or` on the **same `rule_id`** only when NL is **conditional**, not for bare “every applicant has…”.
+- **Never** claim in `change_summary` that you “added yields/variable to K_OF_N” unless `result_variable` or companion rules are **actually present** in the emitted JSON.
+- Read `repairer_ir_normative.md` vNext section for the same contract CrossRepairer uses.

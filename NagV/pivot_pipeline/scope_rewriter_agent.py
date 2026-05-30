@@ -15,6 +15,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from pivot_pipeline.llm import get_pivot_gemini_model, get_pivot_gemini_thinking_level_str
 from pivot_pipeline.paths import read_pivot_encodability_prompt_stack
+from pivot_pipeline.api_retry import api_auto_retries_max, call_with_transient_api_retries
 from registry_stage.llm.gemini_call import gemini_complete
 
 SCHEMA_VERSION = "scope_rewriter_sidecar_v1"
@@ -275,14 +276,22 @@ def _scope_rewriter_thinking() -> str | None:
 
 def call_scope_rewriter_llm(*, system_instruction: str, user_text: str) -> str:
     # application/json avoids invalid JSON from raw newlines inside string fields (e.g. plain_rules).
-    return gemini_complete(
-        system_instruction=system_instruction,
-        user_text=user_text,
-        model=_scope_rewriter_model(),
-        thinking_level=_scope_rewriter_thinking(),
-        max_output_tokens=_scope_rewriter_max_out(),
-        temperature=_scope_rewriter_temperature(),
-        response_mime_type="application/json",
+
+    def _call() -> str:
+        return gemini_complete(
+            system_instruction=system_instruction,
+            user_text=user_text,
+            model=_scope_rewriter_model(),
+            thinking_level=_scope_rewriter_thinking(),
+            max_output_tokens=_scope_rewriter_max_out(),
+            temperature=_scope_rewriter_temperature(),
+            response_mime_type="application/json",
+        )
+
+    return call_with_transient_api_retries(
+        _call,
+        label="scope_rewriter",
+        max_retries=api_auto_retries_max(env_var="PIVOT_SCOPE_REWRITER_API_AUTO_RETRIES"),
     )
 
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any, Callable
 
@@ -14,6 +15,7 @@ from pivot_pipeline.cross_critic_agent import (
 )
 from pivot_pipeline.cross_repairer_agent import cross_repair_handoff_dict
 from pivot_pipeline.policy_gates import PROCEED_INCOMPLETE_TOKEN, REPAIR_CRITIC_DRIFT_TOKEN
+from pivot_pipeline.api_retry import api_auto_retries_max, transient_api_retry_sleep_seconds
 from pivot_pipeline.test_repair_registry import is_repairer_api_error
 
 REPAIR_TOKEN = REPAIR_CRITIC_DRIFT_TOKEN
@@ -108,27 +110,20 @@ def fetch_cross_critic_report(
             if not is_repairer_api_error(e):
                 raise
             api_attempts += 1
-            if not interactive_any:
-                limit = api_cap if api_cap is not None else 3
-                if api_attempts <= limit:
-                    print_fn(
-                        f"\n[policy gate] CrossCritic API unavailable "
-                        f"({api_attempts}/{limit}): {e}\n"
-                        "  Retrying automatically…\n"
-                    )
-                    continue
-                raise
             if api_cap is None or api_attempts <= api_cap:
                 label = f"{api_attempts}/{api_cap}" if api_cap is not None else str(api_attempts)
                 print_fn(
                     f"\n[policy gate] CrossCritic API unavailable ({label}): {e}\n"
-                    "  Retrying automatically…\n"
+                    f"  Retrying in {transient_api_retry_sleep_seconds():g}s…\n",
                 )
+                time.sleep(transient_api_retry_sleep_seconds())
                 continue
+            if not interactive_any:
+                raise
             print_fn(
                 f"\n[policy gate] CrossCritic API unavailable after {api_cap} automatic retries.\n"
                 f"  {e}\n"
-                "  Type 'retry' to call CrossCritic again.\n"
+                "  Type 'retry' to call CrossCritic again.\n",
             )
             if resume_at_gate:
                 print_fn(
@@ -140,7 +135,7 @@ def fetch_cross_critic_report(
                 if cached is not None:
                     print_fn(
                         "  Press Enter to continue with the last saved CrossCritic report, "
-                        "or type 'retry'.\n"
+                        "or type 'retry'.\n",
                     )
                 else:
                     print_fn("  Press Enter to abort.\n")

@@ -1,6 +1,6 @@
 # Dev plan: External world tester — provenance fill, blind review, executable Z3 test (v1)
 
-**Status:** Draft  
+**Status:** Implemented (v1); default executable semantics superseded by **`dev_plan_external_world_tester_v2_global_scenario_v1.md`** (scenario + closed-world defaults)  
 **Priority:** P1  
 **Prerequisites (recommended):** Compiled policy in `work_dir` (`rules_extracted.json`, `meta_scheme.json`, Z3 sat/unsat baseline). Optional gate: prior Tester + Pivot Critic + CrossCritic clean (operator flag, not hard-coded to any domain).  
 **Related:** `dev_plans/dev_plan_executable_test_templates_v1.md`, `dev_plans/dev_plan_pivot_query_templates_and_z3_diagnostics_v1.md`, `dev_plans/dev_plan_cross_repairer_hardening_v1.md`, `dev_plans/dev_plan_pivot_test_repairer_hardening_v1.md`  

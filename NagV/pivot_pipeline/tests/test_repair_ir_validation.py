@@ -90,10 +90,35 @@ def test_k_of_n_binding_note_with_result_variable() -> None:
         {
             "template_class": "K_OF_N",
             "result_variable": "meets_support_ops_competency_requirement",
-        }
+        },
+        all_rules=[],
     )
     assert "assigns result" in note
     assert "meets_support_ops_competency_requirement" in note
+    assert "via compile lowering" in note
+
+
+def test_validate_global_k_of_n_accepts_result_variable_only() -> None:
+    before = {
+        "rule_id": "R0007",
+        "template_class": "K_OF_N",
+        "applies_to": "GLOBAL",
+        "k": 1,
+        "clauses": [
+            {"kind": "atom", "variable": "a", "operator": "EQ", "value": True},
+        ],
+    }
+    after = {**before, "result_variable": "has_required_backend_skills"}
+    validate_repair_ir_application(
+        rules_before=[before],
+        merged_rules=[after],
+        sanitized_rules=[after],
+        focus_rule_ids=["R0007"],
+        change_summary=[
+            {"finding_id": "T002", "rule_id": "R0007", "change": "Set result_variable"}
+        ],
+        dropped_by_rule_id={},
+    )
 
 
 def test_precompile_validated_accepts_result_variable(
@@ -127,7 +152,7 @@ def test_precompile_validated_accepts_result_variable(
                 "finding_id": "X001",
                 "rule_id": "R0019",
                 "change": "Set result_variable",
-            }
+            },
         ],
         skip_vnext_lowering=False,
     )

@@ -52,17 +52,47 @@ def _rules_by_id(rules: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     return {str(r.get("rule_id")).upper(): r for r in rules if r.get("rule_id")}
 
 
-def k_of_n_binding_note(rule: dict[str, Any]) -> str:
+def has_constant_relational_yields_satisfied(
+    rules: list[dict[str, Any]],
+    variable: str,
+) -> bool:
+    """True when some rule enforces ``variable EQ true`` with ``yields SATISFIED``."""
+    var = variable.strip()
+    if not var:
+        return False
+    for r in rules:
+        if str(r.get("template_class")) != "CONSTANT_RELATIONAL":
+            continue
+        if str(r.get("variable") or "").strip() != var:
+            continue
+        if r.get("constant_value") is True and str(r.get("yields") or "") == "SATISFIED":
+            return True
+    return False
+
+
+def k_of_n_binding_note(
+    rule: dict[str, Any],
+    *,
+    all_rules: list[dict[str, Any]] | None = None,
+) -> str:
     """Human-readable binding status for linearized / critic views."""
     if str(rule.get("template_class")) != "K_OF_N":
         return ""
     rv = (rule.get("result_variable") or "").strip()
-    if rv:
-        return f"assigns result → {rv}"
-    return (
-        "no result_variable — set result_variable on this K_OF_N, "
-        "or add companion LOGICAL_IMPLICATION / CONSTANT_RELATIONAL rules"
-    )
+    if not rv:
+        return (
+            "no result_variable — set result_variable on this K_OF_N "
+            "(compile lowering wires the aggregate boolean; one NL line → one rule_id)"
+        )
+    lines = [f"assigns result → {rv}"]
+    if all_rules is not None:
+        if has_constant_relational_yields_satisfied(all_rules, rv):
+            lines.append("enforcement: CONSTANT_RELATIONAL yields SATISFIED on result_variable")
+        else:
+            lines.append(
+                "enforcement: via compile lowering (result_variable → required atom EQ true)"
+            )
+    return "\n  ".join(lines)
 
 
 def validate_repair_ir_application(
@@ -123,8 +153,7 @@ def validate_repair_ir_application(
         if _canonical_rule(prior) == _canonical_rule(after):
             raise RepairIrValidationError(
                 f"{rid}: change_summary listed this focus rule but the sanitized rule is unchanged. "
-                "Emit a real edit (e.g. K_OF_N result_variable, LOGICAL_IMPLICATION companion, "
-                "CONSTANT_RELATIONAL yields SATISFIED) — invalid keys are stripped silently."
+                "Emit a real edit (e.g. K_OF_N result_variable, clause fixes) — invalid keys are stripped silently."
             )
 
     for entry in change_summary:
@@ -142,8 +171,7 @@ def validate_repair_ir_application(
         if _WIRING_CHANGE_RE.search(change_text):
             raise RepairIrValidationError(
                 f"{rid}: change_summary describes wiring/assignment but K_OF_N has no result_variable. "
-                "Set result_variable to the aggregate boolean consumed by gatekeeper rules, or add "
-                "LOGICAL_IMPLICATION / CONSTANT_RELATIONAL companion rules."
+                "Set result_variable to the aggregate boolean consumed by gatekeeper rules."
             )
 
 
@@ -190,14 +218,20 @@ def compile_validation_hint(exc: BaseException) -> str:
     msg = str(exc)
     if "result_variable" in msg or "K_OF_N" in msg:
         return (
-            "\n**K_OF_N wiring:** Use optional `result_variable` on the K_OF_N rule for the aggregate "
-            "boolean gatekeepers reference, and/or add LOGICAL_IMPLICATION + CONSTANT_RELATIONAL "
-            "companion rules. Never put `variable` or `yields` on K_OF_N — they are stripped.\n"
+            "\n**K_OF_N wiring:** Set optional `result_variable` on the cited K_OF_N rule for the "
+            "aggregate boolean gatekeepers reference. Never put `variable` or `yields` on K_OF_N — "
+            "they are stripped. Do not append new rule_ids unless PIVOT_REPAIR_ALLOW_APPEND_RULES=1.\n"
         )
     if "unchanged" in msg.lower():
         return (
             "\n**No-op repair:** Your last output did not change focus rules after sanitize. "
             "Emit concrete IR edits, not narrative-only change_summary.\n"
+        )
+    if "repair_strategy" in msg or "LOGICAL_IMPLICATION" in msg:
+        return (
+            "\n**Template repair_strategy:** Follow `repair_strategy` on each handoff finding. "
+            "Counterfactual tests need SAT mutant worlds with unsatisfied rule — not role-triggered "
+            "implication that makes mutant UNSAT, and not assign-only K_OF_N without result_variable.\n"
         )
     return ""
 
@@ -205,6 +239,7 @@ def compile_validation_hint(exc: BaseException) -> str:
 __all__ = [
     "RepairIrValidationError",
     "compile_validation_hint",
+    "has_constant_relational_yields_satisfied",
     "k_of_n_binding_note",
     "precompile_repaired_rules_validated",
     "sanitize_rule_dict_audited",

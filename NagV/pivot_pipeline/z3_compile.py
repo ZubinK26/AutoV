@@ -7,7 +7,7 @@ from typing import Any
 
 import time
 
-from z3 import And, Bool, Implies, Int, Not, Or, PbEq, PbLe, Solver, is_true, sat, unknown, unsat
+from z3 import And, Bool, BoolVal, Implies, Int, Not, Or, PbEq, PbLe, Solver, is_bool, is_true, sat, unknown, unsat
 
 from pivot_pipeline.ir import (
     ArithmeticEvaluation,
@@ -36,6 +36,12 @@ from pivot_pipeline.ir import (
     VariableRelational,
     Yields,
 )
+from pivot_pipeline.policy_literals import (
+    atom_rhs_to_z3,
+    get_active_policy_literals,
+    harvest_policy_literals,
+    set_active_policy_literals,
+)
 from pivot_pipeline.var_product_validate import product_int_cap
 
 
@@ -56,7 +62,7 @@ def _int_var(sym: dict[str, Any], sorts: dict[str, str], name: str) -> Any:
 
 def _scalar_to_z3(sym: dict[str, Any], sorts: dict[str, str], v: Any) -> Any:
     if isinstance(v, bool):
-        return 1 if v else 0
+        return BoolVal(v)
     if isinstance(v, int):
         return v
     if isinstance(v, float):
@@ -94,7 +100,14 @@ def encode_condition(
         assert isinstance(ca, ConditionAtom)
         v = _int_var(sym, sorts, ca.variable)
         rhs = ca.value
-        rhs_e = _int_var(sym, sorts, rhs) if isinstance(rhs, str) else _scalar_to_z3(sym, sorts, rhs)
+        if sorts.get(ca.variable) != "bool" and isinstance(rhs, bool):
+            from z3 import IntVal
+
+            rhs_e: Any = IntVal(1 if rhs else 0)
+        else:
+            rhs_e = atom_rhs_to_z3(
+                sym, sorts, rhs, int_var_fn=_int_var, scalar_fn=_scalar_to_z3
+            )
         return _rel(ca.operator, v, rhs_e)
     if k == "varcmp":
         cv = c  # type: ignore[assignment]
@@ -145,8 +158,9 @@ def encode_rule(
 ) -> Any:
     if isinstance(rule, ConstantRelational):
         v = _int_var(sym, sorts, rule.variable)
-        rhs = rule.constant_value
-        rhs_e = _int_var(sym, sorts, rhs) if isinstance(rhs, str) else _scalar_to_z3(sym, sorts, rhs)
+        rhs_e = atom_rhs_to_z3(
+            sym, sorts, rule.constant_value, int_var_fn=_int_var, scalar_fn=_scalar_to_z3
+        )
         return _maybe_not(_rel(rule.relational_operator, v, rhs_e), rule.yields)
     if isinstance(rule, VariableRelational):
         a = _int_var(sym, sorts, rule.left_variable)
@@ -277,6 +291,8 @@ def _pathway_formula(
 
 
 def build_solver(meta: MetaScheme) -> tuple[Solver, dict[str, Any]]:
+    rule_dicts = [r.model_dump(mode="json") for r in meta.rules]
+    set_active_policy_literals(harvest_policy_literals(rule_dicts))
     sym: dict[str, Any] = {}
     sorts = dict(meta.variable_sorts)
     by_id: dict[str, AtomicRule] = {r.rule_id: r for r in meta.rules}
@@ -346,7 +362,128 @@ def build_solver(meta: MetaScheme) -> tuple[Solver, dict[str, Any]]:
         pol = And(pol, box)
     solver = Solver()
     solver.add(pol)
-    return solver, {"symbols": sym, "policy": pol, "formulas_by_id": formulas_by_id, "sorts": sorts}
+    return solver, {
+        "symbols": sym,
+        "policy": pol,
+        "formulas_by_id": formulas_by_id,
+        "sorts": sorts,
+        "policy_literals": get_active_policy_literals(),
+    }
+
+
+def _bool_ref_for_track(phi: Any) -> Any:
+    """assert_and_track requires Z3 BoolRef; encode_rule may yield Python bool for vacuous preemptions."""
+    if isinstance(phi, bool):
+        return BoolVal(phi)
+    if is_bool(phi):
+        return phi
+    raise TypeError(f"expected boolean Z3 formula, got {type(phi).__name__}")
+
+
+def build_solver_tracked(meta: MetaScheme) -> tuple[Solver, dict[str, Any]]:
+    """
+    Solver with one assert_and_track per active pathway rule (for unsat core → rule_id).
+    """
+    rule_dicts = [r.model_dump(mode="json") for r in meta.rules]
+    set_active_policy_literals(harvest_policy_literals(rule_dicts))
+    sym: dict[str, Any] = {}
+    sorts = dict(meta.variable_sorts)
+    by_id: dict[str, AtomicRule] = {r.rule_id: r for r in meta.rules}
+    formulas_by_id: dict[str, Any] = {}
+    varprod_bounded: set[str] = set()
+
+    for rid, r in by_id.items():
+        if isinstance(r, Preemption):
+            continue
+        formulas_by_id[rid] = encode_rule(sym, sorts, r, formulas_by_id, varprod_bounded)
+
+    bypass_by_target = _validate_preemption_targets(
+        meta,
+        formulas_by_id=formulas_by_id,
+        by_id=by_id,
+        sym=sym,
+        sorts=sorts,
+        varprod_bounded=varprod_bounded,
+    )
+
+    for rid, r in by_id.items():
+        if isinstance(r, Preemption):
+            formulas_by_id[rid] = encode_rule(sym, sorts, r, formulas_by_id, varprod_bounded)
+
+    solver = Solver()
+    trackers: dict[str, Any] = {}
+    tracked_ids: list[str] = []
+
+    for pw in meta.evaluation_pathways:
+        for rid in pw.must_satisfy_all:
+            if rid not in formulas_by_id:
+                raise KeyError(f"pathway references unknown rule {rid!r}")
+            r = by_id[rid]
+            phi = _pathway_formula(
+                rid,
+                base_phi=formulas_by_id[rid],
+                rule=r,
+                formulas_by_id=formulas_by_id,
+                bypass_by_target=bypass_by_target,
+            )
+            key = rid
+            t = Bool(f"pc_track_{rid}")
+            trackers[key] = t
+            tracked_ids.append(key)
+            solver.assert_and_track(_bool_ref_for_track(phi), t)
+        for rid in pw.must_not_trigger:
+            if rid in formulas_by_id:
+                r = by_id[rid]
+                phi = _pathway_formula(
+                    rid,
+                    base_phi=formulas_by_id[rid],
+                    rule=r,
+                    formulas_by_id=formulas_by_id,
+                    bypass_by_target=bypass_by_target,
+                )
+                key = f"not_{rid}"
+                t = Bool(f"pc_track_{key}")
+                trackers[key] = t
+                tracked_ids.append(key)
+                solver.assert_and_track(Not(_bool_ref_for_track(phi)), t)
+
+    cap = product_int_cap()
+    if varprod_bounded:
+        box = And(
+            *[
+                And(_int_var(sym, sorts, name) >= 0, _int_var(sym, sorts, name) <= cap)
+                for name in sorted(varprod_bounded)
+            ]
+        )
+        key = "__varprod_box__"
+        t = Bool("pc_track_varprod_box")
+        trackers[key] = t
+        tracked_ids.append(key)
+        solver.assert_and_track(box, t)
+
+    return solver, {
+        "symbols": sym,
+        "formulas_by_id": formulas_by_id,
+        "sorts": sorts,
+        "trackers": trackers,
+        "tracked_ids": tracked_ids,
+        "tracker_to_rule": _tracker_rule_map(trackers),
+    }
+
+
+def _tracker_rule_map(trackers: dict[str, Any]) -> dict[str, str]:
+    """Map tracker key → rule_id for explanation."""
+    out: dict[str, str] = {}
+    for key in trackers:
+        if key.startswith("not_"):
+            out[key] = key[4:]
+        elif key.startswith("prem_"):
+            out[key] = key[5:]
+        elif key == "__varprod_box__":
+            out[key] = "__varprod_box__"
+        else:
+            out[key] = key
+    return out
 
 
 def run_z3_check(meta: MetaScheme) -> dict[str, Any]:

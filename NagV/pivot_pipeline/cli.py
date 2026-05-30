@@ -222,6 +222,72 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     p.add_argument(
+        "--with-template-repair",
+        action="store_true",
+        help=(
+            "After template suite run: diagnose fail/inconclusive tests, interactive triage, "
+            "Template Repairer on approved policy_ir findings, re-verify tester/critic/cross/suite."
+        ),
+    )
+    p.add_argument(
+        "--interactive-template-suite",
+        action="store_true",
+        help="Enable template diagnostic triage and REPAIR gate (or use --interactive-policy).",
+    )
+    p.add_argument(
+        "--fail-on-template-findings",
+        action="store_true",
+        help="Exit blocked_template when template suite has fail/inconclusive and not waived.",
+    )
+    p.add_argument(
+        "--with-external-tester",
+        action="store_true",
+        help=(
+            "After template suite (if any): fill world from --external-source via provenance agents, "
+            "blind review, then run one scenario Z3 test (full policy SAT + CWA defaults; "
+            "writes external_tester_run_report.json)."
+        ),
+    )
+    p.add_argument(
+        "--external-source",
+        type=Path,
+        default=None,
+        help="Unstructured text file or numbered JSON envelope for --with-external-tester.",
+    )
+    p.add_argument(
+        "--external-instance-id",
+        default="ext_001",
+        help="Instance id for external tester output (default ext_001).",
+    )
+    p.add_argument(
+        "--external-test-mode",
+        choices=("scenario", "decision_query"),
+        default=None,
+        help=(
+            "External tester executable: scenario (default) = policy∧world SAT with not_found→false/0; "
+            "decision_query = legacy single-rule probe (omits not_found from world)."
+        ),
+    )
+    p.add_argument(
+        "--external-fill-orchestration",
+        choices=("v2", "v3"),
+        default=None,
+        help="v3 (default): chunked two-phase fill + completeness critic; v2: monolithic fill.",
+    )
+    p.add_argument(
+        "--external-query-rule",
+        default=None,
+        help="Legacy decision_query only: force query.rule_id for fill agent.",
+    )
+    p.add_argument(
+        "--require-prior-critics",
+        action="store_true",
+        help=(
+            "With --with-external-tester: abort if tester/critic/cross reports are not clean "
+            "(when those artifacts exist in work_dir)."
+        ),
+    )
+    p.add_argument(
         "--no-vnext-lowering",
         action="store_true",
         help=(
@@ -247,6 +313,15 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.with_test_repair and not args.with_tester:
         print("error: --with-test-repair requires --with-tester", file=sys.stderr)
+        return 2
+    if args.with_template_repair and not args.with_template_generator and args.template_suite is None:
+        print(
+            "error: --with-template-repair requires --with-template-generator or --template-suite",
+            file=sys.stderr,
+        )
+        return 2
+    if args.with_external_tester and not args.external_source:
+        print("error: --with-external-tester requires --external-source", file=sys.stderr)
         return 2
 
     from pivot_pipeline.run import run_pivot_pipeline
@@ -282,6 +357,16 @@ def main(argv: list[str] | None = None) -> int:
         fail_on_varprod_trigger=args.fail_on_varprod_trigger,
         with_template_generator=args.with_template_generator,
         template_suite_path=args.template_suite,
+        with_template_repair=args.with_template_repair,
+        interactive_template_suite=args.interactive_template_suite,
+        fail_on_template_findings=args.fail_on_template_findings,
+        with_external_tester=args.with_external_tester,
+        external_source=args.external_source,
+        external_instance_id=args.external_instance_id,
+        external_query_rule=args.external_query_rule,
+        external_test_mode=args.external_test_mode,
+        external_fill_orchestration=args.external_fill_orchestration,
+        require_prior_critics=args.require_prior_critics,
         no_vnext_lowering=args.no_vnext_lowering,
         input_fn=input,
         print_fn=print,
@@ -302,7 +387,12 @@ def main(argv: list[str] | None = None) -> int:
         return (
             1
             if outcome
-            not in ("blocked_critic", "blocked_semantic_repair_compile", "blocked_test_repair_compile")
+            not in (
+                "blocked_critic",
+                "blocked_semantic_repair_compile",
+                "blocked_test_repair_compile",
+                "blocked_template_repair_compile",
+            )
             else 3
         )
     if summary.get("precheck_ok") is False:

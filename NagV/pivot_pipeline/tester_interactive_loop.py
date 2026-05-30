@@ -29,10 +29,15 @@ from pivot_pipeline.test_repair_registry import (
     test_repair_count_api_as_attempt,
     test_repair_registry_attempts_max,
 )
+from pivot_pipeline.repair_ir_validation import (
+    RepairIrValidationError,
+    compile_validation_hint,
+    precompile_repaired_rules_validated,
+)
 from pivot_pipeline.tester_repairer_agent import (
     MergeRepairerOutputError,
     append_test_repairer_trace,
-    precompile_repaired_rules,
+    focus_rule_ids_from_handoff,
     run_test_repairer,
     test_repair_compile_attempts_max,
     test_repair_max_rounds,
@@ -484,9 +489,50 @@ def run_tester_interactive_loop(
                     )
                     merged_rules = out.rules
                     rules_before = rules
+                    focus_ids = focus_rule_ids_from_handoff(h)
+                    cs_dumped = [c.model_dump() for c in out.change_summary]
+                    dropped_by_id: dict[str, list[str]] = {}
 
                     try:
-                        new_rules = precompile_repaired_rules(policy_id, merged_rules)
+                        new_rules, dropped_by_id = precompile_repaired_rules_validated(
+                            policy_id,
+                            merged_rules,
+                            rules_before=rules_before,
+                            focus_rule_ids=focus_ids,
+                            change_summary=cs_dumped,
+                        )
+                        if dropped_by_id:
+                            append_test_repairer_trace(
+                                work_dir,
+                                {
+                                    "repair_session": repair_sessions_used,
+                                    "compile_attempt": compile_attempt + 1,
+                                    "sanitize_dropped_keys": dropped_by_id,
+                                    "approved_finding_ids": sorted(approved),
+                                },
+                            )
+                    except RepairIrValidationError as ve:
+                        print_fn(
+                            f"[policy gate] Test-repaired rules failed IR validation (attempt "
+                            f"{compile_attempt + 1}/{compile_attempt_cap}): {ve}\n"
+                        )
+                        last_error = ve
+                        last_stage = "rules_compile"
+                        compile_feedback = str(ve) + compile_validation_hint(ve)
+                        merge_feedback = None
+                        append_test_repairer_trace(
+                            work_dir,
+                            {
+                                "repair_session": repair_sessions_used,
+                                "compile_attempt": compile_attempt + 1,
+                                "error_stage": "rules_compile",
+                                "compile_validation_error": str(ve),
+                                "sanitize_dropped_keys": dropped_by_id,
+                                "approved_finding_ids": sorted(approved),
+                            },
+                        )
+                        compile_attempt += 1
+                        continue
                     except Exception as ce:
                         print_fn(
                             f"[policy gate] Test-repaired rules did not compile (attempt "
@@ -494,7 +540,7 @@ def run_tester_interactive_loop(
                         )
                         last_error = ce
                         last_stage = "rules_compile"
-                        compile_feedback = str(ce)
+                        compile_feedback = str(ce) + compile_validation_hint(ce)
                         merge_feedback = None
                         append_test_repairer_trace(
                             work_dir,

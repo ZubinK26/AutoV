@@ -55,7 +55,9 @@ Used by extract/repair prompts. All rules include `rule_id`, `applies_to` (`GLOB
 {
   "rule_id": "R0005",
   "template_class": "K_OF_N",
+  "applies_to": "GLOBAL",
   "k": 2,
+  "result_variable": "meets_k_of_n_requirement",
   "clauses": [
     { "kind": "atom", "variable": "p", "operator": "EQ", "value": 1 },
     { "kind": "atom", "variable": "q", "operator": "EQ", "value": 1 }

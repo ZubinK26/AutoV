@@ -15,7 +15,11 @@ def rules_contain_vnext(rules: list[dict[str, Any]]) -> bool:
     return any(str(r.get("template_class")) in VNEXT_TEMPLATE_CLASSES for r in rules)
 
 
-def _linearize_vnext(rule: Mapping[str, Any]) -> list[str]:
+def _linearize_vnext(
+    rule: Mapping[str, Any],
+    *,
+    all_rules: list[dict[str, Any]] | None = None,
+) -> list[str]:
     rid = rule.get("rule_id", "?")
     tc = str(rule.get("template_class", "?"))
     lines: list[str] = [f"[{rid}] {tc}"]
@@ -43,7 +47,7 @@ def _linearize_vnext(rule: Mapping[str, Any]) -> list[str]:
         clauses = rule.get("clauses") or []
         k = rule.get("k")
         lines[0] = f"[{rid}] K_OF_N at_least k={k} of n={len(clauses)}"
-        binding = k_of_n_binding_note(rule)
+        binding = k_of_n_binding_note(dict(rule), all_rules=all_rules)
         if binding:
             lines.append(f"  {binding}")
         lines.append("  clauses:")
@@ -93,7 +97,7 @@ def build_assessment_linearized(rules: list[dict[str, Any]]) -> str:
     for r in rules:
         tc = str(r.get("template_class", ""))
         if tc in VNEXT_TEMPLATE_CLASSES:
-            blocks.extend(_linearize_vnext(r))
+            blocks.extend(_linearize_vnext(r, all_rules=rules))
         else:
             blocks.append(linearize_rule_line(r))
         blocks.append("")

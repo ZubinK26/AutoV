@@ -52,9 +52,18 @@ def call_agent4_gemini(user_payload: str, *, system: str | None = None) -> str:
     if thinking_level is not None:
         cfg_kwargs["thinking_config"] = genai_types.ThinkingConfig(thinking_level=thinking_level)
 
-    response = client.models.generate_content(
-        model=model,
-        contents=user_payload,
-        config=genai_types.GenerateContentConfig(**cfg_kwargs),
+    from registry_stage.api_retry import api_auto_retries_max, call_with_transient_api_retries
+
+    def _generate() -> str:
+        response = client.models.generate_content(
+            model=model,
+            contents=user_payload,
+            config=genai_types.GenerateContentConfig(**cfg_kwargs),
+        )
+        return (response.text or "").strip()
+
+    return call_with_transient_api_retries(
+        _generate,
+        label="wfm_agent4",
+        max_retries=api_auto_retries_max(env_var="PIVOT_WFM_API_AUTO_RETRIES"),
     )
-    return (response.text or "").strip()

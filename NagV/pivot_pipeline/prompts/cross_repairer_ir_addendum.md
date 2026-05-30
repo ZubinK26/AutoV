@@ -46,10 +46,10 @@ When a finding says wire minimum criteria, escalation, or missing-info into **R0
 2. Use **variable names already present** in the payload / linearized excerpt / cited rules. **Do not invent** new `rule_id` values to host a `K_OF_N` block inside a gatekeeper.
 3. **`K_OF_N` → aggregate boolean wiring (critical):** `K_OF_N` rules support **`result_variable`** only (optional string). They **cannot** use top-level `variable`, `yields`, or prose fields — the loader **silently drops** those keys and the repair round will **fail validation**.
    - To connect a `K_OF_N` block to booleans used in gatekeeper triggers: set `"result_variable": "<boolean_name>"` on that `K_OF_N` rule (same name R0036/R0037 already reference).
-   - For **`yields SATISFIED`** enforcement like experience rules: add a separate **`CONSTANT_RELATIONAL`** rule (new `rule_id` only if unavoidable) on that boolean, or a **`LOGICAL_IMPLICATION`** companion — **not** `yields` on `K_OF_N`.
+   - For aggregate enforcement: set **`result_variable`** on the cited **`K_OF_N`** rule (Way B default). **Not** `yields` on `K_OF_N`. Append a separate **`CONSTANT_RELATIONAL`** only when `allow_append_rules` is true in the payload.
    - **Never** claim in `change_summary` that you “added variable/yields to K_OF_N” unless `result_variable` or companion rules are actually present.
 4. If gatekeepers already reference a boolean but the linearized line says **`no result_variable`**, edit the cited **`K_OF_N` `rule_id`** (set `result_variable`) — do **not** only add `atom` conjuncts on gatekeepers without defining the boolean.
-5. For **`outcome_split` / `yields SATISFIED`** findings on competency: add **`CONSTANT_RELATIONAL`** companion rule(s) on the wired boolean; do not paste `yields` onto `K_OF_N`.
+5. For **`outcome_split` / `yields SATISFIED`** on a `K_OF_N` aggregate: set **`result_variable`** on the cited `K_OF_N` rule; do not paste `yields` onto `K_OF_N` or append new rule ids unless `allow_append_rules` is true.
 
 ### After a compile error mentioning `k_of_n` in `trigger_condition`
 

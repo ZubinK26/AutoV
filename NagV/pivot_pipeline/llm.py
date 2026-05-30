@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import os
-
 from registry_stage.llm.gemini_call import gemini_complete
-
 
 def get_pivot_gemini_model() -> str:
     """Default ``gemini-3-flash-preview``; override with ``PIVOT_GEMINI_MODEL`` only."""
@@ -47,6 +45,7 @@ def pivot_llm_complete(
     }
     if cap is not None:
         kw["max_output_tokens"] = cap
+
     return gemini_complete(**kw)
 
 

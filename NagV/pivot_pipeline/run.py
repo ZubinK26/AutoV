@@ -46,6 +46,16 @@ def run_pivot_pipeline(
     fail_on_varprod_trigger: bool = False,
     with_template_generator: bool = False,
     template_suite_path: Path | None = None,
+    with_template_repair: bool = False,
+    interactive_template_suite: bool = False,
+    fail_on_template_findings: bool = False,
+    with_external_tester: bool = False,
+    external_source: Path | None = None,
+    external_instance_id: str = "ext_001",
+    external_query_rule: str | None = None,
+    external_test_mode: str | None = None,
+    external_fill_orchestration: str | None = None,
+    require_prior_critics: bool = False,
     no_vnext_lowering: bool = False,
     input_fn: Callable[[str], str] | None = None,
     print_fn: Callable[..., None] = print,
@@ -1064,6 +1074,120 @@ def run_pivot_pipeline(
                     summary["template_suite_ok"] = False
                     summary["template_suite_error"] = f"{type(e).__name__}: {e}"
                     print_fn(f"[template_suite] run failed (non-fatal): {e}", file=sys.stderr)
+
+    if with_template_repair and summary.get("template_run_report"):
+        interactive_template_any = interactive_policy or interactive_template_suite
+        suite_for_repair = template_suite_path
+        if suite_for_repair is None and summary.get("template_suite_path"):
+            suite_for_repair = Path(summary["template_suite_path"])
+        if suite_for_repair is not None and suite_for_repair.is_file():
+            try:
+                from pivot_pipeline.template_interactive_loop import run_template_interactive_loop
+
+                rules, meta, synth, z3_result, ok, issues, linearized, early_t = (
+                    run_template_interactive_loop(
+                        work_dir=work_dir,
+                        nl_text_for_artifacts=nl_text_for_artifacts,
+                        nl_for_precheck=nl_for_precheck,
+                        nl_lines_reg=nl_lines_reg,
+                        policy_id=policy_id,
+                        rules=rules,
+                        meta_path=meta_path,
+                        skip_registry=skip_registry,
+                        no_llm=no_llm,
+                        skip_vnext_lowering=no_vnext_lowering,
+                        interactive_any=interactive_template_any,
+                        with_template_repair=True,
+                        suite_path=suite_for_repair.resolve(),
+                        reverify_tester=with_tester,
+                        reverify_critic=not skip_critic,
+                        reverify_cross=with_cross_critic,
+                        skip_critic=skip_critic,
+                        with_cross_critic=with_cross_critic,
+                        print_fn=print_fn,
+                        input_fn=input_fn,
+                        summary=summary,
+                        synth=synth,
+                        meta=meta,
+                        z3_result=z3_result,
+                        ok=ok,
+                        issues=issues,
+                        linearized=linearized,
+                    )
+                )
+                if early_t:
+                    summary["outcome"] = early_t
+                    (work_dir / "run_summary.json").write_text(
+                        json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                        encoding="utf-8",
+                    )
+                    return summary
+            except PivotPipelineUserAbort:
+                summary["outcome"] = "aborted"
+                (work_dir / "run_summary.json").write_text(
+                    json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+                    encoding="utf-8",
+                )
+                return summary
+        elif with_template_repair:
+            print_fn(
+                "[template_repair] skipped: no template suite path (run --with-template-generator first).",
+                file=sys.stderr,
+            )
+
+    if (
+        fail_on_template_findings
+        and summary.get("template_suite_summary")
+        and (
+            int(summary["template_suite_summary"].get("failed", 0))
+            + int(summary["template_suite_summary"].get("inconclusive", 0))
+        )
+        > 0
+        and not summary.get("user_consented_template_issues")
+    ):
+        summary["outcome"] = "blocked_template"
+        summary["message"] = "template suite has fail/inconclusive (--fail-on-template-findings)"
+        (work_dir / "run_summary.json").write_text(
+            json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        return summary
+
+    if with_external_tester and external_source is not None:
+        if no_llm:
+            summary["external_tester_skipped"] = "no_llm"
+            print_fn(
+                "[external_tester] skipped: --no-llm (external tester requires LLM).",
+                file=sys.stderr,
+            )
+        elif not external_source.is_file():
+            summary["external_tester_ok"] = False
+            summary["external_tester_error"] = f"missing --external-source: {external_source}"
+            print_fn(f"[external_tester] {summary['external_tester_error']}", file=sys.stderr)
+        else:
+            try:
+                from pivot_pipeline.external_tester.run import run_external_tester_pipeline
+
+                ext = run_external_tester_pipeline(
+                    work_dir=work_dir,
+                    source_path=external_source.resolve(),
+                    rules_extracted_path=work_dir / "rules_extracted.json",
+                    instance_id=external_instance_id,
+                    query_rule_id=external_query_rule,
+                    test_mode=external_test_mode,
+                    fill_orchestration=external_fill_orchestration,
+                    require_prior_critics=require_prior_critics,
+                    print_fn=print_fn,
+                )
+                summary.update(ext)
+                if ext.get("external_test_verdict"):
+                    print_fn(
+                        f"[external_tester] Z3 test verdict: {ext.get('external_test_verdict')}",
+                    )
+            except Exception as e:
+                summary["external_tester_ok"] = False
+                summary["external_tester_error"] = f"{type(e).__name__}: {e}"
+                print_fn(f"[external_tester] failed (non-fatal): {e}", file=sys.stderr)
 
     warnings: list[str] = []
     if summary.get("user_consented_wfm_incomplete_coverage"):

@@ -66,5 +66,5 @@ Each **core** rule object may include **only** `BaseRule` fields plus the templa
 ## vNext templates (assessment / lowering)
 
 - **`K_OF_N`:** `k`, `clauses`, optional **`result_variable`** (aggregate boolean set true when ≥k clauses hold). **Not** `variable`, **not** `yields` at rule top level.
-- Wiring gatekeepers: set `result_variable` on the `K_OF_N` rule **or** add **`LOGICAL_IMPLICATION`** / **`CONSTANT_RELATIONAL`** companion rules. Invalid keys are **dropped on sanitize**; repairs that only add dropped keys fail validation.
-- Linearized assessment view shows `assigns result → <name>` or `no result_variable` for each `K_OF_N` — match that contract after repair.
+- Wiring gatekeepers: set **`result_variable`** on the `K_OF_N` rule (Way B — one NL line → one `rule_id`; compile lowering enforces the aggregate). Optional separate **`CONSTANT_RELATIONAL`** on the same boolean is legacy-only. Invalid keys are **dropped on sanitize**; repairs that only add dropped keys fail validation.
+- Linearized assessment view shows `assigns result → <name>` with `enforcement: via compile lowering` or `no result_variable` — match that contract after repair.

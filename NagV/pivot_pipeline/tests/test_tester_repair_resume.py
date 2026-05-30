@@ -13,6 +13,24 @@ from pivot_pipeline.tester_repair_resume import (
 )
 
 
+def test_validate_resume_after_proceed_incomplete_message(tmp_path: Path) -> None:
+    (tmp_path / "tester_report.json").write_text(
+        TesterReport(verdict="issues", findings=[TesterFinding(id="T001")]).model_dump_json(),
+        encoding="utf-8",
+    )
+    (tmp_path / "tester_repair_handoff.json").write_text(
+        json.dumps(
+            {
+                "approved_finding_ids": [],
+                "source_note": "user chose PROCEED_INCOMPLETE after tester issues",
+            }
+        ),
+        encoding="utf-8",
+    )
+    with pytest.raises(TesterRepairResumeError, match="PROCEED_INCOMPLETE"):
+        validate_tester_repair_resume(tmp_path)
+
+
 def test_validate_resume_requires_approvals(tmp_path: Path) -> None:
     (tmp_path / "tester_report.json").write_text(
         TesterReport(verdict="issues", findings=[TesterFinding(id="T001")]).model_dump_json(),

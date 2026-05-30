@@ -1,0 +1,44 @@
+flowchart TB
+  subgraph VALUE["Why run this pipeline"]
+    V0["Formalize policy, then stack evidence<br/>that English and the model agree"]
+  end
+
+  subgraph IN["You start with"]
+    NL["Plain-English policy file<br/><b>--input</b><br/>one rule per line, or chunkable text"]
+    OPT_SR["Optional: scope rewriter<br/>What: long spec → encodable lines<br/>How: pre-step agent → latest.nl"]
+  end
+
+  subgraph CORE["Core path — make it formal (always)"]
+    P0["① Normalize text — Pivot WFM<br/>What: stable numbered English for this run<br/>How: chunk workflow, multi-agent rewrite;<br/>progress saved — runs can resume"]
+    P1["② Extract structured rules<br/>What: machine-readable JSON per line<br/>How: LLM extractor + registry aligns<br/>variable names across rules"]
+    P2["③ Compile + Z3 check<br/>What: one formal model + SAT sanity<br/>How: meta_scheme + Z3 encoder;<br/>structural repair if compile fails"]
+  end
+
+  subgraph ALIGN["Optional — LLM alignment reviews"]
+    T["④ Tester — <i>--with-tester</i><br/>What: each NL line vs its rule encoding<br/>How: LLM vs linearized IR;<br/>interactive Test-Repair on findings"]
+    C["⑤ Semantic critic — <i>--with-critic</i><br/>What: whole policy vs model summary<br/>How: NL vs synthetic_en.md;<br/>Repairer_Piv when DRIFT"]
+    X["⑥ Cross-critic — <i>--with-cross-critic</i><br/>What: text vs how rules wire together<br/>How: NL vs linearized IR;<br/>CrossRepairer on approved issues"]
+    XR["Cross-repair loop<br/>How: patch JSON → recompile →<br/>re-run cross (± final semantic pass)"]
+  end
+
+  subgraph TEST["Optional — run the model, not just read it"]
+    TG["⑦ Template suite — <i>--with-template-generator</i><br/>What: many scenarios vs golden outcomes<br/>How: LLM fills fixed template kinds →<br/>same Z3 path → pass/fail report"]
+    EW["⑧ External world tester — <i>--with-external-tester</i><br/>What: real document → one grounded test<br/>How: fill all vars + line cites → blind review → Z3<br/>detail: external_world_tester_overview.md"]
+  end
+
+  subgraph OUT["You get (--work-dir)"]
+    PKG["Evidence bundle on disk<br/>rules_extracted, meta_scheme, z3_result,<br/>reports you enabled, run_summary.json"]
+  end
+
+  OPT_SR -.-> NL
+  NL --> P0 --> P1 --> P2
+  P2 --> T --> C --> X
+  X --> XR
+  XR -.-> X
+  X --> TG
+  X --> EW
+  P2 --> PKG
+  TG --> PKG
+  EW --> PKG
+  T -.-> PKG
+  VALUE -.-> CORE

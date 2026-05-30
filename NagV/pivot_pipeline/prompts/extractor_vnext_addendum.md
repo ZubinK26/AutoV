@@ -60,10 +60,15 @@ Example (three terms):
 
 ## `K_OF_N` (minimal)
 
+For **GLOBAL** mandatory NL (“every applicant must satisfy at least k of n”), include **`result_variable`** on the same rule (Way B — do not add a second rule for the same NL line):
+
 ```json
 {
+  "rule_id": "R0007",
   "template_class": "K_OF_N",
+  "applies_to": "GLOBAL",
   "k": 2,
+  "result_variable": "meets_example_requirement",
   "clauses": [
     { "kind": "atom", "variable": "a", "operator": "EQ", "value": 1 },
     { "kind": "atom", "variable": "b", "operator": "EQ", "value": 1 },

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any, Callable
 
@@ -33,6 +34,7 @@ from pivot_pipeline.semantic_critic_triage import (
     write_critic_repair_handoff,
 )
 from pivot_pipeline.semantic_repair_apply import run_semantic_repair_session
+from pivot_pipeline.api_retry import api_auto_retries_max, transient_api_retry_sleep_seconds
 from pivot_pipeline.test_repair_registry import is_repairer_api_error
 from pivot_pipeline.varprod_trigger_validate import linearize_varprod_rules_excerpt
 
@@ -43,15 +45,9 @@ def critic_api_auto_retries_max() -> int | None:
     """
     Max automatic Pivot Critic retries on transient API errors.
 
-    ``PIVOT_CRITIC_API_AUTO_RETRIES=0`` (default) = unlimited in interactive mode.
+    ``PIVOT_CRITIC_API_AUTO_RETRIES=0`` (default) = unlimited.
     """
-    raw = os.getenv("PIVOT_CRITIC_API_AUTO_RETRIES", "0").strip()
-    if raw in ("", "0"):
-        return None
-    try:
-        return max(1, min(int(raw), 100))
-    except ValueError:
-        return None
+    return api_auto_retries_max(env_var="PIVOT_CRITIC_API_AUTO_RETRIES")
 
 
 def run_pivot_critic_with_api_retries(
@@ -78,17 +74,15 @@ def run_pivot_critic_with_api_retries(
             if not is_repairer_api_error(e):
                 raise
             attempts += 1
-            if not interactive_any:
-                limit = cap if cap is not None else 3
-                if attempts >= limit:
-                    raise
-            elif cap is not None and attempts > cap:
+            if cap is not None and attempts > cap:
                 raise
             label = f"{attempts}/{cap}" if cap is not None else str(attempts)
             print_fn(
                 f"\n[policy gate] Pivot Critic API unavailable ({label}): {e}\n"
-                "  Retrying automatically…\n"
+                f"  Retrying in {transient_api_retry_sleep_seconds():g}s…\n",
             )
+            time.sleep(transient_api_retry_sleep_seconds())
+            continue
 
 
 def _print_semantic_drift_gate(

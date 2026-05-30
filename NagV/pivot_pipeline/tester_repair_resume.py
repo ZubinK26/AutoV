@@ -40,6 +40,13 @@ def validate_tester_repair_resume(work_dir: Path) -> tuple[TesterReport, dict[st
     handoff = load_tester_repair_handoff(work_dir)
     approved = handoff.get("approved_finding_ids") or []
     if not approved:
+        note = str(handoff.get("source_note") or "").lower()
+        if "proceed_incomplete" in note:
+            raise TesterRepairResumeError(
+                "tester_repair_handoff.json has no approved_finding_ids after PROCEED_INCOMPLETE. "
+                "Omit --resume-tester-repair and run with --with-tester --with-test-repair to triage again, "
+                "or restore approved_finding_ids in the handoff (see tester_report.json)."
+            )
         raise TesterRepairResumeError(
             "tester_repair_handoff.json has no approved_finding_ids; triage and REPAIR first, or use full pivot-tester"
         )

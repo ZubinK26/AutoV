@@ -32,7 +32,18 @@ def get_gemini_module():
 
 
 def call_gemini(client, **kwargs):
-    return get_gemini_module().call_gemini(client, **kwargs)
+    from registry_stage.api_retry import api_auto_retries_max, call_with_transient_api_retries
+
+    mod = get_gemini_module()
+
+    def _call():
+        return mod.call_gemini(client, **kwargs)
+
+    return call_with_transient_api_retries(
+        _call,
+        label="wfm_gemini",
+        max_retries=api_auto_retries_max(env_var="PIVOT_WFM_API_AUTO_RETRIES"),
+    )
 
 
 def env_thinking_level():

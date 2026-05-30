@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from typing import Any, Callable
 
+from pivot_pipeline.llm import pivot_llm_complete
 from pivot_pipeline.registry_pass import (
     apply_registry_to_rules,
     build_alias_map,
@@ -34,8 +35,9 @@ def test_repair_count_api_as_attempt() -> bool:
 
 
 def is_repairer_api_error(exc: BaseException) -> bool:
-    msg = str(exc).upper()
-    return "503" in msg or "UNAVAILABLE" in msg or "RATE" in msg or "QUOTA" in msg
+    from pivot_pipeline.api_retry import is_transient_api_error
+
+    return is_transient_api_error(exc)
 
 
 def slug_set(rules: list[dict[str, Any]]) -> set[str]:
@@ -74,7 +76,7 @@ def run_test_repair_registry(
     rules_before: list[dict[str, Any]],
     merged_rules: list[dict[str, Any]],
     cli_skip_registry: bool,
-    llm: Callable[..., str],
+    llm: Callable[..., str] = pivot_llm_complete,
 ) -> tuple[dict[str, Any] | None, list[dict[str, Any]], bool]:
     """
     Apply registry to merged rules.
