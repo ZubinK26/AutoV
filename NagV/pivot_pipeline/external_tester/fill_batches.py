@@ -41,7 +41,13 @@ def catalog_excerpt_for_names(
     for name in names:
         sort = sorts.get(name, "?")
         tier = f", tier={tiers[name]}" if tiers else ""
-        lines.append(f"- `{name}` ({sort}{tier})")
+        extra = ""
+        if sort == "bool" and tiers and tiers.get(name) == "grounded":
+            from pivot_pipeline.external_tester.variable_catalog import assessment_mode_for_var
+
+            if assessment_mode_for_var(name, "bool") == "subjective_llm":
+                extra = ", assessment=subjective_llm (document judgment; bool only)"
+        lines.append(f"- `{name}` ({sort}{tier}{extra})")
     return "\n".join(lines)
 
 

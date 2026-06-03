@@ -4,8 +4,9 @@ The extractor replied with **ABORT** for the policy line below — it cannot be 
 
 Your job: propose **one** replacement English rule line that:
 
-1. **Fits v1** — encodable using core eight + vNext expansion + **temporal surrogates T1–T8** (appended contract): scalar order (`VARIABLE_RELATIONAL`), prerequisites and step chains (`LOGICAL_IMPLICATION` with named flags), phases (`EXCLUSIVE_CHOICE`, `K_OF_N`, `INT_RANGE`, tables), etc.
+1. **Fits v1** — encodable using core eight + vNext expansion + **temporal surrogates T1–T8** + **subjective assessment S1–S4** (appended contract): scalar order (`VARIABLE_RELATIONAL`), prerequisites and step chains (`LOGICAL_IMPLICATION` with named flags), phases (`EXCLUSIVE_CHOICE`, `K_OF_N`, `INT_RANGE`, tables), **bool judgment surrogates** for qualitative norms, etc.
 2. **Preserves intent** as far as those constraints allow — for process order, emit **T1–T8 shaped** English (named `step_*_complete`, `phase`, order scalars), not generic simplification that drops order.
+3. **No invented metrics** — do not replace “clear technical English” with “proficiency score > 90” unless the original line states a numeric threshold. Use **bool** formalization (S1) instead.
 3. Does **not** silently strengthen or weaken policy: call out tradeoffs in `semantic_deltas`.
 
 ## Output

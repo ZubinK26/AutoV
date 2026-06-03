@@ -14,6 +14,33 @@ from pivot_pipeline.registry_pass import collect_used_slugs
 
 _BOOL_OPS = frozenset({"EQ", "NEQ"})
 
+# Bool names suggesting LLM document judgment (catalog hint for fill prompts).
+_SUBJECTIVE_BOOL_FRAGMENTS = (
+    "can_write",
+    "can_speak",
+    "well_structured",
+    "badly_structured",
+    "clear_english",
+    "technical_english",
+    "communicat",
+    "proficien",
+    "quality_",
+    "adequate",
+    "professional",
+    "similar_technology",
+    "meets_",
+    "_assessed",
+)
+
+
+def _assessment_mode_for_var(name: str, sort: str) -> str | None:
+    if sort != "bool":
+        return None
+    low = name.lower()
+    if any(frag in low for frag in _SUBJECTIVE_BOOL_FRAGMENTS):
+        return "subjective_llm"
+    return None
+
 
 def _walk_condition(obj: Any, *, bool_vars: set[str], int_vars: set[str]) -> None:
     if isinstance(obj, dict):
@@ -108,14 +135,16 @@ def write_variable_catalog(
     tiers: dict[str, Tier] = {}
     if rules is not None:
         tiers = tiers_for_meta(meta, rules)
-    rows = [
-        {
-            "name": k,
-            "sort": meta.variable_sorts[k],
-            **({"tier": tiers[k]} if tiers else {}),
-        }
-        for k in sorted(meta.variable_sorts.keys())
-    ]
+    rows = []
+    for k in sorted(meta.variable_sorts.keys()):
+        sort = meta.variable_sorts[k]
+        row: dict[str, Any] = {"name": k, "sort": sort}
+        if tiers:
+            row["tier"] = tiers[k]
+        mode = _assessment_mode_for_var(k, sort)
+        if mode:
+            row["assessment_mode"] = mode
+        rows.append(row)
     path = work_dir / "variable_catalog.json"
     payload: dict[str, Any] = {"variables": rows}
     if rules is not None:
@@ -138,8 +167,12 @@ def catalog_prompt_excerpt(meta: MetaScheme, *, max_chars: int = 12_000) -> str:
 
 
 __all__ = [
+    "assessment_mode_for_var",
     "catalog_prompt_excerpt",
     "ensure_meta_variable_sorts",
     "harvest_variable_sorts",
     "write_variable_catalog",
 ]
+
+# Public alias for fill batch excerpts.
+assessment_mode_for_var = _assessment_mode_for_var

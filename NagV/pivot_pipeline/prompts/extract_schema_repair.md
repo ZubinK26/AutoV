@@ -11,6 +11,7 @@ You fix **one** invalid model output so it becomes a **single** valid Pivot IR J
 5. **v1 encodability:** No variable×variable products in `ARITHMETIC_EVALUATION`; use `varprod_cmp` in `ConditionExpr` only as in the contract. PREEMPTION `target_rule_id` rules as in the shared contract appended to the extractor prompt.
 6. **Forbidden keys:** Remove top-level **`action`** and **`target_rule_id`** unless `template_class` is **`PREEMPTION`**.
 6. **Temporal surrogates (T1–T8):** If the line matches the temporal addendum (order, prerequisites, step flags, phases, k-of-n), repair to the mapped template — do not ABORT when a surrogate applies.
+7. **Subjective assessment (S1–S4):** Qualitative norms without source-stated numbers → **bool** + `CONSTANT_RELATIONAL` (or global bool obligation), not invented int scores or `SUM_THRESHOLD`.
 
 ## PREEMPTION (common fix)
 

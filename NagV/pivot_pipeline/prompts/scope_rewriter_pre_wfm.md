@@ -56,7 +56,8 @@ The following block is normative **only** when the user message’s `input_mode`
 ### Coverage and concretization (policy intent mode)
 
 - Every **substantive** constraint in the specification must be **realized** in **`plain_rules`** **or** appear in **`partial_rewrites`** / **`semantic_deltas`** with an honest reason (cannot encode in v1, needs human split, etc.).
-- You **may concretize** for encodability: explicit thresholds, **named scalar surrogates**, **finite disjunctions**, **extra lines** that unpack one spec clause — when implied by or necessary to realize the spec; document non-obvious choices in **`semantic_deltas`**.
+- You **may concretize** for encodability: **finite disjunctions**, **bool assessment surrogates** (see subjective assessment addendum), **numeric thresholds only when the spec states numbers**, **extra lines** that unpack one spec clause — when implied by or necessary to realize the spec; document non-obvious choices in **`semantic_deltas`**.
+- **Do not invent metrics:** never replace qualitative norms with proficiency scores, 0–100 scales, or “must exceed N” unless **N is in the source**.
 - **Intent fidelity** replaces “source-span equality”: `strict_equivalence_achievable` is `true` only if the rule set captures the specification **as completely** as pivot v1 allows **without** unstated additions.
 
 ### Modality and logic (policy intent mode)
@@ -80,10 +81,11 @@ The following block is normative **only** when the user message’s `input_mode`
 | Tag | When to use |
 |-----|-------------|
 | `state_constraint` | Static predicated facts, roles, caps that are not inherently procedural order. |
-| `arithmetic_threshold` | Numeric comparisons, piecewise caps, floors/ceilings. |
+| `arithmetic_threshold` | Numeric comparisons, piecewise caps, floors/ceilings **only when the source states quantities or point values**. |
+| `subjective_assessment` | Qualitative ability/clarity/quality/structure (“clear,” “well-written,” “badly structured”) — rewrite per **S1–S4** in subjective assessment addendum: **bool** surrogate + disclosed document assessment; **not** invented scores. |
 | `enumeration` | Closed sets, forbidden literals, allowed branch names when the set is finite and explicit. |
 | `temporal_or_process_order` | Before/after, fixed evaluation order, gating by phase — use **temporal surrogates** (T1–T8 in injected addendum): rewrite to state-shaped lines with named flags/ints; **do not** summarize away order. Still tag the line; set `temporal_surrogate_applied` when you apply a pattern. |
-| `comparative_judgment` | Superlatives (best/most/relevant) without a defined metric — **high friction**. |
+| `comparative_judgment` | Superlatives (best/most/relevant) without a defined metric — use **bool bar** or finite disjunction (S4); **do not** scalarize to 0–100. |
 | `artifact_or_filesystem` | Paths, directory layout, filenames — **high friction** if out of scope. |
 | `mixed` | Needs splitting or a surrogate; or you cannot pick one primary type honestly. |
 
@@ -91,7 +93,11 @@ The following block is normative **only** when the user message’s `input_mode`
 
 Do **not** collapse normative ordering (A then B then C) into one vague line without disclosure.
 
-**Comparatives:** scalarize or finite disjunction where possible; else surrogate + honest flags.
+**Qualitative norms:** prefer **`subjective_assessment`** tag + bool surrogate (S1); no invented metrics.
+
+**Comparatives:** finite disjunction or bool threshold (S4); **never** invent 0–100 or rank scores unless the source defines them.
+
+**Numeric source text:** use `arithmetic_threshold` / stated ints only when numbers appear in the source (S2).
 
 **Artifacts:** prefer content obligations over filesystem where the contract is tight.
 

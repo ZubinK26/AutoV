@@ -81,6 +81,8 @@ Use `snake_case` variable names (e.g. `days_since_purchase`, `refund_amount`).
 
 - **Output shape:** one JSON object only — no markdown fences, no trailing comma, no comments.
 - **template_class:** **core eight** or **vNext expansion eight** (see appended encodability contract + vNext addendum) — never invent a new class name. Prefer core `LOGICAL_IMPLICATION` / `CONSTANT_RELATIONAL` when sufficient; use expansion (e.g. `K_OF_N`, `SUM_THRESHOLD` with **≤4 terms**) when NL clearly requires it. If impossible, **`ABORT: Ruleset exceeds decidable scope.`**
+- **Subjective qualitative norms** (“clear,” “well-written,” “professional quality,” “badly structured” without a stated number): encode as **`CONSTANT_RELATIONAL`** on a **bool** variable (descriptive name, `EQ true`) or a global bool obligation — see subjective assessment addendum. **Do not** invent int scores, proficiency metrics, or unstated numeric cutoffs.
+- **`SUM_THRESHOLD` / `INT_RANGE`:** use only when the **input line** states counts, weights, point values, or numeric thresholds.
 - **Enums:** uppercase tokens only (`SATISFIED`, `BYPASS_RULE`, `EQ`, …).
 - **PREEMPTION:** for `BYPASS_RULE` / `FORCE_*`, always set `target_rule_id` to a **prior** line's `rule_id` (`R0001`…), never to another `PREEMPTION`.
 - **ConditionExpr:** every node has `kind`; `and` / `or` need **at least two** children.
@@ -90,6 +92,10 @@ Use `snake_case` variable names (e.g. `days_since_purchase`, `refund_amount`).
 ## Temporal surrogates
 
 When the line matches **T1–T8** in the appended temporal addendum (scalar order, prerequisites, step chains, phases, k-of-n, phase tables, int counters), emit the mapped **core or vNext** template — **do not ABORT**. T3 requires **one rule per implication link** in the policy file (one line in → one JSON out per call). Prerequisite and ordering structure must appear as named variables in conditions.
+
+## Subjective assessment surrogates
+
+When the line matches **S1–S4** in the appended subjective assessment addendum (qualitative ability/clarity/quality, stated point penalties, “or similar” lists), emit **bool** or finite-set encodings — **do not ABORT** and **do not** replace with invented 0–100 scores.
 
 ## Scope and abstain
 

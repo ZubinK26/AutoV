@@ -47,6 +47,10 @@ Process order, prerequisites, and phases are **encodable** with existing templat
 
 **Out of scope:** LTL/CTL (“eventually”, “until”), event logs, unnamed “A then B then C” in one line without flags.
 
+## Subjective assessment surrogates (in scope — no invented metrics)
+
+Qualitative requirements (“clear English,” “well-structured repository,” professional quality) are **encodable** as **bool** obligations with descriptive variable names — see `subjective_assessment_surrogates_addendum.md`. **Do not** invent 0–100 scores, proficiency indices, or numeric cutoffs **unless the source states them**. Stated point penalties (e.g. “10 point penalty”) keep **explicit integers** from the source.
+
 Nested conditions use **`ConditionExpr`** with `kind`: `atom`, `varcmp`, `varprod_cmp`, `and`, `or`, `not` — **max depth** equals `CONDITION_EXPR_MAX_DEPTH` in code (currently **8**).
 
 ## Arithmetic (strict)

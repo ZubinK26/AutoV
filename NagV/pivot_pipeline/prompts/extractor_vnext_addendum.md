@@ -21,7 +21,7 @@ Do **not** invent other names. Still **ABORT** for unbounded domains, infinite q
 | “At least **k** of **n** conditions” / k-of-n | `K_OF_N` | Giant hand-built `and`/`or` only if n ≤ 3 and k small |
 | Switch / case on enum discriminant | `EXHAUSTIVE_SWITCH` | Unrelated implications |
 | “Variable X is defined as …” | `DEFINED_AS` | — |
-| Sum of weighted terms vs limit (e.g. 2·a + 3·b ≤ L) | `SUM_THRESHOLD` | Chaining many `ARITHMETIC_EVALUATION` rules |
+| Sum of weighted terms vs limit (e.g. 2·a + 3·b ≤ L) — **source must state weights/points** | `SUM_THRESHOLD` | Chaining many `ARITHMETIC_EVALUATION` rules; **not** for qualitative “clear / well-written” lines (use bool S1 in subjective assessment addendum) |
 
 ## Caps (hard — exceeding → ABORT or split lines)
 

@@ -77,14 +77,24 @@ def read_temporal_surrogates_examples() -> str:
     return p.read_text(encoding="utf-8")
 
 
+def read_subjective_assessment_surrogates_addendum() -> str:
+    """Qualitative norms as bool surrogates; forbid invented proficiency metrics."""
+    p = PROMPTS_DIR / "subjective_assessment_surrogates.md"
+    if not p.is_file():
+        raise FileNotFoundError(f"missing subjective assessment surrogates addendum: {p}")
+    return p.read_text(encoding="utf-8")
+
+
 def read_pivot_encodability_prompt_stack() -> str:
-    """Shared contract + vNext addendum + temporal addendum (inject into agents)."""
+    """Shared contract + vNext + temporal + subjective assessment addenda (inject into agents)."""
     return (
         read_v1_policy_encodability_contract()
         + "\n\n---\n\n"
         + read_extractor_vnext_addendum()
         + "\n\n---\n\n"
         + read_temporal_surrogates_addendum()
+        + "\n\n---\n\n"
+        + read_subjective_assessment_surrogates_addendum()
     )
 
 

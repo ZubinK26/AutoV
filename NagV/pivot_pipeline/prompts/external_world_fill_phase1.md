@@ -29,5 +29,6 @@ Output **one JSON object**:
 3. **`inferred`**: value clearly follows from cited lines; cite lines used.
 4. **`not_found`**: no basis in the document; omit `value`; empty `provenance`.
 5. Do **not** invent values — use `not_found` when unsupported.
-6. Line numbers are 1-based (`L1:`, `L2:`).
-7. JSON only (no markdown fences).
+6. **Subjective bool** variables (names like `candidate_can_write_technical_english`, `repository_is_well_structured`): assess from document quality; use `present` or `inferred` with cites when the text supports the judgment; use `not_found` when the document is silent. Do **not** invent numeric proficiency scores — only **bool** (or **int** when the catalog says `int` and the source states a number).
+7. Line numbers are 1-based (`L1:`, `L2:`).
+8. JSON only (no markdown fences).
